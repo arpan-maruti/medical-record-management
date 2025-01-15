@@ -1,22 +1,112 @@
 
-.login-container
-{
-    display: flex;
-   
-}
-
-.login__image{
-    flex: 1;
-  
-}
-
-img{
-    object-fit: fill;
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
     height: 100vh;
+    display: flex;
+}
+
+.login-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+
+.login__image {
+    flex: 1;
+    background: #f0f8ff;
+}
+
+img {
+    object-fit: cover;
+    height: 100%;
     width: 100%;
 }
 
-.login__form{
+
+.login__form {
     flex: 1;
-   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.form-wrapper {
+    width: 40%;
+}
+
+h2 {
+    text-align: center;
+    color: #003366;
+    margin-bottom: 20px;
+}
+
+h4 {
+    color: #003366;
+    margin-bottom: 5px;
+}
+
+.input-icons {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-icons i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #003366;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px 10px 10px 50px;
+    border: 1px solid #cfcfcf;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #0073e6;
+}
+
+/* Login Button */
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #004080, #003366);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.login-btn:hover {
+    background: linear-gradient(135deg, #003366, #002244);
+}
+
+/* Forgot Password Link */
+.forgot-password {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #999;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+    color: #003366;
 }
