@@ -1,14 +1,4 @@
-
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    height: 100vh;
-    display: flex;
-}
-
-
-
+/* General Container Styling */
 .login-container {
     display: flex;
     width: 100%;
@@ -18,10 +8,9 @@ body, html {
     overflow: hidden;
 }
 
-
+/* Left Image Section */
 .login__image {
-    flex: 1;
-    background: #f0f8ff;
+    flex: 0.55;
 }
 
 img {
@@ -30,49 +19,42 @@ img {
     width: 100%;
 }
 
-
+/* Right Form Section */
 .login__form {
-    flex: 1;
+    flex: 0.45;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: right;
+    align-items: top;
     background-color: #ffffff;
 }
 
 .form-wrapper {
-    width: 40%;
+    width: 55%;
+    margin-right: 10vh;
+    margin-top: 20vh;
 }
 
 h2 {
     text-align: center;
-    color: #003366;
-    margin-bottom: 20px;
+    color: #434649;
 }
 
 h4 {
-    color: #003366;
-    margin-bottom: 5px;
+    color: #434649;
 }
 
+/* Input Field Styling */
 .input-icons {
     position: relative;
-    margin-bottom: 20px;
-}
-
-.input-icons i {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #003366;
+    margin-bottom: 1rem;
 }
 
 .input-field {
-    width: 100%;
-    padding: 10px 10px 10px 50px;
-    border: 1px solid #cfcfcf;
-    border-radius: 10px;
-    font-size: 16px;
+    width: 90%; /* Increased width for the input fields */
+    padding: 0.9rem 12rem 0.9rem 3rem; /* Space for the icon */
+    border: 1px solid lightgrey;
+    border-radius: 2rem;
+    font-size: 1.1rem;
 }
 
 .input-field:focus {
@@ -80,17 +62,28 @@ h4 {
     border-color: #0073e6;
 }
 
-/* Login Button */
+
+.input-icons .icon {
+    position: absolute;
+    left: 0.80rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #003366;
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+
 .login-btn {
-    width: 100%;
+    width: 35%;
     padding: 12px;
     background: linear-gradient(135deg, #004080, #003366);
     color: #ffffff;
     border: none;
-    border-radius: 10px;
-    font-size: 16px;
+    border-radius: 2rem;
+    font-size: 1.1rem;
     cursor: pointer;
     margin-top: 20px;
+    margin-left: 9rem;
     transition: background 0.3s;
 }
 
@@ -98,13 +91,13 @@ h4 {
     background: linear-gradient(135deg, #003366, #002244);
 }
 
-/* Forgot Password Link */
 .forgot-password {
     display: block;
-    text-align: center;
+    text-align: right;
+    margin-right: 5vh;
     margin-top: 10px;
     color: #999;
-    font-size: 14px;
+    font-size: 1.1rem;
     text-decoration: none;
 }
 
@@ -112,3 +105,18 @@ h4 {
     text-decoration: underline;
     color: #003366;
 }
+
+.login-form-label {
+    color: #003366;
+    margin-bottom: 5rem;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-left: 10vh;
+}
+
+.login__form h4{
+    font-size: 1.3rem;
+    margin-bottom: 0.7rem;
+    margin-left: 1.0rem;
+}
+
