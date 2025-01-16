@@ -1,27 +1,34 @@
-<div class="login-container">
-    <div class="login__image">
-        <img src="assets/image.png" alt="Image is not showing">
-    </div>
+    <div class="login">
+        <div class="login__image">
+            <img src="assets/image.png" alt="Image is not showing">
+        </div>
 
-    <div class="login__form">
-        <div class="form-wrapper">
-            <p class="login-form-label">MediScan - AI Tool</p>
-            
-            <h4>Email Address</h4>
-            <div class="input-icons">
-                <input class="input-field" type="email" placeholder="Your E-Mail" [(ngModel)]="email">
-                <span class="material-symbols-outlined icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#D9D9D9"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
-                </span>
+        <div class="login__form">
+            <div class="login__form-wrapper">
+                <p class="login__form-label">MediScan - AI Tool</p>
+                
+                <h4 class="login__form-title">Email Address</h4>
+                <div class="login__input-container">
+                    <input class="login__input" type="email" placeholder="Your E-Mail" [(ngModel)]="email">
+                    <span class="login__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#D9D9D9">
+                            <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/>
+                        </svg>
+                    </span>
+                </div>
+                
+                <h4 class="login__form-title">Password</h4>
+                <div class="login__input-container">
+                    <input class="login__input" type="password" placeholder="Your Password" [(ngModel)]="password">
+                    <span class="login__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#D9D9D9">
+                            <path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70q81 0 141.5 45.5T506-560h414v160h-80v160H680v-160H506q-24 69-84.5 114.5T280-240Zm0-160q33 0 56.5-23.5T360-480q0-33-23.5-56.5T280-560q-33 0-56.5 23.5T200-480q0 33 23.5 56.5T280-400Z"/>
+                        </svg>
+                    </span>
+                </div>
+                
+                <a href="#" class="login__forgot-password" (click)="onForgotPassword()">Forgot password?</a>
+                <button class="login__button" (click)="onLogin()">Login</button>
             </div>
-            
-            <h4>Password</h4>
-            <div class="input-icons">
-                <input class="input-field" type="password" placeholder="Your Password" [(ngModel)]="password">
-                <span class="material-symbols-outlined icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#D9D9D9"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70q81 0 141.5 45.5T506-560h414v160h-80v160H680v-160H506q-24 69-84.5 114.5T280-240Zm0-160q33 0 56.5-23.5T360-480q0-33-23.5-56.5T280-560q-33 0-56.5 23.5T200-480q0 33 23.5 56.5T280-400Z"/></svg></span>
-            </div>
-            
-            <a href="#" class="forgot-password" (click)="onForgotPassword()">Forgot password?</a>
-            <button class="login-btn" (click)="onLogin()">Login</button>
         </div>
     </div>
-</div>

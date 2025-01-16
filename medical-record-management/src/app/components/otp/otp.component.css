@@ -17,7 +17,7 @@ html {
 }
 
 .otp__image {
-  flex: 0.6;
+  flex: 0.55;
   background: #f0f8ff;
 }
 
@@ -28,7 +28,7 @@ img {
 }
 
 .otp__form {
-  flex: 0.4;
+  flex: 0.45;
   display: flex;
   align-items: center;
 }
