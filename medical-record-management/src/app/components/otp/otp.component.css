@@ -1,3 +1,4 @@
+/* General Styles */
 body,
 html {
   margin: 0;
@@ -11,133 +12,261 @@ html {
   display: flex;
   width: 100%;
   height: 100vh;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   overflow: hidden;
 }
 
+/* Image Section */
 .otp__image {
-  flex: 0.55;
+  flex: 1;
   background: #f0f8ff;
 }
 
-img {
+.otp__image img {
   object-fit: fill;
   height: 100vh;
   width: 100%;
+ 
 }
 
+/* Form Section */
 .otp__form {
-  flex: 0.45;
+  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  position: relative;
+  z-index: 2; /* Ensure form is on top */
 }
 
+/* Content Styles */
 .otp__content {
-  margin-left: 13vw;
-  margin-bottom: 34vh;
-  /* background-color: aqua; */
-  width: 20vw;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.9); /* Slight background for readability */
+  padding: 2rem;
+  border-radius: 10px;
 }
-.test {
-  position: relative;
-}
+
 .otp__heading {
-  padding-right: 3rem;
-  padding-left: 10rem;
-  text-align: right;
-  /* right: 10px; */
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem; /* Increase text size */
+  font-weight: 700;
   color: #003366;
-  font-size: 1.8rem;
-  font-weight: 800;
-  margin-bottom: 3.5rem;
+  margin-bottom: 2.5rem;
 }
+
 .otp_subheading {
-  font-size: 1.6rem;
-  font-weight: 500;
-  margin-bottom: 2.4rem;
-  padding-left: 1rem;
+  text-align: left;
+  margin-left: 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
 }
+
+/* Input Styles */
 .otp__title {
-  font-size: 1.1rem;
-  padding-left: 1rem;
-  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  font-weight: 550;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  margin-left: 1rem;
 }
+
 .otp__search {
   position: relative;
 }
+
 .otp__search input {
-  margin-top: 0.5rem;
-  height: 2rem;
   width: 100%;
-  border-style: solid;
-  border-color: lightgray;
+  padding: 1rem 2rem;
+  border: 1px solid lightgray;
   border-radius: 30px;
-  height: 3.4rem;
-  padding-left: 2rem;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .otp__search svg {
   position: absolute;
-  top: 58%;
-  right: 0.9rem; /* Position the icon inside the input field */
+  top: 50%;
+  right: 1rem;
   transform: translateY(-50%);
-  /* pointer-events: none; Ensures the icon doesn't block input */
+  cursor: pointer;
 }
 
+/* Error Messages */
+.otp__error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  text-align: left;
+}
+
+/* Buttons */
 .otp__buttons {
-  margin-top: 2.3rem;
-  position: relative;
-  /* margin-bottom: 1.2rem; */
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.otp__login,
+.otp__verify {
+  width: 44%;
+  height: 3rem;
+  margin-bottom: 1rem;
+  margin-left: 0.1rem;
+  margin-right: 0.1rem;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .otp__login {
-  height: 3.4rem;
+  background-color: #f0f0f0;
   border-style: solid;
-  border-color: #e6c455;
+  border-color: #E6C455;
   border-radius: 30px;
   width: 42%;
   font-size: 1.1rem;
   background-color: white;
   margin-right: 4.6rem;
   transition: box-shadow 0.35s ease-in-out;
-  margin-left: 5px;
-  /* margin-right: 5.78rem; */
+  
+  color: #333;
+}
+
+.otp__login:hover {
+
+  -webkit-box-shadow: 0px 8px 9px 1px rgba(104,172,179,0.4);
+  -moz-box-shadow: 0px 8px 9px 1px rgba(104,172,179,0.4);
+  box-shadow: 0px 8px 9px 1px rgba(104,172,179,0.4);
+  
 }
 
 .otp__verify {
-  font-size: 1.1rem;
-  height: 3.4rem;
   border-style: solid;
-  border-color: #e6c455;
+  border-color: #E6C455;
   border-radius: 30px;
   width: 42%;
   color: white;
   background-color: #012447;
-  margin-bottom: 1.3rem;
-  transition: box-shadow 0.35s ease-in-out;
 }
+
 .otp__verify:hover {
   -webkit-box-shadow: -1px 8px 9px 1px rgba(104,172,179,0.4);
--moz-box-shadow: -1px 8px 9px 1px rgba(104,172,179,0.4);
-box-shadow: -1px 8px 9px 1px rgba(104,172,179,0.4);
+  -moz-box-shadow: -1px 8px 9px 1px rgba(104,172,179,0.4);
+  box-shadow: -1px 8px 9px 1px rgba(104,172,179,0.4); 
 }
-.otp__login:hover {
-  -webkit-box-shadow: 0px 8px 9px 1px rgba(104,172,179,0.4);
--moz-box-shadow: 0px 8px 9px 1px rgba(104,172,179,0.4);
-box-shadow: 0px 8px 9px 1px rgba(104,172,179,0.4);
-}
+
+/* Resend Link */
 .otp__resend {
   display: block;
   text-align: right;
-  margin-right: 1.5rem;
-  color: #999;
+  margin-top: 1rem;
+  margin-right: 1rem;
   font-size: 0.9rem;
-}
-.otp__resend:hover {
-  color: gray;
+  color: #3b3b3b;
+  text-decoration: underline;
 }
 
-/* Responsive Styles for screens less than 2456px */
-@media (max-width: 2455px) {
+.otp__resend:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+
+  .otp__heading {
+    font-size: 1.7rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .otp_subheading {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .otp-container {
+    flex-direction: column;
+  }
+
+  .otp__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.7; /* Low opacity for the background image */
+  }
+
+  .otp__image img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  .otp__form {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent; /* Transparent background to show the image */
+  }
+}
+
+@media (max-width: 768px) {
+  .otp__content {
+    max-width: 350px;
+   
+  }
+
+  .otp__heading {
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .otp_subheading {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .otp__search input {
+   
+    height: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .otp__content {
+    max-width: 300px;
+  }
+
+  .otp__heading {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+  }
+
+  .otp_subheading {
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .otp__search input {
+    font-size: 0.9rem;
+    height: 2.5rem;
+  }
+
+  .otp__login,
+  .otp__verify {
+    font-size: 0.9rem;
+    height: 2.5rem;
+   
+  }
 }

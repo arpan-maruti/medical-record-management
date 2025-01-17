@@ -16,6 +16,7 @@ export class LoginComponent {
   emailError: string = '';
   passwordError: string = '';
   formSubmitted: boolean = false;
+  isPasswordVisible: boolean = false; // Track password visibility
 
   constructor(private router: Router) {}
 
@@ -81,8 +82,15 @@ export class LoginComponent {
 
   // Password validation
   isValidPassword(password: string): boolean {
-    // Password must have at least 6 characters, one uppercase letter, one number, and one special character.
     const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,}$/;
     return passwordRegex.test(password);
   }
+
+  // Toggle password visibility
+  toggleVisibility() {
+    console.log("hh");
+    this.isPasswordVisible = !this.isPasswordVisible;
+  }
+
+  
 }
