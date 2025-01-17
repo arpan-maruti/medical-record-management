@@ -1,24 +1,50 @@
 <div class="otp-container">
-    <div class="otp__image" alt="image not displaying.">
-        <img src="assets/image.png" alt="image is not showing">
-    </div>
-    <div class="otp__form">
-        <div class="otp__content">
-            <div class="otp__heading">MediScan - AI Tool</div>
-            <div class="otp_subheading">Verify the OTP</div>
-            <div class="otp__input">
-                <div class="otp__title">Enter OTP</div>
-                <div class="otp__search">
-                    <label for="otp"></label>
-                    <input type="text" name="text">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#D9D9D9"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z"/></svg>
-                </div>
-            </div>
-            <div class="otp__buttons">
-                <button class="otp__login" (click)="login()">Back to Login</button>
-                <button class="otp__verify">Verify OTP</button>  
-            </div>
-            <a href="#" class="otp__resend">Resend otp</a>
+  <div class="otp__image" alt="image not displaying.">
+    <img src="assets/image.png" alt="image is not showing" />
+  </div>
+  <div class="otp__form">
+    <div class="otp__content">
+      <div class="otp__heading">MediScan - AI Tool</div>
+      <div class="otp_subheading">Verify the OTP</div>
+      <div class="otp__input">
+        <div class="otp__title">Enter OTP</div>
+        <div class="otp__search">
+          <label for="otp"></label>
+          <input
+            [type]="inputType"
+            name="text"
+            id="otp-input"
+            [(ngModel)]="otp"
+            required
+            #otpInput="ngModel"
+          />
+          <svg
+            id="eye-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#D9D9D9"
+            (click)="toggleVisibility()"
+          >
+            <path
+              d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z"
+            />
+          </svg>
         </div>
+        <div *ngIf="otpInput.touched && otpInput.invalid" class="otp__error-message">
+            OTP is required.
+          </div>
+          <div *ngIf="otpError && !otpInput.invalid && otpInput.touched" class="otp__error-message">
+            OTP is incorrect. Please try again.
+          </div>
+      </div>
+      
+      <div class="otp__buttons">
+        <button class="otp__login" (click)="login()">Back to Login</button>
+        <button class="otp__verify" (click)="verifyOtp(otpInput)">Verify OTP</button>
+      </div>
+      <a href="/otp" class="otp__resend">Resend otp</a>
     </div>
+  </div>
 </div>
