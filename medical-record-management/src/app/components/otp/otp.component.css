@@ -76,12 +76,13 @@ img {
   height: 3.4rem;
   padding-left: 2rem;
 }
+
 .otp__search svg {
   position: absolute;
   top: 58%;
   right: 0.9rem; /* Position the icon inside the input field */
   transform: translateY(-50%);
-  pointer-events: none; /* Ensures the icon doesn't block input */
+  /* pointer-events: none; Ensures the icon doesn't block input */
 }
 
 .otp__buttons {
