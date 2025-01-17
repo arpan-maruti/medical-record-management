@@ -23,7 +23,13 @@ export class LoginComponent {
         title: 'Error!',
         text: 'Please enter both email and password.',
         icon: 'error',
-        confirmButtonText: 'Okay'
+        confirmButtonText: 'Okay',
+        width: '50rem',
+        customClass: {
+          popup: 'swal-custom-popup', // Custom class for the popup
+          confirmButton: 'swal-custom-button' // Custom class for the button
+      }
+        
       });
     } else {
       // Redirect to OTP page if fields are filled
@@ -34,10 +40,18 @@ export class LoginComponent {
   // Function for forgot password
   onForgotPassword() {
     Swal.fire({
-      title: 'Forgot Password',
-      text: 'Please contact BME to reset your password.',
-      icon: 'info',
-      confirmButtonText: 'Okay'
+        title: 'Forgot Password',
+        text: 'Please contact BME to reset your password.',
+        icon: 'info',
+        confirmButtonText: 'Okay',
+        width: '50rem', // Adjusted box width
+        heightAuto: false, // Ensure manual height control
+        customClass: {
+            popup: 'swal-custom-popup', // Custom class for the popup
+            confirmButton: 'swal-custom-button' // Custom class for the button
+        }
     });
-  }
+}
+
+  
 }

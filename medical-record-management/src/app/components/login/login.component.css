@@ -1,5 +1,4 @@
-/* General Container Styling */
-.login-container {
+.login {
     display: flex;
     width: 100%;
     height: 100vh;
@@ -8,14 +7,13 @@
     overflow: hidden;
 }
 
-/* Left Image Section */
 .login__image {
     flex: 0.55;
 }
 
-img {
-    object-fit: cover;
-    height: 100%;
+.login__image img {
+    object-fit: fill;
+    height: 100vh;
     width: 100%;
 }
 
@@ -23,59 +21,62 @@ img {
 .login__form {
     flex: 0.45;
     display: flex;
-    justify-content: right;
-    align-items: top;
+    justify-content: flex-end;
+    align-items: flex-start;
     background-color: #ffffff;
 }
 
-.form-wrapper {
+.login__form-wrapper {
     width: 55%;
     margin-right: 10vh;
     margin-top: 20vh;
 }
 
-h2 {
-    text-align: center;
+.login__form-label {
+    color: #003366;
+    margin-bottom: 5rem;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-left: 11.1vh;
+}
+
+.login__form-title {
+    font-size: 1.3rem;
+    margin-bottom: 0.7rem;
+    margin-left: 1.0rem;
     color: #434649;
 }
 
-h4 {
-    color: #434649;
-}
-
-/* Input Field Styling */
-.input-icons {
+.login__input-container {
     position: relative;
     margin-bottom: 1rem;
 }
 
-.input-field {
-    width: 90%; /* Increased width for the input fields */
-    padding: 0.9rem 12rem 0.9rem 3rem; /* Space for the icon */
+.login__input {
+    width: 90%;
+    padding: 0.9rem 12rem 0.9rem 3rem;
     border: 1px solid lightgrey;
     border-radius: 2rem;
     font-size: 1.1rem;
 }
 
-.input-field:focus {
+.login__input:focus {
     outline: none;
     border-color: #0073e6;
 }
 
-
-.input-icons .icon {
+.login__icon {
     position: absolute;
-    left: 0.80rem;
+    left: 0.8rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #003366;
     font-size: 1.1rem;
     pointer-events: none;
 }
 
-.login-btn {
-    width: 35%;
-    padding: 12px;
+.login__button {
+    width: 30%;
+    height: 3.4rem;
     background: linear-gradient(135deg, #004080, #003366);
     color: #ffffff;
     border: none;
@@ -83,15 +84,18 @@ h4 {
     font-size: 1.1rem;
     cursor: pointer;
     margin-top: 20px;
-    margin-left: 9rem;
+    margin-left: 14vh;
     transition: background 0.3s;
+    margin-bottom: 2rem;
 }
 
-.login-btn:hover {
-    background: linear-gradient(135deg, #003366, #002244);
+.login__button:hover {
+    background: linear-gradient(135deg, #003b75, #003c77); /* Brighter color gradient */
+    box-shadow: 0 10px 20px rgba(23, 131, 161, 0.478); /* Spread-out shadow effect */
+  
+    transition: all 0.35s ease-in-out; /* Smooth animation */
 }
-
-.forgot-password {
+.login__forgot-password {
     display: block;
     text-align: right;
     margin-right: 5vh;
@@ -101,22 +105,26 @@ h4 {
     text-decoration: none;
 }
 
-.forgot-password:hover {
+.login__forgot-password:hover {
     text-decoration: underline;
     color: #003366;
 }
-
-.login-form-label {
-    color: #003366;
-    margin-bottom: 5rem;
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin-left: 10vh;
+::ng-deep .swal-custom-popup {
+    padding: 2.5rem 2rem;
+    height: 30rem;
+    font-size: 1.1rem;
 }
 
-.login__form h4{
-    font-size: 1.3rem;
-    margin-bottom: 0.7rem;
-    margin-left: 1.0rem;
+::ng-deep .swal-custom-button {
+    background: #003366 !important; /* Override with your custom color */
+    color: #ffffff !important; /* Ensure white text */
+    border: none !important;
+    border-radius: 1.8rem !important;
+    padding: 0.8rem 2rem !important;
+    font-size: 1.1rem !important;
+    transition: background 0.3s !important;
 }
 
+::ng-deep .swal-custom-button:hover {
+    background: #0055aa !important; /* Darker hover effect */
+}
