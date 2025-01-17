@@ -17,7 +17,7 @@ html {
 }
 
 .otp__image {
-  flex: 0.6;
+  flex: 0.55;
   background: #f0f8ff;
 }
 
@@ -28,15 +28,17 @@ img {
 }
 
 .otp__form {
-  flex: 0.4;
+  /* align-items: top; */
+  flex: 0.45;
   display: flex;
   align-items: center;
 }
 
 .otp__content {
-  margin-left: 15vw;
-  background-color: aqua;
-  width: auto;
+  margin-left: 13vw;
+  margin-bottom: 34vh;
+  /* background-color: aqua; */
+  width: 20vw;
 }
 .test {
   position: relative;
@@ -44,10 +46,11 @@ img {
 .otp__heading {
   padding-right: 3rem;
   padding-left: 10rem;
-  right: 10px;
+  text-align: right;
+  /* right: 10px; */
   color: #003366;
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 800;
   margin-bottom: 3.5rem;
 }
 .otp_subheading {
@@ -71,7 +74,7 @@ img {
   border-style: solid;
   border-color: lightgray;
   border-radius: 30px;
-  height: 3rem;
+  height: 3.4rem;
   padding-left: 2rem;
 }
 .otp__search svg {
@@ -85,28 +88,56 @@ img {
 .otp__buttons {
   margin-top: 2.3rem;
   position: relative;
-  
+  /* margin-bottom: 1.2rem; */
 }
 
 .otp__login {
-  height: 3rem;
+  height: 3.4rem;
   border-style: solid;
-  border-color: lightgray;
+  border-color: #e6c455;
   border-radius: 30px;
-  width: 40%;
+  width: 42%;
   font-size: 1.1rem;
   background-color: white;
-  margin-right: 5.78rem;
-  /* margin-left: 1rem; */
+  margin-right: 4.6rem;
+  transition: box-shadow 0.35s ease-in-out;
+  margin-left: 5px;
+  /* margin-right: 5.78rem; */
 }
 
 .otp__verify {
   font-size: 1.1rem;
-  height: 3rem;
+  height: 3.4rem;
   border-style: solid;
-  border-color: lightgray;
+  border-color: #e6c455;
   border-radius: 30px;
-  width: 40%;
-  background-color: white;
-  /* margin-left: 60%; */
+  width: 42%;
+  color: white;
+  background-color: #012447;
+  margin-bottom: 1.3rem;
+  transition: box-shadow 0.35s ease-in-out;
+}
+.otp__verify:hover {
+  -webkit-box-shadow: -1px 8px 9px 1px rgba(104,172,179,0.4);
+-moz-box-shadow: -1px 8px 9px 1px rgba(104,172,179,0.4);
+box-shadow: -1px 8px 9px 1px rgba(104,172,179,0.4);
+}
+.otp__login:hover {
+  -webkit-box-shadow: 0px 8px 9px 1px rgba(104,172,179,0.4);
+-moz-box-shadow: 0px 8px 9px 1px rgba(104,172,179,0.4);
+box-shadow: 0px 8px 9px 1px rgba(104,172,179,0.4);
+}
+.otp__resend {
+  display: block;
+  text-align: right;
+  margin-right: 1.5rem;
+  color: #999;
+  font-size: 0.9rem;
+}
+.otp__resend:hover {
+  color: gray;
+}
+
+/* Responsive Styles for screens less than 2456px */
+@media (max-width: 2455px) {
 }
