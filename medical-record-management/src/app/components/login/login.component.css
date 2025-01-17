@@ -1,4 +1,4 @@
-/* Base styling */
+/* Base styling for login container */
 .login {
     display: flex;
     flex-direction: row;
@@ -10,7 +10,7 @@
 }
 
 .login__image {
-    flex: 0.55;
+    flex: 1;
 }
 
 .login__image img {
@@ -19,33 +19,35 @@
     width: 100%;
 }
 
-
 .login__form {
-    flex: 0.45;
+    flex: 1;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    justify-content: center; /* Right-align form */
+    
+    align-items: center;/* Center vertically */
     background-color: #ffffff;
-    padding: 2rem;
+    padding: 3rem;
 }
 
 .login__form-wrapper {
+    margin-right: 15vh;
     width: 100%;
     max-width: 450px;
-    margin-top: 10vh;
+    margin-right: 2rem; /* Push form slightly to the right */
+   
 }
 
 .login__form-label {
     color: #003366;
-    font-size: 1.8rem;
+    font-size: 2rem; /* Increase text size */
     font-weight: 800;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .login__form-title {
-    font-size: 1.3rem;
-    margin-bottom: 0.7rem;
+    font-size: 1.5rem; /* Larger form titles */
+    margin-bottom: 1rem;
     color: #434649;
 }
 
@@ -56,10 +58,10 @@
 
 .login__input {
     width: 100%;
-    padding: 0.9rem 3rem 0.9rem 3rem;
+    padding: 1rem 1.2rem 1rem 3rem; /* Adjust padding for better appearance */
     border: 1px solid lightgrey;
     border-radius: 2rem;
-    font-size: 1rem;
+    font-size: 1.1rem; /* Larger input text */
 }
 
 .login__input:focus {
@@ -78,15 +80,16 @@
 
 .login__button {
     width: 100%;
-    max-width: 200px;
-    height: 3.4rem;
+    max-width: 250px; /* Wider button */
+    height: 3.5rem; /* Slightly taller button */
     background: linear-gradient(135deg, #004080, #003366);
     color: #ffffff;
     border: none;
     border-radius: 2rem;
-    font-size: 1rem;
+    font-size: 1.1rem; /* Larger button text */
     cursor: pointer;
-    margin-top: 1rem;
+    margin: 2rem auto 0 auto; /* Center button inside the form */
+    display: block;
     transition: background 0.3s;
     text-align: center;
 }
@@ -99,10 +102,10 @@
 
 .login__forgot-password {
     display: block;
-    text-align: center;
+    text-align: right;
     margin-top: 1rem;
     color: #999;
-    font-size: 1rem;
+    font-size: 1.1rem;
     text-decoration: none;
 }
 
@@ -118,28 +121,8 @@
 
 .error-message {
     color: red;
-    font-size: 0.9rem;
+    font-size: 1rem;
     margin-top: 0.3rem;
-}
-
-/* SweetAlert2 customizations */
-::ng-deep .swal-custom-popup {
-    padding: 2.5rem 2rem;
-    font-size: 1.1rem;
-}
-
-::ng-deep .swal-custom-button {
-    background: #003366 !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: 1.8rem !important;
-    padding: 0.8rem 2rem !important;
-    font-size: 1.1rem !important;
-    transition: background 0.3s !important;
-}
-
-::ng-deep .swal-custom-button:hover {
-    background: #0055aa !important;
 }
 
 /* Responsive Design */
@@ -165,17 +148,16 @@
         flex: none;
         width: 100%;
         padding: 1.5rem;
+        justify-content: center; /* Center form on smaller screens */
     }
 
     .login__form-wrapper {
         width: 100%;
         max-width: 400px;
-        margin: 5vh auto;
     }
 
     .login__form-label {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
+        font-size: 1.7rem;
     }
 }
 
@@ -185,23 +167,23 @@
     }
 
     .login__form-label {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
     }
 
     .login__input {
         padding: 0.8rem 1.2rem;
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
 
     .login__button {
         width: 100%;
-        max-width: 180px;
-        height: 3rem;
-        font-size: 0.9rem;
+        max-width: 200px;
+        height: 3.2rem;
+        font-size: 1rem;
     }
 
     .login__forgot-password {
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
 }
 
@@ -212,21 +194,21 @@
     }
 
     .login__form-label {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
     }
 
     .login__input {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         padding: 0.7rem 1rem;
     }
 
     .login__button {
-        max-width: 150px;
+        max-width: 180px;
         height: 2.8rem;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 
     .login__forgot-password {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 }

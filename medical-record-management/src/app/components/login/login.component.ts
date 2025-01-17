@@ -6,51 +6,56 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   email: string = '';
   password: string = '';
   emailError: string = '';
   passwordError: string = '';
+  formSubmitted: boolean = false;
 
   constructor(private router: Router) {}
 
   // Function to handle login
   onLogin() {
-    // Reset error messages
-    this.emailError = '';
-    this.passwordError = '';
+    this.formSubmitted = true; // Mark the form as submitted
 
-    // Validate email and password
-    if (!this.isValidEmail(this.email)) {
-      this.emailError = 'Invalid email format. Please provide a valid email.';
-    }
-    if (!this.isValidPassword(this.password)) {
-      this.passwordError =
-        'Password must be at least 6 characters long and include one special character.';
-    }
+    // Perform validation
+    this.validateInputs();
 
-    // Display error alert if validation fails
+    // If there are errors, show an alert
     if (this.emailError || this.passwordError) {
-      Swal.fire({
-        title: 'Validation Error',
-        text: 'Please correct the errors highlighted below.',
-        icon: 'error',
-        confirmButtonText: 'Okay',
-        width: '50rem',
-        customClass: {
-          popup: 'swal-custom-popup',
-          confirmButton: 'swal-custom-button',
-        },
-      });
       return;
     }
 
     // Redirect to OTP page if inputs are valid
     this.router.navigate(['/otp']);
+  }
+
+  // Input validation
+  validateInputs() {
+    if (!this.isValidEmail(this.email)) {
+      this.emailError = 'Invalid email format. Please provide a valid email.';
+    } else {
+      this.emailError = ''; // Clear error if input becomes valid
+    }
+
+    if (!this.isValidPassword(this.password)) {
+      this.passwordError =
+        'Password must be at least 6 characters long and include one special character.';
+    } else {
+      this.passwordError = ''; // Clear error if input becomes valid
+    }
+  }
+
+  // Called on input change to dynamically validate
+  onInputChange() {
+    if (this.formSubmitted) {
+      this.validateInputs();
+    }
   }
 
   // Forgot password function
@@ -76,7 +81,8 @@ export class LoginComponent {
 
   // Password validation
   isValidPassword(password: string): boolean {
-    const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,}$/;
+    // Password must have at least 6 characters, one uppercase letter, one number, and one special character.
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,}$/;
     return passwordRegex.test(password);
   }
 }
