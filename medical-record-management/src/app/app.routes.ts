@@ -11,6 +11,6 @@ export const routes: Routes = [
     {path:'otp', component: OtpComponent, pathMatch:'full'},
     {path:'customalert', component: CustomAlertComponent, pathMatch:'full'},
     {path:'register', component: RegisterComponent, pathMatch:'full'},
-    {path:'page-not-found', component: PageNotFoundComponent, pathMatch:'full'},
+    {path:'page-not-found', component: PageNotFoundComponent},
     {path:'**', redirectTo:'/page-not-found'}
 ];
