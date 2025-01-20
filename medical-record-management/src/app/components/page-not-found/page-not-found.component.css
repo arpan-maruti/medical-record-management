@@ -1,0 +1,97 @@
+/* page-not-found.component.scss */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f3f3f3;
+    padding: 1rem; /* Add some padding for smaller screens */
+  }
+  
+  .content {
+    text-align: center;
+    width: 100%;
+    max-width: 600px; /* Limit the width on larger screens */
+  }
+  
+  h1 {
+    font-size: 80px;
+    color: rgba(104, 172, 179, 0.4);
+    margin: 0;
+  }
+  
+  h2 {
+    font-size: 30px;
+    color: #34495e;
+    margin-top: 10px;
+  }
+  
+  p {
+    font-size: 18px;
+    color: #012447;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #e53e3e;
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 60px;  /* Smaller font size on tablets */
+    }
+  
+    h2 {
+      font-size: 24px;  /* Adjust h2 font size */
+    }
+  
+    p {
+      font-size: 16px;  /* Smaller font size on tablets */
+    }
+  
+    button {
+      padding: 10px 20px;
+      font-size: 14px;  /* Adjust button size */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 50px;  /* Further reduce font size on mobile */
+    }
+  
+    h2 {
+      font-size: 22px;  /* Smaller h2 font size for mobile */
+    }
+  
+    p {
+      font-size: 14px;  /* Adjust font size for better readability on small screens */
+      margin-top: 0.8rem;
+      margin-bottom: 1rem;
+    }
+  
+    button {
+      padding: 10px 15px;
+      font-size: 14px;
+    }
+  
+    .container {
+      padding: 0.5rem; /* Add smaller padding for mobile */
+    }
+  }
+  
