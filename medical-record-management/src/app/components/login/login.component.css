@@ -50,12 +50,12 @@
     font-size: 1.2rem; /* Larger form titles */
     margin-bottom: 1rem;
     color: #434649;
-    margin-left: 1rem;
+    /* margin-left: 1rem; */
 }
 
 .login__input-container {
     position: relative;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.6rem;
 }
 
 .login__input {
@@ -63,6 +63,7 @@
     padding: 1rem 1.2rem 1rem 3rem; /* Adjust padding for better appearance */
     border: 1px solid lightgrey;
     border-radius: 2rem;
+    /* margin-bottom: 0; */
     font-size: 1.1rem; /* Larger input text */
 }
 
@@ -139,10 +140,13 @@
     color: red;
     font-size: 1rem;
     margin-bottom: 0.8rem;
-    margin-left: 1rem;
+    /* margin-left: 1rem; */
 }
 
 @media (max-width: 1024px) {
+    .login__input-container{
+        margin-bottom: 0;
+    }
     .login {
         flex-direction: column;
         height: 100vh; /* Full screen height */
@@ -215,8 +219,20 @@
     .login__form-title {
         font-size: 1.3rem; /* Slightly smaller on medium screens */
     }
+    .email-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the email icon to the left */
+    }
+    
+    .password-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the password key icon to the left */
+    }
 }
 @media (max-width: 768px) {
+    .login__input-container{
+        margin-bottom: 0;
+    }
     .login__form {
         padding: 1.5rem;
         max-width: 400px;
@@ -242,9 +258,25 @@
     .login__form-title {
         font-size: 1.1rem; /* Decrease size further for smaller screens */
     }
+    .email-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the email icon to the left */
+    }
+    
+    .password-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the password key icon to the left */
+    }
+    .error-message {
+        margin-bottom: 1rem;
+        font-size: 0.8rem;
+    }
 }
 
 @media (max-width: 480px) {
+    .login__input-container{
+        margin-bottom: 0;
+    }
     .login__form {
         padding: 1rem;
         max-width: 350px;
@@ -270,6 +302,19 @@
 
     .login__form-title {
         font-size: 1rem; /* Even smaller on very small screens */
+    }
+    .email-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the email icon to the left */
+    }
+    
+    .password-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the password key icon to the left */
+    }
+    .error-message {
+        margin-bottom: 1rem;
+        font-size: 0.8rem;
     }
 }
 
