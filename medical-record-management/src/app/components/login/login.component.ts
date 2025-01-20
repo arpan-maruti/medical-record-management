@@ -29,11 +29,7 @@ export class LoginComponent {
     this.validateInputs();
 
     if (this.emailError || this.passwordError) {
-      this.customAlert.show(
-        'Please correct the errors before proceeding.',
-        'Validation Error',
-        'OK'
-      );
+      
       return;
     }
 

@@ -1,0 +1,372 @@
+
+
+/* Base styling for register container */
+.register {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100vh;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+.register__span{
+    display: flex;
+    flex-direction: column;
+}
+
+.register__form {
+    flex: 1;
+    display: flex;
+    justify-content: center; /* Right-align form */
+    align-items: center; /* Center vertically */
+    background-color: #ffffff;
+    
+}
+
+.register__form-wrapper {
+   
+    width: 100%;
+    max-width: 450px;
+    margin-right: 2rem; /* Push form slightly to the right */
+}
+
+.register__form-label {
+    color: #003366;
+    text-align: center;
+    margin-bottom: 3.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; /* Increase text size */
+    font-weight: 700;
+    
+}
+
+.register__form-title {
+    font-size: 1.2rem; /* Larger form titles */
+    margin-bottom: 1rem;
+    color: #434649;
+    /* margin-left: 1rem; */
+}
+
+.login__input-container {
+    position: relative;
+    margin-bottom: 0.6rem;
+}
+
+.login__inputPhone-container{
+    width: 21rem;
+    position: relative;
+    margin-bottom: 0.6rem;
+}
+
+.register__input-container {
+    display: flex;
+    align-items: center; /* Align input elements vertically */
+    gap: 1rem; /* Space between the country code and phone number input */
+    margin-bottom: 1rem;
+}
+
+.register__input-container select {
+    width: 6.15rem; /* Adjust width for country code dropdown */
+    padding: 0.8rem;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+    border: 1px solid lightgrey;
+}
+
+.register__input-container input {
+    flex: 1; /* Make phone number input take up remaining space */
+    padding: 1rem 1.2rem 1rem 3rem;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+    border: 1px solid lightgrey;
+}
+
+.register__input {
+    width: 100%;
+    padding: 1rem 1.2rem 1rem 3rem; /* Adjust padding for better appearance */
+    border: 1px solid lightgrey;
+    border-radius: 2rem;
+    /* margin-bottom: 0; */
+    font-size: 1.1rem; /* Larger input text */
+}
+
+.register__input:focus {
+    outline: none;
+    border-color: #000000;
+}
+
+.register__icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+
+.email-icon {
+    left: 1rem; /* Position the email icon to the left */
+}
+
+.password-icon {
+    left: 1rem; /* Position the password key icon to the left */
+}
+
+.eye-icon {
+    right: 1rem; /* Position the eye icon to the right */
+    cursor: pointer;
+}
+
+.register__button {
+    width: 100%;
+    max-width: 200px; /* Wider button */
+    height: 3rem; /* Slightly taller button */
+    border-style: solid;
+    
+    border-radius: 30px;
+    width: 42%;
+    color: white;
+    background-color: #012447;
+   
+    font-size: 1.1rem; /* Larger button text */
+    cursor: pointer;
+    margin: 2rem auto 1rem auto; /* Center button inside the form */
+    display: block;
+    text-align: center;
+}
+
+.register__button:hover {
+    background: linear-gradient(135deg, #003b75, #003c77);
+    box-shadow: -1px 8px 9px 1px rgba(104, 172, 179, 0.4);
+    transition: all 0.35s ease-in-out;
+}
+
+.register__forgot-password {
+    display: block;
+    text-align: right;
+    margin-top: 1rem;
+    color: #999;
+    font-size: 1.1rem;
+    text-decoration: none;
+}
+
+.register__forgot-password:hover {
+    text-decoration: underline;
+    color: #003366;
+}
+
+/* Error message styles */
+.input-error {
+    border: 2px solid red !important;
+}
+
+.error-message {
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    /* margin-left: 1rem; */
+}
+
+.register__name-container {
+    display: flex;
+    justify-content: space-between; /* Space between inputs */
+    gap: 1rem; /* Space between the inputs */
+}
+
+/* Adjust the width of the name fields */
+.register__inputName {
+    width: 100%; /* Slightly less than half the container width */
+    padding: 1rem 1.2rem 1rem 3rem;
+    border: 1px solid lightgrey;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+}
+
+.register__input:focus {
+    outline: none;
+    border-color: #000000;
+}
+@media (max-width: 1024px) {
+    .register__input-container{
+        margin-bottom: 0;
+    }
+    .register {
+        flex-direction: column;
+        height: 100vh; /* Full screen height */
+        position: relative; /* Position relative for absolute positioning of the form */
+    }
+
+    .register__image {
+        position: absolute; /* Allow the image to cover the entire background */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* Send the image to the background */
+    }
+
+    .register__image img {
+        object-fit: cover; /* Ensure the image covers the entire screen */
+        width: 100%;
+        height: 100%;
+        opacity: 0.7; /* Add transparency for the image */
+    }
+
+    .register__form {
+        padding: 1.5rem;
+        position: absolute; /* Center the form over the background */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        max-width: 450px; /* Set max width for the form */
+        background-color: rgba(255, 255, 255, 0.85); /* Add a translucent white background */
+        border-radius: 10px; /* Slightly rounded corners */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    }
+
+    .register__form-wrapper {
+        width: 100%;
+        margin: 0;
+    }
+
+    .register__form-label {
+        font-size: 1.6rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #003366;
+    }
+
+    .register__input {
+        font-size: 1.1rem;
+        padding: 1rem 1.2rem 1rem 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .register__button {
+        display: block;
+        margin: 2rem auto 0 auto; /* Center the button */
+        width: 100%;
+        max-width: 200px;
+        font-size: 1rem;
+        height: 3.2rem;
+    }
+
+    .register__forgot-password {
+        text-align: right;
+        font-size: 1rem;
+        margin-top: 1rem;
+    }
+
+    .register__form-title {
+        font-size: 1.3rem; /* Slightly smaller on medium screens */
+    }
+    .email-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the email icon to the left */
+    }
+    
+    .password-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the password key icon to the left */
+    }
+}
+@media (max-width: 768px) {
+    .register__input-container{
+        margin-bottom: 0;
+    }
+    .register__form {
+        padding: 1.5rem;
+        max-width: 400px;
+    }
+
+    .register__form-label {
+        font-size: 1.5rem;
+    }
+
+    .register__input {
+        font-size: 1rem;
+    }
+
+    .register__button {
+        max-width: 180px;
+        height: 3rem;
+    }
+
+    .register__forgot-password {
+        font-size: 0.9rem;
+    }
+
+    .register__form-title {
+        font-size: 1.1rem; /* Decrease size further for smaller screens */
+    }
+    .email-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the email icon to the left */
+    }
+    
+    .password-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the password key icon to the left */
+    }
+    .error-message {
+        margin-bottom: 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .register__input-container{
+        margin-bottom: 0;
+    }
+    .register__form {
+        padding: 1rem;
+        max-width: 350px;
+    }
+
+    .register__form-label {
+        font-size: 1.3rem;
+    }
+
+    .register__input {
+        font-size: 0.9rem;
+    }
+
+    .register__button {
+        max-width: 160px;
+        height: 2.8rem;
+        font-size: 0.9rem;
+    }
+
+    .register__forgot-password {
+        font-size: 0.8rem;
+    }
+
+    .register__form-title {
+        font-size: 1rem; /* Even smaller on very small screens */
+    }
+    .email-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the email icon to the left */
+    }
+    
+    .password-icon {
+        left: 1rem;
+        top: 1.7rem; /* Position the password key icon to the left */
+    }
+    .error-message {
+        margin-bottom: 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+
+.eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 1rem; /* Position to the right */
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    cursor: pointer; /* Ensure the cursor indicates interactivity */
+    z-index: 2; /* Ensure it is above the input field */
+  }
