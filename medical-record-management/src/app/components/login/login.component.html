@@ -62,4 +62,10 @@
       <button class="login__button" (click)="onLogin()">Login</button>
     </div>
   </div>
+
+  <!-- Custom Alert Modal -->
+  <app-custom-alert
+    #customAlert
+    (confirm)="onCustomAlertConfirm()"
+  ></app-custom-alert>
 </div>

@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import Swal from 'sweetalert2';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CustomAlertComponent } from '../../custom-alert/custom-alert.component';
+
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule,CustomAlertComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -16,81 +17,70 @@ export class LoginComponent {
   emailError: string = '';
   passwordError: string = '';
   formSubmitted: boolean = false;
-  isPasswordVisible: boolean = false; // Track password visibility
+  isPasswordVisible: boolean = false;
+
+  @ViewChild('customAlert') customAlert!: CustomAlertComponent;
 
   constructor(private router: Router) {}
 
-  // Function to handle login
   onLogin() {
-    this.formSubmitted = true; // Mark the form as submitted
+    this.formSubmitted = true;
 
-    // Perform validation
     this.validateInputs();
 
-    // If there are errors, show an alert
     if (this.emailError || this.passwordError) {
+      this.customAlert.show(
+        'Please correct the errors before proceeding.',
+        'Validation Error',
+        'OK'
+      );
       return;
     }
 
-    // Redirect to OTP page if inputs are valid
     this.router.navigate(['/otp']);
   }
 
-  // Input validation
   validateInputs() {
     if (!this.isValidEmail(this.email)) {
       this.emailError = 'Invalid email format. Please provide a valid email.';
     } else {
-      this.emailError = ''; // Clear error if input becomes valid
+      this.emailError = '';
     }
 
     if (!this.isValidPassword(this.password)) {
       this.passwordError =
         'Password must be at least 6 characters long and include one special character.';
     } else {
-      this.passwordError = ''; // Clear error if input becomes valid
+      this.passwordError = '';
     }
   }
 
-  // Called on input change to dynamically validate
   onInputChange() {
     if (this.formSubmitted) {
       this.validateInputs();
     }
   }
 
-  // Forgot password function
   onForgotPassword() {
-    Swal.fire({
-      title: 'Forgot Password',
-      text: 'Please contact BME to reset your password.',
-      icon: 'info',
-      confirmButtonText: 'Okay',
-      width: '50rem',
-      customClass: {
-        popup: 'swal-custom-popup',
-        confirmButton: 'swal-custom-button',
-      },
-    });
+    console.log("hii");
+    this.customAlert.show(
+      'Please contact BME to reset your password.',
+      'Forgot Password',
+      'OK'
+    );
   }
 
-  // Email validation
+  onCustomAlertConfirm() {
+    console.log('Alert confirmed');
+  }
+
   isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
 
-  // Password validation
   isValidPassword(password: string): boolean {
     const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,}$/;
     return passwordRegex.test(password);
   }
-
-  // Toggle password visibility
-  toggleVisibility() {
-    console.log("hh");
-    this.isPasswordVisible = !this.isPasswordVisible;
-  }
-
-  
 }
