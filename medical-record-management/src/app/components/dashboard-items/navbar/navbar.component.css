@@ -1,0 +1,53 @@
+/* General styles for the navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    font-family: Arial, sans-serif;
+    height: 5rem; /* Height of the navbar */
+  }
+  
+  /* Reset styles for the list */
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  
+  /* Logo box styling */
+  .logo-box img {
+    height: 5rem; /* Square size */
+    width: 5rem; /* Square size */
+    object-fit: cover; /* Ensure the image fits the square */
+  }
+  
+  /* Title box styling */
+  .title-box {
+    flex-grow: 1; /* Take up remaining space */
+    display: flex;
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+    height: 5rem; /* Ensure it matches navbar height */
+    text-align: center;
+    border: 1px solid lightgray; /* Light gray border */
+    box-sizing: border-box;
+  }
+  
+  .title-box a {
+    text-decoration: none;
+    font-size: 1.3rem; /* Larger font size */
+    font-weight: 1000; /* High font weight */
+    color: #333; /* Dark text color */
+  }
+  
+  /* Profile box styling */
+  .profile-box {
+    font-size: 1rem;
+    display: flex;
+    align-items: center; /* Center content vertically */
+    justify-content: center; /
+  }

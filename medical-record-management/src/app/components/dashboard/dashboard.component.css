@@ -1,0 +1,19 @@
+
+
+.dashboard-container{
+    display: flex;
+    
+}
+
+.sidebar-container{
+    flex: 10;
+    height: 100vh;
+    
+}
+
+.main-layout-container{
+    flex: 60;
+    background-color: #f5f6f9;
+    height: 100vh;
+
+}

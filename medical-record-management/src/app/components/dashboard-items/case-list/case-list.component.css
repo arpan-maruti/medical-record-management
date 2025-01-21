@@ -1,0 +1,42 @@
+/* Container styling */
+.case-list-container {
+    text-align: center;
+    align-content: center;
+    margin: 0 auto;
+    padding: 50px 20px; /* Add padding for spacing */
+    font-family: 'Arial', sans-serif;
+    height: 35rem;
+    width: 105rem;
+    background-color: white;
+  }
+  
+  /* Header styling */
+  .case-list-container p {
+    font-size: 35px;
+    margin-bottom: 20px; /* Space between header and paragraph */
+    color: #000000; /* Dark text color */
+    font-weight: 600;
+  }
+
+  
+  /* Button styling */
+  .upload-button {
+    height: 3.6rem;
+    width: 30rem;
+    font-size: 24px;
+    padding: 10px 20px; /* Add spacing inside the button */
+    background-color: #002B49; /* Dark blue background */
+    color: white; /* White text */
+    border: none; /* Remove default borders */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add slight shadow */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    margin-top: 5rem;
+  }
+  
+  /* Button hover effect */
+  .upload-button:hover {
+    background-color: #004070; /* Slightly lighter blue on hover */
+  }
+  

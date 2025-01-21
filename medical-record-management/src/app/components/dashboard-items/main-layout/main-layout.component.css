@@ -1,0 +1,14 @@
+.main-layout-container{
+    padding: 2rem;
+}
+.main-layout-heading{
+    font-size: 2rem;
+    font-weight:bolder;
+    margin-bottom: 1rem;
+    margin-top: 1.3rem;
+}
+.main-layout-path{
+    margin-bottom: 3rem;
+    margin-top: 0.5rem;
+    color: rgb(158, 157, 157);
+}

@@ -1,0 +1,75 @@
+/* Sidebar container */
+.sidebar {
+  width: 18.18rem; /* Sidebar width */
+  padding: 10px;
+  height: 100vh; /* Full height */
+  position: fixed; /* Fixed position */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Space between elements */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  background-color: #ffffff; /* Sidebar background */
+}
+
+/* Sidebar list */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+ 
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  justify-content: flex-start; /* Align items to the top */
+}
+
+/* Menu item styling */
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 20px 0; /* Create space around items */
+  background: linear-gradient(to right, #7d9fb12a, #f2f2f000); /* Background gradient */
+  border-radius: 8px; /* Rounded corners */
+}
+
+/* Menu icon styling */
+.menu-icon {
+  font-size: 18px; /* Icon size */
+  color: #333; /* Icon color */
+  margin-right: 10px; /* Space between icon and text */
+}
+
+/* Menu text styling */
+.menu-text {
+  font-weight: bold;
+  font-size: 16px;
+  color: #4a6f81;
+  text-decoration: none;
+  flex-grow: 1; /* Expand text to fill available space */
+}
+
+/* Menu status indicator (dot) */
+.menu-status {
+  width: 8px;
+  height: 8px;
+  background-color: #002B49; /* Dark blue */
+  border-radius: 50%; /* Make it circular */
+}
+
+/* Logout link styling */
+.logout-item {
+ 
+  text-align: center;
+  margin-top: 75vh; /* Push logout to the bottom */
+}
+
+.logout-text {
+  font-size: 1.4rem;
+  color: #1e49a5; /* Blue color */
+  text-decoration: none;
+  padding: 10px 0; /* Add spacing */
+}
+
+.logout-text:hover {
+  text-decoration: underline; /* Add underline on hover */
+}
