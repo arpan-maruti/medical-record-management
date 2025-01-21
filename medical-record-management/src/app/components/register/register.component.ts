@@ -91,7 +91,7 @@ export class RegisterComponent implements OnInit {
     
   };
   onCountryChange(country: any) {
-    this.selectedCountryCode= country.dialling_code;
+    this.selectedCountryCode= country;
     // console.log(country);
   }
 

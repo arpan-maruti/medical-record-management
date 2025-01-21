@@ -25,27 +25,34 @@ export class LoginComponent {
 
   onLogin() {
     this.formSubmitted = true;
-
+    
+    // Validate the fields
     this.validateInputs();
 
+    // If there's any error (email or password), don't proceed with login
     if (this.emailError || this.passwordError) {
-      
       return;
     }
 
+    // Proceed to the next page (OTP)
     this.router.navigate(['/otp']);
   }
 
   validateInputs() {
-    if (!this.isValidEmail(this.email)) {
+    // Validate if the email is empty
+    if (!this.email) {
+      this.emailError = 'Email field can\'t be empty.';
+    } else if (!this.isValidEmail(this.email)) {
       this.emailError = 'Invalid email format. Please provide a valid email.';
     } else {
       this.emailError = '';
     }
 
-    if (!this.isValidPassword(this.password)) {
-      this.passwordError =
-        'Password must be at least 6 characters long and include one special character.';
+    // Validate if the password is empty
+    if (!this.password) {
+      this.passwordError = 'Password field can\'t be empty.';
+    } else if (!this.isValidPassword(this.password)) {
+      this.passwordError = 'Password must be at least 6 characters long and include one special character.';
     } else {
       this.passwordError = '';
     }

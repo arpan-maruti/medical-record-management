@@ -44,6 +44,7 @@
 .register__form-title {
     font-size: 1.2rem; /* Larger form titles */
     margin-bottom: 1rem;
+    margin-top: 1rem;
     color: #434649;
     /* margin-left: 1rem; */
 }
@@ -220,9 +221,9 @@
         transform: translate(-50%, -50%);
         width: 100%;
         max-width: 450px; /* Set max width for the form */
-        background-color: rgba(255, 255, 255, 0.85); /* Add a translucent white background */
-        border-radius: 10px; /* Slightly rounded corners */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+        
+       
+        
     }
 
     .register__form-wrapper {
