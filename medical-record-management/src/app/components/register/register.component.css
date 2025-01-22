@@ -31,11 +31,10 @@
   margin-top: 2.1rem; /* Ensure proper spacing above the title */
   margin-bottom: 0.6rem; /* Reduce margin to avoid unnecessary space */
 }
-
 .register__input-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.1rem;
   margin-bottom:0;
 }
 
