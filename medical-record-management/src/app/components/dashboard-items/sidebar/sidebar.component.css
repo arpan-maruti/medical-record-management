@@ -1,0 +1,75 @@
+/* Sidebar container */
+.sidebar {
+  height: 100vh; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 0.3125rem rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #ffffff;
+  transition: all 0.3s ease; /* Smooth transition for responsive changes */
+}
+
+/* Sidebar list */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Menu item styling */
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 1vw; /* Dynamic padding based on viewport width */
+  margin: 2vh 0; /* Dynamic margin based on viewport height */
+  background: linear-gradient(to right, #7d9fb12a, #f2f2f000);
+  border-radius: 0.5vw; /* Border radius based on viewport width */
+  margin-top: 5vh;
+  margin-bottom: 76vh;
+}
+
+/* Menu icon styling */
+.menu-icon {
+
+  color: #333;
+  margin-right: 1vw; /* Spacing based on viewport width */
+}
+
+/* Menu text styling */
+.menu-text {
+  font-weight: bold;
+  font-size: calc(0.3vw + 0.9vh); /* Font size relative to viewport width */
+  color: #4a6f81;
+  text-decoration: none;
+  flex-grow: 1;
+}
+
+/* Menu status indicator (dot) */
+.menu-status {
+  width: 0.58vw; /* Dot size based on viewport width */
+  height: 0.9vh; /* Dot size based on viewport width */
+  background-color: #002B49;
+  border-radius: 50%;
+}
+
+/* Logout link styling */
+.logout-item {
+ 
+  text-align: center;
+  margin-top: auto;
+}
+
+.logout-text {
+ 
+  font-size: calc(0.3vw + 1.5vh); /* Font size relative to viewport width */
+  color: #1e49a5;
+  text-decoration: none;
+  padding: 1vw 0; /* Padding based on viewport width */
+}
+
+.logout-text:hover {
+  text-decoration: underline;
+}
