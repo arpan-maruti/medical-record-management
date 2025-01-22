@@ -22,6 +22,7 @@ export class RegisterComponent {
   lastNameError: string | null = null;
   emailError: string | null = null;
   phoneNumberError: string | null = null;
+  countryCodeError:string | null = null;
 
   // Country configuration for dropdown
   selectedCountryConfig: IConfig = {
@@ -40,11 +41,23 @@ export class RegisterComponent {
 
   // Validate phone number (check for exactly 10 digits)
   validatePhoneNumber() {
+    console.log(this.phoneNumber.length);
+    if (/[a-zA-Z]/.test(this.phoneNumber)) {
+      this.phoneNumberError = 'Phone number cannot contain alphabets';
+    }
     const phoneNumberOnly = this.phoneNumber.replace(/\D/g, ''); // Remove any non-digit characters
     if (phoneNumberOnly.length !== 10) {
+      console.log('hello');
       this.phoneNumberError = 'Phone number must be exactly 10 digits';
     } else {
       this.phoneNumberError = null; // Clear error if the phone number is valid
+    }
+  }
+
+  validateCountryCode() {
+    console.log(this.selectedCountryCode);
+    if(this.selectedCountryCode=='') {
+      this.countryCodeError='Please select a country.'
     }
   }
 
@@ -54,18 +67,14 @@ export class RegisterComponent {
     this.lastNameError = null;
     this.emailError = null;
     this.phoneNumberError = null;
+    this.countryCodeError = null;
   }
 
   // Handle form submission
   onRegister() {
     this.formSubmitted = true;
     this.validatePhoneNumber(); // Validate phone number when submitting the form
-  
-    // Reset error messages
-    this.firstNameError = null;
-    this.lastNameError = null;
-    this.emailError = null;
-    this.phoneNumberError = null;
+    this.validateCountryCode();
   
     // Validate first name (check if it's empty)
     if (!this.firstName) {
@@ -94,7 +103,7 @@ export class RegisterComponent {
     }
   
     // If there are no errors, proceed with registration data
-    if (!this.firstNameError && !this.lastNameError && !this.emailError && !this.phoneNumberError) {
+    if (!this.firstNameError && !this.lastNameError && !this.emailError && !this.phoneNumberError && !this.countryCodeError) {
       const registrationData = {
         firstName: this.firstName,
         lastName: this.lastName,

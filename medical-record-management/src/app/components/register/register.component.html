@@ -23,11 +23,14 @@
               <!-- SVG Icon here -->
             </span>
           </div>
-          <div *ngIf="formSubmitted && firstNameError" class="register__error-message">
+          <div
+            *ngIf="formSubmitted && firstNameError"
+            class="register__error-message"
+          >
             {{ firstNameError }}
           </div>
         </div>
-      
+
         <div class="register__input-group">
           <h4 class="register__form-title">Last Name</h4>
           <div class="register__input-wrapper">
@@ -46,12 +49,14 @@
               <!-- SVG Icon here -->
             </span>
           </div>
-          <div *ngIf="formSubmitted && lastNameError" class="register__error-message">
+          <div
+            *ngIf="formSubmitted && lastNameError"
+            class="register__error-message"
+          >
             {{ lastNameError }}
           </div>
         </div>
       </div>
-      
 
       <!-- Email Input -->
       <h4 class="register__form-title">Email Address</h4>
@@ -84,7 +89,6 @@
             (onCountryChange)="onCountryChange($event)"
           ></lib-country-list>
         </div>
-
         <!-- Phone Number Input -->
         <div class="register__phone-number-container">
           <input
@@ -111,8 +115,13 @@
           </span>
         </div>
       </div>
-      <div *ngIf="formSubmitted && phoneNumberError" class="error-message">
-        {{ phoneNumberError }}
+      <div class="register__code-error">
+        <div *ngIf="formSubmitted && countryCodeError" class="error-message">
+          {{ countryCodeError }}
+        </div>
+        <div *ngIf="formSubmitted && phoneNumberError" class="error-message">
+          {{ phoneNumberError }}
+        </div>
       </div>
 
       <!-- Submit Button -->
