@@ -1,0 +1,80 @@
+/* General styles for the navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Spread items across the navbar */
+  height: calc(1vh + 2.7vw); /* Dynamic height based on viewport */
+  width: 100%; /* Full width of the container */
+ 
+  border-bottom: 1px solid lightgray; /* Subtle border at the bottom */
+  box-sizing: border-box;
+}
+
+/* Reset styles for the list */
+.navbar ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.logo-name {
+  flex: 10; /* Flexible proportional space for the logo section */
+  display: flex;
+  align-items: center;
+}
+
+/* Logo box styling */
+.logo-box img {
+  height: calc(2.48vh + 2vw); /* Dynamically adjust logo size */
+  width: auto; /* Maintain aspect ratio */
+}
+
+/* Title box styling */
+.title-box {
+  flex: 6; /* Proportional space for the title box */
+  display: flex;
+  align-items: center; /* Center content vertically */
+  justify-content: center; /* Center content horizontally */
+  height: calc(2.48vh + 2vw);
+  border: 1px solid lightgray; /* Expand border into full height */
+  
+  box-sizing: border-box;
+}
+
+.title-box a {
+  text-decoration: none;
+  font-size: calc(0.45vw + 0.9vh); /* Font size relative to viewport width */
+  
+  font-weight: 1000; /* Bold text */
+  color: #333; /* Dark text color */
+  text-align: center;
+  width: 100%; /* Expand link width to the title box */
+}
+
+.blank-box {
+  flex: 40.5; /* Placeholder for spacing */
+}
+
+/* Profile box styling */
+.profile-box {
+  flex: 10; /* Proportional space for the profile section */
+  font-size: 1vw; /* Font size relative to viewport width */
+  display: flex;
+  align-items: center; /* Center content vertically */
+  justify-content: flex-end; /* Align profile to the right */
+}
+
+.profile-box a {
+  font-size: calc(0.5vw + 0.9vh); /* Adjust font size dynamically */
+  text-decoration: none;
+  color: #161839;
+  margin-right: 0.5rem; /* Add spacing before the icon */
+}
+
+.profile-box svg {
+  width: 2vw;
+  height: 2vw;
+}

@@ -4,6 +4,7 @@ import { OtpComponent } from './components/otp/otp.component';
 import { CustomAlertComponent } from './custom-alert/custom-alert.component';
 import { RegisterComponent } from './components/register/register.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 export const routes: Routes = [
 
@@ -12,5 +13,6 @@ export const routes: Routes = [
     {path:'customalert', component: CustomAlertComponent, pathMatch:'full'},
     {path:'register', component: RegisterComponent, pathMatch:'full'},
     {path:'page-not-found', component: PageNotFoundComponent},
+    {path:'dashboard', component: DashboardComponent},
     {path:'**', redirectTo:'/page-not-found'}
 ];

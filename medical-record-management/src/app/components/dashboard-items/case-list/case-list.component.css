@@ -1,0 +1,39 @@
+/* Container styling */
+.case-list-container {
+  text-align: center;
+  align-content: center;
+  padding: 10vh 2vw; /* Use vh for vertical padding and vw for horizontal padding */
+  font-family: 'Arial', sans-serif;
+  max-width: 80vw; /* Limit container width based on viewport width */
+  width: 100%; /* Ensure it adjusts to screen width */
+  background-color: white;
+}
+
+/* Header styling */
+.case-list-container p {
+  font-size: calc(2vh + 0.6vw); /* Font size based on viewport width */
+  margin-bottom: 1.25vh; /* Margin based on viewport height */
+  color: #000000; /* Dark text color */
+  font-weight: 600;
+}
+
+/* Button styling */
+.upload-button {
+  height: 5vh; /* Height based on viewport height */
+  width:  18.9vw; /* Width based on viewport width */
+  font-size: calc(1.5vh + 0.3vw); /* Font size based on viewport width */
+  padding: 1vh 2vw; /* Padding based on viewport height and width */
+  background-color: #002B49; /* Dark blue background */
+  color: white; /* White text */
+  border: none; /* Remove default borders */
+  border-radius: 0.5vw; /* Border radius based on viewport width */
+  cursor: pointer; /* Pointer cursor on hover */
+  box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.2); /* Shadow based on viewport width */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+  margin-top: 10vh; /* Top margin based on viewport height */
+}
+
+/* Button hover effect */
+.upload-button:hover {
+  background-color: #004070; /* Slightly lighter blue on hover */
+}
