@@ -1,4 +1,7 @@
 /* Base styling for register container */
+html,body {
+  overflow: visible;
+}
 .register {
   display: flex;
   flex-direction: column;
