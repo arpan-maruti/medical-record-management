@@ -1,14 +1,24 @@
-.main-layout-container{
-    padding: 2rem;
+/* Main Layout Container */
+.main-layout-container {
+    padding: 2rem; /* Default padding */
 }
-.main-layout-heading{
-    font-size: 2rem;
-    font-weight:bolder;
+
+
+
+
+/* Main Layout Heading */
+.main-layout-heading {
+    font-size: calc(2vh + 0.6vw); /* Default heading font size */
+    font-weight: bolder;
     margin-bottom: 1rem;
-    margin-top: 1.3rem;
+    margin-top: 0.9rem;
+    
 }
-.main-layout-path{
+
+/* Main Layout Path */
+.main-layout-path {
+    font-size: calc(1vh + 0.4vw);
     margin-bottom: 3rem;
     margin-top: 0.5rem;
-    color: rgb(158, 157, 157);
+    color: rgb(158, 157, 157); /* Light gray text */
 }

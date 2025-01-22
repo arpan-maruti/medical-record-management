@@ -1,19 +1,20 @@
-
-
-.dashboard-container{
+/* Dashboard container */
+.dashboard-container {
     display: flex;
-    
+    flex-direction: row; /* Default layout for larger screens */
 }
 
-.sidebar-container{
-    flex: 10;
+/* Sidebar container */
+.sidebar-container {
+    flex: 1;
     height: 100vh;
-    
+   
 }
 
-.main-layout-container{
-    flex: 60;
+/* Main layout container */
+.main-layout-container {
+    flex: 5;
     background-color: #f5f6f9;
     height: 100vh;
-
+    padding: 1rem; /* Add some padding for content spacing */
 }
