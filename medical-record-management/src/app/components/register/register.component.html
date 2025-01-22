@@ -10,23 +10,15 @@
           <div class="register__input-wrapper">
             <input
               class="register__input register__input--name"
-              [ngClass]="{
-                'register__input--error': formSubmitted && firstNameError
-              }"
+              [ngClass]="{ 'register__input--error': formSubmitted && firstNameError }"
               type="text"
               placeholder="First Name"
               [(ngModel)]="firstName"
               (input)="onInputChange()"
               pattern="^[A-Za-z]+$"
             />
-            <span class="register__icon register__icon--email">
-              <!-- SVG Icon here -->
-            </span>
           </div>
-          <div
-            *ngIf="formSubmitted && firstNameError"
-            class="register__error-message"
-          >
+          <div *ngIf="formSubmitted && firstNameError" class="register__error-message">
             {{ firstNameError }}
           </div>
         </div>
@@ -36,23 +28,15 @@
           <div class="register__input-wrapper">
             <input
               class="register__input register__input--name"
-              [ngClass]="{
-                'register__input--error': formSubmitted && lastNameError
-              }"
+              [ngClass]="{ 'register__input--error': formSubmitted && lastNameError }"
               type="text"
               placeholder="Last Name"
               [(ngModel)]="lastName"
               (input)="onInputChange()"
               pattern="^[A-Za-z]+$"
             />
-            <span class="register__icon register__icon--email">
-              <!-- SVG Icon here -->
-            </span>
           </div>
-          <div
-            *ngIf="formSubmitted && lastNameError"
-            class="register__error-message"
-          >
+          <div *ngIf="formSubmitted && lastNameError" class="register__error-message">
             {{ lastNameError }}
           </div>
         </div>
@@ -65,14 +49,11 @@
           class="register__input"
           [ngClass]="{ 'register__input--error': formSubmitted && emailError }"
           type="email"
-          placeholder="Your E-Mail"
+          placeholder="Your Email"
           [(ngModel)]="email"
           (input)="onInputChange()"
           required
         />
-        <span class="register__icon register__icon--email">
-          <!-- SVG Icon here -->
-        </span>
       </div>
       <div *ngIf="formSubmitted && emailError" class="register__error-message">
         {{ emailError }}
@@ -83,45 +64,33 @@
       <div class="register__input-container">
         <!-- Country Code Dropdown -->
         <div class="register__country-container">
-          <lib-country-list
-            [selectedCountryConfig]="selectedCountryConfig"
-            [countryListConfig]="countryListConfig"
-            (onCountryChange)="onCountryChange($event)"
-          ></lib-country-list>
+          <select
+            class="register__country-dropdown"
+            [(ngModel)]="selectedCountryCode"
+            (change)="onInputChange()"
+          >
+            <option value="" disabled>Select a Country</option>
+            <option *ngFor="let country of countryList" [value]="country.countryCode">
+              {{ country.flag }} {{ country.countryCode }} ({{ country.countryCallingCode }})
+            </option>
+          </select>
         </div>
         <!-- Phone Number Input -->
         <div class="register__phone-number-container">
           <input
             class="register__input register__input--phone-number"
-            [ngClass]="{ 'input-error': formSubmitted && phoneNumberError }"
+            [ngClass]="{ 'register__input--error': formSubmitted && phoneError }"
+            
             type="text"
             placeholder="Phone Number"
             [(ngModel)]="phoneNumber"
             (input)="onInputChange()"
             required
           />
-          <span class="register__icon email-icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#CCCCCC"
-            >
-              <path
-                d="M798-120q-125 0-247-54.5T329-329Q229-429 174.5-551T120-798q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T387-386q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T670-390l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12ZM241-600l66-66-17-94h-89q5 41 14 81t26 79Zm358 358q39 17 79.5 27t81.5 13v-88l-94-19-67 67ZM241-600Zm358 358Z"
-              />
-            </svg>
-          </span>
         </div>
       </div>
-      <div class="register__code-error">
-        <div *ngIf="formSubmitted && countryCodeError" class="error-message">
-          {{ countryCodeError }}
-        </div>
-        <div *ngIf="formSubmitted && phoneNumberError" class="error-message">
-          {{ phoneNumberError }}
-        </div>
+      <div *ngIf="formSubmitted && phoneError" class="register__error-message">
+        {{ phoneError }}
       </div>
 
       <!-- Submit Button -->
