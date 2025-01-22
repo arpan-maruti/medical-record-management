@@ -1,0 +1,38 @@
+[
+  {
+    "countryCode": "IN",
+    "countryName": "India",
+    "minLength": 10,
+    "maxLength": 10,
+    "countryCallingCode": "+91",
+    "callingCode": 91,
+    "flag": "🇮🇳"
+  },
+  {
+    "countryCode": "US",
+    "countryName": "United States",
+    "minLength": 10,
+    "maxLength": 10,
+    "countryCallingCode": "+1",
+    "callingCode": 1,
+    "flag": "🇺🇸"
+  },
+  {
+    "countryCode": "GB",
+    "countryName": "United Kingdom",
+    "minLength": 10,
+    "maxLength": 15,
+    "countryCallingCode": "+44",
+    "callingCode": 44,
+    "flag": "🇬🇧"
+  },
+  {
+    "countryCode": "AU",
+    "countryName": "Australia",
+    "minLength": 9,
+    "maxLength": 10,
+    "countryCallingCode": "+61",
+    "callingCode": 61,
+    "flag": "🇦🇺"
+  }
+]
