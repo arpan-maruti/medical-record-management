@@ -6,6 +6,7 @@ html {
   font-family: "Arial", sans-serif;
   height: 100vh;
   display: flex;
+  overflow: visible;
 }
 
 .otp-container {
