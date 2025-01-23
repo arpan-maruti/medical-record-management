@@ -32,9 +32,10 @@
 /* Menu icon styling */
 .menu-icon {
   color: #333;
-  height: 2.5rem;
+  height: 2rem;
   margin-left: 1rem;
   margin-right: 1rem;
+  margin-bottom: 0.9rem;
 }
 
 /* Menu text styling */
@@ -61,7 +62,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 63rem;
+  margin-top: 77vh;
   
 }
 
@@ -83,32 +84,57 @@
 }
 /* Responsive Styles */
 
+
+
+
 /* For widths 1440px and below */
 @media (max-width: 1440px) {
   .menu-item {
-    padding: 0.65rem;
-    margin: 0.9rem 0;
+    height: 3.5rem;
+    margin-top: 3.5rem;
+  }
+  .menu-icon{
+    margin-left: 0.5rem;
+  margin-right: 0.1rem;
+  }
+  .menu-icon svg{
+    margin-top: 0.37rem;
+    height: 28px;
   }
 
   .menu-text {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .menu-status {
-    width: 0.45rem;
-    height: 0.45rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    margin-left: 0.7rem;
   }
 
   .logout-text {
     font-size: 1.1rem;
+  }
+
+  .logout-item {
+    margin-top: 75.5vh;
+    
   }
 }
 
 /* For widths 1024px and below */
 @media (max-width: 1024px) {
   .menu-item {
-    padding: 0.6rem;
-    margin: 0.8rem 0;
+    height: 3rem;
+    margin-top: 3rem;
+  }
+  .menu-icon{
+    margin-left: 0.5rem;
+    margin-right: 0.1rem;
+  }
+  .menu-icon svg{
+    margin-top: 0.5rem;
+    height: 25px;
   }
 
   .menu-text {
@@ -116,12 +142,17 @@
   }
 
   .menu-status {
-    width: 0.4rem;
-    height: 0.4rem;
+    width: 0.57rem;
+    height: 0.56rem;
+    margin-left: 0.5rem;
   }
 
   .logout-text {
     font-size: 1rem;
+  }
+
+  .logout-item {
+    margin-top: 74.5vh;
   }
 }
 

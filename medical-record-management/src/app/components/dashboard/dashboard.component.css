@@ -28,16 +28,18 @@
   }
   
   @media (max-width: 1024px) {
-    .dashboard-container {
-      flex-direction: column; /* Stack sidebar and main layout vertically */
-    }
-  
+   
     .sidebar-container {
-      height: auto; /* Allow the sidebar to adjust to content */
+      flex: 13.2;
+      height: 100vh; /* Full height of the parent container */
+      background-color: #ffffff;
     }
+    
+
   
     .main-layout-container {
       padding: 1rem; /* Adjust padding */
+      flex: 50;
     }
   }
   

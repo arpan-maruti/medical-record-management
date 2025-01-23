@@ -53,7 +53,10 @@
 }
 
 .blank-box {
-  flex: 40.5; /* Placeholder for spacing */
+  flex: 41; /* Placeholder for spacing */
+  border: 1px solid lightgray; /* Expand border into full height */
+  box-sizing: border-box;
+  height: 5.5rem; /* Match logo height */
 }
 
 /* Profile box styling */
@@ -63,16 +66,18 @@
   display: flex;
   align-items: center; /* Center content vertically */
   justify-content: flex-end; /* Align profile to the right */
+  
 }
 
 .profile-box a {
   font-size: 1.5rem; /* Adjust font size */
   text-decoration: none;
   color: #161839;
-  margin-right: 0.5rem; /* Add spacing before the icon */
+   /* Add spacing before the icon */
 }
 
 .profile-box svg {
+  margin-right: 8rem;
   width: 1.5rem; /* Adjust size of the SVG */
   height: 1.5rem;
 }
@@ -81,6 +86,10 @@
 
 /* For widths 1440px and below */
 @media (max-width: 1440px) {
+
+  .blank-box {
+    flex: 41.2; /* Placeholder for spacing */
+  }
   .navbar {
     height: 3.4rem;
     
@@ -93,12 +102,15 @@
   .title-box a {
     font-size: 1.1rem;
   }
-
+  .profile-box{
+    padding: 1rem;
+  }
   .profile-box a {
     font-size: 1rem;
   }
 
   .profile-box svg {
+    margin-right: 4rem;
     width: 1rem;
     height: 1rem;
   }
@@ -106,24 +118,37 @@
 
 /* For widths 1024px and below */
 @media (max-width: 1024px) {
-  .navbar {
-    height: 2.9rem;
-  }
 
-  .logo-box img {
+  .logo-name {
+    flex: 15; 
+  }
+  .blank-box {
+    flex: 41.6; /* Placeholder for spacing */
+  }
+  .profile-box {
+    flex: 15; 
+  }
+  .navbar {
     height: 3rem;
-    width: 3rem;
+    
+  }
+  .logo-box img{
+    height: 3.2rem;
+    width: 3.2rem;
   }
 
   .title-box a {
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
-
+  .profile-box{
+    padding: 1rem;
+  }
   .profile-box a {
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 
   .profile-box svg {
+    margin-right: 3rem;
     width: 1rem;
     height: 1rem;
   }
