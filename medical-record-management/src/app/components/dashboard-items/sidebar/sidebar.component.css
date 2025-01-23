@@ -32,7 +32,7 @@
 /* Menu icon styling */
 .menu-icon {
   color: #333;
-  height: 4.5rem;
+  height: 2.5rem;
   margin-left: 1rem;
   margin-right: 1rem;
 }
@@ -43,16 +43,17 @@
   font-size: 1.5rem; /* Adjusted font size */
   color: #4a6f81;
   text-decoration: none;
-  flex-grow: 1;
+ 
   
 }
 
 /* Menu status indicator (dot) */
 .menu-status {
-  width: 0.7rem; /* Adjusted dot size */
-  height: 0.7rem;
+  width: 1rem; /* Adjusted dot size */
+  height: 0.9rem;
   background-color: #002B49;
   border-radius: 50%;
+  margin-left: 2.2rem;
 }
 
 /* Logout link styling */
