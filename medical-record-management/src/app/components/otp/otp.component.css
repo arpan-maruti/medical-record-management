@@ -104,6 +104,7 @@ html {
 
 /* Error Messages */
 .otp__error-message {
+  position: absolute;
   color: red;
   font-size: 1rem;
   margin-top: 0.5rem;
@@ -115,7 +116,7 @@ html {
 .otp__buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 1rem;
+  margin-top: 3rem;
 }
 
 .otp__login,
@@ -271,7 +272,7 @@ html {
   .otp__login,
   .otp__verify {
     /* width: 60%; */
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     height: 2.5rem;
   }
 }
