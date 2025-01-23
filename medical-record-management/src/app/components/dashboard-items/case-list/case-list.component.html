@@ -1,6 +1,11 @@
-<div class="case-list-container">
-    <p>Welcome to the Case Management Section.</p>
-    <p>To upload a new case, please click the button below.</p>
-    <button class="upload-button">Upload New Case</button>
+<div class="container text-center py-5">
+  <div *ngIf="isDataAvailable" class="case-list__case">
+    <!-- Display cases here -->
   </div>
   
+  <div *ngIf="!isDataAvailable" class="case-list__no-case">
+    <p class="fs-3 fw-semibold text-dark mb-4">Welcome to the Case Management Section.</p>
+    <p class="fs-4 text-dark mb-4">To upload a new case, please click the button below.</p>
+    <button class="btn btn-primary btn-lg mt-4">Upload New Case</button>
+  </div>
+</div>
