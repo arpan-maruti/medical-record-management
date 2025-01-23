@@ -2,12 +2,12 @@
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Spread items across the navbar */
-  height: calc(1vh + 2.7vw); /* Dynamic height based on viewport */
+  justify-content: space-between;
+  height: 5.4rem; /* Fixed height using rem */
   width: 100%; /* Full width of the container */
- 
   border-bottom: 1px solid lightgray; /* Subtle border at the bottom */
   box-sizing: border-box;
+  
 }
 
 /* Reset styles for the list */
@@ -28,7 +28,7 @@
 
 /* Logo box styling */
 .logo-box img {
-  height: calc(2.48vh + 2vw); /* Dynamically adjust logo size */
+  height: 5.5rem; /* Logo size in rem */
   width: auto; /* Maintain aspect ratio */
 }
 
@@ -38,17 +38,15 @@
   display: flex;
   align-items: center; /* Center content vertically */
   justify-content: center; /* Center content horizontally */
-  height: calc(2.48vh + 2vw);
+  height: 5.5rem; /* Match logo height */
   border: 1px solid lightgray; /* Expand border into full height */
-  
   box-sizing: border-box;
 }
 
 .title-box a {
   text-decoration: none;
-  font-size: calc(0.45vw + 0.9vh); /* Font size relative to viewport width */
-  
-  font-weight: 1000; /* Bold text */
+  font-size: 1.75rem; /* Font size in rem */
+  font-weight: 700; /* Semi-bold text */
   color: #333; /* Dark text color */
   text-align: center;
   width: 100%; /* Expand link width to the title box */
@@ -61,20 +59,127 @@
 /* Profile box styling */
 .profile-box {
   flex: 10; /* Proportional space for the profile section */
-  font-size: 1vw; /* Font size relative to viewport width */
+  font-size: 1.75rem; /* Font size in rem */
   display: flex;
   align-items: center; /* Center content vertically */
   justify-content: flex-end; /* Align profile to the right */
 }
 
 .profile-box a {
-  font-size: calc(0.5vw + 0.9vh); /* Adjust font size dynamically */
+  font-size: 1.5rem; /* Adjust font size */
   text-decoration: none;
   color: #161839;
   margin-right: 0.5rem; /* Add spacing before the icon */
 }
 
 .profile-box svg {
-  width: 2vw;
-  height: 2vw;
+  width: 1.5rem; /* Adjust size of the SVG */
+  height: 1.5rem;
+}
+
+/* Responsive Styles */
+
+/* For widths 1440px and below */
+@media (max-width: 1440px) {
+  .navbar {
+    height: 3.4rem;
+    
+  }
+  .logo-box img{
+    height: 3.5rem;
+    width: 3.5rem;
+  }
+
+  .title-box a {
+    font-size: 1.1rem;
+  }
+
+  .profile-box a {
+    font-size: 1rem;
+  }
+
+  .profile-box svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* For widths 1024px and below */
+@media (max-width: 1024px) {
+  .navbar {
+    height: 2.9rem;
+  }
+
+  .logo-box img {
+    height: 3rem;
+    width: 3rem;
+  }
+
+  .title-box a {
+    font-size: 0.8rem;
+  }
+
+  .profile-box a {
+    font-size: 0.8rem;
+  }
+
+  .profile-box svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* For widths 768px and below */
+@media (max-width: 768px) {
+  .navbar {
+    height: 2.5rem;
+  }
+
+  .logo-box img {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
+
+  .title-box a {
+    font-size: 0.500rem;
+  }
+
+  .profile-box a {
+    font-size: 0.8rem;
+  }
+
+  .profile-box svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}
+
+/* For widths 440px and below */
+@media (max-width: 440px) {
+  .navbar {
+    height: 2.25rem;
+    flex-direction: column; /* Stack navbar items */
+    align-items: flex-start; /* Align items to the left */
+    padding: 0.5rem;
+  }
+
+  .title-box {
+    border: none; /* Remove border for smaller screens */
+  }
+
+  .title-box a {
+    font-size: 0.75rem;
+    text-align: left;
+  }
+
+  .profile-box {
+    justify-content: flex-start; /* Align profile items to the left */
+    font-size: 0.75rem;
+  }
+
+  .profile-box svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
 }

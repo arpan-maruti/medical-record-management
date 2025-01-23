@@ -5,16 +5,14 @@
   justify-content: center; /* Center the form */
   align-items: center; /* Center vertically */
   height: 100vh;
-  /* background-color: #f8f8f8; */
+  /* background-color: #F8F8F8; */
   padding: 2rem;
 }
-
 .register__form {
   width: 100%;
   max-width: 500px;
   padding: 2rem;
 }
-
 .register__form-label {
   color: #003366;
   text-align: center;
@@ -23,7 +21,6 @@
   font-weight: 700;
   margin-bottom: 2rem;
 }
-
 .register__form-title {
   margin-bottom: 0.2rem;
   font-size: 1.2rem;
@@ -31,19 +28,16 @@
   margin-top: 2.1rem; /* Ensure proper spacing above the title */
   margin-bottom: 0.6rem; /* Reduce margin to avoid unnecessary space */
 }
-
 .register__input-container {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-bottom:0;
 }
-
 .register__input-wrapper,
 .register__phone-number-container {
   width: 100%;
 }
-
 .register__input {
   width: 100%;
   padding: 0.8rem 1.2rem;
@@ -52,30 +46,25 @@
   border-radius: 1.5rem;
   transition: border-color 0.3s;
 }
-
 .register__input--error {
   border-color: red !important;
 }
-
 .register__input:focus {
-  border-color: #0066cc;
+  border-color: #0066CC;
   outline: none;
 }
-
 .register__country-dropdown {
   width: 8rem;
   padding: 0.8rem;
   font-size: 0.89rem;
   border-radius: 1.5rem;
   border: 1px solid #ccc;
-  background-color: #f9f9f9;
+  background-color: #F9F9F9;
 }
-
 .register__phone-number-container input {
   font-size: 1rem;
   padding: 0.8rem 1.2rem;
 }
-
 .register__error-message {
   position: absolute;
   color: red;
@@ -96,9 +85,8 @@
   display: block;
   text-align: center;
 }
-
 .register__button:hover {
-  /* background: linear-gradient(135deg, #003b75, #003c77); */
+  /* background: linear-gradient(135deg, #003B75, #003C77); */
     box-shadow: -1px 8px 9px 1px rgba(104, 172, 179, 0.4);
     transition: all 0.35s ease-in-out;
 }
@@ -134,15 +122,12 @@
   .register__form-wrapper {
     padding: 1.5rem;
   }
-
   .register__form-label {
     font-size: 1.5rem;
   }
-
   .register__input {
     font-size: 0.9rem;
   }
-
   .register__button {
     /* font-size: 1rem;
     padding: 0.9rem; */
@@ -153,7 +138,6 @@
     font-size: 0.9rem;
   }
 }
-
 @media (max-width: 480px) {
   .register {
     padding: 0;
@@ -176,17 +160,14 @@
   .register__form-wrapper {
     padding: 1rem;
   }
-
   .register__form-label {
     font-size: 1.3rem;
   }
-
   .register__input {
     padding-left: 0.8rem;
     padding-right: 0.5rem;
     font-size: 0.9rem;
   }
-
   .register__button {
     font-size: 1rem;
     padding: 0.8rem;
