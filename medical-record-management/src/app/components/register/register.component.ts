@@ -30,7 +30,6 @@ export class RegisterComponent {
   }
   this.cdr.detectChanges();
   }
-
   // Handle input changes
   onInputChange() {
     this.firstNameError = null;
@@ -38,25 +37,21 @@ export class RegisterComponent {
     this.emailError = null;
     this.phoneError = null;
   }
-
   // Handle form submission
   onRegister() {
     this.formSubmitted = true;
-
     // Validate first name
     if (!this.firstName) {
       this.firstNameError = 'First name is required';
     } else if (!this.firstName.match(/^[A-Za-z]+$/)) {
       this.firstNameError = 'Invalid name';
     }
-
     // Validate last name
     if (!this.lastName) {
       this.lastNameError = 'Last name is required';
     } else if (!this.lastName.match(/^[A-Za-z]+$/)) {
       this.lastNameError = 'Invalid name';
     }
-
     // Validate email
     if (!this.email) {
       this.emailError = 'Email address is required';
@@ -76,7 +71,6 @@ export class RegisterComponent {
     else {
       this.phoneError='';
     }
-
     // If there are no errors, proceed with registration data
     if (!this.firstNameError && !this.lastNameError && !this.emailError && !this.phoneError) {
       const registrationData = {

@@ -2,19 +2,58 @@
 .dashboard-container {
     display: flex;
     flex-direction: row; /* Default layout for larger screens */
-}
-
-/* Sidebar container */
-.sidebar-container {
+    height: 100%; /* Use height based on the viewport for consistency */
+  }
+  
+  /* Sidebar container */
+  .sidebar-container {
     flex: 1;
-    height: 100vh;
-   
-}
-
-/* Main layout container */
-.main-layout-container {
+    height: 100vh; /* Full height of the parent container */
+    background-color: #ffffff;
+  }
+  
+  /* Main layout container */
+  .main-layout-container {
     flex: 5;
     background-color: #f5f6f9;
-    height: 100vh;
-    padding: 1rem; /* Add some padding for content spacing */
-}
+    height: 100vh; /* Full height of the parent container */
+    padding: 1.5rem; /* Default padding for larger screens */
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 1440px) {
+    .main-layout-container {
+      padding: 1.25rem; /* Adjust padding */
+    }
+  }
+  
+  @media (max-width: 1024px) {
+    .dashboard-container {
+      flex-direction: column; /* Stack sidebar and main layout vertically */
+    }
+  
+    .sidebar-container {
+      height: auto; /* Allow the sidebar to adjust to content */
+    }
+  
+    .main-layout-container {
+      padding: 1rem; /* Adjust padding */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .main-layout-container {
+      padding: 0.75rem; /* Smaller padding for smaller screens */
+    }
+  }
+  
+  @media (max-width: 440px) {
+    .dashboard-container {
+      flex-direction: column; /* Keep stacked layout for smaller screens */
+    }
+  
+    .main-layout-container {
+      padding: 0.5rem; /* Minimal padding */
+    }
+  }
+  
