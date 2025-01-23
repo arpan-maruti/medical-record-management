@@ -1,6 +1,6 @@
 /* Base styling for register container */
-html,body {
-  overflow: visible;
+*{
+  overflow: visible !important;
 }
 .register {
   display: flex;

@@ -6,7 +6,6 @@ html {
   font-family: "Arial", sans-serif;
   height: 100vh;
   display: flex;
-  overflow: visible;
 }
 
 .otp-container {
@@ -105,7 +104,6 @@ html {
 
 /* Error Messages */
 .otp__error-message {
-  position: absolute;
   color: red;
   font-size: 1rem;
   margin-top: 0.5rem;
@@ -117,7 +115,7 @@ html {
 .otp__buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 3rem;
+  margin-top: 1rem;
 }
 
 .otp__login,
@@ -273,7 +271,7 @@ html {
   .otp__login,
   .otp__verify {
     /* width: 60%; */
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     height: 2.5rem;
   }
 }
