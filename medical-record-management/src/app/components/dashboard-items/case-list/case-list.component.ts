@@ -1,26 +1,51 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import dataset from '../../../../assets/data.json';
+import { DataService } from '../../../data.service';
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-case-list',
   imports: [CommonModule],
   templateUrl: './case-list.component.html',
-  styleUrl: './case-list.component.css'
+  styleUrls: ['./case-list.component.css']
 })
 export class CaseListComponent {
-  data: any;
+  data: any[] = [];
   isDataAvailable: boolean = false;
-  loiTypes: any[] = [];
-  instructionType: any[] = [];
-  selectedLoiType: any[] = [];
-  constructor(private cdr: ChangeDetectorRef) {}
+
+  constructor(private cdr: ChangeDetectorRef, private dataService: DataService) {}
+
   ngAfterViewInit() {
-    this.data;
-    if(this.data) {
-    console.log(this.data);
-    this.isDataAvailable = true;
+    // Fetching case data
+    this.data = this.dataService.getCases(); // Adjusted to fetch cases
+    if (this.data.length > 0) {
+      this.isDataAvailable = true;
     }
     this.cdr.detectChanges();
   }
 
+  toggleSubCases(caseItem: any) {
+    caseItem.expanded = !caseItem.expanded; // Toggle subcase visibility
+  }
+
+  getInstructionType(caseItem: any) {
+    const instruction:any = this.dataService.getParameters().find((param:any)=> param._id === caseItem.parameters[0]).instruction_id;
+    const msg= this.dataService.getInstructionTypes().find((msg)=> msg._id === instruction).instruction_msg;
+    // console.log(msg.instruction_msg);
+    return msg;
+  }
+  
+  getCaseStatus(caseItem: any) {
+    const status = this.dataService.getCaseStatus().find((status: any) => status._id === caseItem.case_status);
+    return status ? status.status : 'Unknown';
+  }
+
+  getTotalFiles(caseItem: any) {
+    // console.log(caseItem.files.length);
+    return caseItem.files ? caseItem.files.length : 0; // Example: count subcases
+  }
+
+  getTotalPages(caseItem: any) {
+    // Example: Sum of pages from files in the case
+    return caseItem.files ? caseItem.files.reduce((sum: number, subCase: any) => sum + (subCase.no_of_pages || 0), 0) : 0;
+  }
 }

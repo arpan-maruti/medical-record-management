@@ -1,0 +1,110 @@
+/* Container Styling */
+.case-list__container {
+  text-align: center;
+  align-content: center;
+  padding: 5rem 1.5rem; /* Default padding in rem */
+  font-family: 'Arial', sans-serif;
+  max-width: 60rem; /* Limit container width to 60rem */
+  width: 100%; /* Ensure it adjusts to screen width */
+  background-color: white;
+  margin: 0 auto; /* Center align the container */
+}
+
+/* Header Styling */
+.case-list__container p {
+  font-size: 1.8rem; /* Default font size */
+  margin-bottom: 1.5rem; /* Space between paragraphs */
+  color: #000000; /* Dark text color */
+  font-weight: 600;
+}
+
+/* Button Styling */
+.upload-button {
+  height: 3.5rem; /* Button height */
+  width: 15rem; /* Button width */
+  font-size: 1.2rem; /* Font size */
+  padding: 0.8rem 1.5rem; /* Padding for button text */
+  background-color: #002B49; /* Dark blue background */
+  color: white; /* White text */
+  border: none; /* Remove default borders */
+  border-radius: 0.5rem; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+  margin-top: 4rem; /* Top margin */
+}
+
+/* Button Hover Effect */
+.upload-button:hover {
+  background-color: #004070; /* Slightly lighter blue on hover */
+}
+
+/* Responsive Styles */
+
+/* For widths 1440px and below */
+@media (max-width: 1440px) {
+  .case-list-container {
+    padding: 4rem 1rem;
+  }
+
+  .case-list-container p {
+    font-size: 1.6rem;
+  }
+
+  .upload-button {
+    height: 3.2rem;
+    width: 14rem;
+    font-size: 1.1rem;
+  }
+}
+
+/* For widths 1024px and below */
+@media (max-width: 1024px) {
+  .case-list-container {
+    padding: 3rem 0.8rem;
+  }
+
+  .case-list-container p {
+    font-size: 1.4rem;
+  }
+
+  .upload-button {
+    height: 3rem;
+    width: 12rem;
+    font-size: 1rem;
+  }
+}
+
+/* For widths 768px and below */
+@media (max-width: 768px) {
+  .case-list-container {
+    padding: 2.5rem 0.5rem;
+  }
+
+  .case-list-container p {
+    font-size: 1.2rem;
+  }
+
+  .upload-button {
+    height: 2.8rem;
+    width: 10rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* For widths 440px and below */
+@media (max-width: 440px) {
+  .case-list-container {
+    padding: 2rem 0.5rem;
+  }
+
+  .case-list-container p {
+    font-size: 1rem;
+  }
+
+  .upload-button {
+    height: 2.5rem;
+    width: 9rem;
+    font-size: 0.8rem;
+  }
+}
