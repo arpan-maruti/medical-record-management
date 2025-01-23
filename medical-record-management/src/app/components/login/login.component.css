@@ -58,11 +58,12 @@
 }
 
 .login__input {
+    
     width: 100%;
     padding: 1rem 1.2rem 1rem 3rem; /* Adjust padding for better appearance */
     border: 1px solid lightgrey;
     border-radius: 2rem;
-    /* margin-bottom: 0; */
+    margin-bottom: 2rem;
     font-size: 1.1rem; /* Larger input text */
 }
 
@@ -73,7 +74,7 @@
 
 .login__icon {
     position: absolute;
-    top: 50%;
+    top: 33%;
     transform: translateY(-50%);
     font-size: 1.1rem;
     pointer-events: none;
@@ -138,8 +139,11 @@
 .error-message {
     color: red;
     font-size: 1rem;
+    /* margin-top: -1.6rem; */
+    margin-top: -2.2rem;
     margin-bottom: 0.8rem;
     /* margin-left: 1rem; */
+    position: absolute;
 }
 
 @media (max-width: 1024px) {
@@ -197,7 +201,7 @@
     .login__input {
         font-size: 1.1rem;
         padding: 1rem 1.2rem 1rem 3rem;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
     }
 
     .login__button {
@@ -208,7 +212,6 @@
         font-size: 1rem;
         height: 3.2rem;
     }
-
     .login__forgot-password {
         text-align: right;
         font-size: 1rem;
@@ -222,7 +225,9 @@
         left: 1rem;
         top: 1.7rem; /* Position the email icon to the left */
     }
-    
+    .error-message {
+        margin-top: -1.6rem;
+    }
     .password-icon {
         left: 1rem;
         top: 1.7rem; /* Position the password key icon to the left */
@@ -268,7 +273,7 @@
     }
     .error-message {
         margin-bottom: 1rem;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 }
 
