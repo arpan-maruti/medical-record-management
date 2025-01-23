@@ -273,3 +273,26 @@
     height: 1rem;
   }
 }
+
+/* For widths 440px and below */
+@media (max-width: 375px) {
+
+  .title-box a {
+    font-size: 1.1rem;
+  }
+
+  .profile-box a {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 325px) {
+
+  .title-box a {
+    font-size: 1rem;
+  }
+
+  .profile-box a {
+    font-size: 0.8rem;
+  }
+}
