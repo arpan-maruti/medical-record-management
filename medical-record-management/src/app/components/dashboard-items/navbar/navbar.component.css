@@ -65,7 +65,7 @@
   font-size: 1.75rem; /* Font size in rem */
   display: flex;
   align-items: center; /* Center content vertically */
-  justify-content: flex-end; /* Align profile to the right */
+  justify-content: center;
   
 }
 
@@ -77,9 +77,53 @@
 }
 
 .profile-box svg {
-  margin-right: 8rem;
+  
   width: 1.5rem; /* Adjust size of the SVG */
   height: 1.5rem;
+}
+
+/* Dropdown container */
+.dropdown {
+  position: absolute;
+  top: 100%; /* Position below the profile box */
+  right: 0;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 0.5rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0;
+  min-width: 150px;
+  z-index: 10;
+  display: none; /* Initially hidden */
+}
+
+/* Show dropdown when it's open */
+.dropdown.show {
+  display: block;
+}
+
+.dropdown li {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown li:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdown li svg {
+  margin-right: 0.5rem;
+}
+
+.dropdown li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
 }
 
 /* Responsive Styles */
@@ -110,7 +154,7 @@
   }
 
   .profile-box svg {
-    margin-right: 4rem;
+    
     width: 1rem;
     height: 1rem;
   }
@@ -148,7 +192,7 @@
   }
 
   .profile-box svg {
-    margin-right: 3rem;
+   
     width: 1rem;
     height: 1rem;
   }
@@ -157,54 +201,75 @@
 /* For widths 768px and below */
 @media (max-width: 768px) {
   .navbar {
-    height: 2.5rem;
+    height: 3.4rem;
+  }
+
+  .logo-name {
+    flex: 30; 
+  }
+  .blank-box {
+    flex: 41.6; /* Placeholder for spacing */
+  }
+  .profile-box {
+    flex: 15; 
   }
 
   .logo-box img {
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 3.5rem;
+    width: 3.5rem;
   }
 
 
   .title-box a {
-    font-size: 0.500rem;
+    font-size: 1.2rem;
   }
 
   .profile-box a {
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 
   .profile-box svg {
-    width: 0.875rem;
-    height: 0.875rem;
+    
+    width: 1rem;
+    height: 1rem;
   }
+
+  
 }
 
 /* For widths 440px and below */
 @media (max-width: 440px) {
   .navbar {
-    height: 2.25rem;
-    flex-direction: column; /* Stack navbar items */
-    align-items: flex-start; /* Align items to the left */
-    padding: 0.5rem;
+    height: 2.9rem;
   }
 
-  .title-box {
-    border: none; /* Remove border for smaller screens */
+  .logo-name {
+    flex: 40; 
   }
+  .blank-box {
+    display: none;
+  }
+  .profile-box {
+    flex: 15; 
+  }
+
+  .logo-box img {
+    height: 3rem;
+    width: 3rem;
+  }
+
 
   .title-box a {
-    font-size: 0.75rem;
-    text-align: left;
+    font-size: 1.15rem;
   }
 
-  .profile-box {
-    justify-content: flex-start; /* Align profile items to the left */
-    font-size: 0.75rem;
+  .profile-box a {
+    font-size: 1.1rem;
   }
 
   .profile-box svg {
-    width: 0.75rem;
-    height: 0.75rem;
+   
+    width: 1rem;
+    height: 1rem;
   }
 }

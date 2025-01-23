@@ -44,18 +44,32 @@
   }
   
   @media (max-width: 768px) {
+    .sidebar-container {
+      flex: 0;
+      height: 100vh; /* Full height of the parent container */
+      background-color: #ffffff;
+    }
+    
+
+  
     .main-layout-container {
-      padding: 0.75rem; /* Smaller padding for smaller screens */
+      padding: 1rem; /* Adjust padding */
+      flex: 50;
     }
   }
   
   @media (max-width: 440px) {
-    .dashboard-container {
-      flex-direction: column; /* Keep stacked layout for smaller screens */
+    .sidebar-container {
+      flex: 0;
+      height: 100vh; /* Full height of the parent container */
+      background-color: #ffffff;
     }
+    
+
   
     .main-layout-container {
-      padding: 0.5rem; /* Minimal padding */
+      padding: 1rem; /* Adjust padding */
+      flex: 50;
     }
   }
   
