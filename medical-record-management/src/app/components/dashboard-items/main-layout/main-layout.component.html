@@ -1,7 +1,11 @@
 <div class="main-layout-container">
-    <p class="main-layout-heading">Case Management</p>
+    <div *ngIf="!isProfile">
+        <p class="main-layout-heading">Case Management</p>
     <p class="main-layout-path">Case Management / All Cases</p>
+    </div>
+    <div *ngIf="isProfile">
+        <p class="main-layout-heading">My Profile</p>
+    </div>
     <router-outlet></router-outlet>
-    
 </div>
   
