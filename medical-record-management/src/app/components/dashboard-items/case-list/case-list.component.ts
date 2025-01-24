@@ -45,6 +45,7 @@ export class CaseListComponent {
   }
 
   getTotalPages(caseItem: any) {
+    console.log(caseItem)
     // Example: Sum of pages from files in the case
     return caseItem.files ? caseItem.files.reduce((sum: number, subCase: any) => sum + (subCase.no_of_pages || 0), 0) : 0;
   }
