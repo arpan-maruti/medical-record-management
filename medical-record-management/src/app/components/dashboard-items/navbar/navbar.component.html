@@ -19,17 +19,18 @@
     
       <!-- Dropdown menu -->
       <ul [ngClass]="{'hide': !isDropdownOpen}" class="dropdown">
-        <li>
+        <li (click)="toProfile()">
           <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="#333" viewBox="0 0 24 24">
             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
           </svg>
-          <a href="/dashboard/profile">Profile</a>
+          <!-- <a routerLink="/dashboard/profile">Profile</a> -->
+           <p>Profile</p>
         </li>
-        <li>
+        <li (click)="toLogout()">
           <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="#333" viewBox="0 0 24 24">
             <path d="M10 17v-4H3v-2h7V7l5 5-5 5zm10 2H9v2h11V5H9v2h11v12z" />
           </svg>
-          <a href="/">Logout</a>
+          <p>Logout</p>
         </li>
       </ul>
     </li>
