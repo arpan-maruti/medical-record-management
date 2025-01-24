@@ -1,7 +1,7 @@
 <div class="main-layout-container">
     <div *ngIf="!isProfile">
         <p class="main-layout-heading">Case Management</p>
-    <p class="main-layout-path">Case Management / All Cases</p>
+    <p class="main-layout-path">{{fullUrl | pathFormat}}</p>
     </div>
     <div *ngIf="isProfile">
         <p class="main-layout-heading">My Profile</p>

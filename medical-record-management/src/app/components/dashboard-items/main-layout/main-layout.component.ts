@@ -1,27 +1,32 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-
+import { PathFormatPipe } from '../../../path-format.pipe';
 @Component({
   selector: 'app-main-layout',
-  imports : [RouterOutlet, CommonModule],
+  imports: [RouterOutlet, CommonModule, PathFormatPipe],
   templateUrl: './main-layout.component.html',
-  styleUrls: ['./main-layout.component.css']  // Corrected to styleUrls (plural)
+  styleUrls: ['./main-layout.component.css']
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements OnInit, DoCheck {
   fullUrl: string = '';
   isProfile: boolean = false;
-
+  title: string = '';
   constructor(private router: Router) {}
 
-  ngDoCheck(): void {
-    // Get the full URL (including path, query params, fragment)
+  ngOnInit(): void {
+    // Initialize the full URL on component load
     this.fullUrl = this.router.url;
-    console.log(this.fullUrl);  // Logs the full URL
+    this.isProfile = this.fullUrl.includes('profile');
+  }
 
-    // Checking if URL contains 'profile'
-    if (this.fullUrl.includes('profile')) {
-      this.isProfile = true;  // Sets isProfile to true if 'profile' is in the URL
+  ngDoCheck(): void {
+    // Only check if the URL has changed
+    const currentUrl = this.router.url;
+    if (this.fullUrl !== currentUrl) {
+      this.fullUrl = currentUrl;
+      this.isProfile = currentUrl.includes('profile');
     }
+    
   }
 }
