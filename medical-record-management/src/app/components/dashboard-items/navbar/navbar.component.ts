@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { ChangeDetectorRef } from '@angular/core';
+import { DataService } from '../../../data.service';
 @Component({
   selector: 'app-navbar',
   imports: [FormsModule,CommonModule],
@@ -27,4 +29,10 @@ export class NavbarComponent {
     this.isDropdownOpen = false; // Close dropdown on resize (optional)
   }
 
+  user: any;
+  constructor(private dataService: DataService, private cdr: ChangeDetectorRef) {}
+  ngAfterViewInit() : void {
+    this.user=this.dataService.getUsers()[0];
+    this.cdr.detectChanges();
+  }
 }

@@ -1,5 +1,5 @@
 /* Container Styling */
-.case-list-container {
+.case-list__container {
   text-align: center;
   align-content: center;
   padding: 5rem 1.5rem; /* Default padding in rem */
@@ -11,7 +11,7 @@
 }
 
 /* Header Styling */
-.case-list-container p {
+.case-list__container p {
   font-size: 1.8rem; /* Default font size */
   margin-bottom: 1.5rem; /* Space between paragraphs */
   color: #000000; /* Dark text color */

@@ -1,6 +1,92 @@
-<div class="case-list-container">
+<div class="case-list__container">
+  <div *ngIf="isDataAvailable" class="case-list__case">
+    <table class="min-w-full table-auto">
+      <thead>
+        <tr class="border-b">
+          <th class="px-4 py-2 text-left">Case Ref No</th>
+          <th class="px-4 py-2 text-left">Instruction Type</th>
+          <th class="px-4 py-2 text-left">Client Name</th>
+          <th class="px-4 py-2 text-left">Total Files</th>
+          <th class="px-4 py-2 text-left">Total Pages</th>
+          <th class="px-4 py-2 text-left">Date Uploaded</th>
+          <th class="px-4 py-2 text-left">Case Status</th>
+          <th class="px-4 py-2 text-left">LOI</th>
+          <th class="px-4 py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let caseItem of data">
+          <!-- Parent case row -->
+          <tr (click)="toggleSubCases(caseItem)" class="cursor-pointer hover:bg-gray-100">
+            <td class="px-4 py-2">{{ caseItem.ref_number }}</td>
+            <td class="px-4 py-2">{{ getInstructionType(caseItem) }}</td>
+            <td class="px-4 py-2">{{ caseItem.client_name }}</td>
+            <td class="px-4 py-2">{{ getTotalFiles(caseItem) }}</td>
+            <td class="px-4 py-2">{{ getTotalPages(caseItem) }}</td>
+            <td class="px-4 py-2">{{ caseItem.created_on | date }}</td>
+            <td class="px-4 py-2">{{ getCaseStatus(caseItem) }}</td>
+            <!-- <td class="px-4 py-2">
+              <a href="#" class="text-blue-500">View LOI</a> | 
+              <button class="text-blue-500">Upload File</button>
+            </td> -->
+            <!-- <td class="px-4 py-2">
+              <button class="text-blue-500">View/Label</button> |
+              <button class="text-blue-500">Generate Summary</button>
+              <button class="text-blue-500">+ Add Subcase</button>
+            </td> -->
+          </tr>
+
+          <!-- Subcase rows (expandable) -->
+          <!-- <tr *ngIf="caseItem.expanded">
+            <td colspan="9" class="px-4 py-2">
+              <ng-container *ngFor="let subCase of caseItem.subCases">
+                <div class="pl-8">
+                  <table class="min-w-full table-auto">
+                    <thead>
+                      <tr class="border-b">
+                        <th class="px-4 py-2 text-left">Subcase Ref No</th>
+                        <th class="px-4 py-2 text-left">Instruction Type</th>
+                        <th class="px-4 py-2 text-left">Client Name</th>
+                        <th class="px-4 py-2 text-left">Total Files</th>
+                        <th class="px-4 py-2 text-left">Total Pages</th>
+                        <th class="px-4 py-2 text-left">Date Uploaded</th>
+                        <th class="px-4 py-2 text-left">Case Status</th>
+                        <th class="px-4 py-2 text-left">LOI</th>
+                        <th class="px-4 py-2 text-left">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="px-4 py-2">{{ subCase.ref_number }}</td>
+                        <td class="px-4 py-2">{{ getInstructionType(subCase) }}</td>
+                        <td class="px-4 py-2">{{ subCase.client_name }}</td>
+                        <td class="px-4 py-2">{{ getTotalFiles(subCase) }}</td>
+                        <td class="px-4 py-2">{{ getTotalPages(subCase) }}</td>
+                        <td class="px-4 py-2">{{ subCase.created_on | date }}</td>
+                        <td class="px-4 py-2">{{ getCaseStatus(subCase) }}</td>
+                        <td class="px-4 py-2">
+                          <a href="#" class="text-blue-500">View LOI</a> | 
+                          <button class="text-blue-500">Upload File</button>
+                        </td>
+                        <td class="px-4 py-2">
+                          <button class="text-blue-500">View/Label</button> |
+                          <button class="text-blue-500">Generate Summary</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-container>
+            </td>
+          </tr> -->
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!isDataAvailable" class="case-list__no-case">
     <p>Welcome to the Case Management Section.</p>
     <p>To upload a new case, please click the button below.</p>
     <button class="upload-button">Upload New Case</button>
   </div>
-  
+</div>
