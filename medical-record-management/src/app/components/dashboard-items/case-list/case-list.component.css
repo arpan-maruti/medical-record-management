@@ -1,12 +1,82 @@
-@import "tailwindcss";
-* {
-  overflow: visible !important;
+.container{
+  margin-top: 5rem;
+  background-color: #ffffff;
+  padding: 1rem;
+ 
+ 
 }
-.case-list__container {
-  background-color: white;  /* White background for the box */
-  padding: 20px;            /* Add some padding around the table */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Optional: add a subtle shadow for effect */
-  width: 100%;              /* Ensure it takes up full width */
-  margin: 0 auto;           /* Center the box horizontally */
-  border-radius: 8px;       /* Optional: rounded corners */
+.case-list__case {
+  overflow-x: auto;
+  border-radius: 8px;
+  width: 100%; /* Set desired width (e.g., 95% of the parent container) */
+  margin: 0 auto; /* Center the table container */
+}
+.table {
+  width: 100%; /* Make table fill the container */
+  table-layout: auto; /* Adjust column widths automatically */
+  
+}
+.case-list__heading{
+  font-weight: 800;
+}
+
+/* Table Header Style */
+.thead-custom {
+  background-color: #ced1da !important; /* Heading background color */
+  border-radius: 1rem;
+}
+
+/* Light border-radius for rows */
+.table tr {
+  
+  border-radius: 8px;
+  border: 1px solid transparent; /* Add transparent border to prevent collapse */
+}
+
+/* Optional: Add hover effect for rows */
+.table tbody tr:hover {
+  background-color: #f9fafb; /* Light gray hover effect */
+}
+
+/* Optional: Add border-radius to the table container if needed */
+.case-list__case {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+/* Adjust padding for consistency */
+.table th,
+.table td {
+  padding: 12px 16px; /* Adjust padding for spacing */
+  padding: 12px 16px;
+  word-wrap: break-word; 
+}
+
+.table td img {
+  height: 1rem;
+  width: 1rem;
+  
+}
+
+/* Add bottom border to prevent line after header row */
+.table thead tr {
+  border: 2px solid #ced1da; /* Optional: can use the same color as the header background */
+}
+
+  
+.custom-btn {
+  background-color: #00344d;
+  color: white;
+  width: 30rem;
+  border-radius: 0.5rem;
+  border: none; /* Optional: Remove the default border */
+}
+
+.custom-btn:hover {
+  color: white;
+  background-color: #002734; /* Optional: Darker shade for hover effect */
+}
+
+.case-list__no-case{
+  height: 35rem;
 }
