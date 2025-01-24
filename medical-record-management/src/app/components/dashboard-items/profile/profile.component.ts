@@ -7,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
-
+  user = {
+    firstName: 'Eliza',
+    lastName: 'Hart',
+    role: 'Super Assistant',
+    email: 'superassistant1@dentistexpertwitness.london',
+    mobile: '727 - 9090 - 0909'
+  };
 }

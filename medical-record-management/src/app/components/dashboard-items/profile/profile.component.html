@@ -1,1 +1,29 @@
-<p>profile works!</p>
+<div class="profile-card">
+    <div class="profile-row">
+      <div>
+        <p class="label">First Name</p>
+        <p class="value">{{ user.firstName }}</p>
+      </div>
+      <div>
+        <p class="label">Last Name</p>
+        <p class="value">{{ user.lastName }}</p>
+      </div>
+      <div>
+        <p class="label">I am a</p>
+        <p class="value">{{ user.role }}</p>
+      </div>
+    </div>
+    <div class="profile-row">
+      <div>
+        <p class="label">Email Address</p>
+        <p class="value">{{ user.email }}</p>
+      </div>
+    </div>
+    <div class="profile-row">
+      <div>
+        <p class="label">Mobile Number</p>
+        <p class="value">{{ user.mobile }}</p>
+      </div>
+    </div>
+  </div>
+  

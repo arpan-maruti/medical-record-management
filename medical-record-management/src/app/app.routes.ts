@@ -6,6 +6,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/dashboard-items/profile/profile.component';
+import { MainLayoutComponent } from './components/dashboard-items/main-layout/main-layout.component';
+import { CaseListComponent } from './components/dashboard-items/case-list/case-list.component';
 
 export const routes: Routes = [
 
@@ -13,8 +15,22 @@ export const routes: Routes = [
     {path:'otp', component: OtpComponent, pathMatch:'full'},
     {path:'customalert', component: CustomAlertComponent, pathMatch:'full'},
     {path:'register', component: RegisterComponent, pathMatch:'full'},
+    
+    {
+        path: 'dashboard',
+        component: DashboardComponent,
+        children: [
+          {
+            path: '',
+            component: MainLayoutComponent,
+            children: [
+              { path: '', redirectTo: 'cases', pathMatch: 'full' },
+              { path: 'cases', component: CaseListComponent },
+              { path: 'profile', component: ProfileComponent  },
+            ],
+          },
+        ],
+      },
     {path:'page-not-found', component: PageNotFoundComponent},
-    {path:'dashboard', component: DashboardComponent},
-    {path:'profile',component:ProfileComponent, pathMatch:'full'},
     {path:'**', redirectTo:'/page-not-found'}, 
 ];

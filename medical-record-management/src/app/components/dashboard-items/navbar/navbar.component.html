@@ -12,7 +12,7 @@
     <li class="blank-box"></li>
 
     <li class="profile-box" (click)="toggleDropdown($event)">
-      <a style="text-decoration: none; color: #161839">Eliza Hart</a>
+      <a style="text-decoration: none; color: #161839">{{user?.first_name}} {{user?.last_name}}</a>
       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#161839">
         <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
       </svg>
@@ -23,7 +23,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="#333" viewBox="0 0 24 24">
             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
           </svg>
-          <a href="/profile">Profile</a>
+          <a href="/dashboard/profile">Profile</a>
         </li>
         <li>
           <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="#333" viewBox="0 0 24 24">

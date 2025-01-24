@@ -1,0 +1,39 @@
+.profile-card {
+    background: #fff;
+    border-radius: 0.5rem; /* 8px */
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1); /* 2px 4px */
+    
+    font-family: Arial, sans-serif;
+    width: 36vw; /* Card width relative to the viewport */
+    height: 24vh;
+    
+  }
+  
+  .profile-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 2.5rem; /* 16px spacing between rows */
+  }
+  
+  .label {
+    font-size: 1.6rem; /* 14px */
+    font-weight: 700;
+    margin: 0;
+    color: #3f3f3f;
+  }
+  
+  .value {
+    font-size: 1.1rem; /* 16px */
+    
+    color: #636363;
+    margin: 0.25rem 0 0; /* 4px top margin */
+  }
+  
+  .profile-row div {
+   margin-right: 2.5rem;
+  }
+  
+  .profile-row div:not(:last-child) {
+    margin-right: 0.5rem; /* 16px space between columns */
+  }
+  
