@@ -58,7 +58,7 @@ export class DataService {
       "cases": [
         {
           "_id": "case1",
-          "parent_id": "user1",
+          "parent_id": "null",
           "client_name": "Client ABC",
           "ref_number": "XYZ123",
           "is_deleted": false,
@@ -71,20 +71,20 @@ export class DataService {
           "files": ["file1", "file2"],
           "parameters": ["param1", "param2"]
         },
-        // {
-        //   "_id": "case2",
-        //   "parent_id": "user2",
-        //   "client_name": "Client XYZ",
-        //   "ref_number": "ABC456",
-        //   "is_deleted": false,
-        //   "date_of_breach": "2025-02-01",
-        //   "created_by": "user2",
-        //   "modified_by": "user1",
-        //   "created_on": "2025-01-22T10:00:00Z",
-        //   "modified_on": "2025-01-22T10:00:00Z",
-        //   "case_status": "status2",
-        //   "parameters": ["param2"]
-        // }
+        {
+          "_id": "case2",
+          "parent_id": "null",
+          "client_name": "Client XYZ",
+          "ref_number": "ABC456",
+          "is_deleted": false,
+          "date_of_breach": "2025-02-01",
+          "created_by": "user2",
+          "modified_by": "user1",
+          "created_on": "2025-01-22T10:00:00Z",
+          "modified_on": "2025-01-22T10:00:00Z",
+          "case_status": "status2",
+          "parameters": ["param2"]
+        }
       ],
       "case_status": [
         {
