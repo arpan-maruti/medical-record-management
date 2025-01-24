@@ -81,12 +81,12 @@
   width: 1.5rem; /* Adjust size of the SVG */
   height: 1.5rem;
 }
-
-/* Dropdown container */
+/* Dropdown styles */
 .dropdown {
   position: absolute;
-  top: 100%; /* Position below the profile box */
-  right: 0;
+  top: 5vh;
+  right: 4.5%;
+  width: 10rem !important;
   background-color: white;
   border: 1px solid lightgray;
   border-radius: 0.5rem;
@@ -94,14 +94,16 @@
   list-style: none;
   padding: 0.5rem 0;
   margin: 0;
-  min-width: 150px;
-  z-index: 10;
-  display: none; /* Initially hidden */
+  z-index: 100000; /* Ensure it appears on top */
+  display: flex;
+  flex-direction: column;
+  
 }
 
-/* Show dropdown when it's open */
-.dropdown.show {
-  display: block;
+
+
+.dropdown.hide{
+  visibility: hidden;
 }
 
 .dropdown li {
