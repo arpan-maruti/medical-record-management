@@ -1,12 +1,13 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { DataService } from '../../../data.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-case-list',
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './case-list.component.html',
-  styleUrls: ['./case-list.component.css']
+  styleUrls: ['./case-list.component.css', '../../../../../node_modules/bootstrap/dist/css/bootstrap.min.css']
 })
 export class CaseListComponent {
   data: any[] = [];
@@ -49,4 +50,5 @@ export class CaseListComponent {
     // Example: Sum of pages from files in the case
     return caseItem.files ? caseItem.files.reduce((sum: number, subCase: any) => sum + (subCase.no_of_pages || 0), 0) : 0;
   }
+  
 }
