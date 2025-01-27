@@ -1,5 +1,5 @@
 .container{
-  margin-top: 5rem;
+  margin-top: 3rem;
   background-color: #ffffff;
   padding: 1rem;
  
@@ -17,6 +17,7 @@
   
 }
 .case-list__heading{
+  font-size: 1.6rem;
   font-weight: 800;
 }
 
@@ -40,7 +41,7 @@
 
 /* Optional: Add border-radius to the table container if needed */
 .case-list__case {
-  overflow-x: auto;
+  overflow: auto;
   border-radius: 8px;
 }
 

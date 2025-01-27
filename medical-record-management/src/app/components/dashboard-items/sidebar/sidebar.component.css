@@ -33,7 +33,9 @@
 .menu-icon {
   color: #333;
   height: 2rem;
-  margin-left: 1rem;
+  /* width: 4rem; */
+  /* font-size: 2rem; */
+  margin-left: 0rem;
   margin-right: 1rem;
   margin-bottom: 0.9rem;
 }
@@ -41,11 +43,10 @@
 /* Menu text styling */
 .menu-text {
   font-weight: bold;
-  font-size: 1.5rem; /* Adjusted font size */
+  font-size: 1.2rem; /* Adjusted font size */
   color: #4a6f81;
   text-decoration: none;
- 
-  
+  padding: 0;
 }
 
 /* Menu status indicator (dot) */
@@ -54,7 +55,8 @@
   height: 0.9rem;
   background-color: #002B49;
   border-radius: 50%;
-  margin-left: 2.2rem;
+  margin-left: 1rem;
+  margin-right: 1rem  ;
 }
 
 /* Logout link styling */
@@ -109,7 +111,7 @@
   .menu-status {
     width: 0.6rem;
     height: 0.6rem;
-    margin-left: 0.7rem;
+    margin-left: 1rem;
   }
 
   .logout-text {
@@ -121,7 +123,14 @@
     
   }
 }
-
+@media (max-width: 1150px) {
+  .menu-status {
+    visibility: hidden;
+  }
+  .menu-text {
+    font-size: 0.8rem;
+  }
+}
 /* For widths 1024px and below */
 @media (max-width: 1024px) {
   .menu-item {
@@ -129,7 +138,7 @@
     margin-top: 3rem;
   }
   .menu-icon{
-    margin-left: 0.5rem;
+    margin-left: 0rem;
     margin-right: 0.1rem;
   }
   .menu-icon svg{
@@ -138,10 +147,11 @@
   }
 
   .menu-text {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .menu-status {
+    visibility: hidden;
     width: 0.57rem;
     height: 0.56rem;
     margin-left: 0.5rem;
