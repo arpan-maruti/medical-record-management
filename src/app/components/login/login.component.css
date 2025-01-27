@@ -123,12 +123,13 @@
     margin-top: 1rem;
     color: #999;
     font-size: 1.1rem;
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 .login__forgot-password:hover {
     text-decoration: underline;
     color: #003366;
+    
 }
 
 /* Error message styles */

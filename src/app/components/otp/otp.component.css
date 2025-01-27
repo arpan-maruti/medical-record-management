@@ -169,7 +169,6 @@ html {
 .otp__resend {
   display: block;
   text-align: right;
-  /* margin-top: 1rem; */
   margin-right: 1rem;
   font-size: 0.9rem;
   color: #3b3b3b;
