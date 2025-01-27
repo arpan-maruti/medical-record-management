@@ -77,8 +77,9 @@ export class LoginComponent {
     console.log('Alert confirmed');
   }
 
+  //error message if not valid credentials entered(to be implemented)
   isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailRegex.test(email);
   }
 

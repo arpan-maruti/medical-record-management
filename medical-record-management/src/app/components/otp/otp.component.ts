@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -17,10 +16,7 @@ export class OtpComponent {
   otpError1: string = '';
   formSubmitted: boolean = false;
   constructor(private router: Router) {}
-
-  /**
-   * Navigate back to the login page.
-   */
+  
   login(): void {
     this.router.navigate(['/']);
   }
@@ -35,37 +31,18 @@ export class OtpComponent {
     }, 1000); // Revert to 'password' after 1 second
   }
 
-  /**
-   * Verify the entered OTP.
-   * @param otpInput - The input field reference for validation
-   */
-  verifyOtp(otpInput: any): void {
-    if (otpInput.invalid) {
-      this.otpError1 = 'OTP field cannot be empty';
-      return; // Exit if the input field is invalid (empty)
-    } 
-    
-    if (this.otp === '123456') {
-      // Simulate successful OTP verification
-      this.otpError = false;
-      alert('OTP Verified Successfully!');
-      this.router.navigate(['/dashboard']); // Example: Redirect to the dashboard
-    } else {
-      // Display an error if the OTP is incorrect
-      this.otpError1 = 'OTP is invalid';
-      this.otpError = true;
-    }
-  }
 
-  onVerifyOTP() {
-    this.formSubmitted = true;
+  verifyOtp(otpInput: any): void {
+    this.otpError1 = ''; // Reset any previous error message
 
     if (!this.otp.trim()) {
       this.otpError1 = 'OTP field cannot be empty';
+    } else if (this.otp !== '123456') {
+      this.otpError1 = 'OTP is invalid';
     } else {
-      this.otpError1 = '';
-      // Proceed with OTP verification logic
+      // Logic to validate otp
       console.log('Verifying OTP:', this.otp);
+      this.router.navigate(['/dashboard']);
     }
   }
 }
