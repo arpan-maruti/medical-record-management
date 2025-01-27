@@ -30,7 +30,7 @@ export class NavbarComponent {
     this.cdr.detectChanges();
   }
   toProfile() {
-    this.router.navigate(['/dashboard/profile']);
+    this.router.navigate(['/case-management/profile']);
   }
   toLogout() {
     this.router.navigate(['/']);
