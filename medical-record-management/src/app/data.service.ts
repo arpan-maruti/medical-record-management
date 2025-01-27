@@ -119,7 +119,8 @@ export class DataService {
       "case_status": "status4",
       "files": ["file5", "file6"],
       "parameters": ["param2"]
-    }
+    },
+    
   ],
       "case_status": [
         {

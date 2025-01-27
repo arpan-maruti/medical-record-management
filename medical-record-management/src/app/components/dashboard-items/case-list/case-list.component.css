@@ -10,7 +10,7 @@
 
 .case-list__case {
   overflow: auto;
-  max-height: 29rem;
+  
   border-radius: 0.5rem;
   width: 100%; /* Responsive width */
   margin: 0 auto; /* Center the table container */

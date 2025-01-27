@@ -56,7 +56,8 @@ export class CaseListComponent {
   }
 
   getTotalPages(caseItem: any) {
-    return caseItem.files ? caseItem.files.reduce((sum: number, subCase: any) => sum + (subCase.no_of_pages || 0), 0) : 0;
+    // return caseItem.files ? caseItem.files.reduce((sum: number, subCase: any) => sum + (subCase.no_of_pages || 0), 0) : 0;
+    return 0;
   }
 
   getCaseUploader(caseItem: any) {
