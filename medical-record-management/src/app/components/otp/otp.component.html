@@ -19,6 +19,7 @@
             name="text"
             id="otp"
             [(ngModel)]="otp"
+            (input)= "onInput()"
             required
             #otpInput="ngModel"
           />
@@ -28,6 +29,7 @@
             height="24px"
             viewBox="0 -960 960 960"
             width="24px"
+            (input)= "onInput()"
             fill="#D9D9D9"
             (click)="toggleVisibility()"
           >
@@ -37,13 +39,9 @@
           </svg>
         </div>
         
-        <div  class="otp__error-message">
+        <div class="otp__error-message">
           {{otpError1}}
           </div>
-          <!-- <div *ngIf="otpError && !otpInput.invalid && otpInput.touched" class="otp__error-message">
-            OTP is incorrect. Please try again.
-          </div> -->
-          
       </div>
       
       <div class="otp__buttons">
