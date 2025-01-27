@@ -16,16 +16,17 @@ export const routes: Routes = [
     {path:'customalert', component: CustomAlertComponent, pathMatch:'full'},
     {path:'register', component: RegisterComponent, pathMatch:'full'},
     
+    
     {
-        path: 'dashboard',
+        path: 'case-management', 
         component: DashboardComponent,
         children: [
           {
             path: '',
             component: MainLayoutComponent,
             children: [
-              { path: '', redirectTo: 'cases', pathMatch: 'full' },
-              { path: 'cases', component: CaseListComponent },
+              { path: '', redirectTo: 'all-cases', pathMatch: 'full' },
+              { path: 'all-cases', component: CaseListComponent },
               { path: 'profile', component: ProfileComponent  },
             ],
           },
