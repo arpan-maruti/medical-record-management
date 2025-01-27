@@ -65,7 +65,6 @@ export class LoginComponent {
   }
 
   onForgotPassword() {
-    console.log("hii");
     this.customAlert.show(
       'Please contact BME to reset your password.',
       'Forgot Password',

@@ -19,6 +19,7 @@
             name="text"
             id="otp"
             [(ngModel)]="otp"
+            (input)= "onInput()"
             required
             #otpInput="ngModel"
           />
@@ -28,6 +29,7 @@
             height="24px"
             viewBox="0 -960 960 960"
             width="24px"
+            (input)= "onInput()"
             fill="#D9D9D9"
             (click)="toggleVisibility()"
           >

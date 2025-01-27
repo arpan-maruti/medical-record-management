@@ -11,8 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class OtpComponent {
   otp: string = ''; // Holds the entered OTP
-  inputType: string = 'password'; // Toggle between 'text' and 'password' for OTP visibility
-  otpError: boolean = false; // Tracks if an OTP error occurs
+  inputType: string = 'password';
   otpError1: string = '';
   formSubmitted: boolean = false;
   constructor(private router: Router) {}
@@ -20,6 +19,11 @@ export class OtpComponent {
   login(): void {
     this.router.navigate(['/']);
   }
+
+  onInput() {
+    this.otpError1 = ' ';
+  }
+
 
   /**
    * Toggle OTP input visibility between 'password' and 'text'.
@@ -42,7 +46,7 @@ export class OtpComponent {
     } else {
       // Logic to validate otp
       console.log('Verifying OTP:', this.otp);
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/case-management']);
     }
   }
 }
