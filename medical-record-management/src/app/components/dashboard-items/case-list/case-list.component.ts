@@ -17,7 +17,7 @@ export class CaseListComponent {
 
   ngAfterViewInit() {
     // Fetching case data
-    this.data = this.dataService.getCases(); // Adjusted to fetch cases
+    // this.data = this.dataService.getCases(); 
     if (this.data.length > 0) {
       this.isDataAvailable = true;
     }
