@@ -8,7 +8,7 @@
   /* Sidebar container */
   .sidebar-container {
     flex: 1;
-    height: 100vh; /* Full height of the parent container */
+    height: 100vh; 
     background-color: #ffffff;
   }
   
@@ -16,7 +16,7 @@
   .main-layout-container {
     flex: 5;
     background-color: #f5f6f9;
-    height: 100vh; /* Full height of the parent container */
+    height: 100vh; 
     padding: 1.5rem; /* Default padding for larger screens */
   }
   

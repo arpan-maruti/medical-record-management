@@ -49,7 +49,7 @@ export class OtpComponent {
       // Simulate successful OTP verification
       this.otpError = false;
       alert('OTP Verified Successfully!');
-      this.router.navigate(['/dashboard']); // Example: Redirect to the dashboard
+      this.router.navigate(['/case-management']); // Example: Redirect to the dashboard
     } else {
       // Display an error if the OTP is incorrect
       this.otpError1 = 'OTP is invalid';
