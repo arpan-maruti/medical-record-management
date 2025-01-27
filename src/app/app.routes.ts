@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { OtpComponent } from './components/otp/otp.component';
-import { CustomAlertComponent } from './custom-alert/custom-alert.component';
+import { CustomAlertComponent } from './components/custom-alert/custom-alert.component';
 import { RegisterComponent } from './components/register/register.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ProfileComponent } from './components/dashboard-items/profile/profile.component';
-import { MainLayoutComponent } from './components/dashboard-items/main-layout/main-layout.component';
-import { CaseListComponent } from './components/dashboard-items/case-list/case-list.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { MainLayoutComponent } from './components/main-layout/main-layout.component';
+import { CaseListComponent } from './components/case-list/case-list.component';
 
 export const routes: Routes = [
 

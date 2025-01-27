@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { DataService } from '../../../data.service';
+import { DataService } from '../../data.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-case-list',
   imports: [CommonModule, FormsModule],
   templateUrl: './case-list.component.html',
-  styleUrls: ['./case-list.component.css', '../../../../../node_modules/bootstrap/dist/css/bootstrap.min.css']
+  styleUrls: ['./case-list.component.css', '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css']
 })
 export class CaseListComponent {
   data: any[] = [];
