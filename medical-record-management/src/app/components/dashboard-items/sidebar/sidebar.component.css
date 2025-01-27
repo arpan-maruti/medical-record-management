@@ -64,7 +64,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 77vh;
+  margin-top: calc(100vh - 20rem);
   
 }
 
