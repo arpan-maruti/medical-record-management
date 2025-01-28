@@ -1,10 +1,14 @@
 <div class="layout-container">
-    <div *ngIf="!isProfile">
+    <div *ngIf="(!isProfile)">
         <p class="layout-container__heading">Case Management</p>
         <p class="layout-container__path">{{fullUrl | pathFormat | titlecase}}</p>
     </div>
     <div *ngIf="isProfile">
         <p class="layout-container__heading">My Profile</p>
     </div>
+    <!-- <div *ngIf="isUploadNewCase">
+        <p class="layout-container__heading">Case Management</p>
+        <p class="layout-container__path">{{fullUrl | pathFormat | titlecase}}</p>
+    </div> -->
     <router-outlet></router-outlet>
 </div>

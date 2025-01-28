@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CustomAlertComponent } from './custom-alert.component';
+import { UploadNewCaseComponent } from './upload-new-case.component';
 
-describe('CustomAlertComponent', () => {
-  let component: CustomAlertComponent;
-  let fixture: ComponentFixture<CustomAlertComponent>;
+describe('UploadNewCaseComponent', () => {
+  let component: UploadNewCaseComponent;
+  let fixture: ComponentFixture<UploadNewCaseComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomAlertComponent]
+      imports: [UploadNewCaseComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CustomAlertComponent);
+    fixture = TestBed.createComponent(UploadNewCaseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
