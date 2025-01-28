@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
+import { RouterLink, RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-otp',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './otp.component.html',
   styleUrls: ['./otp.component.css'],
 })
@@ -23,7 +23,7 @@ export class OtpComponent {
   onInput() {
     this.otpError1 = ' ';
   }
-
+  
 
   /**
    * Toggle OTP input visibility between 'password' and 'text'.

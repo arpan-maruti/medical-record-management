@@ -48,7 +48,8 @@
       </div>
       <div *ngIf="formSubmitted && passwordError" class="error-message">{{ passwordError }}</div>
 
-      <a href="#" class="login__forgot-password" (click)="onForgotPassword()">Forgot password?</a>
+      <!-- <a href="#" class="login__forgot-password" (click)="onForgotPassword()">Forgot password?</a> -->
+      <a routerLink="/" class="login__forgot-password" (click)="onForgotPassword()">Forgot password?</a>
       <button class="login__button" (click)="onLogin()">Login</button>
     </div>
   </div>
