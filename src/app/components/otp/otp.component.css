@@ -167,9 +167,8 @@ html {
 
 /* Resend Link */
 .otp__resend {
-  display: block;
-  text-align: right;
-  margin-right: 1rem;
+  display: inline;
+  margin-right: -15rem;
   font-size: 0.9rem;
   color: #3b3b3b;
   text-decoration: underline;
@@ -225,7 +224,9 @@ html {
   .otp__content {
     max-width: 350px;
   }
-
+  .otp__resend {
+    margin-right: -11rem;
+  }
   .otp__heading {
     font-size: 1.5rem;
     margin-bottom: 2.5rem;
@@ -260,6 +261,10 @@ html {
   .otp_subheading {
     font-size: 1.1rem;
     margin-bottom: 1.2rem;
+  }
+  
+  .otp__resend {
+    margin-right: -9rem;
   }
 
   .otp__search input {

@@ -125,7 +125,7 @@
 /* Responsive Styles */
 
 /* For widths 1440px and below */
-@media (max-width: 1440px) {
+@media (max-width: 1640px) {
   .navbar__blank-box {
     flex: 40.22; /* Placeholder for spacing */
   }

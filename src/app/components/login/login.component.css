@@ -118,8 +118,9 @@
 }
 
 .login__forgot-password {
-    display: block;
-    text-align: right;
+    display: inline;
+    /* text-align: right; */
+    margin-left: 19rem;
     margin-top: 1rem;
     color: #999;
     font-size: 1.1rem;
@@ -214,7 +215,8 @@
         height: 3.2rem;
     }
     .login__forgot-password {
-        text-align: right;
+        /* text-align: right; */
+        margin-left: 17rem;
         font-size: 1rem;
         margin-top: 1rem;
     }
@@ -257,6 +259,7 @@
     }
 
     .login__forgot-password {
+        margin-left: 14rem;
         font-size: 0.9rem;
     }
 
@@ -302,6 +305,7 @@
     }
 
     .login__forgot-password {
+        margin-left: 13rem;
         font-size: 0.8rem;
     }
 
