@@ -1,0 +1,37 @@
+<nav class="navbar">
+  <ul class="navbar__list">
+    <div class="navbar__logo-name">
+      <li class="navbar__logo-box">
+        <img src="assets/logo.png" alt="logo" class="navbar__logo" />
+      </li>
+      <li class="navbar__title-box">
+        <a href="#" class="navbar__title">Mediscan - AI Tool</a>
+      </li>
+    </div>
+
+    <li class="navbar__blank-box"></li>
+
+    <li class="navbar__profile-box" (click)="toggleDropdown($event)">
+      <a class="navbar__profile-name">{{user?.first_name}} {{user?.last_name}}</a>
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="navbar__profile-icon">
+        <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+      </svg>
+    
+      <!-- Dropdown menu -->
+      <ul [ngClass]="{'navbar__dropdown--hide': !isDropdownOpen}" class="navbar__dropdown">
+        <li (click)="toProfile()" class="navbar__dropdown-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="#333" viewBox="0 0 24 24" class="navbar__dropdown-icon">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+          </svg>
+          <p class="navbar__dropdown-text">Profile</p>
+        </li>
+        <li (click)="toLogout()" class="navbar__dropdown-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="#333" viewBox="0 0 24 24" class="navbar__dropdown-icon">
+            <path d="M10 17v-4H3v-2h7V7l5 5-5 5zm10 2H9v2h11V5H9v2h11v12z" />
+          </svg>
+          <p class="navbar__dropdown-text">Logout</p>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>

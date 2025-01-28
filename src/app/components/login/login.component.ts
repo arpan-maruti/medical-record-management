@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CustomAlertComponent } from '../../custom-alert/custom-alert.component';
+import { CustomAlertComponent } from '../custom-alert/custom-alert.component';
 import { RouterLink } from '@angular/router';
 
 @Component({

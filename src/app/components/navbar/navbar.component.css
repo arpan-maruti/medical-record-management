@@ -1,0 +1,255 @@
+/* General styles for the navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5.4rem; /* Fixed height using rem */
+  width: 100%; /* Full width of the container */
+  border-bottom: 1px solid lightgray; /* Subtle border at the bottom */
+  box-sizing: border-box;
+}
+
+/* Reset styles for the list */
+.navbar__list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.navbar__logo-name {
+  flex: 10; /* Flexible proportional space for the logo section */
+  display: flex;
+  align-items: center;
+}
+
+/* Logo box styling */
+.navbar__logo-box img {
+  height: 5.5rem; /* Logo size in rem */
+  width: auto; /* Maintain aspect ratio */
+}
+
+/* Title box styling */
+.navbar__title-box {
+  flex: 6; /* Proportional space for the title box */
+  display: flex;
+  align-items: center; /* Center content vertically */
+  justify-content: center; /* Center content horizontally */
+  height: 5.5rem; /* Match logo height */
+  border: 1px solid lightgray; /* Expand border into full height */
+  box-sizing: border-box;
+}
+
+.navbar__title-box a {
+  text-decoration: none;
+  font-size: 1.75rem; /* Font size in rem */
+  font-weight: 700; /* Semi-bold text */
+  color: #333; /* Dark text color */
+  text-align: center;
+  width: 100%; /* Expand link width to the title box */
+}
+
+.navbar__blank-box {
+  flex: 41; /* Placeholder for spacing */
+  border: 1px solid lightgray; /* Expand border into full height */
+  box-sizing: border-box;
+  height: 5.5rem; /* Match logo height */
+}
+
+/* Profile box styling */
+.navbar__profile-box {
+  flex: 10; /* Proportional space for the profile section */
+  font-size: 1.75rem; /* Font size in rem */
+  display: flex;
+  align-items: center; /* Center content vertically */
+  justify-content: center;
+}
+
+.navbar__profile-box a {
+  font-size: 1.5rem; /* Adjust font size */
+  text-decoration: none;
+  color: #161839;
+}
+
+.navbar__profile-box svg {
+  width: 1.5rem; /* Adjust size of the SVG */
+  height: 1.5rem;
+}
+
+/* Dropdown styles */
+.navbar__dropdown {
+  position: absolute;
+  top: 5vh;
+  right: 4.5%;
+  width: 10rem !important;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 0.5rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0;
+  z-index: 100000; /* Ensure it appears on top */
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar__dropdown--hide {
+  visibility: hidden;
+}
+
+.navbar__dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.navbar__dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+.navbar__dropdown-item svg {
+  margin-right: 0.5rem;
+}
+
+.navbar__dropdown-item p {
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+}
+
+/* Responsive Styles */
+
+/* For widths 1440px and below */
+@media (max-width: 1440px) {
+  .navbar__blank-box {
+    flex: 40.22; /* Placeholder for spacing */
+  }
+  .navbar {
+    height: 3.4rem;
+  }
+  .navbar__logo-box img {
+    height: 3.5rem;
+    width: 3.5rem;
+  }
+  .navbar__title-box a {
+    font-size: 1.1rem;
+  }
+  .navbar__profile-box {
+    padding: 1rem;
+  }
+  .navbar__profile-box a {
+    font-size: 1rem;
+  }
+  .navbar__profile-box svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* For widths 1024px and below */
+@media (max-width: 1024px) {
+  .navbar__logo-name {
+    flex: 15; 
+  }
+  .navbar__blank-box {
+    flex: 41.6; /* Placeholder for spacing */
+  }
+  .navbar__profile-box {
+    flex: 15; 
+  }
+  .navbar {
+    height: 3rem;
+  }
+  .navbar__logo-box img {
+    height: 3.2rem;
+    width: 3.2rem;
+  }
+  .navbar__title-box a {
+    font-size: 1rem;
+  }
+  .navbar__profile-box {
+    padding: 1rem;
+  }
+  .navbar__profile-box a {
+    font-size: 1rem;
+  }
+  .navbar__profile-box svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* For widths 768px and below */
+@media (max-width: 768px) {
+  .navbar {
+    height: 3.4rem;
+  }
+
+  .navbar__logo-name {
+    flex: 30; 
+  }
+  .navbar__blank-box {
+    flex: 41.6; /* Placeholder for spacing */
+  }
+  .navbar__profile-box {
+    flex: 15; 
+  }
+
+  .navbar__logo-box img {
+    height: 3.5rem;
+    width: 3.5rem;
+  }
+
+  .navbar__title-box a {
+    font-size: 1.2rem;
+  }
+
+  .navbar__profile-box a {
+    font-size: 1rem;
+  }
+
+  .navbar__profile-box svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* For widths 440px and below */
+@media (max-width: 440px) {
+  .navbar {
+    height: 2.9rem;
+  }
+
+  .navbar__logo-name {
+    flex: 40; 
+  }
+  .navbar__blank-box {
+    display: none;
+  }
+  .navbar__profile-box {
+    flex: 15; 
+  }
+
+  .navbar__logo-box img {
+    height: 3rem;
+    width: 3rem;
+  }
+
+  .navbar__title-box a {
+    font-size: 1.15rem;
+  }
+
+  .navbar__profile-box a {
+    font-size: 1.1rem;
+  }
+
+  .navbar__profile-box svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
