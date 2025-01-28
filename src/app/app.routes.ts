@@ -9,7 +9,6 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { MainLayoutComponent } from './components/main-layout/main-layout.component';
 import { CaseListComponent } from './components/case-list/case-list.component';
 import { UploadNewCaseComponent } from './components/upload-new-case/upload-new-case.component';
-
 export const routes: Routes = [
 
     {path:'', component: LoginComponent, pathMatch:'full'},
@@ -22,17 +21,16 @@ export const routes: Routes = [
         path: 'case-management', 
         component: DashboardComponent,
         children: [
-            {path: '',
+          {
+            path: '',
             component: MainLayoutComponent,
             children: [
               { path: '', redirectTo: 'all-cases', pathMatch: 'full' },
               { path: 'all-cases', component: CaseListComponent },
               { path: 'profile', component: ProfileComponent  },
-            ]},
-            {
-              path: 'upload-new-case',
-              component: UploadNewCaseComponent,
-            },
+              {path: 'upload-new-case', component: UploadNewCaseComponent},
+            ],
+          },
         ],
       },
     {path:'page-not-found', component: PageNotFoundComponent},

@@ -11,6 +11,7 @@ import { PathFormatPipe } from '../../path-format.pipe';
 export class MainLayoutComponent implements OnInit, DoCheck {
   fullUrl: string = '';
   isProfile: boolean = false;
+  isUploadNewCase: boolean = false;
   title: string = '';
   constructor(private router: Router) {}
 
@@ -18,6 +19,7 @@ export class MainLayoutComponent implements OnInit, DoCheck {
     // Initialize the full URL on component load
     this.fullUrl = this.router.url;
     this.isProfile = this.fullUrl.includes('profile');
+    this.isUploadNewCase = this.fullUrl.includes('upload-new-case');
   }
 
   ngDoCheck(): void {
@@ -26,6 +28,7 @@ export class MainLayoutComponent implements OnInit, DoCheck {
     if (this.fullUrl !== currentUrl) {
       this.fullUrl = currentUrl;
       this.isProfile = currentUrl.includes('profile');
+      this.isUploadNewCase = currentUrl.includes('upload-new-case');
     }
     
   }
