@@ -11,18 +11,18 @@ import { FormsModule } from '@angular/forms';
 })
 export class CaseListComponent {
   data: any[] = [];
-  filteredData: any[] = [];
+  
   isDataAvailable: boolean = false;
 
   constructor(private cdr: ChangeDetectorRef, private dataService: DataService) {}
 
   ngAfterViewInit() {
     // Fetching case data
-    this.data = this.dataService.getCases();
+    this.data = this.dataService.getMainCases();
     console.log("data"+this.data);
-    // Filter only cases with parent_id === null
-    this.filteredData = this.data.filter((case1) => case1.parent_id == "null");
-    console.log("Filtered"+this.filteredData);
+  
+    
+   
     if (this.data.length > 0) {
       this.isDataAvailable = true;
     }
@@ -37,27 +37,23 @@ export class CaseListComponent {
  
 
   getSubCases(parentId: string) {
-    return this.data.filter((subCase) => subCase.parent_id === parentId); // Fetch subcases for a parent case
+    return this.dataService.getSubCases(parentId);
   }
 
   getInstructionType(caseItem: any) {
-    const instruction: any = this.dataService.getParameters().find((param: any) => param._id === caseItem.parameters[0]).instruction_id;
-    const msg = this.dataService.getInstructionTypes().find((msg) => msg._id === instruction).instruction_msg;
-    return msg;
+    return this.dataService.getInstructionType(caseItem);
   }
 
   getCaseStatus(caseItem: any) {
-    const status = this.dataService.getCaseStatus().find((status: any) => status._id === caseItem.case_status);
-    return status ? status.status : 'Unknown';
+    return this.dataService.getCaseStatus(caseItem);
   }
 
   getTotalFiles(caseItem: any) {
-    return caseItem.files ? caseItem.files.length : 0; // Count files in the case
+    return this.dataService.getTotalFiles(caseItem);
   }
 
   getTotalPages(caseItem: any) {
-    // return caseItem.files ? caseItem.files.reduce((sum: number, subCase: any) => sum + (subCase.no_of_pages || 0), 0) : 0;
-    return 0;
+    return this.dataService.getTotalPages(caseItem);
   }
 
   getCaseUploader(caseItem: any) {

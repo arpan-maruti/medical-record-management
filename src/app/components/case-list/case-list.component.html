@@ -5,9 +5,9 @@
       <thead class="thead-custom">
         <tr>
           <th class="px-4 py-4"></th>
-          <th class="px-16 py-4">Case Ref No</th>
-          <th class="px-14 py-4">Instruction Type</th>
-          <th class="px-16 py-4">Client Name</th>
+          <th class="px-4 py-4">Case Ref No</th>
+          <th class="px-4 py-4">Instruction Type</th>
+          <th class="px-4 py-4">Client Name</th>
           <th class="px-4 py-4">Total Files</th>
           <th class="px-4 py-4">Total Pages</th>
           <th class="px-4 py-4">Date Uploaded</th>
@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let caseItem of filteredData">
+        <ng-container *ngFor="let caseItem of data">
           <tr (click)="toggleSubCases(caseItem)" class="clickable-row">
             <td class="px-4 py-4">
               <span *ngIf="caseItem.expanded; else downArrow">
@@ -36,7 +36,7 @@
                 </svg>
               </ng-template>
               </td>
-            <td class="px-8 py-4">
+            <td class="px-4 py-4">
               {{ caseItem.ref_number }}
             </td>
            
@@ -65,7 +65,7 @@
           <!-- Subcases -->
           <tr *ngFor="let subCase of getSubCases(caseItem._id)" [hidden]="!caseItem.expanded" class="subcase-row">
             <td class="px-4 py-4"></td>
-            <td class="px-8 py-4">{{ subCase.ref_number }}</td>
+            <td class="px-4 py-4">{{ subCase.ref_number }}</td>
             <td class="px-4 py-4">{{ getInstructionType(subCase) }}</td>
             <td class="px-4 py-4">{{ subCase.client_name }}</td>
             <td class="px-4 py-4">{{ getTotalFiles(subCase) }}</td>

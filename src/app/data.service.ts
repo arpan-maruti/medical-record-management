@@ -120,6 +120,70 @@ export class DataService {
       "files": ["file5", "file6"],
       "parameters": ["param2"]
     },
+    {
+      "_id": "case1",
+      "parent_id": "null",
+      "client_name": "Client ABC",
+      "ref_number": "XYZ123",
+      "is_deleted": false,
+      "date_of_breach": "2025-01-01",
+      "created_by": "user1",
+      "modified_by": "user2",
+      "created_on": "2025-01-23T10:00:00Z",
+      "modified_on": "2025-01-23T10:00:00Z",
+      "case_uploaded_by": "John Doe",
+      "case_status": "status1",
+      "files": ["file1", "file2"],
+      "parameters": ["param1", "param2"]
+    },
+    {
+      "_id": "case2",
+      "parent_id": "null",
+      "client_name": "Client XYZ",
+      "ref_number": "ABC456",
+      "is_deleted": false,
+      "date_of_breach": "2025-02-01",
+      "created_by": "user2",
+      "modified_by": "user1",
+      "created_on": "2025-01-22T10:00:00Z",
+      "modified_on": "2025-01-22T10:00:00Z",
+      "case_uploaded_by": "Jane Smith",
+      "case_status": "status2",
+      "files": ["file3"],
+      "parameters": ["param2"]
+    },
+    {
+      "_id": "subcase1",
+      "parent_id": "case1",
+      "client_name": "Client ABC - Subcase 1",
+      "ref_number": "XYZ123-1",
+      "is_deleted": false,
+      "date_of_breach": "2025-01-05",
+      "created_by": "user1",
+      "modified_by": "user1",
+      "created_on": "2025-01-24T10:00:00Z",
+      "modified_on": "2025-01-24T10:00:00Z",
+      "case_uploaded_by": "John Doe",
+      "case_status": "status3",
+      "files": ["file4"],
+      "parameters": ["param1"]
+    },
+    {
+      "_id": "subcase2",
+      "parent_id": "case1",
+      "client_name": "Client ABC - Subcase 2",
+      "ref_number": "XYZ123-2",
+      "is_deleted": false,
+      "date_of_breach": "2025-01-06",
+      "created_by": "user1",
+      "modified_by": "user2",
+      "created_on": "2025-01-25T10:00:00Z",
+      "modified_on": "2025-01-25T10:00:00Z",
+      "case_uploaded_by": "John Doe",
+      "case_status": "status4",
+      "files": ["file5", "file6"],
+      "parameters": ["param2"]
+    },
     
   ],
       "case_status": [
@@ -259,21 +323,36 @@ export class DataService {
       getRoles(): Array<any> {
         return this.mockData.roles;
       }
+
+      getMainCases(): Array<any> {
+        return this.mockData.cases.filter((case1) => case1.parent_id == "null");
+      }
+
+      getSubCases(parentId: string) {
+        return this.mockData.cases.filter((subCase) => subCase.parent_id === parentId); // Fetch subcases for a parent case
+      }
+
+      getInstructionType(caseItem: any) {
+        const instruction: any = this.getParameters().find((param: any) => param._id === caseItem.parameters[0]).instruction_id;
+        const msg = this.getInstructionTypes().find((msg) => msg._id === instruction).instruction_msg;
+        return msg;
+      }
     
       getCases(): Array<any> {
         return this.mockData.cases;
       }
     
-      getCaseStatus(): Array<any> {
-        return this.mockData.case_status;
+      getCaseStatus(caseItem: any) {
+        const status = this.mockData.case_status.find((status: any) => status._id === caseItem.case_status);
+        return status ? status.status : 'Unknown';
       }
     
       getOtps(): Array<any> {
         return this.mockData.otps;
       }
     
-      getFiles(): Array<any> {
-        return this.mockData.files;
+      getTotalFiles(caseItem: any) {
+        return caseItem.files ? caseItem.files.length : 0; // Count files in the case
       }
     
       getParameters(): Array<any> {
@@ -283,8 +362,17 @@ export class DataService {
       getLoiTypes(): Array<any> {
         return this.mockData.loi_types;
       }
+
+      getTotalPages(caseItem: any) {
+        // return caseItem.files ? caseItem.files.reduce((sum: number, subCase: any) => sum + (subCase.no_of_pages || 0), 0) : 0;
+        return 0;
+      }
     
       getInstructionTypes(): Array<any> {
         return this.mockData.instruction_types;
+      }
+
+      getCaseUploader(caseItem: any) {
+        return caseItem.case_uploaded_by ? caseItem.case_uploaded_by : 'Unknown';
       }
   };
