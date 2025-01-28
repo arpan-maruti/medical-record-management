@@ -1,6 +1,6 @@
 .container {
   margin-top: 3rem;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 1rem;
 }
 .case-list__heading {
@@ -144,55 +144,11 @@
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
-.card-container {
-  display: none;
+
+.subcase-row {
+  background-color: #f9fafb;
 }
-.main-case-card {
-  background-color: #F9FAFB;  
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
- }
- .case-list__links {
-  display: inline-block;
- }
- .case-list__links a {
-  padding-right: 0.6rem;
-  
- }
- 
- .main-case-card-header {
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
- }
- .plus-icon {
-  height: 0.8rem;  /* Adjust the size of the icon */
-  width: 0.8rem;   /* Keep it proportional */
- }
- .main-case-card-body p {
-  margin: 0.5rem 0;
- }
- 
- 
- .subcase-card-container {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
- }
- 
- 
- .subcase-card {
-  background-color: #F1F5F9;
-  padding: 1rem;
-  margin-bottom: 0.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
- }
- 
+
 @media (max-width: 1024px) {
   .custom-btn {
     width: 17rem;
@@ -200,26 +156,16 @@
   }
 }
 @media (max-width: 768px) {
-  .table-container {
-    display: none; /* Hide the table for smaller screens */
-  }
- 
- 
-  .card-container {
-    display: block; /* Show card layout for smaller screens */
-  }
- 
- 
-  .main-case-card-body p {
-    font-size: 0.9rem;
-  }
- 
- 
   .custom-btn {
     width: 15rem;
   }
- }
- 
+
+  .table th,
+  .table td {
+    padding: 0.5rem;
+  }
+}
+
 @media (max-width: 425px) {
   .custom-btn {
     width: 12rem;

@@ -11,8 +11,7 @@ import { FormsModule } from '@angular/forms';
 export class CaseListComponent {
   data: any[] = [];
   isDataAvailable: boolean = false;
-  constructor(private cdr: ChangeDetectorRef, private dataService: DataService) {
-  }
+  constructor(private cdr: ChangeDetectorRef, private dataService: DataService) {}
 
   
   ngAfterViewInit() {

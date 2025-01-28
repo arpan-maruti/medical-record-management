@@ -1,6 +1,7 @@
 .upload-new-case__container {
+    width: 100%;
     padding-top: 2rem;
-    background-color: #F4F4F4;
+    background-color: #f4f4f4;
 }
 .upload-new-case__header {
     text-align: center;
@@ -45,12 +46,14 @@
     border-radius: 0.5rem;
     background-color: white;
 }
+
 .form-group-instruction-type label {
     font-size: 1.2rem;
     font-weight: bold;
     display: block;
     margin-bottom: 0.5rem;
 }
+
 .form-group-instruction-type input,
 .form-group-instruction-type select {
     width: 50%; /* Adjusted width for instruction type inputs */
@@ -60,7 +63,7 @@
     border-radius: 0.5rem;
     background-color: white;
 }
-/* Styling for the row of 4 inputs */
+/* New styling for the row of 4 inputs */
 .form-group-row {
     display: flex;
     gap: 2rem; /* Added spacing between inputs */
@@ -78,9 +81,11 @@
     font-size: 1.2rem;
     margin-bottom: 1rem;
 }
+
 .loi-text {
     text-decoration: underline;
 }
+
 .upload-container {
     display: flex;
     align-items: center;
@@ -91,39 +96,22 @@
     font-size: 1.2rem;
 }
 .upload-icon {
-    font-size: 1.4rem;
+    font-size: 18px;
 }
-.parameter-list li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-.checkbox-container {
-    padding: 1rem;
-  }
-  .checkbox-container input {
-    width: 1.5rem; /* Adjust the size of the checkbox */
-    height: 1.5rem;
-  }
-  .parameter-details {
-    border: 1px solid #ddd;
-    width: 100%;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    font-size: 1.2rem;
-  }
+
 button {
-    padding: 1rem 1.5rem;
-    font-size: 1.2rem;
-    background-color: #00344D;
+    padding: 10px 15px;
+    background-color: #007bff;
     color: white;
    width: 20rem;
     border-radius: 0.4rem;
     cursor: pointer;
-    margin-left: 50rem;
-    margin-right: 50rem;
 }
-/* Media query for smaller screens */
+
+button:hover {
+    background-color: #0056b3;
+}
+
 @media (max-width: 768px) {
     .upload-new-case__forms {
         flex-direction: column;

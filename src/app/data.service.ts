@@ -56,7 +56,7 @@ export class DataService {
         }
       ],
       "cases": [
-    {
+      {
       "_id": "case1",
       "parent_id": "null",
       "client_name": "Client ABC",
@@ -119,71 +119,7 @@ export class DataService {
       "case_status": "status4",
       "files": ["file5", "file6"],
       "parameters": ["param2"]
-    },
-    {
-      "_id": "case1",
-      "parent_id": "null",
-      "client_name": "Client ABC",
-      "ref_number": "XYZ123",
-      "is_deleted": false,
-      "date_of_breach": "2025-01-01",
-      "created_by": "user1",
-      "modified_by": "user2",
-      "created_on": "2025-01-23T10:00:00Z",
-      "modified_on": "2025-01-23T10:00:00Z",
-      "case_uploaded_by": "John Doe",
-      "case_status": "status1",
-      "files": ["file1", "file2"],
-      "parameters": ["param1", "param2"]
-    },
-    {
-      "_id": "case2",
-      "parent_id": "null",
-      "client_name": "Client XYZ",
-      "ref_number": "ABC456",
-      "is_deleted": false,
-      "date_of_breach": "2025-02-01",
-      "created_by": "user2",
-      "modified_by": "user1",
-      "created_on": "2025-01-22T10:00:00Z",
-      "modified_on": "2025-01-22T10:00:00Z",
-      "case_uploaded_by": "Jane Smith",
-      "case_status": "status2",
-      "files": ["file3"],
-      "parameters": ["param2"]
-    },
-    {
-      "_id": "subcase1",
-      "parent_id": "case1",
-      "client_name": "Client ABC - Subcase 1",
-      "ref_number": "XYZ123-1",
-      "is_deleted": false,
-      "date_of_breach": "2025-01-05",
-      "created_by": "user1",
-      "modified_by": "user1",
-      "created_on": "2025-01-24T10:00:00Z",
-      "modified_on": "2025-01-24T10:00:00Z",
-      "case_uploaded_by": "John Doe",
-      "case_status": "status3",
-      "files": ["file4"],
-      "parameters": ["param1"]
-    },
-    {
-      "_id": "subcase2",
-      "parent_id": "case1",
-      "client_name": "Client ABC - Subcase 2",
-      "ref_number": "XYZ123-2",
-      "is_deleted": false,
-      "date_of_breach": "2025-01-06",
-      "created_by": "user1",
-      "modified_by": "user2",
-      "created_on": "2025-01-25T10:00:00Z",
-      "modified_on": "2025-01-25T10:00:00Z",
-      "case_uploaded_by": "John Doe",
-      "case_status": "status4",
-      "files": ["file5", "file6"],
-      "parameters": ["param2"]
-    },
+    }
     
   ],
       "case_status": [
@@ -246,9 +182,9 @@ export class DataService {
       ],
       "parameters": [
         {
-          "_id": "param1",
+          "_id": "param1_inst1",
           "instruction_id": "inst1",
-          "parameter_msg": "Parameter 1 description",
+          "parameter_msg": "1-1 message",
           "significance_level": "High",
           "created_by": "user1",
           "modified_by": "user1",
@@ -256,15 +192,146 @@ export class DataService {
           "modified_on": "2025-01-23T10:00:00Z"
         },
         {
-          "_id": "param2",
-          "instruction_id": "inst2",
-          "parameter_msg": "Parameter 2 description",
+          "_id": "param2_inst1",
+          "instruction_id": "inst1",
+          "parameter_msg": "1-2 message",
+          "significance_level": "Moderate",
+          "created_by": "user1",
+          "modified_by": "user1",
+          "created_on": "2025-01-23T10:01:00Z",
+          "modified_on": "2025-01-23T10:01:00Z"
+        },
+        {
+          "_id": "param3_inst1",
+          "instruction_id": "inst1",
+          "parameter_msg": "1-3 message",
+          "significance_level": "Low",
+          "created_by": "user2",
+          "modified_by": "user2",
+          "created_on": "2025-01-23T10:02:00Z",
+          "modified_on": "2025-01-23T10:02:00Z"
+        },
+        {
+          "_id": "param4_inst1",
+          "instruction_id": "inst1",
+          "parameter_msg": "1-4 message",
+          "significance_level": "High",
+          "created_by": "user1",
+          "modified_by": "user1",
+          "created_on": "2025-01-23T10:03:00Z",
+          "modified_on": "2025-01-23T10:03:00Z"
+        },
+        {
+          "_id": "param5_inst1",
+          "instruction_id": "inst1",
+          "parameter_msg": "1-5 message",
           "significance_level": "Moderate",
           "created_by": "user2",
           "modified_by": "user2",
+          "created_on": "2025-01-23T10:04:00Z",
+          "modified_on": "2025-01-23T10:04:00Z"
+        },
+        {
+          "_id": "param1_inst2",
+          "instruction_id": "inst2",
+          "parameter_msg": "2-1 message",
+          "significance_level": "High",
+          "created_by": "user1",
+          "modified_by": "user1",
           "created_on": "2025-01-22T10:00:00Z",
           "modified_on": "2025-01-22T10:00:00Z"
+        },
+        {
+          "_id": "param2_inst2",
+          "instruction_id": "inst2",
+          "parameter_msg": "2-2 message",
+          "significance_level": "Moderate",
+          "created_by": "user2",
+          "modified_by": "user2",
+          "created_on": "2025-01-22T10:01:00Z",
+          "modified_on": "2025-01-22T10:01:00Z"
+        },
+        {
+          "_id": "param3_inst2",
+          "instruction_id": "inst2",
+          "parameter_msg": "2-3 message",
+          "significance_level": "Low",
+          "created_by": "user1",
+          "modified_by": "user1",
+          "created_on": "2025-01-22T10:02:00Z",
+          "modified_on": "2025-01-22T10:02:00Z"
+        },
+        {
+          "_id": "param4_inst2",
+          "instruction_id": "inst2",
+          "parameter_msg": "2-4 message",
+          "significance_level": "High",
+          "created_by": "user2",
+          "modified_by": "user2",
+          "created_on": "2025-01-22T10:03:00Z",
+          "modified_on": "2025-01-22T10:03:00Z"
+        },
+        {
+          "_id": "param5_inst2",
+          "instruction_id": "inst2",
+          "parameter_msg": "2-5 message",
+          "significance_level": "Moderate",
+          "created_by": "user1",
+          "modified_by": "user1",
+          "created_on": "2025-01-22T10:04:00Z",
+          "modified_on": "2025-01-22T10:04:00Z"
+        },
+        {
+          "_id": "param1_inst3",
+          "instruction_id": "inst3",
+          "parameter_msg": "3-1 message",
+          "significance_level": "High",
+          "created_by": "user1",
+          "modified_by": "user1",
+          "created_on": "2025-01-23T10:00:00Z",
+          "modified_on": "2025-01-23T10:00:00Z"
+        },
+        {
+          "_id": "param2_inst3",
+          "instruction_id": "inst3",
+          "parameter_msg": "3-2 message",
+          "significance_level": "Moderate",
+          "created_by": "user2",
+          "modified_by": "user2",
+          "created_on": "2025-01-23T10:01:00Z",
+          "modified_on": "2025-01-23T10:01:00Z"
+        },
+        {
+          "_id": "param3_inst3",
+          "instruction_id": "inst3",
+          "parameter_msg": "3-3 message",
+          "significance_level": "Low",
+          "created_by": "user1",
+          "modified_by": "user1",
+          "created_on": "2025-01-23T10:02:00Z",
+          "modified_on": "2025-01-23T10:02:00Z"
+        },
+        {
+          "_id": "param4_inst3",
+          "instruction_id": "inst3",
+          "parameter_msg": "3-4 message",
+          "significance_level": "High",
+          "created_by": "user2",
+          "modified_by": "user2",
+          "created_on": "2025-01-23T10:03:00Z",
+          "modified_on": "2025-01-23T10:03:00Z"
+        },
+        {
+          "_id": "param5_inst3",
+          "instruction_id": "inst3",
+          "parameter_msg": "3-5 message",
+          "significance_level": "Moderate",
+          "created_by": "user1",
+          "modified_by": "user1",
+          "created_on": "2025-01-23T10:04:00Z",
+          "modified_on": "2025-01-23T10:04:00Z"
         }
+        
       ],
           "loi_types": [
             {
@@ -333,9 +400,23 @@ export class DataService {
       }
 
       getInstructionType(caseItem: any) {
-        const instruction: any = this.getParameters().find((param: any) => param._id === caseItem.parameters[0]).instruction_id;
-        const msg = this.getInstructionTypes().find((msg) => msg._id === instruction).instruction_msg;
-        return msg;
+        const parameters = this.getParameters();
+  const matchingParam = parameters.find((param: any) => param._id === caseItem.parameters[0]);
+  
+  if (!matchingParam) {
+  
+    return null; // or a default value
+  }
+
+  const instruction = matchingParam.instruction_id;
+  const instructionType = this.getInstructionTypes().find((msg: any) => msg._id === instruction);
+
+  if (!instructionType) {
+    console.error('No matching instruction type found for instruction_id:', instruction);
+    return null; // or a default value
+  }
+
+  return instructionType.instruction_msg;
       }
     
       getCases(): Array<any> {
@@ -357,6 +438,10 @@ export class DataService {
     
       getParameters(): Array<any> {
         return this.mockData.parameters;
+      }
+
+      getParametersByInstructionId(instructionId: string): Array<any> {
+        return this.mockData.parameters.filter(param => param.instruction_id === instructionId);
       }
     
       getLoiTypes(): Array<any> {
