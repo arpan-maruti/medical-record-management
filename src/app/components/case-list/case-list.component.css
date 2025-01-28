@@ -1,58 +1,50 @@
-
-.container{
-
+.container {
   margin-top: 3rem;
   background-color: #ffffff;
   padding: 1rem;
-  
-  
+}
+
+.case-list__heading {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 
 .case-list__case {
-  overflow: auto;
-  
-  border-radius: 0.5rem;
-  width: 100%; /* Responsive width */
-  margin: 0 auto; /* Center the table container */
+  overflow-x: auto;
+ 
+  margin: 0 auto;
+  width: 100%;
 }
 
 .table {
-  width: 100%; /* Make table fill the container */
-  table-layout: auto; /* Adjust column widths automatically */
-}
-.case-list__heading{
-  font-size: 1.6rem;
-  font-weight: 800;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
 }
 
-/* Table Header Style */
-.thead-custom {
-  background-color: #ced1da !important; /* Heading background color */
-  border-radius: 1rem;
-}
 
-/* Light border-radius for rows */
-.table tr {
-  border-radius: 0.5rem;
-  border: 1px solid transparent; /* Add transparent border to prevent collapse */
-}
 
-/* Optional: Add hover effect for rows */
-.table tbody tr:hover {
-  background-color: #f9fafb; /* Light gray hover effect */
-}
-
-/* Optional: Add border-radius to the table container if needed */
-.case-list__case {
-  overflow: auto;
-  border-radius: 8px;
-}
-
-/* Adjust padding for consistency */
 .table th,
 .table td {
-  padding: 0.75rem 1rem; /* Adjust padding for spacing */
-  word-wrap: break-word;
+  text-align: left;
+  padding: 0.75rem;
+ 
+  
+}
+
+.thead-custom {
+  background-color: #ced1da;
+  
+}
+
+.table-header{
+ 
+  border-radius: 0.5rem;
+}
+
+.table tbody tr:hover {
+  background-color: #f9fafb;
 }
 
 .table td img {
@@ -60,46 +52,42 @@
   width: 1rem;
 }
 
-/* Add bottom border to prevent line after header row */
-.table thead tr {
-  border: 2px solid #ced1da; /* Optional: can use the same color as the header background */
+.clickable-row {
+  cursor: pointer;
+  
 }
 
 .custom-btn {
   background-color: #00344d;
   color: white;
-  width: 100%; /* Responsive button width */
-  max-width: 30rem; /* Restrict button width */
-  border-radius: 0.3rem;
-  border: none; /* Optional: Remove the default border */
+  width: 100%;
+  max-width: 30rem;
   padding: 0.8rem;
+  border: none;
+ 
+  text-align: center;
+  font-size: 1rem;
 }
 
 .custom-btn:hover {
-  color: white;
-  background-color: #002734; /* Optional: Darker shade for hover effect */
+  background-color: #002734;
 }
 
 .case-list__no-case {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   height: 35rem;
 }
 
-/* Responsive Design */
-@media (max-width: 1440px) {
-  .custom-btn {
-    width: 17rem;
-    height: 2.9rem;
-  }
-  .case-list__no-case {
-    height: 20rem;
-  }
+.case-list__no-case-content p {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
 
-  .case-list__no-case-content p{
-    font-size: 1.5rem;
-  }
-  .case-list__no-case-content button{
-    font-size: 1.2rem;
-  }
+.subcase-row {
+  background-color: #f9fafb;
 }
 
 @media (max-width: 1024px) {
@@ -107,22 +95,13 @@
     width: 17rem;
     height: 2.9rem;
   }
-  .case-list__no-case {
-    height: 20rem;
-  }
-
-  .case-list__no-case-content p{
-    font-size: 1.5rem;
-  }
-  .case-list__no-case-content button{
-    font-size: 1.2rem;
-  }
 }
 
 @media (max-width: 768px) {
   .custom-btn {
     width: 15rem;
   }
+
   .table th,
   .table td {
     padding: 0.5rem;
@@ -133,32 +112,9 @@
   .custom-btn {
     width: 12rem;
     height: 2rem;
-    
-  }
-  .case-list__no-case {
-    height: 20rem;
   }
 
-  .case-list__no-case-content p{
+  .case-list__no-case-content p {
     font-size: 1.05rem;
-  }
-  .case-list__no-case-content button{
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 375px) {
-  .case-list__case {
-    padding: 0.25rem;
-  }
-  .table th,
-  .table td {
-    padding: 0.25rem 0.5rem;
-  }
-}
-
-@media (max-width: 320px) {
-  .case-list__no-case {
-    height: 25rem; /* Adjusted height for smaller screens */
   }
 }
