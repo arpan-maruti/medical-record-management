@@ -1,78 +1,138 @@
 .container {
   margin-top: 3rem;
-  background-color: #ffffff;
+  background-color: #FFFFFF;
   padding: 1rem;
 }
-
 .case-list__heading {
   font-size: 1.6rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
-
 .case-list__case {
-  overflow-x: auto;
- 
   margin: 0 auto;
   width: 100%;
 }
-
 .table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 0.5rem;
+  border-collapse: collapse;
 }
-
-
-
 .table th,
 .table td {
   text-align: left;
   padding: 0.75rem;
- 
-  
 }
-
 .thead-custom {
-  background-color: #ced1da;
-  
+  background-color: #CED1DA;
 }
-
-.table-header{
- 
-  border-radius: 0.5rem;
+.table-header {
+  height: 3rem;
 }
-
+.table th {
+  font-weight: bold;
+}
+.table-container {
+  overflow-x: auto;
+}
 .table tbody tr:hover {
-  background-color: #f9fafb;
+  background-color: #F9FAFB;
 }
-
-.table td img {
+.clickable-row {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.3s;
+}
+.clickable-row:hover {
+  border: 2px solid #CED1DA;
+}
+.main-case {
+  background-color: #F9FAFB;
+  border-radius: 8px;
+  padding: 1rem;
+}
+.subcase-row {/* Main Case Card Style */
+  .main-case {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .subcase-row {
+    background-color: #F9FAFB;
+  }
+  .subcase-card {
+    margin-top: 1rem;
+    background-color: #F1F5F9;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .subcase-card-item {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #FFFFFF;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .subcase-card-item:last-child {
+    margin-bottom: 0;
+  }
+  .subcase-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  .subcase-content p {
+    margin: 0.5rem 0;
+  }
+  /* Hover Effect on Main Case */
+  .clickable-row {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .clickable-row:hover {
+    background-color: #E9F2F9;
+  }
+  /* Plus Icon */
+  .plus-icon {
+    height: 1rem;
+    width: 1rem;
+  }
+  /* Custom Button */
+  .custom-btn {
+    background-color: #00344D;
+    color: white;
+    width: 100%;
+    max-width: 30rem;
+    padding: 0.8rem;
+    text-align: center;
+    font-size: 1rem;
+  }
+  .custom-btn:hover {
+    background-color: #002734;
+  }
+  background-color: #F1F5F9;
+  border-radius: 4px;
+  padding: 0.8rem;
+}
+.subcase-row td {
+  padding-left: 2rem; /* Indent subcases */
+}
+.plus-icon {
   height: 1rem;
   width: 1rem;
 }
-
-.clickable-row {
-  cursor: pointer;
-  
-}
-
 .custom-btn {
-  background-color: #00344d;
+  background-color: #00344D;
   color: white;
   width: 100%;
   max-width: 30rem;
   padding: 0.8rem;
-  border: none;
- 
   text-align: center;
   font-size: 1rem;
 }
-
 .custom-btn:hover {
   background-color: #002734;
 }
-
 .case-list__no-case {
   display: flex;
   justify-content: center;
@@ -80,40 +140,77 @@
   text-align: center;
   height: 35rem;
 }
-
 .case-list__no-case-content p {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
-
-.subcase-row {
-  background-color: #f9fafb;
+.card-container {
+  display: none;
 }
-
+.main-case-card {
+  background-color: #F9FAFB;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ }
+ .case-list__links {
+  display: inline-block;
+ }
+ .case-list__links a {
+  padding-right: 0.6rem;
+ }
+ .main-case-card-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+ }
+ .plus-icon {
+  height: 0.8rem;  /* Adjust the size of the icon */
+  width: 0.8rem;   /* Keep it proportional */
+ }
+ .main-case-card-body p {
+  margin: 0.5rem 0;
+ }
+ .subcase-card-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+ }
+ .subcase-card {
+  background-color: #F1F5F9;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
 @media (max-width: 1024px) {
   .custom-btn {
     width: 17rem;
     height: 2.9rem;
   }
 }
-
 @media (max-width: 768px) {
+  .table-container {
+    display: none; /* Hide the table for smaller screens */
+  }
+  .card-container {
+    display: block; /* Show card layout for smaller screens */
+  }
+  .main-case-card-body p {
+    font-size: 0.9rem;
+  }
   .custom-btn {
     width: 15rem;
   }
-
-  .table th,
-  .table td {
-    padding: 0.5rem;
-  }
-}
-
+ }
 @media (max-width: 425px) {
   .custom-btn {
     width: 12rem;
     height: 2rem;
   }
-
   .case-list__no-case-content p {
     font-size: 1.05rem;
   }

@@ -1,85 +1,87 @@
 .upload-new-case__container {
-    padding-top: 20px;
+    width: 100%;
+    padding-top: 2rem;
     background-color: #f4f4f4;
 }
 
 .upload-new-case__header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
 }
 
 .upload-new-case__title {
-    font-size: 24px;
+    font-size: 2rem; /* Increased font size */
     font-weight: bold;
 }
 
 .upload-new-case__forms {
     display: flex;
-    gap: 20px;
+    gap: 2rem;
     justify-content: space-between;
     flex-direction: column;
-    flex-wrap: wrap; /* Make sure the forms stack on smaller screens */
+    flex-wrap: wrap; /* Ensure forms stack on smaller screens */
 }
 
 .upload-new-case__form {
     background-color: white;
-    padding-top: 2.8rem;
-    justify-content: center;
-    padding-left: 1.5rem;
-    /* padding-right: 1.5rem; */
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 3rem 2rem;
     flex: 1;
-    min-width: 300px;
+    min-width: 20rem;
 }
 
 .upload-new-case__form-title {
-    font-size: 18px;
-    margin-bottom: 15px;
+    font-size: 1.6rem; /* Increased font size */
+    margin-bottom: 2.5rem;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem;
 }
 
 .form-group label {
-    font-size: 14px;
+    font-size: 1.2rem; /* Increased font size for labels */
     font-weight: bold;
     display: block;
+    margin-bottom: 0.5rem;
 }
 
 .form-group input,
 .form-group select {
-    width: 73%;
-    padding: 10px;
-    margin-top: 0.7rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    width: 100%;
+    padding: 1rem; /* Increased padding for inputs */
+    font-size: 1.2rem; /* Increased font size for input text */
+    border: 0.1rem solid #ddd;
+    border-radius: 0.5rem;
+    background-color: white;
 }
+
 .form-group-instruction-type label {
-    font-size: 14px;
+    font-size: 1.2rem;
     font-weight: bold;
     display: block;
+    margin-bottom: 0.5rem;
 }
+
 .form-group-instruction-type input,
 .form-group-instruction-type select {
-    width: 43%;
-    padding: 10px;
+    width: 50%; /* Adjusted width for instruction type inputs */
+    padding: 1rem;
+    font-size: 1.2rem;
+    border: 0.1rem solid #ddd;
+    border-radius: 0.5rem;
     background-color: white;
-    margin-top: 0.7rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
 }
-/* New styling for the row of 4 inputs */
+
+/* Styling for the row of 4 inputs */
 .form-group-row {
     display: flex;
-    gap: 0; /* Space between inputs */
-    flex-wrap: wrap; /* Allow wrapping if screen is small */
+    gap: 2rem; /* Added spacing between inputs */
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
 }
 
 .form-group-row .form-group {
     flex: 1; /* Make each input take equal width */
-    min-width: 150px; /* Ensure inputs don't shrink too small */
+    min-width: 15rem; /* Ensure inputs have a minimum width */
 }
 
 /* Custom styling for select dropdowns */
@@ -87,45 +89,78 @@
     display: inline-flex;
     align-items: center;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1.2rem;
     margin-bottom: 1rem;
 }
+
 .loi-text {
     text-decoration: underline;
 }
+
 .upload-container {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .upload-container input[type="file"] {
-    padding: 10px;
+    padding: 1rem;
+    font-size: 1.2rem;
 }
 
 .upload-icon {
-    font-size: 18px;
+    font-size: 1.4rem;
 }
+
+.parameter-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+.checkbox-container {
+    padding: 1rem;
+  }
+  
+  .checkbox-container input {
+    width: 1.5rem; /* Adjust the size of the checkbox */
+    height: 1.5rem;
+  }
+
+  .parameter-details {
+    border: 1px solid #ddd;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1.2rem;
+  }
+  
+  
+ 
+  
 
 button {
-    padding: 10px 15px;
-    background-color: #007bff;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    background-color: #00344d;
     color: white;
-    border: none;
-    border-radius: 5px;
+   width: 20rem;
+    border-radius: 0.4rem;
     cursor: pointer;
+    margin-left: 50rem;
+    margin-right: 50rem;
 }
 
-button:hover {
-    background-color: #0056b3;
-}
 
+
+/* Media query for smaller screens */
 @media (max-width: 768px) {
     .upload-new-case__forms {
         flex-direction: column;
     }
 
     .form-group-row {
-        flex-direction: column; /* Stack the inputs vertically on smaller screens */
+        flex-direction: column; /* Stack inputs vertically on smaller screens */
+        gap: 1rem;
     }
 }

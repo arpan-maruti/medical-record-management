@@ -21,16 +21,16 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let caseItem of data">
-          <tr (click)="toggleSubCases(caseItem)" class="clickable-row">
+        <ng-container *ngFor="let caseItem of data" class="case-row">
+          <tr (click)="toggleSubCases(caseItem)" class="clickable-row main-case">
             <td>
               <span *ngIf="caseItem.expanded; else downArrow">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#4A6F81">
+                <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="#4A6F81">
                   <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
                 </svg>
               </span>
               <ng-template #downArrow>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#4A6F81">
+                <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="#4A6F81">
                   <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
                 </svg>
               </ng-template>
@@ -55,7 +55,7 @@
             <td>
               <a href="#" class="text-primary">Generate Summary</a>
             </td>
-            <td><img src="assets/plus.png"></td>
+            <td><img src="assets/plus.png" class="plus-icon"></td>
           </tr>
           <!-- Subcases -->
           <tr *ngFor="let subCase of getSubCases(caseItem._id)" [hidden]="!caseItem.expanded" class="subcase-row">
@@ -91,6 +91,61 @@
       <p>Welcome to the Case Management Section.</p>
       <p>To upload a new case, please click the button below.</p>
       <button class="custom-btn">Upload New Case</button>
+    </div>
+  </div>
+</div>
+ <!-- Case list for smaller screens (card layout) -->
+ <div *ngIf="isDataAvailable" class="card-container">
+  <div *ngFor="let caseItem of data" class="main-case-card">
+    <!-- Main case card -->
+    <div (click)="toggleSubCases(caseItem)" class="clickable-row main-case">
+      <div class="main-case-card-header">
+        <span>{{ caseItem.ref_number }}</span>
+        <span *ngIf="caseItem.expanded; else downArrow">
+          <svg xmlns="http://www.w3.org/2000/svg" height="12px" width="12px" fill="#4A6F81">
+            <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+          </svg>
+        </span>
+        <ng-template #downArrow>
+          <svg xmlns="http://www.w3.org/2000/svg" height="12px" width="12px" fill="#4A6F81">
+            <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
+          </svg>
+        </ng-template>
+      </div>
+      <div class="main-case-card-body">
+        <p>Instruction Type: {{ getInstructionType(caseItem) }}</p>
+        <p>Client Name: {{ caseItem.client_name }}</p>
+        <p>Total Files: {{ getTotalFiles(caseItem) }}</p>
+        <p>Total Pages: {{ getTotalPages(caseItem) }}</p>
+        <p>Date Uploaded: {{ caseItem.created_on | date }}</p>
+        <p>Uploaded By: {{ getCaseUploader(caseItem) }}</p>
+        <p>Case Status: {{ getCaseStatus(caseItem) }}</p>
+        <div class="case-list__links">
+          <a href="#" class="text-primary">View LOI</a>
+          <a href="#" class="text-primary">Upload File</a>
+          <a href="#" class="text-primary">View/Label</a>
+          <a href="#" class="text-primary">Generate Summary</a>
+        </div>
+      </div>
+    </div>
+    <!-- Subcase Cards -->
+    <div *ngIf="caseItem.expanded" class="subcase-card-container">
+      <div *ngFor="let subCase of getSubCases(caseItem._id)" class="subcase-card">
+        <h4>{{ subCase.ref_number }}</h4>
+        <p>Instruction Type: {{ getInstructionType(subCase) }}</p>
+        <p>Client Name: {{ subCase.client_name }}</p>
+        <p>Total Files: {{ getTotalFiles(subCase) }}</p>
+        <p>Total Pages: {{ getTotalPages(subCase) }}</p>
+        <p>Date Uploaded: {{ subCase.created_on | date }}</p>
+        <p>Uploaded By: {{ getCaseUploader(subCase) }}</p>
+        <p>Case Status: {{ getCaseStatus(subCase) }}</p>
+        <div class="case-list__links">
+          <a href="#" class="text-primary">View LOI</a>
+          <a href="#" class="text-primary">Upload File</a>
+          <a href="#" class="text-primary">View/Label</a>
+          <a href="#" class="text-primary">Generate Summary</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
