@@ -57,6 +57,5 @@ export class CaseListComponent {
   }
 
   getCaseUploader(caseItem: any) {
-    return caseItem.case_uploaded_by ? caseItem.case_uploaded_by : 'Unknown';
-  }
+    return this.dataService.getCaseUploader(caseItem);
 }
