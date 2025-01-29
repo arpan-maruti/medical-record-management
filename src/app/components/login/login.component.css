@@ -59,7 +59,7 @@
   padding: 1rem 1.2rem 1rem 3rem; /* Adjust padding for better appearance */
   border: 1px solid lightgrey;
   border-radius: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem;
   font-size: 1.1rem; /* Larger input text */
 }
 
@@ -114,13 +114,13 @@
 }
 
 .login__forgot-password {
-    display: inline;
-    /* text-align: right; */
-    margin-left: 19rem;
-    margin-top: 1rem;
-    color: #999;
-    font-size: 1.1rem;
-    text-decoration: none;
+  display: inline;
+  /* text-align: right; */
+  margin-left: 19rem;
+  margin-top: 1rem;
+  color: #999;
+  font-size: 1.1rem;
+  text-decoration: none;
 }
 
 .login__forgot-password:hover {
@@ -137,7 +137,7 @@
   color: red;
   font-size: 1rem;
   /* margin-top: -1.6rem; */
-  margin-top: -2.2rem;
+  margin-top: -1.2rem;
   margin-bottom: 0.8rem;
   /* margin-left: 1rem; */
   position: absolute;
@@ -203,23 +203,23 @@
   .login__input {
     font-size: 1.1rem;
     padding: 1rem 1.2rem 1rem 3rem;
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
   }
 
-    .login__button {
-        display: block;
-        margin: 2rem auto 0 auto; /* Center the button */
-        width: 100%;
-        max-width: 200px;
-        font-size: 1rem;
-        height: 3.2rem;
-    }
-    .login__forgot-password {
-        /* text-align: right; */
-        margin-left: 17rem;
-        font-size: 1rem;
-        margin-top: 1rem;
-    }
+  .login__button {
+    display: block;
+    margin: 2rem auto 0 auto; /* Center the button */
+    width: 100%;
+    max-width: 200px;
+    font-size: 1rem;
+    height: 3.2rem;
+  }
+  .login__forgot-password {
+    /* text-align: right; */
+    margin-left: 17rem;
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
 
   .login__form-title {
     font-size: 1.3rem; /* Slightly smaller on medium screens */
@@ -229,7 +229,7 @@
     top: 1.7rem; /* Position the email icon to the left */
   }
   .error-message {
-    margin-top: -1.6rem;
+    margin-top: -1rem;
   }
   .password-icon {
     left: 1rem;
@@ -258,10 +258,10 @@
     height: 3rem;
   }
 
-    .login__forgot-password {
-        margin-left: 14rem;
-        font-size: 0.9rem;
-    }
+  .login__forgot-password {
+    margin-left: 14rem;
+    font-size: 0.9rem;
+  }
 
   .login__form-title {
     font-size: 1.1rem; /* Decrease size further for smaller screens */
@@ -278,9 +278,6 @@
   .error-message {
     margin-bottom: 1rem;
     font-size: 0.9rem;
-  }
-  .login__forgot-password {
-    padding-left: 65%;
   }
 }
 
@@ -307,10 +304,10 @@
     font-size: 0.9rem;
   }
 
-    .login__forgot-password {
-        margin-left: 13rem;
-        font-size: 0.8rem;
-    }
+  .login__forgot-password {
+    margin-left: 13rem;
+    font-size: 0.8rem;
+  }
 
   .login__form-title {
     font-size: 1rem; /* Even smaller on very small screens */
@@ -329,11 +326,17 @@
     margin-bottom: 1rem;
     font-size: 0.8rem;
   }
-  .login__forgot-password {
+  /* .login__forgot-password {
     padding-left: 67%;
-  }
+  } */
 }
+@media (max-width: 341px) {
+  .login__forgot-password {
+    margin-left: 12rem;
+    font-size: 0.8rem;
+  }
 
+}
 .eye-icon {
   position: absolute;
   top: 50%;
