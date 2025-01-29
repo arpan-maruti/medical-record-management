@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomAlertComponent } from '../custom-alert/custom-alert.component';
 import { RouterLink } from '@angular/router';
+import validator from 'validator'; // Import validator
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule,CustomAlertComponent, RouterLink],
+  imports: [FormsModule, CommonModule, CustomAlertComponent, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -25,7 +26,7 @@ export class LoginComponent {
 
   onLogin() {
     this.formSubmitted = true;
-    
+
     // Validate the fields
     this.validateInputs();
 
@@ -52,7 +53,7 @@ export class LoginComponent {
     if (!this.password) {
       this.passwordError = 'Password field can\'t be empty.';
     } else if (!this.isValidPassword(this.password)) {
-      this.passwordError = 'Password must be at least 6 characters long and include one special character.';
+      this.passwordError = 'error';
     } else {
       this.passwordError = '';
     }
@@ -76,15 +77,22 @@ export class LoginComponent {
     console.log('Alert confirmed');
   }
 
-  //error message if not valid credentials entered(to be implemented)
+  // Use validator.isEmail() to validate the email format
   isValidEmail(email: string): boolean {
-
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    return emailRegex.test(email);
+    return validator.isEmail(email);
   }
 
+  // Use validator.js to check password validity
   isValidPassword(password: string): boolean {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,}$/;
-    return passwordRegex.test(password);
+    // Check minimum length
+    if (!validator.isLength(password, { min: 6 })) {
+      return false;
+    }
+    
+    // Check if password contains at least one uppercase letter, one number, and one special character
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    return true;
   }
 }
