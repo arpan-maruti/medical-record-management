@@ -463,7 +463,7 @@ export class DataService {
       getParametersByInstructionId(instructionId: string): Array<any> {
         return this.mockData.parameters.filter(param => param.instruction_id === instructionId);
       }
-getInstructionTypesByLoiId(loiId: string): Array<any> {
+      getInstructionTypesByLoiId(loiId: string): Array<any> {
         return this.mockData.instruction_types.filter(instruction => instruction.loi_id === loiId);
       }
   };

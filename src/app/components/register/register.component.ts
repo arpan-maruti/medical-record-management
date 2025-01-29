@@ -5,11 +5,13 @@ import { CommonModule } from '@angular/common';
 import { phone } from 'phone';
 import { PhoneMaskService } from '../../phone-mask.service';  // Import the PhoneMaskService
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask'; 
+import emailValidator from 'email-validator';  // Import email-validator package
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
-  imports:[FormsModule, CommonModule, NgxMaskDirective],
+  imports: [FormsModule, CommonModule, NgxMaskDirective],
   providers: [provideNgxMask()]
 })
 export class RegisterComponent {
@@ -44,17 +46,37 @@ export class RegisterComponent {
     this.phoneMask = this.phoneMaskService.getMask(this.selectedCountryCode);
   }
 
-  // Handle input changes
-  onInputChange() {
-    this.firstNameError = null;
-    this.lastNameError = null;
-    this.emailError = null;
-    this.phoneError = null;
-    this.updatePhoneMask();  // Update mask on input change
+  // Fetch the valid TLDs from an API (or use a static list)
+  async fetchValidTlds(): Promise<string[]> {
+    // In this case, using a static list of common TLDs
+    return [
+      "com", "org", "net", "edu", "gov", "int", "mil", "co", "io", "us", "uk", "de", "jp", "in"
+      // Add other valid TLDs as needed or fetch from an API
+    ];
+  }
+
+  // Validate email with basic format check and valid TLD check
+  async isValidEmail(email: string): Promise<boolean> {
+    // Use email-validator to check if the email format is valid
+    if (!emailValidator.validate(email)) {
+      return false;
+    }
+
+    // Fetch valid TLDs asynchronously
+    const validTlds = await this.fetchValidTlds();
+
+    // Extract the domain part of the email (after '@')
+    const domain = email.split('@')[1];
+
+    // Get the TLD by splitting the domain at the last dot
+    const domainParts = domain.split('.');
+    const tld = domainParts[domainParts.length - 1];  // The part after the last dot
+
+    return validTlds.includes(tld);
   }
 
   // Handle form submission
-  onRegister() {
+  async onRegister() {
     this.formSubmitted = true;
 
     // Validate first name
@@ -71,11 +93,11 @@ export class RegisterComponent {
       this.lastNameError = 'Invalid name';
     }
 
-    // Validate email
+    // Validate email asynchronously
     if (!this.email) {
       this.emailError = 'Email address is required';
-    } else if (!this.email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-      this.emailError = 'Invalid email address';
+    } else if (!(await this.isValidEmail(this.email))) {
+      this.emailError = 'Invalid email address or TLD';
     }
 
     // Validate phone number using the `phone` library
