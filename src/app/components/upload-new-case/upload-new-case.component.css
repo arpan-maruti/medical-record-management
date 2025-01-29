@@ -1,6 +1,7 @@
 .upload-new-case__container {
+    width: 100%;
     padding-top: 2rem;
-    background-color: #F4F4F4;
+    background-color: #f4f4f4;
 }
 .upload-new-case__header {
     text-align: center;
@@ -32,10 +33,12 @@
 }
 .form-group label {
     font-size: 1.2rem; /* Increased font size for labels */
-    font-weight: bold;
-    display: block;
+    font-weight: 600;
+    line-height: 24px;
+    /* display: block; */
     margin-bottom: 0.5rem;
 }
+
 .form-group input,
 .form-group select {
     width: 100%;
@@ -45,12 +48,14 @@
     border-radius: 0.5rem;
     background-color: white;
 }
+
 .form-group-instruction-type label {
     font-size: 1.2rem;
     font-weight: bold;
     display: block;
     margin-bottom: 0.5rem;
 }
+
 .form-group-instruction-type input,
 .form-group-instruction-type select {
     width: 50%; /* Adjusted width for instruction type inputs */
@@ -60,7 +65,7 @@
     border-radius: 0.5rem;
     background-color: white;
 }
-/* Styling for the row of 4 inputs */
+/* New styling for the row of 4 inputs */
 .form-group-row {
     display: flex;
     gap: 2rem; /* Added spacing between inputs */
@@ -78,9 +83,11 @@
     font-size: 1.2rem;
     margin-bottom: 1rem;
 }
+
 .loi-text {
     text-decoration: underline;
 }
+
 .upload-container {
     display: flex;
     align-items: center;
@@ -91,14 +98,44 @@
     font-size: 1.2rem;
 }
 .upload-icon {
-    font-size: 1.4rem;
+    font-size: 18px;
 }
-.parameter-list li {
+
+button {
+    padding: 1rem 1.5rem;
+   font-size: 1.2rem;
+   background-color: #00344D;
+   color: white;
+  width: 20rem;
+   border-radius: 0.4rem;
+   cursor: pointer;
+   margin-left: calc(50% - 7rem);
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+.parameter-list{
+    display: grid;
+  grid-template-columns: 50% 50%;;  /* Creates two columns */
+  /* grid-gap: 1rem;  Adds gap between items */
+  width: 100%;
+ }
+ .parameter-list li {
     display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  font-size: 1.2rem;
+  width: 70%;
   }
-.checkbox-container {
+  .parameter-list li:nth-child(odd) {
+    grid-column-start:  1;  /* Span across two rows for odd items (1, 2, 3...) */
+  }
+  .parameter-list li:nth-child(even) {
+    grid-column-start: 2;  /* Span across one row for even items (6, 7, 8...) */
+  }
+ .checkbox-container {
     padding: 1rem;
   }
   .checkbox-container input {
@@ -108,28 +145,126 @@
   .parameter-details {
     border: 1px solid #ddd;
     width: 100%;
-    padding: 1rem;
+    height: auto;
+    min-height: 3rem;
     border-radius: 0.5rem;
     font-size: 1.2rem;
+    padding: 1rem;
   }
-button {
-    padding: 1rem 1.5rem;
-    font-size: 1.2rem;
-    background-color: #00344D;
-    color: white;
-   width: 20rem;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    margin-left: 50rem;
-    margin-right: 50rem;
-}
-/* Media query for smaller screens */
-@media (max-width: 768px) {
+  
+@media (max-width: 1024px) {
     .upload-new-case__forms {
         flex-direction: column;
     }
     .form-group-row {
         flex-direction: column; /* Stack inputs vertically on smaller screens */
         gap: 1rem;
+    }
+    .parameter-list {
+        grid-template-columns: 100%; /* Display items in a single column on smaller screens */
+    }
+    .parameter-list li:nth-child(odd),
+    .parameter-list li:nth-child(even) {
+        grid-column-start: auto; /* Reset grid column start for smaller screens */
+    }
+    .parameter-list li {
+        width: 100%; /* Full width for list items on smaller screens */
+    }
+    .parameter-details {
+        margin-top: 1rem; /* Add margin between parameter details on smaller screens */
+    }
+    
+}
+@media (max-width: 768px) {
+    .upload-new-case__title {
+        font-size: 1.5rem; /* Adjust font size for smaller screens */
+    }
+    .upload-new-case__form {
+        padding: 2rem 1.5rem; /* Adjust padding for smaller screens */
+    }
+    .upload-new-case__form-title {
+        font-size: 1.2rem; /* Adjust font size for smaller screens */
+        margin-bottom: 1.5rem; /* Adjust margin for smaller screens */
+    }
+    .form-group label {
+        font-size: 1.1rem; /* Adjust font size for smaller screens */
+    }
+    .form-group {
+        margin-bottom: 0.5rem;
+    }
+    .upload-new-case__forms {
+        flex-direction: column;
+    }
+    .form-group-row {
+        flex-direction: column; /* Stack inputs vertically on smaller screens */
+        gap: 1rem;
+    }
+}
+@media (max-width: 480px) {
+    .upload-new-case__form {
+        padding: 1.5rem 1rem;
+        min-width: 0;
+    }
+    .upload-new-case__title {
+        font-size: 1.2rem;
+        text-align: left;
+    }
+    .form-group-row {
+        gap: 0;
+    }
+    .form-group label {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+        font-weight: 600;
+    }
+    .form-group input,
+    .form-group select {
+        padding: 0.8rem; /* Adjust padding for smaller screens */
+        font-size: 0.8rem; /* Adjust font size for smaller screens */
+    }
+    .form-group-instruction-type label {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+    .form-group-instruction-type input,
+    .form-group-instruction-type select {
+        padding: 0.8rem; /* Adjust padding for smaller screens */
+        font-size: 1rem; /* Adjust font size for smaller screens */
+        width: 100%;
+
+    }
+    .upload-container input[type="file"] {
+        padding: 0.8rem; /* Adjust padding for smaller screens */
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+    button {
+        padding: 0.8rem 1.2rem; /* Adjust padding for smaller screens */
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+    .parameter-list li {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+    .parameter-details {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+        padding: 0.8rem; /* Adjust padding for smaller screens */
+    }
+    .upload-new-case__container {
+        padding-top: 1rem; /* Adjust padding for smaller screens */
+    }
+    .upload-new-case__header {
+        margin-bottom: 1rem; /* Adjust margin for smaller screens */
+    }
+    .upload-new-case__form-title {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+        margin-bottom: 1rem; /* Adjust margin for smaller screens */
+    }
+    .parameter-list {
+        grid-template-columns: 100%; /* Display items in a single column on smaller screens */
+    }
+    .parameter-list li:nth-child(odd),
+    .parameter-list li:nth-child(even) {
+        grid-column-start: auto; /* Reset grid column start for smaller screens */
+    }
+    button {
+        width: 100%; /* Full width for button on smaller screens */
+        margin-left: 0; /* Remove left margin for button on smaller screens */
     }
 }

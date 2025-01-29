@@ -41,6 +41,13 @@ export class RegisterComponent {
     this.cdr.detectChanges();
   }
 
+  onInputChange() {
+    this.firstNameError = null;
+    this.lastNameError = null;
+    this.emailError = null;
+    this.phoneError = null;
+  }
+
   // Update the phone number mask based on selected country
   updatePhoneMask() {
     this.phoneMask = this.phoneMaskService.getMask(this.selectedCountryCode);
