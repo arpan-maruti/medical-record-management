@@ -440,9 +440,9 @@ export class DataService {
         return this.mockData.parameters;
       }
 
-      getParametersByInstructionId(instructionId: string): Array<any> {
-        return this.mockData.parameters.filter(param => param.instruction_id === instructionId);
-      }
+      // getParametersByInstructionId(instructionId: string): Array<any> {
+      //   return this.mockData.parameters.filter(param => param.instruction_id === instructionId);
+      // }
     
       getLoiTypes(): Array<any> {
         return this.mockData.loi_types;
