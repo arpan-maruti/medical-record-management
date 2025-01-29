@@ -2,6 +2,7 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import phoneValidationData from '../../../assets/country-phone-validation.json';  // Import JSON data
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {phone} from 'phone';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -59,6 +60,7 @@ export class RegisterComponent {
       this.emailError = 'Invalid email address';
     }
     // Validate phone number
+    console.log(phone(this.phoneNumber, {country: 'IN'})); 
     const country = this.countryList.find((c: { countryCode: string; }) => c.countryCode === this.selectedCountryCode);
     if (!this.phoneNumber) {
       this.phoneError = 'Phone number is required';
