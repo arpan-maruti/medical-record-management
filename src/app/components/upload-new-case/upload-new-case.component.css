@@ -3,17 +3,14 @@
     padding-top: 2rem;
     background-color: #f4f4f4;
 }
-
 .upload-new-case__header {
     text-align: center;
     margin-bottom: 2rem;
 }
-
 .upload-new-case__title {
     font-size: 2rem; /* Increased font size */
     font-weight: bold;
 }
-
 .upload-new-case__forms {
     display: flex;
     gap: 2rem;
@@ -21,30 +18,25 @@
     flex-direction: column;
     flex-wrap: wrap; /* Ensure forms stack on smaller screens */
 }
-
 .upload-new-case__form {
     background-color: white;
     padding: 3rem 2rem;
     flex: 1;
     min-width: 20rem;
 }
-
 .upload-new-case__form-title {
     font-size: 1.6rem; /* Increased font size */
     margin-bottom: 2.5rem;
 }
-
 .form-group {
     margin-bottom: 1.5rem;
 }
-
 .form-group label {
     font-size: 1.2rem; /* Increased font size for labels */
     font-weight: bold;
     display: block;
     margin-bottom: 0.5rem;
 }
-
 .form-group input,
 .form-group select {
     width: 100%;
@@ -71,19 +63,16 @@
     border-radius: 0.5rem;
     background-color: white;
 }
-
-/* Styling for the row of 4 inputs */
+/* New styling for the row of 4 inputs */
 .form-group-row {
     display: flex;
     gap: 2rem; /* Added spacing between inputs */
     flex-wrap: wrap; /* Allow wrapping for smaller screens */
 }
-
 .form-group-row .form-group {
     flex: 1; /* Make each input take equal width */
     min-width: 15rem; /* Ensure inputs have a minimum width */
 }
-
 /* Custom styling for select dropdowns */
 .loi-upload-label {
     display: inline-flex;
@@ -102,63 +91,31 @@
     align-items: center;
     gap: 1rem;
 }
-
 .upload-container input[type="file"] {
     padding: 1rem;
     font-size: 1.2rem;
 }
-
 .upload-icon {
-    font-size: 1.4rem;
+    font-size: 18px;
 }
 
-.parameter-list li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  
-.checkbox-container {
-    padding: 1rem;
-  }
-  
-  .checkbox-container input {
-    width: 1.5rem; /* Adjust the size of the checkbox */
-    height: 1.5rem;
-  }
-
-  .parameter-details {
-    border: 1px solid #ddd;
-    width: 100%;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    font-size: 1.2rem;
-  }
-  
-  
- 
-  
-
 button {
-    padding: 1rem 1.5rem;
-    font-size: 1.2rem;
-    background-color: #00344d;
+    padding: 10px 15px;
+    background-color: #007bff;
     color: white;
    width: 20rem;
     border-radius: 0.4rem;
     cursor: pointer;
-    margin-left: 50rem;
-    margin-right: 50rem;
 }
 
+button:hover {
+    background-color: #0056b3;
+}
 
-
-/* Media query for smaller screens */
 @media (max-width: 768px) {
     .upload-new-case__forms {
         flex-direction: column;
     }
-
     .form-group-row {
         flex-direction: column; /* Stack inputs vertically on smaller screens */
         gap: 1rem;

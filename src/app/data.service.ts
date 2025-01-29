@@ -440,9 +440,9 @@ export class DataService {
         return this.mockData.parameters;
       }
 
-      getParametersByInstructionId(instructionId: string): Array<any> {
-        return this.mockData.parameters.filter(param => param.instruction_id === instructionId);
-      }
+      // getParametersByInstructionId(instructionId: string): Array<any> {
+      //   return this.mockData.parameters.filter(param => param.instruction_id === instructionId);
+      // }
     
       getLoiTypes(): Array<any> {
         return this.mockData.loi_types;
@@ -460,8 +460,10 @@ export class DataService {
       getCaseUploader(caseItem: any) {
         return caseItem.case_uploaded_by ? caseItem.case_uploaded_by : 'Unknown';
       }
-
-      getInstructionTypesByLoiId(loiId: string): Array<any> {
+      getParametersByInstructionId(instructionId: string): Array<any> {
+        return this.mockData.parameters.filter(param => param.instruction_id === instructionId);
+      }
+getInstructionTypesByLoiId(loiId: string): Array<any> {
         return this.mockData.instruction_types.filter(instruction => instruction.loi_id === loiId);
       }
   };

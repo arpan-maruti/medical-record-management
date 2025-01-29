@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { DataService } from '../../data.service';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { DataService } from '../../data.service';
 
 @Component({
   selector: 'app-upload-new-case',
@@ -24,7 +24,6 @@ export class UploadNewCaseComponent implements OnInit {
   ngOnInit() {
     // Fetch LOI Types on component initialization
     this.loiTypes = this.dataService.getLoiTypes();
-
     // Set the first LOI type as the default selected option
     if (this.loiTypes && this.loiTypes.length > 0) {
       this.selectedLoi = this.loiTypes[0]._id;
