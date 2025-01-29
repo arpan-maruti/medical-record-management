@@ -15,8 +15,7 @@ import validator from 'validator'; // Import validator
 export class LoginComponent {
   email: string = '';
   password: string = '';
-  emailError: string = '';
-  passwordError: string = '';
+  generalError: string = ''; // Combined error message
   formSubmitted: boolean = false;
   isPasswordVisible: boolean = false;
 
@@ -30,8 +29,8 @@ export class LoginComponent {
     // Validate the fields
     this.validateInputs();
 
-    // If there's any error (email or password), don't proceed with login
-    if (this.emailError || this.passwordError) {
+    // If there's any error, don't proceed with login
+    if (this.generalError) {
       return;
     }
 
@@ -40,22 +39,25 @@ export class LoginComponent {
   }
 
   validateInputs() {
-    // Validate if the email is empty
-    if (!this.email) {
-      this.emailError = 'Email field can\'t be empty.';
-    } else if (!this.isValidEmail(this.email)) {
-      this.emailError = 'Invalid email format. Please provide a valid email.';
-    } else {
-      this.emailError = '';
+    // Reset the general error message before validating
+    this.generalError = '';
+
+    // Check if email and password are both entered
+    if (!this.email || !this.password) {
+      this.generalError = 'Please enter both email and password.';
+      return; // Exit early if one of them is missing
     }
 
-    // Validate if the password is empty
-    if (!this.password) {
-      this.passwordError = 'Password field can\'t be empty.';
-    } else if (!this.isValidPassword(this.password)) {
-      this.passwordError = 'error';
-    } else {
-      this.passwordError = '';
+    // Validate if the email is invalid
+    if (!this.isValidEmail(this.email)) {
+      this.generalError = 'Invalid email or password.';
+      return; // Exit early if email is invalid
+    }
+
+    // Validate if the password is invalid
+    if (!this.isValidPassword(this.password)) {
+      this.generalError = 'Invalid email or password.';
+      return; // Exit early if password is invalid
     }
   }
 
@@ -77,22 +79,18 @@ export class LoginComponent {
     console.log('Alert confirmed');
   }
 
-  // Use validator.isEmail() to validate the email format
   isValidEmail(email: string): boolean {
     return validator.isEmail(email);
   }
 
-  // Use validator.js to check password validity
   isValidPassword(password: string): boolean {
-    // Check minimum length
     if (!validator.isLength(password, { min: 6 })) {
       return false;
     }
-    
-    // Check if password contains at least one uppercase letter, one number, and one special character
     const hasUpperCase = /[A-Z]/.test(password);
     const hasNumber = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    return true;
+    return hasUpperCase && hasNumber && hasSpecialChar;
   }
 }
+

@@ -1,23 +1,20 @@
-<!-- File Content: Page for Login, Landing page for the application -->
-
 <div class="login">
-  <!-- Left component -->
   <div class="login__image">
     <img src="assets/image.png" alt="Image is not showing" />
   </div>
-  <!-- Right component -->
   <div class="login__form">
     <div class="login__form-wrapper">
       <p class="login__form-label">MediScan - AI Tool</p>
+
       <!-- Email Input -->
       <h4 class="login__form-title">Email Address</h4>
       <div class="login__input-container">
         <input
           class="login__input"
-          [ngClass]="{ 'input-error': formSubmitted && emailError }"
+          [ngClass]="{ 'input-error': formSubmitted && generalError }"
           type="email"
           placeholder="Your E-Mail"
-          [(ngModel)]="email" 
+          [(ngModel)]="email"
           (input)="onInputChange()"
           email="true"
         />
@@ -27,14 +24,13 @@
           </svg>
         </span>
       </div>
-      <div *ngIf="formSubmitted && emailError" class="error-message">{{ emailError }}</div>
-      
+
       <!-- Password Input -->
       <h4 class="login__form-title">Password</h4>
       <div class="login__input-container">
         <input
           class="login__input"
-          [ngClass]="{ 'input-error': formSubmitted && passwordError }"
+          [ngClass]="{ 'input-error': formSubmitted && generalError }"
           [type]="isPasswordVisible ? 'text' : 'password'"
           placeholder="Your Password"
           [(ngModel)]="password"
@@ -46,15 +42,15 @@
           </svg>
         </span>
       </div>
-      <div *ngIf="formSubmitted && passwordError" class="error-message">{{ passwordError }}</div>
 
-      <!-- <a href="#" class="login__forgot-password" (click)="onForgotPassword()">Forgot password?</a> -->
+      <!-- General Error Message -->
+      <div *ngIf="formSubmitted && generalError" class="error-message">{{ generalError }}</div>
+
       <a routerLink="/" class="login__forgot-password" (click)="onForgotPassword()">Forgot password?</a>
       <button class="login__button" (click)="onLogin()">Login</button>
     </div>
   </div>
 
-  <!-- Custom Alert Modal -->
   <app-custom-alert
     #customAlert
     (confirm)="onCustomAlertConfirm()"
