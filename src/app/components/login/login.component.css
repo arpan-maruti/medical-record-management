@@ -114,13 +114,13 @@
 }
 
 .login__forgot-password {
-  display: inline;
-  /* text-align: right; */
-  padding-left: 68%;
-  margin-top: 1rem;
-  color: #999;
-  font-size: 1.1rem;
-  text-decoration: none;
+    display: inline;
+    /* text-align: right; */
+    margin-left: 19rem;
+    margin-top: 1rem;
+    color: #999;
+    font-size: 1.1rem;
+    text-decoration: none;
 }
 
 .login__forgot-password:hover {
@@ -206,19 +206,20 @@
     margin-bottom: 2rem;
   }
 
-  .login__button {
-    display: block;
-    margin: 2rem auto 0 auto; /* Center the button */
-    width: 100%;
-    max-width: 200px;
-    font-size: 1rem;
-    height: 3.2rem;
-  }
-  .login__forgot-password {
-    text-align: right;
-    font-size: 1rem;
-    margin-top: 1rem;
-  }
+    .login__button {
+        display: block;
+        margin: 2rem auto 0 auto; /* Center the button */
+        width: 100%;
+        max-width: 200px;
+        font-size: 1rem;
+        height: 3.2rem;
+    }
+    .login__forgot-password {
+        /* text-align: right; */
+        margin-left: 17rem;
+        font-size: 1rem;
+        margin-top: 1rem;
+    }
 
   .login__form-title {
     font-size: 1.3rem; /* Slightly smaller on medium screens */
@@ -257,9 +258,10 @@
     height: 3rem;
   }
 
-  .login__forgot-password {
-    font-size: 0.9rem;
-  }
+    .login__forgot-password {
+        margin-left: 14rem;
+        font-size: 0.9rem;
+    }
 
   .login__form-title {
     font-size: 1.1rem; /* Decrease size further for smaller screens */
@@ -305,9 +307,10 @@
     font-size: 0.9rem;
   }
 
-  .login__forgot-password {
-    font-size: 0.8rem;
-  }
+    .login__forgot-password {
+        margin-left: 13rem;
+        font-size: 0.8rem;
+    }
 
   .login__form-title {
     font-size: 1rem; /* Even smaller on very small screens */

@@ -11,8 +11,9 @@ import { FormsModule } from '@angular/forms';
 export class CaseListComponent {
   data: any[] = [];
   isDataAvailable: boolean = false;
-  constructor(private cdr: ChangeDetectorRef, private dataService: DataService) {
-  }
+  constructor(private cdr: ChangeDetectorRef, private dataService: DataService) {}
+
+  
   ngAfterViewInit() {
     // Fetching case data
     this.data = this.dataService.getMainCases();
@@ -22,6 +23,8 @@ export class CaseListComponent {
     }
     this.cdr.detectChanges();
   }
+  
+
   toggleSubCases(caseItem: any) {
     caseItem.expanded = !caseItem.expanded; // Toggle subcase visibility
   }
@@ -43,4 +46,5 @@ export class CaseListComponent {
   getCaseUploader(caseItem: any) {
     return this.dataService.getCaseUploader(caseItem);
 }
+
 }

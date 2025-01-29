@@ -1,7 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { DataService } from '../../data.service';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-upload-new-case',
