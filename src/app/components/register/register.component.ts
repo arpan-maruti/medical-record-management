@@ -58,7 +58,6 @@ export class RegisterComponent {
     // In this case, using a static list of common TLDs
     return [
       "com", "org", "net", "edu", "gov", "int", "mil", "co", "io", "us", "uk", "de", "jp", "in"
-      // Add other valid TLDs as needed or fetch from an API
     ];
   }
 

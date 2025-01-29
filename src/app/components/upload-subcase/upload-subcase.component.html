@@ -1,0 +1,118 @@
+<div class="upload-new-case__container">
+    <div class="upload-new-case__header">
+      <h2 class="upload-new-case__title">Upload New Case</h2>
+    </div>
+  
+    <!-- Form container -->
+    <div class="upload-new-case__forms">
+      <!-- First Form: Client Name, Case Reference, LOI Upload -->
+      <form class="upload-new-case__form">
+        <div class="form-group-row">
+          <!-- Client Name -->
+          <div class="form-group">
+            <label for="client-name">Client Name</label>
+            <input
+              type="text"
+              id="client-name"
+              [(ngModel)]="clientName"
+              [ngModelOptions]="{ standalone: true }"
+              disabled="true"
+            />
+          </div>
+          <div class="form-group">
+            <label for="parent-case-reference">Parent Case Reference Number</label>
+            <input
+              type="text"
+              id="parent-case-reference"
+              [(ngModel)]="parentCaseReference"
+              [ngModelOptions]="{ standalone: true }"
+              disabled="true"
+            />
+          </div>
+          <!-- Case Reference Number -->
+          <div class="form-group">
+            <label for="sub-case-reference">Sub Case Reference Number</label>
+            <input
+              type="text"
+              id="sub-case-reference"
+              placeholder="Enter reference number"
+              [(ngModel)]="subCaseReference"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </div>
+  
+          <!-- LOI (Letter of Instruction) Type -->
+          <div class="form-group">
+            <label for="loi-type">What type of LOI?</label>
+            <select
+              id="loi-type"
+              [(ngModel)]="selectedLoi"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="onLoiChange()"
+            >
+              <option *ngFor="let loi of loiTypes" [value]="loi._id">
+                {{ loi.loi_msg }}
+              </option>
+            </select>
+          </div>
+  
+          <!-- Date of Branch / Liability -->
+          <div class="form-group">
+            <label for="date-of-branch">Date of Breach / Liability</label>
+            <input type="date" id="date-of-branch" />
+          </div>
+        </div>
+  
+        <!-- Upload LOI -->
+        <div class="form-group">
+          <label for="loi-upload" class="loi-upload-label">
+            <span class="loi-text">Upload Letter of Instruction</span>
+            <span class="upload-icon">📎</span>
+          </label>
+        </div>
+  
+        <!-- Instruction Type -->
+        <div class="form-group-instruction-type">
+          <label for="instruction-type">Instruction Type (DDP)</label>
+          <select
+            id="instruction-type"
+            [(ngModel)]="selectedInstruction"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onInstructionChange()"
+          >
+            <option *ngFor="let instruction of instructionTypes" [value]="instruction._id">
+              {{ instruction.instruction_msg }}
+            </option>
+          </select>
+        </div>
+      </form>
+  
+      <!-- Second Form -->
+      <form class="upload-new-case__form">
+        <h3 class="upload-new-case__form-title">SELECT THE PARAMETERS</h3>
+        <div class="form-group" *ngIf="parameters.length > 0">
+          <ul class="parameter-list">
+            <li *ngFor="let param of parameters">
+              <div class="checkbox-container" (click)="toggleSelection(param._id)">
+                <svg *ngIf="!isSelected(param._id)" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                  <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z"/>
+                </svg>
+                <svg *ngIf="isSelected(param._id)" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                  <path d="m424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
+                </svg>
+              </div>
+              <div class="parameter-details">
+                {{ param.parameter_msg }}
+              </div>
+            </li>
+          </ul>
+        </div>
+  
+        <!-- Submit Button -->
+        <div class="form-group">
+          <button type="button" (click)="submitForm()" class="submit-button">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
