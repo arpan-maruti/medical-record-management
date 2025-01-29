@@ -2,37 +2,325 @@
   {
     "countryCode": "IN",
     "countryName": "India",
-    "minLength": 10,
-    "maxLength": 10,
     "countryCallingCode": "+91",
-    "callingCode": 91,
     "flag": "🇮🇳"
   },
   {
     "countryCode": "US",
     "countryName": "United States",
-    "minLength": 10,
-    "maxLength": 10,
     "countryCallingCode": "+1",
-    "callingCode": 1,
     "flag": "🇺🇸"
   },
   {
-    "countryCode": "GB",
+    "countryCode": "UK",
     "countryName": "United Kingdom",
-    "minLength": 10,
-    "maxLength": 15,
     "countryCallingCode": "+44",
-    "callingCode": 44,
     "flag": "🇬🇧"
   },
   {
     "countryCode": "AU",
     "countryName": "Australia",
-    "minLength": 9,
-    "maxLength": 10,
     "countryCallingCode": "+61",
-    "callingCode": 61,
     "flag": "🇦🇺"
+  },
+  {
+    "countryCode": "CA",
+    "countryName": "Canada",
+    "countryCallingCode": "+1",
+    "flag": "🇨🇦"
+  },
+  {
+    "countryCode": "FR",
+    "countryName": "France",
+    "countryCallingCode": "+33",
+    "flag": "🇫🇷"
+  },
+  {
+    "countryCode": "DE",
+    "countryName": "Germany",
+    "countryCallingCode": "+49",
+    "flag": "🇩🇪"
+  },
+  {
+    "countryCode": "BR",
+    "countryName": "Brazil",
+    "countryCallingCode": "+55",
+    "flag": "🇧🇷"
+  },
+  {
+    "countryCode": "IT",
+    "countryName": "Italy",
+    "countryCallingCode": "+39",
+    "flag": "🇮🇹"
+  },
+  {
+    "countryCode": "JP",
+    "countryName": "Japan",
+    "countryCallingCode": "+81",
+    "flag": "🇯🇵"
+  },
+  {
+    "countryCode": "CN",
+    "countryName": "China",
+    "countryCallingCode": "+86",
+    "flag": "🇨🇳"
+  },
+  {
+    "countryCode": "KR",
+    "countryName": "South Korea",
+    "countryCallingCode": "+82",
+    "flag": "🇰🇷"
+  },
+  {
+    "countryCode": "MX",
+    "countryName": "Mexico",
+    "countryCallingCode": "+52",
+    "flag": "🇲🇽"
+  },
+  {
+    "countryCode": "ZA",
+    "countryName": "South Africa",
+    "countryCallingCode": "+27",
+    "flag": "🇿🇦"
+  },
+  {
+    "countryCode": "RU",
+    "countryName": "Russia",
+    "countryCallingCode": "+7",
+    "flag": "🇷🇺"
+  },
+  {
+    "countryCode": "AR",
+    "countryName": "Argentina",
+    "countryCallingCode": "+54",
+    "flag": "🇦🇷"
+  },
+  {
+    "countryCode": "NG",
+    "countryName": "Nigeria",
+    "countryCallingCode": "+234",
+    "flag": "🇳🇬"
+  },
+  {
+    "countryCode": "EG",
+    "countryName": "Egypt",
+    "countryCallingCode": "+20",
+    "flag": "🇪🇬"
+  },
+  {
+    "countryCode": "NG",
+    "countryName": "Nigeria",
+    "countryCallingCode": "+234",
+    "flag": "🇳🇬"
+  },
+  {
+    "countryCode": "SE",
+    "countryName": "Sweden",
+    "countryCallingCode": "+46",
+    "flag": "🇸🇪"
+  },
+  {
+    "countryCode": "NO",
+    "countryName": "Norway",
+    "countryCallingCode": "+47",
+    "flag": "🇳🇴"
+  },
+  {
+    "countryCode": "DK",
+    "countryName": "Denmark",
+    "countryCallingCode": "+45",
+    "flag": "🇩🇰"
+  },
+  {
+    "countryCode": "FI",
+    "countryName": "Finland",
+    "countryCallingCode": "+358",
+    "flag": "🇫🇮"
+  },
+  {
+    "countryCode": "CH",
+    "countryName": "Switzerland",
+    "countryCallingCode": "+41",
+    "flag": "🇨🇭"
+  },
+  {
+    "countryCode": "BE",
+    "countryName": "Belgium",
+    "countryCallingCode": "+32",
+    "flag": "🇧🇪"
+  },
+  {
+    "countryCode": "NL",
+    "countryName": "Netherlands",
+    "countryCallingCode": "+31",
+    "flag": "🇳🇱"
+  },
+  {
+    "countryCode": "AT",
+    "countryName": "Austria",
+    "countryCallingCode": "+43",
+    "flag": "🇦🇹"
+  },
+  {
+    "countryCode": "PL",
+    "countryName": "Poland",
+    "countryCallingCode": "+48",
+    "flag": "🇵🇱"
+  },
+  {
+    "countryCode": "SG",
+    "countryName": "Singapore",
+    "countryCallingCode": "+65",
+    "flag": "🇸🇬"
+  },
+  {
+    "countryCode": "MY",
+    "countryName": "Malaysia",
+    "countryCallingCode": "+60",
+    "flag": "🇲🇾"
+  },
+  {
+    "countryCode": "PH",
+    "countryName": "Philippines",
+    "countryCallingCode": "+63",
+    "flag": "🇵🇭"
+  },
+  {
+    "countryCode": "TH",
+    "countryName": "Thailand",
+    "countryCallingCode": "+66",
+    "flag": "🇹🇭"
+  },
+  {
+    "countryCode": "ID",
+    "countryName": "Indonesia",
+    "countryCallingCode": "+62",
+    "flag": "🇮🇩"
+  },
+  {
+    "countryCode": "PK",
+    "countryName": "Pakistan",
+    "countryCallingCode": "+92",
+    "flag": "🇵🇰"
+  },
+  {
+    "countryCode": "VN",
+    "countryName": "Vietnam",
+    "countryCallingCode": "+84",
+    "flag": "🇻🇳"
+  },
+  {
+    "countryCode": "KW",
+    "countryName": "Kuwait",
+    "countryCallingCode": "+965",
+    "flag": "🇰🇼"
+  },
+  {
+    "countryCode": "QA",
+    "countryName": "Qatar",
+    "countryCallingCode": "+974",
+    "flag": "🇶🇦"
+  },
+  {
+    "countryCode": "OM",
+    "countryName": "Oman",
+    "countryCallingCode": "+968",
+    "flag": "🇴🇲"
+  },
+  {
+    "countryCode": "SA",
+    "countryName": "Saudi Arabia",
+    "countryCallingCode": "+966",
+    "flag": "🇸🇦"
+  },
+  {
+    "countryCode": "AE",
+    "countryName": "United Arab Emirates",
+    "countryCallingCode": "+971",
+    "flag": "🇦🇪"
+  },
+  {
+    "countryCode": "KW",
+    "countryName": "Kuwait",
+    "countryCallingCode": "+965",
+    "flag": "🇰🇼"
+  },
+  {
+    "countryCode": "IL",
+    "countryName": "Israel",
+    "countryCallingCode": "+972",
+    "flag": "🇮🇱"
+  },
+  {
+    "countryCode": "EG",
+    "countryName": "Egypt",
+    "countryCallingCode": "+20",
+    "flag": "🇪🇬"
+  },
+  {
+    "countryCode": "IQ",
+    "countryName": "Iraq",
+    "countryCallingCode": "+964",
+    "flag": "🇮🇶"
+  },
+  {
+    "countryCode": "IR",
+    "countryName": "Iran",
+    "countryCallingCode": "+98",
+    "flag": "🇮🇷"
+  },
+  {
+    "countryCode": "AF",
+    "countryName": "Afghanistan",
+    "countryCallingCode": "+93",
+    "flag": "🇦🇫"
+  },
+  {
+    "countryCode": "BT",
+    "countryName": "Bhutan",
+    "countryCallingCode": "+975",
+    "flag": "🇧🇹"
+  },
+  {
+    "countryCode": "LK",
+    "countryName": "Sri Lanka",
+    "countryCallingCode": "+94",
+    "flag": "🇱🇰"
+  },
+  {
+    "countryCode": "BD",
+    "countryName": "Bangladesh",
+    "countryCallingCode": "+880",
+    "flag": "🇧🇩"
+  },
+  {
+    "countryCode": "NE",
+    "countryName": "Niger",
+    "countryCallingCode": "+227",
+    "flag": "🇳🇪"
+  },
+  {
+    "countryCode": "KE",
+    "countryName": "Kenya",
+    "countryCallingCode": "+254",
+    "flag": "🇰🇪"
+  },
+  {
+    "countryCode": "ET",
+    "countryName": "Ethiopia",
+    "countryCallingCode": "+251",
+    "flag": "🇪🇹"
+  },
+  {
+    "countryCode": "TZ",
+    "countryName": "Tanzania",
+    "countryCallingCode": "+255",
+    "flag": "🇹🇿"
+  },
+  {
+    "countryCode": "UG",
+    "countryName": "Uganda",
+    "countryCallingCode": "+256",
+    "flag": "🇺🇬"
   }
 ]

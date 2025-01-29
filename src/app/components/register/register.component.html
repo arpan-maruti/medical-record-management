@@ -73,7 +73,7 @@
           </select>
         </div>
         <!-- Phone Number Input -->
-        <div class="register__phone-number-container">
+        <div class="register__input-wrapper">
           <input
             class="register__input register__input--phone-number"
             [ngClass]="{ 'register__input--error': formSubmitted && phoneError }"
@@ -81,6 +81,7 @@
             placeholder="Phone Number"
             [(ngModel)]="phoneNumber"
             (input)="onInputChange()"
+            [mask]="phoneMask"
             required
           />
         </div>
