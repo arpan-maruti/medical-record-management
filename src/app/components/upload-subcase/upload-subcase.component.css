@@ -1,0 +1,274 @@
+.upload-new-case__container {
+    width: 100%;
+    padding-top: 2rem;
+    background-color: #f4f4f4;
+}
+.upload-new-case__header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.upload-new-case__title {
+    font-size: 2rem; /* Increased font size */
+    font-weight: bold;
+}
+.upload-new-case__forms {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    flex-direction: column;
+    flex-wrap: wrap; /* Ensure forms stack on smaller screens */
+}
+.upload-new-case__form {
+    background-color: white;
+    padding: 3rem 2rem;
+    flex: 1;
+    min-width: 20rem;
+}
+.upload-new-case__form-title {
+    font-size: 1.6rem; /* Increased font size */
+    margin-bottom: 2.5rem;
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.form-group label {
+    font-size: 1.2rem; /* Increased font size for labels */
+    font-weight: 600;
+    line-height: 24px;
+    /* display: block; */
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 1rem; /* Increased padding for inputs */
+    font-size: 1.2rem; /* Increased font size for input text */
+    border: 0.1rem solid #ddd;
+    border-radius: 0.5rem;
+    background-color: white;
+}
+
+.form-group-instruction-type label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group-instruction-type input,
+.form-group-instruction-type select {
+    width: 50%; /* Adjusted width for instruction type inputs */
+    padding: 1rem;
+    font-size: 1.2rem;
+    border: 0.1rem solid #ddd;
+    border-radius: 0.5rem;
+    background-color: white;
+}
+/* New styling for the row of 4 inputs */
+.form-group-row {
+    display: flex;
+    gap: 2rem; /* Added spacing between inputs */
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
+.form-group-row .form-group {
+    flex: 1; /* Make each input take equal width */
+    min-width: 15rem; /* Ensure inputs have a minimum width */
+}
+/* Custom styling for select dropdowns */
+.loi-upload-label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.loi-text {
+    text-decoration: underline;
+}
+
+.upload-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.upload-container input[type="file"] {
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+.upload-icon {
+    font-size: 18px;
+}
+
+button {
+    padding: 1rem 1.5rem;
+   font-size: 1.2rem;
+   background-color: #00344D;
+   color: white;
+  width: 20rem;
+   border-radius: 0.4rem;
+   cursor: pointer;
+   margin-left: calc(50% - 7rem);
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+.parameter-list{
+    display: grid;
+  grid-template-columns: 50% 50%;;  /* Creates two columns */
+  /* grid-gap: 1rem;  Adds gap between items */
+  width: 100%;
+ }
+ .parameter-list li {
+    display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  font-size: 1.2rem;
+  width: 70%;
+  }
+  .parameter-list li:nth-child(odd) {
+    grid-column-start:  1;  /* Span across two rows for odd items (1, 2, 3...) */
+  }
+  .parameter-list li:nth-child(even) {
+    grid-column-start: 2;  /* Span across one row for even items (6, 7, 8...) */
+  }
+ .checkbox-container {
+    padding: 1rem;
+  }
+  .checkbox-container input {
+    width: 1.5rem; /* Adjust the size of the checkbox */
+    height: 1.5rem;
+  }
+  .parameter-details {
+    border: 1px solid #ddd;
+    width: 100%;
+    height: auto;
+    min-height: 3rem;
+    border-radius: 0.5rem;
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+  input:disabled {
+    background-color: #f2f3f3 !important;
+    cursor: not-allowed; /* Change cursor to indicate the field is not editable */
+}
+
+@media (max-width: 1024px) {
+    .upload-new-case__forms {
+        flex-direction: column;
+    }
+    .form-group-row {
+        flex-direction: column; /* Stack inputs vertically on smaller screens */
+        gap: 1rem;
+    }
+    .parameter-list {
+        grid-template-columns: 100%; /* Display items in a single column on smaller screens */
+    }
+    .parameter-list li:nth-child(odd),
+    .parameter-list li:nth-child(even) {
+        grid-column-start: auto; /* Reset grid column start for smaller screens */
+    }
+    .parameter-list li {
+        width: 100%; /* Full width for list items on smaller screens */
+    }
+    .parameter-details {
+        margin-top: 1rem; /* Add margin between parameter details on smaller screens */
+    }
+    
+}
+@media (max-width: 768px) {
+    .upload-new-case__title {
+        font-size: 1.5rem; /* Adjust font size for smaller screens */
+    }
+    .upload-new-case__form {
+        padding: 2rem 1.5rem; /* Adjust padding for smaller screens */
+    }
+    .upload-new-case__form-title {
+        font-size: 1.2rem; /* Adjust font size for smaller screens */
+        margin-bottom: 1.5rem; /* Adjust margin for smaller screens */
+    }
+    .form-group label {
+        font-size: 1.1rem; /* Adjust font size for smaller screens */
+    }
+    .form-group {
+        margin-bottom: 0.5rem;
+    }
+    .upload-new-case__forms {
+        flex-direction: column;
+    }
+    .form-group-row {
+        flex-direction: column; /* Stack inputs vertically on smaller screens */
+        gap: 1rem;
+    }
+}
+@media (max-width: 480px) {
+    .upload-new-case__form {
+        padding: 1.5rem 1rem;
+        min-width: 0;
+    }
+    .upload-new-case__title {
+        font-size: 1.2rem;
+        text-align: left;
+    }
+    .form-group-row {
+        gap: 0;
+    }
+    .form-group label {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+        font-weight: 600;
+    }
+    .form-group input,
+    .form-group select {
+        padding: 0.8rem; /* Adjust padding for smaller screens */
+        font-size: 0.8rem; /* Adjust font size for smaller screens */
+    }
+    .form-group-instruction-type label {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+    .form-group-instruction-type input,
+    .form-group-instruction-type select {
+        padding: 0.8rem; /* Adjust padding for smaller screens */
+        font-size: 1rem; /* Adjust font size for smaller screens */
+        width: 100%;
+
+    }
+    .upload-container input[type="file"] {
+        padding: 0.8rem; /* Adjust padding for smaller screens */
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+    button {
+        padding: 0.8rem 1.2rem; /* Adjust padding for smaller screens */
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+    .parameter-list li {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+    .parameter-details {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+        padding: 0.8rem; /* Adjust padding for smaller screens */
+    }
+    .upload-new-case__container {
+        padding-top: 1rem; /* Adjust padding for smaller screens */
+    }
+    .upload-new-case__header {
+        margin-bottom: 1rem; /* Adjust margin for smaller screens */
+    }
+    .upload-new-case__form-title {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+        margin-bottom: 1rem; /* Adjust margin for smaller screens */
+    }
+    .parameter-list {
+        grid-template-columns: 100%; /* Display items in a single column on smaller screens */
+    }
+    .parameter-list li:nth-child(odd),
+    .parameter-list li:nth-child(even) {
+        grid-column-start: auto; /* Reset grid column start for smaller screens */
+    }
+    button {
+        width: 100%; /* Full width for button on smaller screens */
+        margin-left: 0; /* Remove left margin for button on smaller screens */
+    }
+}
