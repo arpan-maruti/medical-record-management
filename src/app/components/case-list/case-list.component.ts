@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ViewAndLabelComponent } from '../view-and-label/view-and-label.component';
+import { UploadFilesComponent } from '../upload-files/upload-files.component';
 
 @Component({
   selector: 'app-case-list',
-  imports: [CommonModule, FormsModule, ViewAndLabelComponent],
+  imports: [CommonModule, FormsModule, ViewAndLabelComponent, UploadFilesComponent],
   templateUrl: './case-list.component.html',
   styleUrls: ['./case-list.component.css']
 })
@@ -20,19 +21,29 @@ export class CaseListComponent {
   selectedFileName: string = ''; 
   isViewLabelVisible: boolean = false; 
   isBackgroundBlurred: boolean = false; 
-  selectedFiles:any[] = [];  // Store selected files
+  isUploadFilesVisible: boolean = false;
+  selectedFiles: any[] = [];  // Store selected files
+  uploadedFileName: string = '';  // New property to store the uploaded file name
 
   constructor(private cdr: ChangeDetectorRef,
               private dataService: DataService, 
               private sanitizer: DomSanitizer,
               private router: Router) {}
-    
+
   ngAfterViewInit() {
     this.data = this.dataService.getMainCases();
     if (this.data.length > 0) {
       this.isDataAvailable = true;
     }
     this.cdr.detectChanges();
+  }
+
+  openUploadFiles() {
+    this.isUploadFilesVisible = true;
+  }
+
+  closeUploadFiles() {
+    this.isUploadFilesVisible = false;
   }
 
   openPdfPreview(fileName: string) {
@@ -73,15 +84,11 @@ export class CaseListComponent {
   getCaseUploader(caseItem: any) {
     return this.dataService.getCaseUploader(caseItem);
   }
-
-  // openViewLabel(caseItem: any) {
-  //   this.isViewLabelVisible = true; 
-  //   // Assume each caseItem has a 'files' property with name and icon
-  //   this.selectedFiles = caseItem.files.map(file => ({
-  //     name: file.name,
-  //     icon: file.icon || 'assets/default-icon.png' // Set default icon if not available
-  //   }));
-  // }
+  
+  // This function is called when a file is uploaded and it gets the file name
+  onFileUploaded(fileName: string) {
+    this.uploadedFileName = fileName;  // Store the file name in the parent component
+  }
 
   openViewLabel() {
     this.selectedFiles = [
@@ -89,7 +96,7 @@ export class CaseListComponent {
       { name: 'File 2.pdf', icon: '📄' },
       { name: 'File 3.pdf', icon: '📄' }
     ];
-  
+
     this.isViewLabelVisible = true;
   }
   

@@ -47,14 +47,18 @@
               <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')" >View LOI</a>
             </td>
             <td>
-              <a href="#" class="text-primary">Upload File</a>
+              <a class="text-primary" (click)="openUploadFiles()">Upload File</a>
             </td>
+            <!-- <td *ngIf="uploadedFileName"> -->
+              <!-- <p>Uploaded: {{ uploadedFileName }}</p> -->
+            <!-- </td> -->
             <td>
               <a class="text-primary" (click)="openViewLabel()">View/Label</a>
             </td>
             <td>
               <a href="#" class="text-primary">Generate Summary</a>
             </td>
+            
             <td><img src="assets/plus.png" class="plus-icon"></td>
           </tr>
           <!-- Subcases -->
@@ -114,4 +118,10 @@
       <button class="custom-btn">Upload New Case</button>
     </div>
   </div>
+  <div *ngIf="isUploadFilesVisible" class="upload-files-popup">
+    <app-upload-files 
+      (closePopup)="closeUploadFiles()">
+    </app-upload-files>
+  </div>
 </div>
+

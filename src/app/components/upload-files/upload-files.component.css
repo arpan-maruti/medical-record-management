@@ -1,0 +1,87 @@
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #fff; /* White background */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow around the container */
+  border-radius: 10px;
+  width: 350px; /* Slightly narrower width */
+  margin: auto;
+}
+
+.drag-drop-area {
+  width: 100%;
+  height: 150px;
+  border: 2px solid #007bff; /* Blue border */
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9; /* Light gray background */
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.drag-drop-area.drag-over {
+  border-color: #0056b3; /* Darker blue when dragged over */
+  background-color: #e0f7ff; /* Light blue background when dragging */
+}
+
+.upload-icon {
+  font-size: 40px;
+  color: #007bff;
+  margin-right: 10px;
+}
+
+.drag-drop-area p {
+  color: #007bff;
+  font-size: 16px;
+  text-align: center;
+}
+
+.file-input-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.file-input-container input[type="file"] {
+  display: none; /* Hide the input element */
+}
+
+.file-input-container label {
+  background-color: #007bff; /* Blue color for the button */
+  color: white;
+  padding: 12px 30px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.file-input-container label:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.file-name-display {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-secondary {
+  background-color: #ccc;
+}
+
+.btn-secondary:hover {
+  background-color: #999;
+}
