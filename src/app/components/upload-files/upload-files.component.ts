@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -46,7 +46,13 @@ export class UploadFilesComponent {
     const target = event.currentTarget as HTMLElement;
     target.classList.remove('drag-over');
   }
-
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const modal = document.querySelector('.upload-container');
+    if (modal && !modal.contains(event.target as Node)) {
+      this.closeModal(); // Close the modal if the click is outside
+    }
+  }
   // Close modal
   closeModal() {
     this.closePopup.emit();

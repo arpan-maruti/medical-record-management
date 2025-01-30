@@ -1,16 +1,6 @@
 <div class="upload-container">
   <!-- Drag and Drop Area -->
-  <div
-    class="drag-drop-area"
-    (drop)="onDrop($event)"
-    (dragover)="onDragOver($event)"
-    (dragleave)="onDragLeave($event)"
-  >
-    <i class="upload-icon">&#128194;</i> <!-- Document icon for file -->
-    <p>Drag & Drop PDF Files Here</p>
-  </div>
-
-  <!-- File Input for Browsing -->
+  
   <div class="file-input-container">
     <input
       type="file"
@@ -20,6 +10,18 @@
     />
     <label for="fileInput" class="btn">Browse Files</label>
   </div>
+  <div class="or-text">Or</div>
+  <div
+    class="drag-drop-area"
+    (drop)="onDrop($event)"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+  > <!-- Document icon for file -->
+  <img src="/assets/pdf-icon.png">
+    <p>Drag & Drop PDF Files Here</p>
+  </div>
+
+  <!-- File Input for Browsing -->
 
   <!-- File Name Display -->
   <div *ngIf="fileName" class="file-name-display">
