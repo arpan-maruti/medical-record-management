@@ -155,7 +155,11 @@ button:hover {
     background-color: #f2f3f3 !important;
     cursor: not-allowed; /* Change cursor to indicate the field is not editable */
 }
-
+@media (max-width: 1440px) {
+    .form-group label {
+        font-size: 1rem;
+    }
+}
 @media (max-width: 1024px) {
     .upload-new-case__forms {
         flex-direction: column;
@@ -176,6 +180,14 @@ button:hover {
     }
     .parameter-details {
         margin-top: 1rem; /* Add margin between parameter details on smaller screens */
+    }
+    .form-group input, .form-group select {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+    .form-group-instruction-type input,
+    .form-group-instruction-type select {
+        font-size: 1rem;
+        width: 100%;
     }
     
 }
