@@ -1,153 +1,266 @@
 .container {
-  margin-top: 3rem;
-  background-color: #ffffff;
-  padding: 1rem;
+ margin-top: 3rem;
+ background-color: #ffffff;
+ padding: 1rem;
 }
 .case-list__heading {
-  font-size: 1.6rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+ font-size: 1.6rem;
+ font-weight: bold;
+ margin-bottom: 1rem;
 }
 .case-list__case {
-  margin: 0 auto;
-  width: 100%;
+ margin: 0 auto;
+ width: 100%;
 }
 .table {
-  width: 100%;
-  border-collapse: collapse;
+ width: 100%;
+ border-collapse: collapse;
 }
 .table th,
 .table td {
-  text-align: left;
-  padding: 0.75rem;
+ text-align: left;
+ padding: 0.75rem;
 }
 .thead-custom {
-  background-color: #CED1DA;
+ background-color: #CED1DA;
 }
 .table-header {
-  height: 3rem;
+ height: 3rem;
 }
 .table th {
-  font-weight: bold;
+ font-weight: bold;
 }
 .table-container {
-  overflow-x: auto;
+ overflow-x: auto;
 }
 .table tbody tr:hover {
-  background-color: #F9FAFB;
+ background-color: #F9FAFB;
 }
 .clickable-row {
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: border 0.3s;
+ cursor: pointer;
+ border: 2px solid transparent;
+ transition: border 0.3s;
 }
 .clickable-row:hover {
-  border: 2px solid #CED1DA;
+ border: 2px solid #CED1DA;
 }
 .main-case {
-  background-color: #F9FAFB;
-  border-radius: 8px;
-  padding: 1rem;
+ background-color: #F9FAFB;
+ border-radius: 8px;
+ padding: 1rem;
 }
 .subcase-row {/* Main Case Card Style */
-  .main-case {
-    background-color: #FFFFFF;
-    border-radius: 8px;
-    padding: 1rem;
-  }
-  .subcase-row {
-    background-color: #F9FAFB;
-  }
-  .subcase-card {
-    margin-top: 1rem;
-    background-color: #F1F5F9;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  .subcase-card-item {
-    margin-bottom: 1rem;
-    padding: 1rem;
-    background-color: #FFFFFF;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  .subcase-card-item:last-child {
-    margin-bottom: 0;
-  }
-  .subcase-header {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-  .subcase-content p {
-    margin: 0.5rem 0;
-  }
-  /* Hover Effect on Main Case */
-  .clickable-row {
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  .clickable-row:hover {
-    background-color: #E9F2F9;
-  }
-  /* Plus Icon */
-  .plus-icon {
-    height: 1rem;
-    width: 1rem;
-  }
-  /* Custom Button */
-  .custom-btn {
-    background-color: #00344D;
-    color: white;
-    width: 100%;
-    max-width: 30rem;
-    padding: 0.8rem;
-    text-align: center;
-    font-size: 1rem;
-  }
-  .custom-btn:hover {
-    background-color: #002734;
-  }
-  background-color: #F1F5F9;
-  border-radius: 4px;
-  padding: 0.8rem;
+ .main-case {
+   background-color: #FFFFFF;
+   border-radius: 8px;
+   padding: 1rem;
+ }
+ .subcase-row {
+   background-color: #F9FAFB;
+ }
+ .subcase-card {
+   margin-top: 1rem;
+   background-color: #F1F5F9;
+   border-radius: 8px;
+   padding: 1rem;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ }
+ .subcase-card-item {
+   margin-bottom: 1rem;
+   padding: 1rem;
+   background-color: #FFFFFF;
+   border-radius: 6px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
+ .subcase-card-item:last-child {
+   margin-bottom: 0;
+ }
+ .subcase-header {
+   display: flex;
+   justify-content: space-between;
+   font-weight: bold;
+   margin-bottom: 1rem;
+ }
+ .subcase-content p {
+   margin: 0.5rem 0;
+ }
+ /* Hover Effect on Main Case */
+ .clickable-row {
+   cursor: pointer;
+   transition: background-color 0.3s ease;
+ }
+ .clickable-row:hover {
+   background-color: #E9F2F9;
+ }
+ /* Plus Icon */
+ .plus-icon {
+   height: 1rem;
+   width: 1rem;
+ }
+ /* Custom Button */
+ .custom-btn {
+   background-color: #00344D;
+   color: white;
+   width: 100%;
+   max-width: 30rem;
+   padding: 0.8rem;
+   text-align: center;
+   font-size: 1rem;
+ }
+ .custom-btn:hover {
+   background-color: #002734;
+ }
+ background-color: #F1F5F9;
+ border-radius: 4px;
+ padding: 0.8rem;
 }
 .subcase-row td {
-  padding-left: 2rem; /* Indent subcases */
+ padding-left: 2rem; /* Indent subcases */
 }
 .plus-icon {
-  height: 1rem;
-  width: 1rem;
+ height: 1rem;
+ width: 1rem;
 }
 .custom-btn {
-  background-color: #00344D;
-  color: white;
-  width: 100%;
-  max-width: 30rem;
-  padding: 0.8rem;
-  text-align: center;
-  font-size: 1rem;
+ background-color: #00344D;
+ color: white;
+ width: 100%;
+ max-width: 30rem;
+ padding: 0.8rem;
+ text-align: center;
+ font-size: 1rem;
 }
 .custom-btn:hover {
-  background-color: #002734;
+ background-color: #002734;
 }
 .case-list__no-case {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 35rem;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ text-align: center;
+ height: 35rem;
 }
 .case-list__no-case-content p {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+ font-size: 1.5rem;
+ margin-bottom: 1rem;
 }
 
+
 .subcase-row {
-  background-color: #f9fafb;
+ background-color: #f9fafb;
 }
+
+
+/* Style for modal */
+.pdf-modal {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background-color: rgba(0, 0, 0, 0.7);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ z-index: 1000;
+}
+
+
+.modal-background {
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ backdrop-filter: blur(5px); /* Blur the background */
+}
+
+
+.pdf-modal-content {
+ background-color: white;
+ padding: 20px;
+ position: relative;
+ z-index: 1001; /* Ensure content appears above the background */
+ max-width: 80%;
+ max-height: 80%;
+ overflow-y: auto;
+}
+
+
+.close {
+ position: absolute;
+ top: 10px;
+ right: 10px;
+ font-size: 24px;
+ cursor: pointer;
+}
+
+
+iframe {
+ border: none;
+ display: block;
+ margin-top: 20px;
+}
+
+
+.modal-actions {
+ margin-top: 20px;
+ display: flex;
+ justify-content: space-between;
+}
+
+
+.btn {
+ padding: 10px;
+ font-size: 14px;
+ cursor: pointer;
+}
+
+
+.btn-primary {
+ background-color: #007bff;
+ color: white;
+}
+
+
+.btn-secondary {
+ background-color: #6c757d;
+ color: white;
+}
+
+
+
+
+@media (max-width: 1024px) {
+ .custom-btn {
+   width: 17rem;
+   height: 2.9rem;
+ }
+}
+@media (max-width: 768px) {
+ .custom-btn {
+   width: 15rem;
+ }
+
+
+ .table th,
+ .table td {
+   padding: 0.5rem;
+ }
+}
+
+
+@media (max-width: 425px) {
+ .custom-btn {
+   width: 12rem;
+   height: 2rem;
+ }
+ .case-list__no-case-content p {
+   font-size: 1.05rem;
+ }
+}
+
+
 
 @media (max-width: 1024px) {
   .custom-btn {

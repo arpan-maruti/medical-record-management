@@ -8,7 +8,7 @@
     margin-bottom: 2rem;
 }
 .upload-new-case__title {
-    font-size: 2rem; /* Increased font size */
+    font-size: 2rem;
     font-weight: bold;
 }
 .upload-new-case__forms {
@@ -16,7 +16,7 @@
     gap: 2rem;
     justify-content: space-between;
     flex-direction: column;
-    flex-wrap: wrap; /* Ensure forms stack on smaller screens */
+    flex-wrap: wrap;
 }
 .upload-new-case__form {
     background-color: white;
@@ -25,25 +25,24 @@
     min-width: 20rem;
 }
 .upload-new-case__form-title {
-    font-size: 1.6rem; /* Increased font size */
+    font-size: 1.6rem;
     margin-bottom: 2.5rem;
 }
 .form-group {
     margin-bottom: 1.5rem;
 }
 .form-group label {
-    font-size: 1.2rem; /* Increased font size for labels */
+    font-size: 1.2rem;
     font-weight: 600;
     line-height: 24px;
-    /* display: block; */
     margin-bottom: 0.5rem;
 }
 
 .form-group input,
 .form-group select {
     width: 100%;
-    padding: 1rem; /* Increased padding for inputs */
-    font-size: 1.2rem; /* Increased font size for input text */
+    padding: 1rem;
+    font-size: 1.2rem;
     border: 0.1rem solid #ddd;
     border-radius: 0.5rem;
     background-color: white;
@@ -58,24 +57,22 @@
 
 .form-group-instruction-type input,
 .form-group-instruction-type select {
-    width: 50%; /* Adjusted width for instruction type inputs */
+    width: 50%;
     padding: 1rem;
     font-size: 1.2rem;
     border: 0.1rem solid #ddd;
     border-radius: 0.5rem;
     background-color: white;
 }
-/* New styling for the row of 4 inputs */
 .form-group-row {
     display: flex;
-    gap: 2rem; /* Added spacing between inputs */
-    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 .form-group-row .form-group {
-    flex: 1; /* Make each input take equal width */
-    min-width: 15rem; /* Ensure inputs have a minimum width */
+    flex: 1;
+    min-width: 15rem;
 }
-/* Custom styling for select dropdowns */
 .loi-upload-label {
     display: inline-flex;
     align-items: center;
@@ -117,8 +114,7 @@ button:hover {
 }
 .parameter-list{
     display: grid;
-  grid-template-columns: 50% 50%;;  /* Creates two columns */
-  /* grid-gap: 1rem;  Adds gap between items */
+  grid-template-columns: 50% 50%;
   width: 100%;
  }
  .parameter-list li {
@@ -130,16 +126,16 @@ button:hover {
   width: 70%;
   }
   .parameter-list li:nth-child(odd) {
-    grid-column-start:  1;  /* Span across two rows for odd items (1, 2, 3...) */
+    grid-column-start:  1;
   }
   .parameter-list li:nth-child(even) {
-    grid-column-start: 2;  /* Span across one row for even items (6, 7, 8...) */
+    grid-column-start: 2;
   }
  .checkbox-container {
     padding: 1rem;
   }
   .checkbox-container input {
-    width: 1.5rem; /* Adjust the size of the checkbox */
+    width: 1.5rem;
     height: 1.5rem;
   }
   .parameter-details {
@@ -157,24 +153,24 @@ button:hover {
         flex-direction: column;
     }
     .form-group-row {
-        flex-direction: column; /* Stack inputs vertically on smaller screens */
+        flex-direction: column;
         gap: 1rem;
     }
     .parameter-list {
-        grid-template-columns: 100%; /* Display items in a single column on smaller screens */
+        grid-template-columns: 100%;
     }
     .parameter-list li:nth-child(odd),
     .parameter-list li:nth-child(even) {
-        grid-column-start: auto; /* Reset grid column start for smaller screens */
+        grid-column-start: auto;
     }
     .parameter-list li {
-        width: 100%; /* Full width for list items on smaller screens */
+        width: 100%;
     }
     .parameter-details {
-        margin-top: 1rem; /* Add margin between parameter details on smaller screens */
+        margin-top: 1rem;
     }
     .form-group input, .form-group select {
-        font-size: 1rem; /* Adjust font size for smaller screens */
+        font-size: 1rem;
     }
     .form-group-instruction-type input,
     .form-group-instruction-type select {
