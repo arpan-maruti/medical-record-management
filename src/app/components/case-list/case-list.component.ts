@@ -14,25 +14,75 @@ import { ViewAndLabelComponent } from '../view-and-label/view-and-label.componen
 })
 export class CaseListComponent {
   data: any[] = [];
+  filteredData: any[] = [];
   isDataAvailable: boolean = false;
   isPdfPreviewVisible: boolean = false;
   pdfUrl: SafeResourceUrl = '';  
   selectedFileName: string = ''; 
   isViewLabelVisible: boolean = false; 
   isBackgroundBlurred: boolean = false; 
-  selectedFiles:any[] = [];  // Store selected files
+  selectedFiles: any[] = [];  // Store selected files
+  searchQuery: string = '';  // Search query
+
+  // Define the type for the sortOrder object
+  sortOrder: { 
+    [key in 'ref_number' | 'instruction_type' | 'client_name' | 'total_files' | 'total_pages' | 'created_on' | 'uploaded_by' | 'case_status' | 'loi' | 'action' | 'subcase']: 'asc' | 'desc' 
+  } = {
+    ref_number: 'asc',
+    instruction_type: 'asc',
+    client_name: 'asc',
+    total_files: 'asc',
+    total_pages: 'asc',
+    created_on: 'asc',
+    uploaded_by: 'asc',
+    case_status: 'asc',
+    loi: 'asc',
+    action: 'asc',
+    subcase: 'asc',
+  };
 
   constructor(private cdr: ChangeDetectorRef,
               private dataService: DataService, 
               private sanitizer: DomSanitizer,
               private router: Router) {}
-    
+
   ngAfterViewInit() {
     this.data = this.dataService.getMainCases();
+    this.filteredData = [...this.data];  // Initialize filteredData with all cases
     if (this.data.length > 0) {
       this.isDataAvailable = true;
     }
     this.cdr.detectChanges();
+  }
+
+  // Filter data based on search query
+  onSearch() {
+    if (this.searchQuery) {
+      this.filteredData = this.data.filter(caseItem =>
+        caseItem.ref_number.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        caseItem.client_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        caseItem.case_status.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    } else {
+      this.filteredData = [...this.data];  // Reset to original data if no search query
+    }
+  }
+
+  // Sort the data based on column and direction
+  sortData(column: 'ref_number' | 'instruction_type' | 'client_name' | 'total_files' | 'total_pages' | 'created_on' | 'uploaded_by' | 'case_status' | 'loi' | 'action' | 'subcase', currentOrder: 'asc' | 'desc') {
+    // Toggle sorting order
+    console.log('column', column);
+    const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+    this.sortOrder[column] = newOrder;
+
+    // Sort filteredData based on the selected column and order
+    this.filteredData.sort((a, b) => {
+      if (newOrder === 'asc') {
+        return a[column] > b[column] ? 1 : (a[column] < b[column] ? -1 : 0);
+      } else {
+        return a[column] < b[column] ? 1 : (a[column] > b[column] ? -1 : 0);
+      }
+    });
   }
 
   openPdfPreview(fileName: string) {
@@ -74,22 +124,12 @@ export class CaseListComponent {
     return this.dataService.getCaseUploader(caseItem);
   }
 
-  // openViewLabel(caseItem: any) {
-  //   this.isViewLabelVisible = true; 
-  //   // Assume each caseItem has a 'files' property with name and icon
-  //   this.selectedFiles = caseItem.files.map(file => ({
-  //     name: file.name,
-  //     icon: file.icon || 'assets/default-icon.png' // Set default icon if not available
-  //   }));
-  // }
-
   openViewLabel() {
     this.selectedFiles = [
       { name: 'File 1.pdf', icon: '📄' },
       { name: 'File 2.pdf', icon: '📄' },
       { name: 'File 3.pdf', icon: '📄' }
     ];
-  
     this.isViewLabelVisible = true;
   }
   

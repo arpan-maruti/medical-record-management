@@ -1,17 +1,24 @@
 <div class="container" [class.blurred]="isViewLabelVisible">
   <h2 class="case-list__heading">All Cases</h2>
+
+  <!-- Search Bar -->
+  <div class="search-container">
+    <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()" placeholder="Search by Ref No, Client Name, or Status">
+  </div>
+
   <div *ngIf="isDataAvailable" class="case-list__case table-container">
     <table class="table">
       <thead class="thead-custom">
         <tr class="table-header">
           <th></th>
-          <th>Case Ref No</th>
+          <th (click)="sortData('ref_number', sortOrder['ref_number'])">Case Ref No</th>
           <th>Instruction Type</th>
-          <th>Client Name</th>
-          <th>Total Files</th>
-          <th>Total Pages</th>
-          <th>Date Uploaded</th>
-          <th>Uploaded By</th>
+          <th (click)="sortData('instruction_type', sortOrder['instruction_type'])">Instruction Type</th>
+          <th (click)="sortData('client_name', sortOrder['client_name'])">Client Name</th>
+          <th (click)="sortData('total_files', sortOrder['total_files'])">Total Files</th>
+          <th (click)="sortData('total_pages', sortOrder['total_pages'])">Total Pages</th>
+          <th (click)="sortData('created_on', sortOrder['created_on'])">Date Uploaded</th>
+          <th (click)="sortData('uploaded_by', sortOrder['uploaded_by'])">Uploaded By</th>
           <th>Case Status</th>
           <th>LOI</th>
           <th></th>
@@ -21,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let caseItem of data" class="case-row">
+        <ng-container *ngFor="let caseItem of filteredData" class="case-row">
           <tr (click)="toggleSubCases(caseItem)" class="clickable-row main-case">
             <td>
               <span *ngIf="caseItem.expanded; else downArrow">
@@ -86,6 +93,7 @@
       </tbody>
     </table>
   </div>
+
   <!-- View/Label Popup -->
   <div *ngIf="isViewLabelVisible" class="view-label-popup">
     <app-view-and-label 
