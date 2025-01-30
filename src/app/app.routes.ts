@@ -10,6 +10,7 @@ import { MainLayoutComponent } from './components/main-layout/main-layout.compon
 import { CaseListComponent } from './components/case-list/case-list.component';
 import { UploadNewCaseComponent } from './components/upload-new-case/upload-new-case.component';
 import { UploadSubcaseComponent } from './components/upload-subcase/upload-subcase.component';
+import { ViewAndLabelComponent } from './components/view-and-label/view-and-label.component'
 export const routes: Routes = [
 
     {path:'', component: LoginComponent, pathMatch:'full'},
@@ -30,7 +31,10 @@ export const routes: Routes = [
               { path: 'all-cases', component: CaseListComponent },
               { path: 'profile', component: ProfileComponent  },
               {path: 'upload-new-case', component: UploadNewCaseComponent},
-              {path: 'main-case/upload-subcase', component: UploadSubcaseComponent}
+              {path: 'main-case/upload-subcase', component: UploadSubcaseComponent},
+              {
+                path: 'view-label', component: ViewAndLabelComponent,
+              }
             ],
           },
         ],
