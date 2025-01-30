@@ -1,0 +1,80 @@
+.popup__container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Overlay background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup__content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+}
+
+.popup__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: darkblue;
+}
+
+.popup__file-list {
+  margin-top: 20px;
+}
+
+.popup__file-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.popup__file-icon {
+  margin-right: 10px;
+  font-size: 2rem;
+
+}
+
+.popup__file-name {
+  flex-grow: 1;
+}
+
+.popup__file-label-input {
+  margin-left: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 18rem;
+  height: 2.5rem;
+}
+
+.popup__file-label-input::placeholder {
+  font-style: italic;
+  color: gray;
+  
+}
+
+.popup__button {
+  background-color: #007bff;
+    color: white;
+    padding: 13px 38px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: calc(50% - 3rem);
+    margin-top: 1rem;
+}
+
+.popup__button:hover {
+  background-color: #0056b3;
+}

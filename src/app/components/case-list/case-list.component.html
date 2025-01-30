@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [class.blurred]="isViewLabelVisible">
   <h2 class="case-list__heading">All Cases</h2>
   <div *ngIf="isDataAvailable" class="case-list__case table-container">
     <table class="table">
@@ -50,7 +50,7 @@
               <a href="#" class="text-primary">Upload File</a>
             </td>
             <td>
-              <a href="#" class="text-primary">View/Label</a>
+              <a class="text-primary" (click)="openViewLabel()">View/Label</a>
             </td>
             <td>
               <a href="#" class="text-primary">Generate Summary</a>
@@ -86,6 +86,14 @@
       </tbody>
     </table>
   </div>
+  <!-- View/Label Popup -->
+  <div *ngIf="isViewLabelVisible" class="view-label-popup">
+    <app-view-and-label 
+      [selectedFiles]="selectedFiles"
+      (closePopup)="closeViewLabel()">
+    </app-view-and-label>
+  </div>
+
   <div *ngIf="isPdfPreviewVisible" class="pdf-modal">
     <div class="modal-background" (click)="closePdfPreview()"></div> <!-- To close on background click -->
     <div class="pdf-modal-content">
@@ -98,6 +106,7 @@
       </div>
     </div>
   </div>
+
   <div *ngIf="!isDataAvailable" class="case-list__no-case">
     <div class="case-list__no-case-content">
       <p>Welcome to the Case Management Section.</p>
@@ -105,5 +114,4 @@
       <button class="custom-btn">Upload New Case</button>
     </div>
   </div>
- </div>
- 
+</div>
