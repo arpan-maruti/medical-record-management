@@ -16,22 +16,34 @@
             id="client-name"
             placeholder="Enter client name"
             [(ngModel)]="clientName"
+            name="clientName"
+            #clientNameField="ngModel"
             [ngModelOptions]="{ standalone: true }"
+            (input)="onInputChange()"
+            required
+            minlength="2"
+            maxlength="50"
+            pattern="^[A-Za-z]"
           />
+          <div *ngIf="isSubmitted && clientNameError" class="error-message">
+            {{ clientNameError }}
+          </div>
         </div>
-
         <!-- Case Reference Number -->
         <div class="form-group">
           <label for="case-reference">Case Reference Number</label>
           <input
             type="text"
             id="case-reference"
+            (input)="onInputChange()"
             placeholder="Enter reference number"
             [(ngModel)]="caseReference"
             [ngModelOptions]="{ standalone: true }"
           />
+          <div *ngIf="isSubmitted && caseReferenceError" class="error-message">
+            {{ caseReferenceError }}
+          </div>
         </div>
-
         <!-- LOI (Letter of Instruction) Type -->
         <div class="form-group">
           <label for="loi-type">What type of LOI?</label>
@@ -50,7 +62,10 @@
         <!-- Date of Branch / Liability -->
         <div class="form-group">
           <label for="date-of-branch">Date of Breach / Liability</label>
-          <input type="date" id="date-of-branch" />
+          <input (input)="onInputChange()" type="date" id="date-of-branch" name="dateOfBranch" [(ngModel)]="dateOfBranch"/>
+          <div *ngIf="isSubmitted && dateError" class="error-message">
+            {{ dateError }}
+          </div>
         </div>
       </div>
 
@@ -71,7 +86,10 @@
           [ngModelOptions]="{ standalone: true }"
           (ngModelChange)="onInstructionChange()"
         >
-          <option *ngFor="let instruction of instructionTypes" [value]="instruction._id">
+          <option
+            *ngFor="let instruction of instructionTypes"
+            [value]="instruction._id"
+          >
             {{ instruction.instruction_msg }}
           </option>
         </select>
@@ -79,17 +97,42 @@
     </form>
 
     <!-- Second Form -->
-    <form id="upload-new-case__form2" class="upload-new-case__form">
+    <form
+      id="upload-new-case__form2"
+      class="upload-new-case__form"
+      (input)="onInputChange()"
+    >
       <h3 class="upload-new-case__form-title">SELECT THE PARAMETERS</h3>
       <div class="form-group" *ngIf="parameters.length > 0">
         <ul class="parameter-list">
           <li *ngFor="let param of parameters">
-            <div class="checkbox-container" (click)="toggleSelection(param._id)">
-              <svg *ngIf="!isSelected(param._id)" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z"/>
+            <div
+              class="checkbox-container"
+              (click)="toggleSelection(param._id)"
+            >
+              <svg
+                *ngIf="!isSelected(param._id)"
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#000000"
+              >
+                <path
+                  d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z"
+                />
               </svg>
-              <svg *ngIf="isSelected(param._id)" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                <path d="m424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
+              <svg
+                *ngIf="isSelected(param._id)"
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#000000"
+              >
+                <path
+                  d="m424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"
+                />
               </svg>
             </div>
             <div class="parameter-details">
@@ -97,11 +140,16 @@
             </div>
           </li>
         </ul>
+        <div *ngIf="isSubmitted && parametersError" class="error-message">
+          {{ parametersError }}
+        </div>
       </div>
 
       <!-- Submit Button -->
       <div class="form-group">
-        <button type="button" (click)="submitForm()" class="submit-button">Submit</button>
+        <button type="button" (click)="submitForm()" class="submit-button">
+          Submit
+        </button>
       </div>
     </form>
   </div>
