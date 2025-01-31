@@ -92,7 +92,7 @@ export class CaseListComponent {
 
   addSubcase() {
     this.router.navigate(['case-management/main-case/upload-subcase']);
-  }
+  };
 
   openViewLabel() {
     this.selectedFiles = [

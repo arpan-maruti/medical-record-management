@@ -21,6 +21,9 @@
  text-align: left;
  padding: 0.75rem;
 }
+.case-list__utext {
+  text-decoration: underline;
+}
 .thead-custom {
  background-color: #CED1DA;
 }
@@ -48,6 +51,9 @@
  background-color: #F9FAFB;
  border-radius: 8px;
  padding: 1rem;
+}
+.text-primary {
+ text-decoration: underline;
 }
 .subcase-row {/* Main Case Card Style */
  .main-case {
