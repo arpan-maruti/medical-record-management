@@ -1,0 +1,92 @@
+<h2 class="header-title">ALL CASES</h2>
+<div class="header-container">
+  <div class="search-container">
+    <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Client Name or Uploaded By" class="search-input"/>
+  </div>
+  <button class="upload-btn">Upload New Case</button>
+</div>
+  
+<table class="table table-striped">
+    <thead>
+        <tr class="table-header">
+            <th></th>
+            <th>Case Ref No</th>
+            <th>Instruction Type</th>
+            <th>Client Name</th>
+            <th>Total Files</th>
+            <th>Total Pages</th>
+            <th>Date Uploaded</th>
+            <th>Uploaded By</th>
+            <th>Case Status</th>
+            <th>LOI</th>
+            <th></th>
+            <th>Action</th>
+            <th></th>
+            <th>Add Subcase</th>
+          </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let caseItem of filteredData" class="case-row">
+          <tr (click)="toggleSubCases(caseItem)" class="clickable-row main-case">
+            <td>
+              <span *ngIf="caseItem.expanded; else downArrow">
+                <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="#4A6F81">
+                  <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+                </svg>
+              </span>
+              <ng-template #downArrow>
+                <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="#4A6F81">
+                  <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
+                </svg>
+              </ng-template>
+            </td>
+            <td>{{ caseItem.ref_number }}</td>
+            <td>{{ getInstructionType(caseItem) }}</td>
+            <td>{{ caseItem.client_name }}</td>
+            <td>{{ getTotalFiles(caseItem) }}</td>
+            <td>{{ getTotalPages(caseItem) }}</td>
+            <td>{{ caseItem.created_on | date }}</td>
+            <td>{{ getCaseUploader(caseItem) }}</td>
+            <td>{{ getCaseStatus(caseItem) }}</td>
+            <td>
+              <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')">View LOI</a>
+            </td>
+            <td>
+              <a href="#" class="text-primary">Upload File</a>
+            </td>
+            <td>
+              <a href="#" class="text-primary">View/Label</a>
+            </td>
+            <td>
+              <a href="#" class="text-primary">Generate Summary</a>
+            </td>
+            <td><img src="assets/plus.png" class="plus-icon"></td>
+          </tr>
+          <!-- Subcases -->
+          <tr *ngFor="let subCase of getSubCases(caseItem._id)" [hidden]="!caseItem.expanded" class="subcase-row">
+            <td></td>
+            <td>{{ subCase.ref_number }}</td>
+            <td>{{ getInstructionType(subCase) }}</td>
+            <td>{{ subCase.client_name }}</td>
+            <td>{{ getTotalFiles(subCase) }}</td>
+            <td>{{ getTotalPages(subCase) }}</td>
+            <td>{{ subCase.created_on | date }}</td>
+            <td>{{ getCaseUploader(subCase) }}</td>
+            <td>{{ getCaseStatus(subCase) }}</td>
+            <td>
+              <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')">View LOI</a>
+            </td>
+            <td>
+              <a href="#" class="text-primary">Upload File</a>
+            </td>
+            <td>
+              <a href="#" class="text-primary">View/Label</a>
+            </td>
+            <td>
+              <a href="#" class="text-primary">Generate Summary</a>
+            </td>
+            <td></td>
+          </tr>
+        </ng-container>
+      </tbody>
+  </table>

@@ -70,7 +70,7 @@ export class DataService {
       "case_uploaded_by": "John Doe",
       "case_status": "status1",
       "files": ["file1", "file2"],
-      "parameters": ["param1", "param2"]
+      "parameters": ["param1_inst1", "param2_inst1"]
     },
     {
       "_id": "case2",
@@ -86,7 +86,7 @@ export class DataService {
       "case_uploaded_by": "Jane Smith",
       "case_status": "status2",
       "files": ["file3"],
-      "parameters": ["param2"]
+      "parameters": ["param1_inst2"]
     },
     {
       "_id": "subcase1",
@@ -102,7 +102,7 @@ export class DataService {
       "case_uploaded_by": "John Doe",
       "case_status": "status3",
       "files": ["file4"],
-      "parameters": ["param1"]
+      "parameters": ["param1_inst2"]
     },
     {
       "_id": "subcase2",
@@ -118,7 +118,7 @@ export class DataService {
       "case_uploaded_by": "John Doe",
       "case_status": "status4",
       "files": ["file5", "file6"],
-      "parameters": ["param2"]
+      "parameters": ["param1_inst3"]
     }
     
   ],
@@ -486,5 +486,10 @@ export class DataService {
       }
       getInstructionTypesByLoiId(loiId: string): Array<any> {
         return this.mockData.instruction_types.filter(instruction => instruction.loi_id === loiId);
+      }
+
+      getStatusLabelById(statusId: string): string {
+        const status = this.mockData.case_status.find(s => s._id === statusId);
+        return status ? status.status : ''; // Return the status label or empty string if not found
       }
   };

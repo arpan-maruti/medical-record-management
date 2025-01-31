@@ -1,290 +1,245 @@
-.container {
- margin-top: 3rem;
- background-color: #ffffff;
- padding: 1rem;
-}
-.case-list__heading {
- font-size: 1.6rem;
- font-weight: bold;
- margin-bottom: 1rem;
-}
-.case-list__case {
- margin: 0 auto;
- width: 100%;
-}
-.table {
- width: 100%;
- border-collapse: collapse;
-}
-.table th,
-.table td {
- text-align: left;
- padding: 0.75rem;
-}
-.thead-custom {
- background-color: #CED1DA;
-}
-.table-header {
- height: 3rem;
-}
-.table th {
- font-weight: bold;
-}
-.table-container {
- overflow-x: auto;
-}
-.table tbody tr:hover {
- background-color: #F9FAFB;
-}
-.clickable-row {
- cursor: pointer;
- border: 2px solid transparent;
- transition: border 0.3s;
-}
-.clickable-row:hover {
- border: 2px solid #CED1DA;
-}
-.main-case {
- background-color: #F9FAFB;
- border-radius: 8px;
- padding: 1rem;
-}
-.subcase-row {/* Main Case Card Style */
- .main-case {
-   background-color: #FFFFFF;
-   border-radius: 8px;
-   padding: 1rem;
- }
- .subcase-row {
-   background-color: #F9FAFB;
- }
- .subcase-card {
-   margin-top: 1rem;
-   background-color: #F1F5F9;
-   border-radius: 8px;
-   padding: 1rem;
-   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
- }
- .subcase-card-item {
-   margin-bottom: 1rem;
-   padding: 1rem;
-   background-color: #FFFFFF;
-   border-radius: 6px;
-   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
- }
- .subcase-card-item:last-child {
-   margin-bottom: 0;
- }
- .subcase-header {
-   display: flex;
-   justify-content: space-between;
-   font-weight: bold;
-   margin-bottom: 1rem;
- }
- .subcase-content p {
-   margin: 0.5rem 0;
- }
- /* Hover Effect on Main Case */
- .clickable-row {
-   cursor: pointer;
-   transition: background-color 0.3s ease;
- }
- .clickable-row:hover {
-   background-color: #E9F2F9;
- }
- /* Plus Icon */
- .plus-icon {
-   height: 1rem;
-   width: 1rem;
- }
- /* Custom Button */
- .custom-btn {
-   background-color: #00344D;
-   color: white;
-   width: 100%;
-   max-width: 30rem;
-   padding: 0.8rem;
-   text-align: center;
-   font-size: 1rem;
- }
- .custom-btn:hover {
-   background-color: #002734;
- }
- background-color: #F1F5F9;
- border-radius: 4px;
- padding: 0.8rem;
-}
-.subcase-row td {
- padding-left: 2rem; /* Indent subcases */
-}
-.plus-icon {
- height: 1rem;
- width: 1rem;
-}
-.custom-btn {
- background-color: #00344D;
- color: white;
- width: 100%;
- max-width: 30rem;
- padding: 0.8rem;
- text-align: center;
- font-size: 1rem;
-}
-.custom-btn:hover {
- background-color: #002734;
-}
-.case-list__no-case {
- display: flex;
- justify-content: center;
- align-items: center;
- text-align: center;
- height: 35rem;
-}
-.case-list__no-case-content p {
- font-size: 1.5rem;
- margin-bottom: 1rem;
+.case-list-container {
+  margin-top: 3rem;
+  background-color: #ffffff;
+  padding: 1rem;
 }
 
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  text-align: left;
+  padding: 0.75rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.clickable-row {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.3s;
+}
+
+.clickable-row:hover {
+  border: 2px solid #CED1DA;
+}
+
+.main-case {
+  background-color: #e9e9e9;
+  border-radius: 8px;
+  padding: 1rem;
+}
 
 .subcase-row {
- background-color: #f9fafb;
+  background-color: #f9fafb;
 }
 
-
-/* Style for modal */
-.pdf-modal {
- position: fixed;
- top: 0;
- left: 0;
- width: 100%;
- height: 100%;
- background-color: rgba(0, 0, 0, 0.7);
- display: flex;
- justify-content: center;
- align-items: center;
- z-index: 1000;
+.plus-icon {
+  height: 1rem;
+  width: 1rem;
 }
 
-
-.modal-background {
- position: absolute;
- top: 0;
- left: 0;
- width: 100%;
- height: 100%;
- backdrop-filter: blur(5px); /* Blur the background */
+.search-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  width: 50%;
 }
 
-
-.pdf-modal-content {
- background-color: white;
- padding: 20px;
- position: relative;
- z-index: 1001; /* Ensure content appears above the background */
- max-width: 80%;
- max-height: 80%;
- overflow-y: auto;
+.search-upload-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-
-.close {
- position: absolute;
- top: 10px;
- right: 10px;
- font-size: 24px;
- cursor: pointer;
+.search-input {
+  width: 20rem;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
-iframe {
- border: none;
- display: block;
- margin-top: 20px;
+.upload-btn {
+  background-color: #00344d;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-
-.modal-actions {
- margin-top: 20px;
- display: flex;
- justify-content: space-between;
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-
-.btn {
- padding: 10px;
- font-size: 14px;
- cursor: pointer;
+.header-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  padding: 1rem;
+}
+/* Container for all cards */
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-
-.btn-primary {
- background-color: #007bff;
- color: white;
+/* Styling each card */
+.case-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-
-.btn-secondary {
- background-color: #6c757d;
- color: white;
+.case-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
+/* Card Header */
+.case-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
 
+.case-card-header h3 {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: #4A6F81;
+  margin: 0;
+}
 
+button {
+  background-color: #4A6F81;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2e4e5b;
+}
+
+/* Card Details */
+.case-card-details {
+  margin-bottom: 20px;
+}
+
+.case-card-details p {
+  font-size: 1em;
+  margin: 5px 0;
+  color: #6c757d;
+}
+
+.case-card-details strong {
+  color: #2c3e50;
+}
+
+/* Actions Section */
+.case-card-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+.case-card-actions a {
+  font-size: 0.95em;
+  color: #4A6F81;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.case-card-actions a:hover {
+  color: #2e4e5b;
+}
+
+.plus-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+/* Subcase Card (inside each case card when expanded) */
+.subcase-card {
+  background-color: #f8f9fa;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.subcase-card h4 {
+  font-size: 1.2em;
+  color: #34495e;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.subcase-card p {
+  font-size: 0.95em;
+  margin: 5px 0;
+  color: #6c757d;
+}
+
+.subcase-card strong {
+  color: #2c3e50;
+}
+
+/* Hover effects for subcases */
+.subcase-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  background-color: #f1f3f5;
+}
+
+.cards-container {
+  display: none;
+}
 
 @media (max-width: 1024px) {
- .custom-btn {
-   width: 17rem;
-   height: 2.9rem;
- }
-}
-@media (max-width: 768px) {
- .custom-btn {
-   width: 15rem;
- }
-
-
- .table th,
- .table td {
-   padding: 0.5rem;
- }
-}
-
-
-@media (max-width: 425px) {
- .custom-btn {
-   width: 12rem;
-   height: 2rem;
- }
- .case-list__no-case-content p {
-   font-size: 1.05rem;
- }
-}
-
-
-
-@media (max-width: 1024px) {
-  .custom-btn {
-    width: 17rem;
-    height: 2.9rem;
-  }
-}
-@media (max-width: 768px) {
-  .custom-btn {
-    width: 15rem;
-  }
-
-  .table th,
-  .table td {
+  .table th, .table td {
     padding: 0.5rem;
   }
 }
 
-@media (max-width: 425px) {
-  .custom-btn {
-    width: 12rem;
-    height: 2rem;
+@media (max-width: 768px) {
+
+  .desktop-table-view {
+    display: none; /* Hide desktop/tablet view on mobile */
   }
-  .case-list__no-case-content p {
-    font-size: 1.05rem;
+
+  .mobile-card-view {
+    display: block; /* Show mobile card view on mobile */
+  }
+  .table-container {
+    display: none;
+  }
+
+  .cards-container {
+    display: block;
   }
 }
