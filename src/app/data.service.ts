@@ -1,61 +1,61 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DataService {
   private mockData = {
-      "users": [
-        {
-          "_id": "user1",
-          "first_name": "John",
-          "last_name": "Doe",
-          "email": "john.doe@example.com",
-          "is_active": true,
-          "password": "hashedpassword1",
-          "country_code": "+1",
-          "phone_number": "1234567890",
-          "role_id": "role1",
-          "created_by": "user1",
-          "modified_by": "user1",
-          "created_on": "2025-01-23T10:00:00Z",
-          "modified_on": "2025-01-23T10:00:00Z"
-        },
-        {
-          "_id": "user2",
-          "first_name": "Jane",
-          "last_name": "Smith",
-          "email": "jane.smith@example.com",
-          "is_active": false,
-          "password": "hashedpassword2",
-          "country_code": "+44",
-          "phone_number": "9876543210",
-          "role_id": "role2",
-          "created_by": "user1",
-          "modified_by": "user2",
-          "created_on": "2025-01-22T10:00:00Z",
-          "modified_on": "2025-01-22T10:00:00Z"
-        }
-      ],
-      "roles": [
-        {
-          "_id": "role1",
-          "role_name": "Admin",
-          "created_by": "user1",
-          "modified_by": "user1",
-          "created_on": "2025-01-23T10:00:00Z",
-          "modified_on": "2025-01-23T10:00:00Z"
-        },
-        {
-          "_id": "role2",
-          "role_name": "User",
-          "created_by": "user1",
-          "modified_by": "user2",
-          "created_on": "2025-01-22T10:00:00Z",
-          "modified_on": "2025-01-22T10:00:00Z"
-        }
-      ],
-      "cases": [
+    users: [
+      {
+        _id: 'user1',
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john.doe@example.com',
+        is_active: true,
+        password: 'hashedpassword1',
+        country_code: '+1',
+        phone_number: '1234567890',
+        role_id: 'role1',
+        created_by: 'user1',
+        modified_by: 'user1',
+        created_on: '2025-01-23T10:00:00Z',
+        modified_on: '2025-01-23T10:00:00Z',
+      },
+      {
+        _id: 'user2',
+        first_name: 'Jane',
+        last_name: 'Smith',
+        email: 'jane.smith@example.com',
+        is_active: false,
+        password: 'hashedpassword2',
+        country_code: '+44',
+        phone_number: '9876543210',
+        role_id: 'role2',
+        created_by: 'user1',
+        modified_by: 'user2',
+        created_on: '2025-01-22T10:00:00Z',
+        modified_on: '2025-01-22T10:00:00Z',
+      },
+    ],
+    roles: [
+      {
+        _id: 'role1',
+        role_name: 'Admin',
+        created_by: 'user1',
+        modified_by: 'user1',
+        created_on: '2025-01-23T10:00:00Z',
+        modified_on: '2025-01-23T10:00:00Z',
+      },
+      {
+        _id: 'role2',
+        role_name: 'User',
+        created_by: 'user1',
+        modified_by: 'user2',
+        created_on: '2025-01-22T10:00:00Z',
+        modified_on: '2025-01-22T10:00:00Z',
+      },
+    ],
+    cases: [
       {
       "_id": "case1",
       "parent_id": "null",
@@ -411,72 +411,82 @@ export class DataService {
         return this.mockData.roles;
       }
 
-      getMainCases(): Array<any> {
-        return this.mockData.cases.filter((case1) => case1.parent_id == "null");
-      }
-
-      getSubCases(parentId: string) {
-        return this.mockData.cases.filter((subCase) => subCase.parent_id === parentId); // Fetch subcases for a parent case
-      }
-
-      getInstructionType(caseItem: any) {
-        const parameters = this.getParameters();
-  const matchingParam = parameters.find((param: any) => param._id === caseItem.parameters[0]);
-  
-  if (!matchingParam) {
-  
-    return null; // or a default value
+  getMainCases(): Array<any> {
+    return this.mockData.cases.filter((case1) => case1.parent_id == 'null');
   }
 
-  const instruction = matchingParam.instruction_id;
-  const instructionType = this.getInstructionTypes().find((msg: any) => msg._id === instruction);
-
-  if (!instructionType) {
-    console.error('No matching instruction type found for instruction_id:', instruction);
-    return null; // or a default value
+  getSubCases(parentId: string) {
+    return this.mockData.cases.filter(
+      (subCase) => subCase.parent_id === parentId
+    ); // Fetch subcases for a parent case
   }
 
-  return instructionType.instruction_msg;
-      }
+  getInstructionType(caseItem: any) {
     
-      getCases(): Array<any> {
-        return this.mockData.cases;
-      }
-    
-      getCaseStatus(caseItem: any) {
-        const status = this.mockData.case_status.find((status: any) => status._id === caseItem.case_status);
-        return status ? status.status : 'Unknown';
-      }
-    
-      getOtps(): Array<any> {
-        return this.mockData.otps;
-      }
-    
-      getTotalFiles(caseItem: any) {
-        return caseItem.files ? caseItem.files.length : 0; // Count files in the case
-      }
-    
-      getParameters(): Array<any> {
-        return this.mockData.parameters;
-      }
+    const parameters = this.getParameters();
+    const matchingParam = parameters.find(
+      (param: any) => param._id === caseItem.parameters[0]
+    );
 
-      // getParametersByInstructionId(instructionId: string): Array<any> {
-      //   return this.mockData.parameters.filter(param => param.instruction_id === instructionId);
-      // }
-    
-      getLoiTypes(): Array<any> {
-        return this.mockData.loi_types;
-      }
+    if (!matchingParam) {
+      return null; // or a default value
+    }
+    console.log('instructionType');
+    const instruction = matchingParam.instruction_id;
+    const instructionType = this.getInstructionTypes().find(
+      (msg: any) => msg._id === instruction
+    );
 
-      getTotalPages(caseItem: any) {
-        // return caseItem.files ? caseItem.files.reduce((sum: number, subCase: any) => sum + (subCase.no_of_pages || 0), 0) : 0;
-        return 0;
-      }
+    if (!instructionType) {
+      console.error(
+        'No matching instruction type found for instruction_id:',
+        instruction
+      );
+      return null; // or a default value
+    }
     
-      getInstructionTypes(): Array<any> {
-        return this.mockData.instruction_types;
-      }
-    
+    return instructionType.instruction_msg;
+  }
+
+  getCases(): Array<any> {
+    return this.mockData.cases;
+  }
+
+  getCaseStatus(caseItem: any) {
+    const status = this.mockData.case_status.find(
+      (status: any) => status._id === caseItem.case_status
+    );
+    return status ? status.status : 'Unknown';
+  }
+
+  getOtps(): Array<any> {
+    return this.mockData.otps;
+  }
+
+  getTotalFiles(caseItem: any) {
+    return caseItem.files ? caseItem.files.length : 0; // Count files in the case
+  }
+
+  getParameters(): Array<any> {
+    return this.mockData.parameters;
+  }
+
+  // getParametersByInstructionId(instructionId: string): Array<any> {
+  //   return this.mockData.parameters.filter(param => param.instruction_id === instructionId);
+  // }
+
+  getLoiTypes(): Array<any> {
+    return this.mockData.loi_types;
+  }
+
+  getTotalPages(caseItem: any) {
+    // return caseItem.files ? caseItem.files.reduce((sum: number, subCase: any) => sum + (subCase.no_of_pages || 0), 0) : 0;
+    return 0;
+  }
+
+  getInstructionTypes(): Array<any> {
+    return this.mockData.instruction_types;
+  }
 
       getCaseUploader(caseItem: any) {
         return caseItem.case_uploaded_by ? caseItem.case_uploaded_by : 'Unknown';

@@ -1,0 +1,13 @@
+<div class="popup__container" (click)="close()">
+  <div class="popup__content" (click)="$event.stopPropagation()">
+    <h3 class="popup__title">View Files Or Label</h3>
+    
+    <div *ngFor="let file of selectedFiles; let i = index" class="popup__file-item">
+      <span class="popup__file-icon">{{ file.icon }} </span>
+      <span class="popup__file-name">{{ file.name }}</span>
+      <input type="text" [(ngModel)]="fileLabels[i]" placeholder="Label it" class="popup__file-label-input">
+    </div>
+      
+    <button class="popup__button" (click)="close()">Save</button>
+  </div>
+</div>

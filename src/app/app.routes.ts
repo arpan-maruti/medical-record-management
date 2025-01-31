@@ -11,13 +11,15 @@ import { CaseListComponent } from './components/case-list/case-list.component';
 import { UploadNewCaseComponent } from './components/upload-new-case/upload-new-case.component';
 import { UploadSubcaseComponent } from './components/upload-subcase/upload-subcase.component';
 import { TableViewComponent } from './table-view/table-view.component';
+import { ViewAndLabelComponent } from './components/view-and-label/view-and-label.component'
+// import { TableSearchComponent } from './table-search/table-search.component';
 export const routes: Routes = [
 
     {path:'', component: LoginComponent, pathMatch:'full'},
     {path:'otp', component: OtpComponent, pathMatch:'full'},
     {path:'customalert', component: CustomAlertComponent, pathMatch:'full'},
     {path:'register', component: RegisterComponent, pathMatch:'full'},
-    {path:'p', component: TableViewComponent, pathMatch:'full'},
+    
     
     {
         path: 'case-management', 
@@ -31,11 +33,15 @@ export const routes: Routes = [
               { path: 'all-cases', component: CaseListComponent },
               { path: 'profile', component: ProfileComponent  },
               {path: 'upload-new-case', component: UploadNewCaseComponent},
-              {path: 'main-case/upload-subcase', component: UploadSubcaseComponent}
+              {path: 'main-case/upload-subcase', component: UploadSubcaseComponent},
+              {
+                path: 'view-label', component: ViewAndLabelComponent,
+              }
             ],
           },
         ],
       },
     {path:'page-not-found', component: PageNotFoundComponent},
+    
     {path:'**', redirectTo:'/page-not-found'}, 
 ];

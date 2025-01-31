@@ -1,6 +1,7 @@
-<div class="case-list-container">
+<div class="case-list-container" [class.blurred]="isViewLabelVisible">
   <div class="header-container">
     <h2 class="header-title">ALL CASES</h2>
+
     <div class="filter-container">
       <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
         <option value="">All Statuses</option>
@@ -24,7 +25,7 @@
   </div>
 
   <!-- Desktop/Table view with table -->
-  <div class="table-container desktop-table-view">
+  <div *ngIf="isDataAvailable" class="table-container desktop-table-view">
     <table class="table table-striped">
       <thead>
         <tr class="table-header">
