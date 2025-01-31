@@ -19,7 +19,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center; /* Light gray background */
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   position: relative;
 }
 
@@ -79,7 +79,19 @@
 }
 
 .btn-secondary {
-  background-color: #ccc;
+  width: 100%;
+    max-width: 200px;
+    height: 3rem;
+    border-style: solid;
+    border-radius: 30px;
+    width: 42%;
+    color: white;
+    background-color: #012447;
+    font-size: 1.1rem;
+    cursor: pointer;
+    /* margin: 2rem auto 1rem auto; */
+    display: block;
+    text-align: center;
 }
 
 .btn-secondary:hover {
