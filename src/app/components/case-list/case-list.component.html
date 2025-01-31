@@ -4,7 +4,7 @@
 
     <div class="filter-container">
       <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
-        <option value="">All Statuses</option>
+        <option value="">All Status</option>
         <option value="Open">Open</option>
         <option value="Closed">Closed</option>
       </select>
@@ -39,7 +39,9 @@
           <th>Uploaded By</th>
           <th>Case Status</th>
           <th>LOI</th>
+          <th></th>
           <th>Action</th>
+          <th></th>
           <th>Add Subcase</th>
         </tr>
       </thead>
@@ -49,13 +51,14 @@
             <td>
               <span *ngIf="caseItem.expanded; else downArrow">
                 <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="#4A6F81">
-                  <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+                  <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
                 </svg>
               </span>
               <ng-template #downArrow>
                 <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="#4A6F81">
-                  <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
+                  <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
                 </svg>
+                
               </ng-template>
             </td>
             <td class="case-list__utext">{{ caseItem.ref_number }}</td>

@@ -1,4 +1,4 @@
-.container {
+.case-list-container {
  /* margin-top: 3rem; */
  background-color: #ffffff;
  padding: 1rem;
@@ -17,8 +17,11 @@
   width: 100%;
   border-collapse: collapse;
 }
-
+.table th{
+  background-color: #a4a4a4;
+}
 .table th, .table td {
+
   text-align: left;
   padding: 0.75rem;
 }
@@ -85,14 +88,8 @@
    cursor: pointer;
    transition: background-color 0.3s ease;
  }
- .clickable-row:hover {
-   background-color: #E9F2F9;
- }
- /* Plus Icon */
- .plus-icon {
-   height: 1rem;
-   width: 1rem;
- }
+
+ 
  /* Custom Button */
  .custom-btn {
    background-color: #00344D;
@@ -106,7 +103,7 @@
  .custom-btn:hover {
    background-color: #002734;
  }
- 
+
  .subcase-row {/* Main Case Card Style */
  background-color: #F1F5F9;
  border-radius: 4px;
@@ -298,11 +295,7 @@ button:hover {
   color: #2e4e5b;
 }
 
-.plus-icon {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-}
+
 
 /* Subcase Card (inside each case card when expanded) */
 .subcase-card {
@@ -439,6 +432,35 @@ button:hover {
   background-color: #6c757d;
   color: white;
  }
+
+ .filter-container {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 12px;
+  width: 220px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-container select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  color: #374151;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+}
+
+
+
+
+
+
  
  
 
