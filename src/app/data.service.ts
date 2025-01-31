@@ -494,4 +494,9 @@ export class DataService {
       (instruction) => instruction.loi_id === loiId
     );
   }
+  
+  getStatusLabelById(statusId: string): string {
+    const status = this.mockData.case_status.find(s => s._id === statusId);
+    return status ? status.status : ''; // Return the status label or empty string if not found
+  }
 }
