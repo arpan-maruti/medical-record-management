@@ -10,7 +10,9 @@ import { MainLayoutComponent } from './components/main-layout/main-layout.compon
 import { CaseListComponent } from './components/case-list/case-list.component';
 import { UploadNewCaseComponent } from './components/upload-new-case/upload-new-case.component';
 import { UploadSubcaseComponent } from './components/upload-subcase/upload-subcase.component';
+import { TableViewComponent } from './table-view/table-view.component';
 import { ViewAndLabelComponent } from './components/view-and-label/view-and-label.component'
+// import { TableSearchComponent } from './table-search/table-search.component';
 export const routes: Routes = [
 
     {path:'', component: LoginComponent, pathMatch:'full'},
@@ -40,5 +42,6 @@ export const routes: Routes = [
         ],
       },
     {path:'page-not-found', component: PageNotFoundComponent},
+    
     {path:'**', redirectTo:'/page-not-found'}, 
 ];
