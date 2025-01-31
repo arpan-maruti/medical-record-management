@@ -6,7 +6,7 @@
     <!-- Form container -->
     <div class="upload-new-case__forms">
       <!-- First Form: Client Name, Case Reference, LOI Upload -->
-      <form class="upload-new-case__form">
+      <form id="upload-subcase__form1" class="upload-new-case__form">
         <div class="form-group-row">
           <!-- Client Name -->
           <div class="form-group">
@@ -88,7 +88,7 @@
       </form>
   
       <!-- Second Form -->
-      <form class="upload-new-case__form">
+      <form id="upload-subcase__form2" class="upload-new-case__form">
         <h3 class="upload-new-case__form-title">SELECT THE PARAMETERS</h3>
         <div class="form-group" *ngIf="parameters.length > 0">
           <ul class="parameter-list">

@@ -59,7 +59,7 @@
               <a href="#" class="text-primary">Generate Summary</a>
             </td>
             
-            <td><img src="assets/plus.png" class="plus-icon"></td>
+            <td><img src="assets/plus.png" class="plus-icon" (click)="addSubcase()"></td>
           </tr>
           <!-- Subcases -->
           <tr *ngFor="let subCase of getSubCases(caseItem._id)" [hidden]="!caseItem.expanded" class="subcase-row">

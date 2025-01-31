@@ -65,17 +65,16 @@
 }
 
 .popup__button {
-  width: 100%;
-    max-width: 200px;
+  max-width: 200px;
     height: 3rem;
     border-style: solid;
     border-radius: 30px;
-    width: 42%;
+    width: 11rem;
     color: white;
     background-color: #012447;
     font-size: 1.1rem;
     cursor: pointer;
-    margin-left: calc(50% - 6rem);
+    margin-left: calc(50% - 5rem);
     display: block;
     text-align: center;
 }

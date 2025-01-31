@@ -90,6 +90,10 @@ export class CaseListComponent {
     this.uploadedFileName = fileName;  // Store the file name in the parent component
   }
 
+  addSubcase() {
+    this.router.navigate(['case-management/main-case/upload-subcase']);
+  }
+
   openViewLabel() {
     this.selectedFiles = [
       { name: 'File 1.pdf', icon: '📄' },
