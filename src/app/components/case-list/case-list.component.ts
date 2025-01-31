@@ -204,6 +204,10 @@ export class CaseListComponent {
     this.router.navigate(['case-management/main-case/upload-subcase']);
   };
 
+  addCase() {
+    this.router.navigate(['case-management/upload-new-case']);
+  };
+
   openViewLabel() {
     this.selectedFiles = [
       { name: 'File 1.pdf', icon: '📄' },

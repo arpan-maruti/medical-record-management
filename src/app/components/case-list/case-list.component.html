@@ -16,7 +16,7 @@
       <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Client Name or Uploaded By" class="search-input" (input)="onSearchChange()"/>
     </div>
     <div class="upload-container">
-      <button class="upload-btn">Upload New Case</button>
+      <button class="upload-btn" (click)="addCase()">Upload New Case</button>
     </div>
   </div>
 
@@ -166,9 +166,9 @@
       </div>
       <div class="case-card-actions">
         <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')">View LOI</a>
-        <a href="#" class="text-primary">Upload File</a>
-        <a href="#" class="text-primary">Generate Summary</a>
-        <img src="assets/plus.png" class="plus-icon">
+        <a  class="text-primary" (click)="openUploadFiles()">Upload File</a>
+        <a  class="text-primary">Generate Summary</a>
+        <img src="assets/plus.png" class="plus-icon" (click)="addSubcase()">
       </div>
 
       <!-- Display Subcases in Card Layout -->
