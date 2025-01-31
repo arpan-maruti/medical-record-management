@@ -330,6 +330,12 @@ iframe {
 }
 
 @media (max-width: 425px) {
+  .pdf-modal-content {
+    /* padding: 10px; */
+    max-height: 100%;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+  }
   .custom-btn {
     width: 12rem;
     height: 2rem;

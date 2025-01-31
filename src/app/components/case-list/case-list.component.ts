@@ -98,6 +98,9 @@ export class CaseListComponent {
     this.selectedFiles = [
       { name: 'File 1.pdf', icon: '📄' },
       { name: 'File 2.pdf', icon: '📄' },
+      { name: 'File 3.pdf', icon: '📄' },
+      { name: 'File 1.pdf', icon: '📄' },
+      { name: 'File 2.pdf', icon: '📄' },
       { name: 'File 3.pdf', icon: '📄' }
     ];
 

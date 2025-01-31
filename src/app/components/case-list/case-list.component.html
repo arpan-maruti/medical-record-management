@@ -105,8 +105,8 @@
       <h3>LOI Preview - {{ selectedFileName }}</h3>
       <iframe [src]="pdfUrl" width="100%" height="500px" style="border: none;"></iframe>
       <div class="modal-actions">
-        <a [href]="pdfUrl" download class="btn btn-primary">Download PDF</a>
-        <button class="btn btn-secondary" (click)="closePdfPreview()">Close</button>
+        <a [href]="pdfUrl" download class="btn">Download PDF</a>
+        <!-- <button class="btn btn-secondary" (click)="closePdfPreview()">Close</button> -->
       </div>
     </div>
   </div>
