@@ -195,7 +195,9 @@ button:hover {
         font-size: 1rem;
         width: 100%;
     }
-    
+    .error-message {
+        font-size: 0.8rem; /* Adjust font size for smaller screens */
+    }
 }
 @media (max-width: 768px) {
     .upload-new-case__title {
@@ -223,6 +225,9 @@ button:hover {
     }
 }
 @media (max-width: 480px) {
+    .error-message {
+        font-size: 0.7rem; /* Adjust font size for smaller screens */
+    }
     .upload-new-case__form {
         padding: 1.5rem 1rem;
         min-width: 0;
