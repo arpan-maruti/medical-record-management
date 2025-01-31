@@ -18,6 +18,8 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   width: 80%;
   max-width: 600px;
+  overflow: scroll;
+  height: 29rem;
 }
 
 .popup__title {
@@ -26,7 +28,7 @@
   font-weight: bold;
   text-align: center;
   margin-bottom: 3rem;
-  color: darkblue;
+  color: #012447;
 }
 
 .popup__file-list {
@@ -65,14 +67,18 @@
 }
 
 .popup__button {
-  background-color: #007bff;
+  max-width: 200px;
+    height: 3rem;
+    border-style: solid;
+    border-radius: 30px;
+    width: 11rem;
     color: white;
-    padding: 13px 38px;
-    border: none;
-    border-radius: 4px;
+    background-color: #012447;
+    font-size: 1.1rem;
     cursor: pointer;
-    margin-left: calc(50% - 3rem);
-    margin-top: 1rem;
+    margin-left: calc(50% - 5rem);
+    display: block;
+    text-align: center;
 }
 
 .popup__button:hover {

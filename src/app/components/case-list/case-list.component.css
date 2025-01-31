@@ -1,5 +1,5 @@
 .container {
- margin-top: 3rem;
+ /* margin-top: 3rem; */
  background-color: #ffffff;
  padding: 1rem;
 }
@@ -20,6 +20,9 @@
 .table td {
  text-align: left;
  padding: 0.75rem;
+}
+.case-list__utext {
+  text-decoration: underline;
 }
 .thead-custom {
  background-color: #CED1DA;
@@ -48,6 +51,9 @@
  background-color: #F9FAFB;
  border-radius: 8px;
  padding: 1rem;
+}
+.text-primary {
+ text-decoration: underline;
 }
 .subcase-row {/* Main Case Card Style */
  .main-case {
@@ -229,6 +235,50 @@ iframe {
 }
 
 
+.upload-files-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it is on top */
+}
+
+.upload-files-popup .popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-files-popup .popup-content h3 {
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.upload-files-popup button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.upload-files-popup button:hover {
+  background-color: #0056b3;
+}
 
 
 @media (max-width: 1024px) {
@@ -280,6 +330,12 @@ iframe {
 }
 
 @media (max-width: 425px) {
+  .pdf-modal-content {
+    /* padding: 10px; */
+    max-height: 100%;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+  }
   .custom-btn {
     width: 12rem;
     height: 2rem;

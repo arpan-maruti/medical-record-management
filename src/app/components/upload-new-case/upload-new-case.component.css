@@ -1,3 +1,9 @@
+.error-message {
+    color: red;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    /* position: absolute; */
+}
 .upload-new-case__container {
     width: 100%;
     padding-top: 2rem;
@@ -177,6 +183,9 @@ button:hover {
         font-size: 1rem;
         width: 100%;
     }
+    .error-message {
+        font-size: 0.8rem;
+    }
 }
 @media (max-width: 768px) {
     .upload-new-case__title {
@@ -201,6 +210,9 @@ button:hover {
     .form-group-row {
         flex-direction: column; /* Stack inputs vertically on smaller screens */
         gap: 1rem;
+    }
+    .error-message {
+        font-size: 0.7rem;
     }
 }
 @media (max-width: 480px) {

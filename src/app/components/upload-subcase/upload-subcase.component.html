@@ -6,7 +6,7 @@
     <!-- Form container -->
     <div class="upload-new-case__forms">
       <!-- First Form: Client Name, Case Reference, LOI Upload -->
-      <form class="upload-new-case__form">
+      <form id="upload-subcase__form1" class="upload-new-case__form">
         <div class="form-group-row">
           <!-- Client Name -->
           <div class="form-group">
@@ -22,23 +22,27 @@
           <div class="form-group">
             <label for="parent-case-reference">Parent Case Reference Number</label>
             <input
-              type="text"
-              id="parent-case-reference"
-              [(ngModel)]="parentCaseReference"
-              [ngModelOptions]="{ standalone: true }"
-              disabled="true"
+            type="text"
+            id="parent-case-reference"
+            [(ngModel)]="parentCaseReference"
+            [ngModelOptions]="{ standalone: true }"
+            disabled="true"
             />
           </div>
           <!-- Case Reference Number -->
           <div class="form-group">
             <label for="sub-case-reference">Sub Case Reference Number</label>
             <input
-              type="text"
-              id="sub-case-reference"
-              placeholder="Enter reference number"
-              [(ngModel)]="subCaseReference"
-              [ngModelOptions]="{ standalone: true }"
+            type="text"
+            id="sub-case-reference"
+            placeholder="Enter reference number"
+            (input)="onInputChange()"
+            [(ngModel)]="subCaseReference"
+            [ngModelOptions]="{ standalone: true }"
             />
+            <div *ngIf="isSubmitted && subCaseReferenceError" class="error-message">
+              {{ subCaseReferenceError }}
+              </div>
           </div>
   
           <!-- LOI (Letter of Instruction) Type -->
@@ -59,7 +63,10 @@
           <!-- Date of Branch / Liability -->
           <div class="form-group">
             <label for="date-of-branch">Date of Breach / Liability</label>
-            <input type="date" id="date-of-branch" />
+            <input (input)="onInputChange()" type="date" id="date-of-branch" name="dateOfBranch" [(ngModel)]="dateOfBranch"/>
+            <div *ngIf="isSubmitted && dateError" class="error-message">
+              {{ dateError }}
+            </div>
           </div>
         </div>
   
@@ -88,7 +95,7 @@
       </form>
   
       <!-- Second Form -->
-      <form class="upload-new-case__form">
+      <form id="upload-subcase__form2" class="upload-new-case__form">
         <h3 class="upload-new-case__form-title">SELECT THE PARAMETERS</h3>
         <div class="form-group" *ngIf="parameters.length > 0">
           <ul class="parameter-list">
@@ -106,6 +113,9 @@
               </div>
             </li>
           </ul>
+          <div *ngIf="isSubmitted && parametersError" class="error-message">
+            {{ parametersError }}
+          </div>
         </div>
   
         <!-- Submit Button -->

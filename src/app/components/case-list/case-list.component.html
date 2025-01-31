@@ -35,7 +35,7 @@
                 </svg>
               </ng-template>
             </td>
-            <td>{{ caseItem.ref_number }}</td>
+            <td class="case-list__utext">{{ caseItem.ref_number }}</td>
             <td>{{ getInstructionType(caseItem) }}</td>
             <td>{{ caseItem.client_name }}</td>
             <td>{{ getTotalFiles(caseItem) }}</td>
@@ -47,20 +47,24 @@
               <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')" >View LOI</a>
             </td>
             <td>
-              <a href="#" class="text-primary">Upload File</a>
+              <a class="text-primary" (click)="openUploadFiles()">Upload File</a>
             </td>
+            <!-- <td *ngIf="uploadedFileName"> -->
+              <!-- <p>Uploaded: {{ uploadedFileName }}</p> -->
+            <!-- </td> -->
             <td>
               <a class="text-primary" (click)="openViewLabel()">View/Label</a>
             </td>
             <td>
-              <a href="#" class="text-primary">Generate Summary</a>
+              <a class="text-primary">Generate Summary</a>
             </td>
-            <td><img src="assets/plus.png" class="plus-icon"></td>
+            
+            <td><img src="assets/plus.png" class="plus-icon" (click)="addSubcase()"></td>
           </tr>
           <!-- Subcases -->
           <tr *ngFor="let subCase of getSubCases(caseItem._id)" [hidden]="!caseItem.expanded" class="subcase-row">
             <td></td>
-            <td>{{ subCase.ref_number }}</td>
+            <td class="case-list__utext">{{ subCase.ref_number }}</td>
             <td>{{ getInstructionType(subCase) }}</td>
             <td>{{ subCase.client_name }}</td>
             <td>{{ getTotalFiles(subCase) }}</td>
@@ -72,13 +76,13 @@
               <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')" >View LOI</a>
             </td>
             <td>
-              <a href="#" class="text-primary">Upload File</a>
+              <a class="text-primary" (click)="openUploadFiles()">Upload File</a>
             </td>
             <td>
-              <a href="#" class="text-primary">View/Label</a>
+              <a class="text-primary" (click)="openViewLabel()">View/Label</a>
             </td>
             <td>
-              <a href="#" class="text-primary">Generate Summary</a>
+              <a class="text-primary">Generate Summary</a>
             </td>
             <td></td>
           </tr>
@@ -101,8 +105,8 @@
       <h3>LOI Preview - {{ selectedFileName }}</h3>
       <iframe [src]="pdfUrl" width="100%" height="500px" style="border: none;"></iframe>
       <div class="modal-actions">
-        <a [href]="pdfUrl" download class="btn btn-primary">Download PDF</a>
-        <button class="btn btn-secondary" (click)="closePdfPreview()">Close</button>
+        <a [href]="pdfUrl" download class="btn">Download PDF</a>
+        <!-- <button class="btn btn-secondary" (click)="closePdfPreview()">Close</button> -->
       </div>
     </div>
   </div>
@@ -113,5 +117,10 @@
       <p>To upload a new case, please click the button below.</p>
       <button class="custom-btn">Upload New Case</button>
     </div>
+  </div>
+  <div *ngIf="isUploadFilesVisible" class="upload-files-popup">
+    <app-upload-files 
+      (closePopup)="closeUploadFiles()">
+    </app-upload-files>
   </div>
 </div>
