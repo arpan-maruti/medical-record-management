@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { PathFormatPipe } from '../../path-format.pipe';
+// import { PathFormatPipe } from '../../pipes/path-format.pipe';
+import { PathFormatPipe } from '../../pipes/path-format.pipe';
 @Component({
   selector: 'app-main-layout',
   imports: [RouterOutlet, CommonModule, PathFormatPipe],

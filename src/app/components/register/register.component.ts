@@ -3,7 +3,7 @@ import phoneValidationData from '../../../assets/country-phone-validation.json';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { phone } from 'phone';
-import { PhoneMaskService } from '../../phone-mask.service';  // Import the PhoneMaskService
+import { PhoneMaskService } from '../../services/phone-mask.service';  // Import the PhoneMaskService
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask'; 
 import emailValidator from 'email-validator';  // Import email-validator package
 

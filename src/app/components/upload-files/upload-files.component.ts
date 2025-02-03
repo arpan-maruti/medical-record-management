@@ -15,22 +15,23 @@ export class UploadFilesComponent {
 
   // Handle when files are selected via the file input
   onFilesSelected(event: any) {
-    const selectedFile = event.target.files[0];  // Get the first file
+    const selectedFile = event.target.files[0];
     if (selectedFile) {
       this.file = selectedFile;
-      this.fileName = selectedFile.name;  // Store the file name
-      this.fileUploaded.emit(this.fileName); // Emit the file name to parent
+      this.fileName = selectedFile.name;
+      this.fileUploaded.emit(this.fileName);
     }
   }
 
+  // Will remove this in future.
   // Handle when files are dropped into the drag-and-drop area
   onDrop(event: DragEvent) {
     event.preventDefault();
     const file = event.dataTransfer?.files[0];  // Get the first file
     if (file) {
       this.file = file;
-      this.fileName = file.name;  // Store the file name
-      this.fileUploaded.emit(this.fileName); // Emit the file name to parent
+      this.fileName = file.name;
+      this.fileUploaded.emit(this.fileName);
     }
   }
 

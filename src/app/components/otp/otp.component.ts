@@ -35,9 +35,8 @@ export class OtpComponent {
     }, 1000); // Revert to 'password' after 1 second
   }
 
-
   verifyOtp(otpInput: any): void {
-    this.otpError1 = ''; // Reset any previous error message
+    this.otpError1 = '';
 
     if (!this.otp.trim()) {
       this.otpError1 = 'OTP field cannot be empty';

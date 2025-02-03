@@ -8,10 +8,10 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./view-and-label.component.css']
 })
 export class ViewAndLabelComponent {
-  @Input() selectedFiles: any[] = [];  // Input for the list of files
-  @Output() closePopup: EventEmitter<void> = new EventEmitter<void>(); // To notify parent to close the pop-up
+  @Input() selectedFiles: { name: string; icon: string }[] = [];;
+  @Output() closePopup: EventEmitter<void> = new EventEmitter<void>();
 
-  fileLabels: string[] = [];  // New property to hold the labels for the files
+  fileLabels: string[] = []; 
 
   constructor() {}
 
@@ -19,7 +19,6 @@ export class ViewAndLabelComponent {
     this.closePopup.emit();
   }
 
-  // Update the labels if needed
   updateLabel(index: number, label: string) {
     this.fileLabels[index] = label;
   }

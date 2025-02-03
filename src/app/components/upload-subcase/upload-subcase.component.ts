@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DataService } from '../../data.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-upload-subcase',
@@ -14,11 +14,11 @@ export class UploadSubcaseComponent {
     parentCaseReference: string | undefined;
     subCaseReference: string | undefined;
     dateOfBranch: string | undefined;
-    loiTypes: any[] = []; // To hold the LOI Types fetched from DataService
-    selectedLoi: string = ''; // To store the selected LOI ID
-    instructionTypes: any[] = [];
+    loiTypes: Array<any> = [];
+    selectedLoi: string = '';
+    instructionTypes: Array<any> = [];
     selectedInstruction: string = ''; // To store the selected Instruction ID
-    parameters: any[] = []; // To store the fetched parameters based on selected instruction
+    parameters: Array<any> = []; // To store the fetched parameters based on selected instruction
     selectedParameters: { [key: string]: boolean } = {};
     subCaseReferenceError: string | null=null;
     dateError: string | null=null;
@@ -27,12 +27,10 @@ export class UploadSubcaseComponent {
     constructor(private dataService: DataService) {};
   
     ngOnInit() {
-      // Fetch LOI Types on component initialization
       this.loiTypes = this.dataService.getLoiTypes();
-      // Set the first LOI type as the default selected option
       if (this.loiTypes && this.loiTypes.length > 0) {
         this.selectedLoi = this.loiTypes[0]._id;
-        this.onLoiChange(); // Trigger onLoiChange to populate instructions
+        this.onLoiChange();
       }
     }
   

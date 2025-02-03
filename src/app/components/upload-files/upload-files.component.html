@@ -1,33 +1,34 @@
-<div class="upload-container">
+<div class="upload-files__container">
   <!-- Drag and Drop Area -->
-  
-  <div class="file-input-container">
+  <div class="upload-files__file-input-container">
     <input
       type="file"
       (change)="onFilesSelected($event)"
       id="fileInput"
       accept="application/pdf"
+      class="upload-files__file-input"
     />
-    <label for="fileInput" class="btn">Browse Files</label>
+    <label for="fileInput" class="upload-files__btn">Browse Files</label>
   </div>
-  <div class="or-text">Or</div>
+
+  <div class="upload-files__or-text">Or</div>
+
   <div
-    class="drag-drop-area"
+    class="upload-files__drag-drop-area"
     (drop)="onDrop($event)"
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave($event)"
-  > <!-- Document icon for file -->
-  <img src="/assets/pdf-icon.png">
-    <p>Drag & Drop PDF Files Here</p>
+  >
+    <!-- Document icon for file -->
+    <img src="/assets/pdf-icon.png" alt="PDF icon" class="upload-files__drag-drop-icon" />
+    <p class="upload-files__drag-drop-text">Drag & Drop PDF Files Here</p>
   </div>
 
-  <!-- File Input for Browsing -->
-
   <!-- File Name Display -->
-  <div *ngIf="fileName" class="file-name-display">
+  <div *ngIf="fileName" class="upload-files__file-name-display">
     <p>Selected File: {{ fileName }}</p>
   </div>
 
   <!-- Close Button -->
-  <button (click)="closeModal()" class="btn btn-secondary">Close</button>
+  <button (click)="closeModal()" class="upload-files__btn upload-files__btn--secondary">Close</button>
 </div>

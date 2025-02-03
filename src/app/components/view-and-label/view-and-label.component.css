@@ -1,4 +1,4 @@
-.popup__container {
+.view-and-label__container {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-.popup__content {
+.view-and-label__content {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
@@ -22,7 +22,7 @@
   height: 29rem;
 }
 
-.popup__title {
+.view-and-label__title {
   margin: 0;
   font-size: 1.5rem;
   font-weight: bold;
@@ -31,27 +31,26 @@
   color: #012447;
 }
 
-.popup__file-list {
+.view-and-label__file-list {
   margin-top: 20px;
 }
 
-.popup__file-item {
+.view-and-label__file-item {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.popup__file-icon {
+.view-and-label__file-item-icon {
   margin-right: 10px;
   font-size: 2rem;
-
 }
 
-.popup__file-name {
+.view-and-label__file-item-name {
   flex-grow: 1;
 }
 
-.popup__file-label-input {
+.view-and-label__file-item-label-input {
   margin-left: 10px;
   padding: 5px;
   border: 1px solid #ccc;
@@ -60,27 +59,26 @@
   height: 2.5rem;
 }
 
-.popup__file-label-input::placeholder {
+.view-and-label__file-item-label-input::placeholder {
   font-style: italic;
   color: gray;
-  
 }
 
-.popup__button {
+.view-and-label__button {
   max-width: 200px;
-    height: 3rem;
-    border-style: solid;
-    border-radius: 30px;
-    width: 11rem;
-    color: white;
-    background-color: #012447;
-    font-size: 1.1rem;
-    cursor: pointer;
-    margin-left: calc(50% - 5rem);
-    display: block;
-    text-align: center;
+  height: 3rem;
+  border-style: solid;
+  border-radius: 30px;
+  width: 11rem;
+  color: white;
+  background-color: #012447;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-left: calc(50% - 5rem);
+  display: block;
+  text-align: center;
 }
 
-.popup__button:hover {
+.view-and-label__button:hover {
   background-color: #0056b3;
 }

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PhoneMaskService } from './phone-mask.service';
+import { PhoneMaskService } from './services/phone-mask.service';
 
 describe('PhoneMaskService', () => {
   let service: PhoneMaskService;

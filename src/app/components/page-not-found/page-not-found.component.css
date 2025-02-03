@@ -1,5 +1,5 @@
 /* page-not-found.component.scss */
-.container {
+.page-not-found__container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,7 +9,7 @@
     padding: 1rem; /* Add some padding for smaller screens */
   }
   
-  .content {
+  .page-not-found__content {
     text-align: center;
     width: 100%;
     max-width: 600px; /* Limit the width on larger screens */
