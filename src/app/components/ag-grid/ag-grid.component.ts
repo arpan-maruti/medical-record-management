@@ -7,6 +7,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 ModuleRegistry.registerModules([AllCommunityModule]);
+
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
 interface IRow {
   blank: string;
   Case_Ref_No: string;
@@ -46,9 +49,14 @@ export class AgGridComponent {
   selectedFileName: string = '';
   isViewLabelVisible: boolean = false;
   isPdfPreviewVisible: boolean = false;
+  isBrowser: boolean | undefined;
+
   // Mock Data for cases and subcases
   constructor(private cdr: ChangeDetectorRef,
-    private dataService: DataService, private sanitizer: DomSanitizer, private renderer: Renderer2){}
+    private dataService: DataService, private sanitizer: DomSanitizer, private renderer: Renderer2, @Inject(PLATFORM_ID) private platformId: object)
+    {
+      this.isBrowser = isPlatformBrowser(this.platformId);
+    }
   // Column Definitions
   colDefs: ColDef<IRow>[] = [
     { field: 'blank', headerName: '' },
@@ -106,6 +114,9 @@ export class AgGridComponent {
     this.isPdfPreviewVisible = false;
   }
   addPdfPreviewClickListener() {
+    if (!this.isBrowser) {
+      return; // Skip execution on the server
+    }
     // Use Renderer2 to add event listener for the "View PDF" link
     const links = document.querySelectorAll('.view-pdf-link');
     links.forEach((link) => {
