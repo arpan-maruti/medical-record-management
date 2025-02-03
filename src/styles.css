@@ -4,6 +4,8 @@
 
 /* @import "../node_modules/ngx-countries-dropdown/assets/styles.css"; */
 /* @import "tailwindcss"; */
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-alpine.css";
 *{
     font-family: "Josefin Sans", serif;
     padding: 0;
