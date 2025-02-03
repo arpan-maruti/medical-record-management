@@ -18,11 +18,7 @@ export class NavbarComponent {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  // Close the dropdown if the window is resized (optional for better UI experience)
-  @HostListener('window:resize', ['$event'])
-  onResize(): void {
-    this.isDropdownOpen = false; // Close dropdown on resize (optional)
-  }
+  
   user: any;
   constructor(private dataService: DataService, private cdr: ChangeDetectorRef, private router: Router) {}
   ngAfterViewInit() : void {

@@ -28,33 +28,22 @@ export class CaseListComponent {
   selectedStatus: string  = '';
   data: any[] = [];
 
-  private screenWidth: number;
+
 
 
   constructor(private cdr: ChangeDetectorRef,
     private dataService: DataService, 
     private sanitizer: DomSanitizer,
     private router: Router) {
-    this.screenWidth = window.innerWidth;
+    
   }
-  ngOnInit(): void {
-    this.updateScreenWidth();
-  }
+  
 
-   // Listen to window resize events
-   @HostListener('window:resize', ['$event'])
-   onResize(event: any) {
-     this.screenWidth = event.target.innerWidth;
-   }
+  
+  
  
    // Optional: Method to update the screen width dynamically on page load
-   updateScreenWidth() {
-     this.screenWidth = window.innerWidth;
-   }
-
-  isDesktopOrTablet(): boolean {
-    return this.screenWidth >= 768;
-  }
+   
 
   ngAfterViewInit() {
     // Fetching case data
