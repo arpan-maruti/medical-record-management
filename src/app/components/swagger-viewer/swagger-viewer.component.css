@@ -1,8 +1,7 @@
 /* swagger-viewer.component.css */
 
-@import url('../../../../node_modules/swagger-ui-dist/swagger-ui.css');
-*
-{
-    overflow: visible !important;
+@import url('../../../../node_modules/swagger-ui-dist/swagger-ui.css') ;
+*{
+   overflow: visible !important;
 }
   
