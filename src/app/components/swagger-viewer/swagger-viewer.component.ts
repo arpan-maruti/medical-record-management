@@ -13,7 +13,7 @@ export class SwaggerViewerComponent implements AfterViewInit {
   
   constructor(
     private el: ElementRef,
-    @Inject(PLATFORM_ID) private platformId: object // Detects the platform (browser/server)
+    @Inject(PLATFORM_ID) private platformId: object 
   ) {}
 
   ngAfterViewInit(): void {
