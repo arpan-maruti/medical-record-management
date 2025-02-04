@@ -1,4 +1,6 @@
 /* swagger-viewer.component.css */
+
+@import url('swagger-ui-dist/swagger-ui.css');
 *
 {
     overflow: visible !important;

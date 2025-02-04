@@ -6,7 +6,7 @@ declare global {
   }
 }
 import { isPlatformBrowser } from '@angular/common';
-import "swagger-ui-dist/swagger-ui.css";
+
 
 @Component({
   selector: 'app-swagger-viewer',
