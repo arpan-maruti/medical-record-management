@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, Inject, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
 
 declare global {
   interface Window {
@@ -12,7 +12,7 @@ import { isPlatformBrowser } from '@angular/common';
   selector: 'app-swagger-viewer',
   templateUrl: './swagger-viewer.component.html',
   styleUrls: ['./swagger-viewer.component.css'],
-  encapsulation: ViewEncapsulation.None // Disable view encapsulation
+  // encapsulation: ViewEncapsulation.None // Disable view encapsulation
 })
 export class SwaggerViewerComponent implements AfterViewInit {
   
