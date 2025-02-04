@@ -13,6 +13,8 @@ import { UploadSubcaseComponent } from './components/upload-subcase/upload-subca
 import { TableViewComponent } from './table-view/table-view.component';
 import { ViewAndLabelComponent } from './components/view-and-label/view-and-label.component'
 import { AgGridComponent } from './components/ag-grid/ag-grid.component';
+import { SwaggerViewerComponent } from './components/swagger-viewer/swagger-viewer.component';
+
 export const routes: Routes = [
 
     {path:'', component: LoginComponent, pathMatch:'full'},
@@ -20,6 +22,7 @@ export const routes: Routes = [
     {path:'customalert', component: CustomAlertComponent, pathMatch:'full'},
     {path:'register', component: RegisterComponent, pathMatch:'full'},
     {path:'a', component: AgGridComponent, pathMatch:'full'},
+    {path:'swagger', component: SwaggerViewerComponent, pathMatch:'full'},
     
     {
         path: 'case-management', 
@@ -41,6 +44,7 @@ export const routes: Routes = [
           },
         ],
       },
+
     {path:'page-not-found', component: PageNotFoundComponent},
     
     {path:'**', redirectTo:'/page-not-found'}, 
