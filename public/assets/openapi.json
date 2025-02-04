@@ -1,0 +1,3583 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Medical Record Management API",
+    "description": "API for managing medical records, user registration, user authentication, and OTP verification.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/user/register": {
+      "post": {
+        "tags": [
+          "Login, Logout, Register"
+        ],
+        "summary": "Registers a new user (Admin only)",
+        "description": "Allows an admin to register a new user with details like name, email, and role.",
+        "operationId": "registerUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "string",
+                    "description": "The first name of the user",
+                    "example": "John"
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "description": "The last name of the user",
+                    "example": "Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The email of the user",
+                    "example": "johndoe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password (hashed)",
+                    "example": "hashedpassword"
+                  },
+                  "country_code": {
+                    "type": "string",
+                    "description": "The country code of the phone number (e.g., +1)",
+                    "example": "+1"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "The phone number of the user",
+                    "example": "1234567890"
+                  },
+                  "user_role": {
+                    "type": "string",
+                    "enum": [
+                      "admin",
+                      "user"
+                    ],
+                    "description": "The role of the user (admin or user)",
+                    "example": "user"
+                  }
+                },
+                "required": [
+                  "first_name",
+                  "last_name",
+                  "email",
+                  "password",
+                  "country_code",
+                  "phone_number",
+                  "user_role"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User registered successfully"
+                    },
+                    "user_id": {
+                      "type": "string",
+                      "example": "generated_user_id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Missing or invalid data)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid request",
+                    "message": "{\n  \"first_name\": \"First name is required\",\n  \"last_name\": \"Last name is required\",\n  \"email\": {\n    \"missing\": \"Email is required\",\n    \"invalid\": \"Invalid email format\"\n  },\n  \"country_code\": \"Country code is required\",\n  \"phone_number\": {\n    \"missing\": \"Phone number is required\",\n    \"invalid\": \"Invalid phone number format\"\n  },\n  \"user_role\": {\n    \"missing\": \"User role is required\",\n    \"invalid\": \"Invalid user role, must be 'admin' or 'user'\"\n  }\n}\n"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/password/reset-request": {
+      "post": {
+        "tags": [
+          "Login, Logout, Register"
+        ],
+        "summary": "Allows the user to reset their password using a token",
+        "description": "This endpoint allows a user to reset their password by providing a valid token and a new password.",
+        "operationId": "resetPassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "The reset token sent to the user for verification",
+                    "example": "valid-reset-token"
+                  },
+                  "new_password": {
+                    "type": "string",
+                    "description": "The new password to be set",
+                    "example": "NewSecurePassword123!"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "id of user",
+                    "example": "user_id"
+                  }
+                },
+                "required": [
+                  "token",
+                  "new_password",
+                  "user_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password reset successful"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Missing or invalid data)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid request",
+                    "message": "{\n  \"token\": \"Reset token is required\",\n  \"new_password\": {\n    \"missing\": \"New password is required\",\n    \"too_short\": \"Password must be at least 8 characters long\"\n  }\n}\n"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (Invalid token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid token",
+                    "message": "The reset token has expired or is invalid"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Weak password)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Weak password",
+                    "message": "Password does not meet security requirements"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (User not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "User not found",
+                    "message": "No user associated with this token"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while resetting the password"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "Login, Logout, Register"
+        ],
+        "summary": "Authenticates user based on email and password",
+        "description": "This endpoint allows a user to log in by providing their email and password.",
+        "operationId": "loginUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The email of the user",
+                    "example": "johndoe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password of the user (in plaintext)",
+                    "example": "plaintext"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful"
+                    },
+                    "first_name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "johndoe@example.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "hashedpassword"
+                    },
+                    "country_code": {
+                      "type": "string",
+                      "example": "+1"
+                    },
+                    "phone_number": {
+                      "type": "string",
+                      "example": "1234567890"
+                    },
+                    "user_role": {
+                      "type": "string",
+                      "example": "user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Missing or invalid data)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid request",
+                    "message": "{\n  \"email\": \"Email is required\",\n  \"password\": \"Password is required\"\n}\n"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (Invalid credentials)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid credentials",
+                    "message": "Incorrect email or password"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Account disabled)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Account disabled",
+                    "message": "This account has been deactivated. Contact support."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (User not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "User not found",
+                    "message": "No user exists with this phone number"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred during login"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/otp/verify": {
+      "post": {
+        "tags": [
+          "Login, Logout, Register"
+        ],
+        "summary": "Validates the OTP entered by the user",
+        "description": "This endpoint validates the OTP code entered by the user for verification.",
+        "operationId": "verifyOtp",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "type": "string",
+                    "description": "The ID of the user",
+                    "example": "123"
+                  },
+                  "otp_code": {
+                    "type": "string",
+                    "description": "The OTP code entered by the user",
+                    "example": "123456"
+                  }
+                },
+                "required": [
+                  "user_id",
+                  "otp_code"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "OTP verified successfully"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "jwt_token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid OTP or expired)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid OTP",
+                    "message": "The OTP is incorrect or expired"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests (OTP verification limit exceeded)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "OTP verification limit exceeded",
+                    "message": "You have exceeded the number of OTP verifications allowed"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while verifying OTP"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/otp/resend": {
+      "post": {
+        "tags": [
+          "Login, Logout, Register"
+        ],
+        "summary": "Resend a new OTP to the user if it expired or wasn't received",
+        "description": "This endpoint allows the user to request a new OTP if the previous one expired or wasn't received.",
+        "operationId": "resendOtp",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "type": "string",
+                    "description": "The ID of the user requesting the OTP resend",
+                    "example": "123"
+                  }
+                },
+                "required": [
+                  "user_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "OTP sent successfully"
+                    },
+                    "otp_code": {
+                      "type": "string",
+                      "example": "123456"
+                    },
+                    "expiry_time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-01-29T10:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests (OTP resend limit exceeded)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "OTP resend limit exceeded",
+                    "message": "You have exceeded the number of OTP requests within the allowed time frame"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while resending OTP"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Retrieves all users in the system (Admin Only)",
+        "description": "Allows an admin to fetch all users in the system.",
+        "operationId": "getAllUsers",
+        "responses": {
+          "200": {
+            "description": "List of all users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "user_id": {
+                            "type": "string",
+                            "example": "1"
+                          },
+                          "first_name": {
+                            "type": "string",
+                            "example": "John"
+                          },
+                          "last_name": {
+                            "type": "string",
+                            "example": "Doe"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "johndoe@example.com"
+                          },
+                          "user_role": {
+                            "type": "string",
+                            "example": "admin"
+                          },
+                          "is_active": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "created_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (Admin authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "Admin authentication required. Please provide a valid admin token."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to access this resource. Ensure you have the required admin permissions."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (No users found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "No users found",
+                    "message": "There are no users in the system"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Unexpected Error)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An unexpected error occurred while processing the request. Please try again later."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Fetches user details",
+        "description": "Fetches the details of a specific user by their user_id.",
+        "operationId": "getUserDetails",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to retrieve details for.",
+            "schema": {
+              "type": "string",
+              "example": "generated_user_id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "string",
+                      "example": "generated_user_id"
+                    },
+                    "first_name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "johndoe@example.com"
+                    },
+                    "phone_number": {
+                      "type": "string",
+                      "example": "1234567890"
+                    },
+                    "country_code": {
+                      "type": "string",
+                      "example": "+1"
+                    },
+                    "user_role": {
+                      "type": "string",
+                      "example": "user"
+                    },
+                    "is_active": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "User authentication required. Please provide a valid authentication token."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to access this resource. Ensure you are authorized to view this user's details."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (User not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "User not found",
+                    "message": "No user exists with the given user_id"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Unexpected Error)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An unexpected error occurred while retrieving user details. Please try again later."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Updates user details (Admin Only)",
+        "description": "Allows an admin to update a user's details.",
+        "operationId": "updateUserDetails",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to update.",
+            "schema": {
+              "type": "string",
+              "example": "generated_user_id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "string",
+                    "example": "John"
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "example": "Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "example": "1234567890"
+                  },
+                  "country_code": {
+                    "type": "string",
+                    "example": "+1"
+                  },
+                  "user_role": {
+                    "type": "string",
+                    "example": "user"
+                  }
+                },
+                "required": [
+                  "first_name",
+                  "last_name",
+                  "email",
+                  "phone_number",
+                  "country_code",
+                  "user_role"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User updated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Missing or invalid data)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid request",
+                    "message": "{\n  \"first_name\": \"First name is required\",\n  \"last_name\": \"Last name is required\",\n  \"email\": {\n    \"missing\": \"Email is required\",\n    \"invalid\": \"Invalid email format\"\n  },\n  \"country_code\": \"Country code is required\",\n  \"phone_number\": {\n    \"missing\": \"Phone number is required\",\n    \"invalid\": \"Invalid phone number format\"\n  },\n  \"user_role\": {\n    \"missing\": \"User role is required\",\n    \"invalid\": \"Invalid user role, must be 'admin' or 'user'\"\n  }\n}\n"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "You do not have permission to update this user. Ensure you are authenticated as an admin."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to update this user."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (User not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "User not found",
+                    "message": "No user exists with the given user_id"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Unexpected Error)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An unexpected error occurred while updating user details. Please try again later."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/cases/{case_id}": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Get details of a specific case",
+        "description": "Fetches details of a specific case by its case_id.",
+        "operationId": "getCaseDetails",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "The user ID associated with the case.",
+            "schema": {
+              "type": "string",
+              "example": "user_id_example"
+            }
+          },
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the case to fetch details for.",
+            "schema": {
+              "type": "string",
+              "example": "case_id_example"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Case details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "case_id": {
+                      "type": "string",
+                      "example": "case_id_example"
+                    },
+                    "parent_id": {
+                      "type": "string",
+                      "example": "parent_case_id_example"
+                    },
+                    "client_name": {
+                      "type": "string",
+                      "example": "Client A"
+                    },
+                    "ref_number": {
+                      "type": "string",
+                      "example": "ABC123"
+                    },
+                    "date_of_breach": {
+                      "type": "string",
+                      "format": "date",
+                      "example": "2025-01-01"
+                    },
+                    "case_status": {
+                      "type": "string",
+                      "example": "Open"
+                    },
+                    "parameters": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "param1",
+                        "param2"
+                      ]
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "file1.pdf",
+                        "file2.pdf"
+                      ]
+                    },
+                    "is_deleted": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "created_by": {
+                      "type": "string",
+                      "example": "admin_user"
+                    },
+                    "modified_by": {
+                      "type": "string",
+                      "example": "admin_user"
+                    },
+                    "created_on": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-01-01T10:00:00Z"
+                    },
+                    "modified_on": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-01-01T10:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid request)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid request",
+                    "message": "The provided user_id or case_id format is incorrect. Please ensure both values are valid strings."
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "User authentication required. Please authenticate before accessing this resource."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to view this case. Ensure you have the correct user permissions."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Case not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Case not found",
+                    "message": "No case exists with the given case_id. Please verify the case_id."
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error fetching case details)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An unexpected error occurred while fetching the case details. Please try again later."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/cases/{parent_id}/subcases": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Fetch subcases of a specific case",
+        "description": "Retrieves all subcases of a specific case by parent_id.",
+        "operationId": "getSubcases",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "The user ID associated with the subcases.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "60d5f48722e7bfcf8b349a44"
+            }
+          },
+          {
+            "name": "parent_id",
+            "in": "path",
+            "required": true,
+            "description": "The parent case ID whose subcases are to be fetched.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "60d5f48722e7bfcf8b349a45"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of subcases retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "case_id": {
+                        "type": "string",
+                        "pattern": "^[a-fA-F0-9]{24}$",
+                        "example": "subcase_id_example"
+                      },
+                      "parent_id": {
+                        "type": "string",
+                        "pattern": "^[a-fA-F0-9]{24}$",
+                        "example": "parent_case_id_example"
+                      },
+                      "client_name": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Subclient A"
+                      },
+                      "ref_number": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "XYZ987"
+                      },
+                      "date_of_breach": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01"
+                      },
+                      "case_status": {
+                        "type": "string",
+                        "enum": [
+                          "Open",
+                          "Closed",
+                          "Pending"
+                        ],
+                        "example": "Open"
+                      },
+                      "parameters": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "maxLength": 255
+                        },
+                        "example": [
+                          "paramA",
+                          "paramB"
+                        ]
+                      },
+                      "files": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "example": [
+                          "fileA.pdf",
+                          "fileB.pdf"
+                        ]
+                      },
+                      "is_deleted": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "created_by": {
+                        "type": "string",
+                        "pattern": "^[a-fA-F0-9]{24}$",
+                        "example": "admin_user"
+                      },
+                      "modified_by": {
+                        "type": "string",
+                        "pattern": "^[a-fA-F0-9]{24}$",
+                        "example": "admin_user"
+                      },
+                      "created_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      },
+                      "modified_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid request)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid request",
+                    "message": "The provided user_id or parent_id format is incorrect. Ensure the IDs are in valid format."
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "User authentication required. Please authenticate to access this resource."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to view the subcases for this parent case."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Case not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Not Found",
+                    "message": "No subcases exist for the provided parent_case_id."
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error fetching subcases)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while fetching the subcases. Please try again later."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/cases": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Fetch all main cases",
+        "description": "Fetches all cases associated with a specific user.",
+        "operationId": "getAllCases",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "The user ID to fetch the cases for.",
+            "schema": {
+              "type": "string",
+              "example": "user_id_example"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all cases",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "case_id": {
+                        "type": "string",
+                        "example": "case_id_example"
+                      },
+                      "parent_id": {
+                        "type": "string",
+                        "example": "parent_case_id_example"
+                      },
+                      "client_name": {
+                        "type": "string",
+                        "example": "Client A"
+                      },
+                      "ref_number": {
+                        "type": "string",
+                        "example": "ABC123"
+                      },
+                      "date_of_breach": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01"
+                      },
+                      "case_status": {
+                        "type": "string",
+                        "example": "Open"
+                      },
+                      "parameters": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": [
+                          "param1",
+                          "param2"
+                        ]
+                      },
+                      "files": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": [
+                          "file1.pdf",
+                          "file2.pdf"
+                        ]
+                      },
+                      "is_deleted": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "created_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      },
+                      "modified_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      },
+                      "created_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      },
+                      "modified_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "User authentication required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to access this resource"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (No cases found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "No cases found",
+                    "message": "There are no cases in the system"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Upload a new main case",
+        "description": "Allows a user to upload a new case.",
+        "operationId": "createNewCase",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "The user ID uploading the new case.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "60d5f48722e7bfcf8b349a44"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "pattern": "^[a-zA-Z0-9 ]*$",
+                    "example": "Client A"
+                  },
+                  "ref_number": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "pattern": "^[A-Za-z0-9_-]*$",
+                    "example": "ABC123"
+                  },
+                  "date_of_breach": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2025-01-01"
+                  },
+                  "LOI_type": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "example": "loi_type"
+                  },
+                  "instruction_type": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "example": "inst_type"
+                  },
+                  "parameters": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "maxLength": 255
+                    },
+                    "example": [
+                      "param1",
+                      "param2"
+                    ]
+                  },
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "example": [
+                      "file1.pdf",
+                      "file2.pdf"
+                    ]
+                  },
+                  "created_by": {
+                    "type": "string",
+                    "pattern": "^[a-fA-F0-9]{24}$",
+                    "example": "60d5f48722e7bfcf8b349a44"
+                  }
+                },
+                "required": [
+                  "client_name",
+                  "ref_number",
+                  "date_of_breach",
+                  "LOI_type",
+                  "instruction_type",
+                  "parameters",
+                  "files",
+                  "created_by"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Case uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Case uploaded successfully"
+                    },
+                    "case_id": {
+                      "type": "string",
+                      "example": "new_case_id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid or Missing Required Fields)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid request"
+                    },
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "client_name": {
+                          "type": "string",
+                          "example": "Client name is required"
+                        },
+                        "ref_number": {
+                          "type": "object",
+                          "properties": {
+                            "missing": {
+                              "type": "string",
+                              "example": "Reference number is required"
+                            },
+                            "invalid": {
+                              "type": "string",
+                              "example": "Invalid reference number format"
+                            }
+                          }
+                        },
+                        "date_of_breach": {
+                          "type": "string",
+                          "example": "Date of breach is required"
+                        },
+                        "LOI_type": {
+                          "type": "string",
+                          "example": "LOI type is required"
+                        },
+                        "instruction_type": {
+                          "type": "string",
+                          "example": "Instruction type is required"
+                        },
+                        "parameters": {
+                          "type": "string",
+                          "example": "At least one parameter is required"
+                        },
+                        "files": {
+                          "type": "string",
+                          "example": "At least one file is required"
+                        },
+                        "created_by": {
+                          "type": "string",
+                          "example": "Created by (User ID) is required"
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid request",
+                    "message": {
+                      "client_name": "Client name is required",
+                      "ref_number": {
+                        "missing": "Reference number is required",
+                        "invalid": "Invalid reference number format"
+                      },
+                      "date_of_breach": "Date of breach is required",
+                      "LOI_type": "LOI type is required",
+                      "instruction_type": "Instruction type is required",
+                      "parameters": "At least one parameter is required",
+                      "files": "At least one file is required",
+                      "created_by": "Created by (User ID) is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "User authentication required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to upload a case"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error uploading case)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while uploading the case"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{case_id}/subcases": {
+      "post": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Add a subcase to a parent case",
+        "description": "Allows a user to create a subcase under a specific parent case.",
+        "operationId": "createSubcase",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "description": "The parent case ID to create a subcase under.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "60d5f48722e7bfcf8b349a44"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parent_id": {
+                    "type": "string",
+                    "pattern": "^[a-fA-F0-9]{24}$",
+                    "example": "60d5f48722e7bfcf8b349a45"
+                  },
+                  "client_name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "pattern": "^[a-zA-Z0-9 ]*$",
+                    "example": "Client A"
+                  },
+                  "ref_number": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "pattern": "^[A-Za-z0-9_-]*$",
+                    "example": "ABC123"
+                  },
+                  "date_of_breach": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2025-01-01"
+                  },
+                  "case_status": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Open"
+                  },
+                  "parameters": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "maxLength": 255
+                    },
+                    "example": [
+                      "param1",
+                      "param2"
+                    ]
+                  },
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "example": [
+                      "file1.pdf",
+                      "file2.pdf"
+                    ]
+                  },
+                  "created_by": {
+                    "type": "string",
+                    "pattern": "^[a-fA-F0-9]{24}$",
+                    "example": "60d5f48722e7bfcf8b349a46"
+                  }
+                },
+                "required": [
+                  "parent_id",
+                  "client_name",
+                  "ref_number",
+                  "date_of_breach",
+                  "case_status",
+                  "parameters",
+                  "files",
+                  "created_by"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subcase added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Subcase added successfully"
+                    },
+                    "subcase_id": {
+                      "type": "string",
+                      "example": "subcase_id_example"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid or Missing Required Fields)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid request"
+                    },
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "case_id": {
+                          "type": "string",
+                          "example": "Invalid case ID format"
+                        },
+                        "parent_id": {
+                          "type": "string",
+                          "example": "Invalid parent case ID format"
+                        },
+                        "client_name": {
+                          "type": "string",
+                          "example": "Client name is required"
+                        },
+                        "ref_number": {
+                          "type": "object",
+                          "properties": {
+                            "missing": {
+                              "type": "string",
+                              "example": "Reference number is required"
+                            },
+                            "invalid": {
+                              "type": "string",
+                              "example": "Invalid reference number format"
+                            }
+                          }
+                        },
+                        "date_of_breach": {
+                          "type": "string",
+                          "example": "Date of breach is required"
+                        },
+                        "case_status": {
+                          "type": "string",
+                          "example": "Case status is required"
+                        },
+                        "parameters": {
+                          "type": "string",
+                          "example": "At least one parameter is required"
+                        },
+                        "files": {
+                          "type": "string",
+                          "example": "At least one file is required"
+                        },
+                        "created_by": {
+                          "type": "string",
+                          "example": "Created by (User ID) is required"
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid request",
+                    "message": {
+                      "case_id": "Invalid case ID format",
+                      "parent_id": "Invalid parent case ID format",
+                      "client_name": "Client name is required",
+                      "ref_number": {
+                        "missing": "Reference number is required",
+                        "invalid": "Invalid reference number format"
+                      },
+                      "date_of_breach": "Date of breach is required",
+                      "case_status": "Case status is required",
+                      "parameters": "At least one parameter is required",
+                      "files": "At least one file is required",
+                      "created_by": "Created by (User ID) is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "User authentication required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to create a subcase"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Parent case not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Parent case not found",
+                    "message": "No case exists with the given parent case_id"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error creating subcase)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while adding the subcase"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{case_id}/files": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Retrieve all files linked to a case",
+        "description": "Fetches all files associated with a specific case.",
+        "operationId": "getFilesForCase",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "description": "The case ID for fetching the files.",
+            "schema": {
+              "type": "string",
+              "example": "case_id_example"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully fetched files",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "file_id": {
+                        "type": "string",
+                        "example": "file_id_example"
+                      },
+                      "file_name": {
+                        "type": "string",
+                        "example": "document.pdf"
+                      },
+                      "file_size": {
+                        "type": "integer",
+                        "example": 1024
+                      },
+                      "no_of_pages": {
+                        "type": "integer",
+                        "example": 10
+                      },
+                      "files_label": {
+                        "type": "string",
+                        "example": "Confidential Document"
+                      },
+                      "is_deleted": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "added_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      },
+                      "modified_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      },
+                      "added_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      },
+                      "modified_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid case_id)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid case_id",
+                    "message": "The provided case_id is not valid"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "User authentication required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to view files for this case"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Case not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Case not found",
+                    "message": "No case exists with the given case_id"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error fetching files)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while retrieving files"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Upload a file and attach it to a case",
+        "description": "Allows a user to upload a file and attach it to a case.",
+        "operationId": "uploadFileToCase",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "description": "The case ID to which the file is attached.",
+            "schema": {
+              "type": "string",
+              "example": "case_id_example"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file_name": {
+                    "type": "string",
+                    "example": "document.pdf"
+                  },
+                  "file_size": {
+                    "type": "integer",
+                    "example": 1024
+                  },
+                  "no_of_pages": {
+                    "type": "integer",
+                    "example": 10
+                  },
+                  "files_label": {
+                    "type": "string",
+                    "example": "Confidential Document"
+                  },
+                  "added_by": {
+                    "type": "string",
+                    "example": "admin_user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "File uploaded successfully"
+                    },
+                    "file_id": {
+                      "type": "string",
+                      "example": "file_id_example"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid file)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid file",
+                    "message": "The provided file is not valid or missing"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "User authentication required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to upload files to this case"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Case not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Case not found",
+                    "message": "No case exists with the given case_id"
+                  }
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload Too Large (File size too large)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "File size too large",
+                    "message": "The uploaded file exceeds the allowed size limit"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error uploading file)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while uploading the file"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/files/{file_id}/label": {
+      "patch": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Update the label of a file",
+        "description": "Allows a user to update the label of a specific file.",
+        "operationId": "updateFileLabel",
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "description": "The file ID to update the label for.",
+            "schema": {
+              "type": "string",
+              "example": "file_id_example"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "example": "Confidential Document"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File label updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "file_id": {
+                      "type": "string",
+                      "example": "file_id_example"
+                    },
+                    "label": {
+                      "type": "string",
+                      "example": "Confidential Document"
+                    },
+                    "updated_on": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-01-29T10:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid label)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid label",
+                    "message": "Label is required and must be a valid string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "User authentication required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to update this file label"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (File not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "File not found",
+                    "message": "No file exists with the given file_id"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error updating file label)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while updating the file label"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loi-types": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Fetch all Letter of Intent (LOI) types",
+        "description": "Retrieves all available LOI types.",
+        "operationId": "getAllLoiTypes",
+        "responses": {
+          "200": {
+            "description": "Successfully fetched LOI types",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "loi_id": {
+                        "type": "string",
+                        "example": "loi_id_example"
+                      },
+                      "loi_msg": {
+                        "type": "string",
+                        "example": "Message for LOI"
+                      },
+                      "created_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      },
+                      "modified_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      },
+                      "created_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      },
+                      "modified_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized",
+                    "message": "User authentication required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Forbidden",
+                    "message": "You do not have permission to access LOI types"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (No LOI types found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "No LOI types found",
+                    "message": "There are no LOI types in the system"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error fetching LOI types)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while fetching LOI types"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/instruction-types/loi/{loi_id}": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Get Instruction Types by LOI ID",
+        "description": "Fetch all instruction types for a specific LOI ID.",
+        "operationId": "getInstructionTypesByLoiId",
+        "parameters": [
+          {
+            "name": "loi_id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the LOI whose instruction types need to be fetched.",
+            "schema": {
+              "type": "string",
+              "example": "loi_id_example"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of instruction types retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "instruction_id": {
+                        "type": "string",
+                        "example": "instruction_id_example"
+                      },
+                      "instruction_msg": {
+                        "type": "string",
+                        "example": "Instruction message example"
+                      },
+                      "loi_id": {
+                        "type": "string",
+                        "example": "loi_id_example"
+                      },
+                      "created_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      },
+                      "modified_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      },
+                      "created_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      },
+                      "modified_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid LOI ID)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Invalid LOI ID",
+                  "message": "The provided LOI ID is not in a valid format"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "User authentication required"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Forbidden",
+                  "message": "You do not have permission to access instruction types"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (LOI not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "LOI not found",
+                  "message": "No LOI exists with the given loi_id"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error fetching instruction types)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Server error",
+                  "message": "An error occurred while fetching instruction types"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/parameters/instruction/{instruction_id}": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Get Parameters by Instruction ID",
+        "description": "Fetch all parameters for a specific instruction ID.",
+        "operationId": "getParametersByInstructionId",
+        "parameters": [
+          {
+            "name": "instruction_id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the instruction whose parameters need to be fetched.",
+            "schema": {
+              "type": "string",
+              "example": "instruction_id_example"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of parameters retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "parameter_id": {
+                        "type": "string",
+                        "example": "parameter_id_example"
+                      },
+                      "instruction_id": {
+                        "type": "string",
+                        "example": "instruction_id_example"
+                      },
+                      "parameter_msg": {
+                        "type": "string",
+                        "example": "Parameter message example"
+                      },
+                      "significance_level": {
+                        "type": "integer",
+                        "example": 3
+                      },
+                      "is_deleted": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "created_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      },
+                      "modified_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      },
+                      "created_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      },
+                      "modified_on": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T10:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Invalid Instruction ID)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Invalid Instruction ID",
+                  "message": "The provided instruction ID is not in a valid format"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "User authentication required"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Forbidden",
+                  "message": "You do not have permission to access parameters"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Instruction not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Instruction not found",
+                  "message": "No instruction exists with the given instruction_id"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error fetching parameters)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Server error",
+                  "message": "An error occurred while fetching parameters"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": [
+          "Login, Logout, Register"
+        ],
+        "summary": "Logs out the user by invalidating the token",
+        "description": "This endpoint allows a user to log out by invalidating their active session token.",
+        "operationId": "logoutUser",
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Logout successful"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (No active session)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "No active session",
+                    "message": "No user is logged in to log out"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Invalid token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid token",
+                    "message": "Token is invalid or expired"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Server error",
+                    "message": "An error occurred while logging out"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
