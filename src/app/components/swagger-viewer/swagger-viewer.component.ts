@@ -19,10 +19,10 @@ export class SwaggerViewerComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     // Run Swagger UI only in the browser
     if (isPlatformBrowser(this.platformId)) {
-      SwaggerUI({
-        domNode: this.el.nativeElement.querySelector('#swagger-container'),
-        url: 'assets/openapi.json',
-      });
+      // SwaggerUI({
+      //   domNode: this.el.nativeElement.querySelector('#swagger-container'),
+      //   url: 'assets/openapi.json',
+      // });
     }
   }
 }
