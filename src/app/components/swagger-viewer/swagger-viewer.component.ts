@@ -28,13 +28,17 @@ export class SwaggerViewerComponent implements AfterViewInit {
 
       const temp1= this.el
 
-      window.swagger= SwaggerUI
+      
       
       if(typeof window !=='undefined'){
-         window.swagger({
-            domNode: this.el.nativeElement.querySelector('#swagger-container'),
-            url: 'assets/openapi.json',
-          });
+
+        setTimeout(() => {
+          window.swagger= SwaggerUI
+          window.swagger({
+              domNode: temp1.nativeElement.querySelector('#swagger-container'),
+              url: 'assets/openapi.json',
+            });
+        }, 1000);
       }
     }
   }
