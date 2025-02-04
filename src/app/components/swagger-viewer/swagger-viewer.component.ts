@@ -7,7 +7,7 @@ import "swagger-ui-dist/swagger-ui.css";
   selector: 'app-swagger-viewer',
   templateUrl: './swagger-viewer.component.html',
   styleUrls: ['./swagger-viewer.component.css'],
-  encapsulation: ViewEncapsulation.None // Disable view encapsulation
+  encapsulation: ViewEncapsulation.None
 })
 export class SwaggerViewerComponent implements AfterViewInit {
   
