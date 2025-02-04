@@ -1,4 +1,10 @@
 import { Component, AfterViewInit, ElementRef, Inject, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+
+declare global {
+  interface Window {
+    swagger: any;
+  }
+}
 import { isPlatformBrowser } from '@angular/common';
 import SwaggerUI from 'swagger-ui';
 import "swagger-ui-dist/swagger-ui.css";
@@ -19,10 +25,17 @@ export class SwaggerViewerComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     // Run Swagger UI only in the browser
     if (isPlatformBrowser(this.platformId)) {
-      // SwaggerUI({
-      //   domNode: this.el.nativeElement.querySelector('#swagger-container'),
-      //   url: 'assets/openapi.json',
-      // });
+
+      const temp1= this.el
+
+      window.swagger= SwaggerUI
+      
+      if(typeof window !=='undefined'){
+         window.swagger({
+            domNode: this.el.nativeElement.querySelector('#swagger-container'),
+            url: 'assets/openapi.json',
+          });
+      }
     }
   }
 }
