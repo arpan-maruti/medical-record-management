@@ -6,13 +6,13 @@ declare global {
   }
 }
 import { isPlatformBrowser } from '@angular/common';
-import 'swagger-ui-dist/swagger-ui.css';
+import '../../../../node_modules/swagger-ui-dist/swagger-ui.css';
 
 @Component({
   selector: 'app-swagger-viewer',
   templateUrl: './swagger-viewer.component.html',
   styleUrls: ['./swagger-viewer.component.css'],
-//  encapsulation: ViewEncapsulation.None // Disable view encapsulation
+  encapsulation: ViewEncapsulation.None // Disable view encapsulation
 })
 export class SwaggerViewerComponent implements AfterViewInit {
   
