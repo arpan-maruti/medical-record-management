@@ -6,6 +6,7 @@ import { phone } from 'phone';
 import { PhoneMaskService } from '../../services/phone-mask.service';  // Import the PhoneMaskService
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask'; 
 import emailValidator from 'email-validator';  // Import email-validator package
+import axios from 'axios';
 
 @Component({
   selector: 'app-register',
@@ -84,35 +85,35 @@ export class RegisterComponent {
   // Handle form submission
   async onRegister() {
     this.formSubmitted = true;
-
+  
     // Validate first name
     if (!this.firstName) {
       this.firstNameError = 'First name is required';
     } else if (!this.firstName.match(/^[A-Za-z]+$/)) {
       this.firstNameError = 'Invalid name';
     }
-
+  
     // Validate last name
     if (!this.lastName) {
       this.lastNameError = 'Last name is required';
     } else if (!this.lastName.match(/^[A-Za-z]+$/)) {
       this.lastNameError = 'Invalid name';
     }
-
+  
     // Validate email asynchronously
     if (!this.email) {
       this.emailError = 'Email address is required';
     } else if (!(await this.isValidEmail(this.email))) {
       this.emailError = 'Invalid email address or TLD';
     }
-
+  
     // Validate phone number using the `phone` library
     const country = this.countryList.find((c: { countryCode: string; }) => c.countryCode === this.selectedCountryCode);
     if (!this.phoneNumber) {
       this.phoneError = 'Phone number is required';
     } else {
       const phoneValidation = phone(this.phoneNumber, { country: this.selectedCountryCode });
-
+  
       // Check if the phone number is valid based on the selected country code
       if (!phoneValidation.isValid) {
         this.phoneError = `Invalid phone number for ${country?.countryName}`;
@@ -120,17 +121,39 @@ export class RegisterComponent {
         this.phoneError = ''; // Clear the error if valid
       }
     }
-
+  
     // If there are no errors, proceed with registration data
     if (!this.firstNameError && !this.lastNameError && !this.emailError && !this.phoneError) {
       const registrationData = {
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
+        countryCode: this.selectedCountryCode,
         phoneNumber: this.phoneNumber,
-        selectedCountryCode: this.selectedCountryCode
       };
-      console.log('Registration Data:', registrationData);
+  
+      try {
+        // Send POST request using axios
+        const response = await axios.post('http://localhost:5000/api/users', registrationData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        console.log('Registration successful:', response.data);
+        alert('User registered successfully!');
+        
+        // Reset form fields after successful registration
+        this.firstName = '';
+        this.lastName = '';
+        this.email = '';
+        this.phoneNumber = '';
+        this.formSubmitted = false;
+      } catch (error) {
+        console.error('Error during registration:', error);
+        alert('Failed to register user. Please try again.');
+      }
     }
   }
+  
 }
