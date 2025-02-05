@@ -1,20 +1,18 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import phoneValidationData from '../../../assets/country-phone-validation.json'; // Import JSON data
+import phoneValidationData from '../../../assets/country-phone-validation.json';  // Import JSON data
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { phone } from 'phone';
-import { PhoneMaskService } from '../../services/phone-mask.service'; // Import the PhoneMaskService
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import emailValidator from 'email-validator'; // Import email-validator package
-import axios from 'axios';
-
+import { PhoneMaskService } from '../../services/phone-mask.service';  // Import the PhoneMaskService
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask'; 
+import emailValidator from 'email-validator';  // Import email-validator package
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
   imports: [FormsModule, CommonModule, NgxMaskDirective],
-  providers: [provideNgxMask()],
+  providers: [provideNgxMask()]
 })
 export class RegisterComponent {
   firstName: string = '';
@@ -29,16 +27,12 @@ export class RegisterComponent {
   emailError: string | null = null;
   phoneError: string | null = null;
   countryList: any;
-  phoneMask: string = ''; // Variable to store the selected country mask
+  phoneMask: string = '';  // Variable to store the selected country mask
 
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private phoneMaskService: PhoneMaskService,
-   
-  ) {}
+  constructor(private cdr: ChangeDetectorRef, private phoneMaskService: PhoneMaskService) {}
 
   ngAfterViewInit() {
-    this.countryList = phoneValidationData; // List of countries from the JSON
+    this.countryList = phoneValidationData;  // List of countries from the JSON
     if (this.countryList.length > 0) {
       this.selectedCountryCode = this.countryList[0].countryCode;
       this.selectedCountryName = this.countryList[0].countryName;
@@ -63,20 +57,7 @@ export class RegisterComponent {
   async fetchValidTlds(): Promise<string[]> {
     // In this case, using a static list of common TLDs
     return [
-      'com',
-      'org',
-      'net',
-      'edu',
-      'gov',
-      'int',
-      'mil',
-      'co',
-      'io',
-      'us',
-      'uk',
-      'de',
-      'jp',
-      'in',
+      "com", "org", "net", "edu", "gov", "int", "mil", "co", "io", "us", "uk", "de", "jp", "in"
     ];
   }
 
@@ -95,7 +76,7 @@ export class RegisterComponent {
 
     // Get the TLD by splitting the domain at the last dot
     const domainParts = domain.split('.');
-    const tld = domainParts[domainParts.length - 1]; // The part after the last dot
+    const tld = domainParts[domainParts.length - 1];  // The part after the last dot
 
     return validTlds.includes(tld);
   }
@@ -126,15 +107,11 @@ export class RegisterComponent {
     }
 
     // Validate phone number using the `phone` library
-    const country = this.countryList.find(
-      (c: { countryCode: string }) => c.countryCode === this.selectedCountryCode
-    );
+    const country = this.countryList.find((c: { countryCode: string; }) => c.countryCode === this.selectedCountryCode);
     if (!this.phoneNumber) {
       this.phoneError = 'Phone number is required';
     } else {
-      const phoneValidation = phone(this.phoneNumber, {
-        country: this.selectedCountryCode,
-      });
+      const phoneValidation = phone(this.phoneNumber, { country: this.selectedCountryCode });
 
       // Check if the phone number is valid based on the selected country code
       if (!phoneValidation.isValid) {
@@ -145,31 +122,15 @@ export class RegisterComponent {
     }
 
     // If there are no errors, proceed with registration data
-    if (
-      !this.firstNameError &&
-      !this.lastNameError &&
-      !this.emailError &&
-      !this.phoneError
-    ) {
+    if (!this.firstNameError && !this.lastNameError && !this.emailError && !this.phoneError) {
       const registrationData = {
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
         phoneNumber: this.phoneNumber,
+        selectedCountryCode: this.selectedCountryCode
       };
       console.log('Registration Data:', registrationData);
-
-      axios.post('http://localhost:6000/api/users', registrationData)
-      .then(response => {
-        console.log('Registration successful', response.data);
-        alert('Registration successful!');
-      })
-      .catch(error => {
-        console.error('Error registering user', error);
-        alert('Registration failed!');
-      });
-  }
     }
   }
-
-
+}

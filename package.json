@@ -26,7 +26,6 @@
     "@angular/ssr": "^19.0.6",
     "ag-grid-angular": "^33.0.4",
     "ag-grid-enterprise": "^33.0.4",
-    "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "email-validator": "^2.0.4",
     "ngx-mask": "^19.0.6",
