@@ -39,8 +39,8 @@
                   },
                   "password": {
                     "type": "string",
-                    "description": "The password (hashed)",
-                    "example": "hashedpassword"
+                    "description": "The password",
+                    "example": "plaintext"
                   },
                   "country_code": {
                     "type": "string",
@@ -83,13 +83,50 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "message": {
                       "type": "string",
                       "example": "User registered successfully"
                     },
-                    "user_id": {
-                      "type": "string",
-                      "example": "generated_user_id"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "string",
+                          "example": "generated_user_id"
+                        },
+                        "first_name": {
+                          "type": "string",
+                          "example": "John"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "example": "Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
+                        },
+                        "country_code": {
+                          "type": "string",
+                          "example": "+1"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "user_role": {
+                          "type": "string",
+                          "example": "user"
+                        }
+                      }
                     }
                   }
                 }
@@ -103,16 +140,91 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid request"
+                    },
+                    "errorCode": {
+                      "type": "string",
+                      "example": "VALIDATION_ERROR"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "object",
+                      "properties": {
+                        "first_name": {
+                          "type": "string",
+                          "example": "First name is required"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "example": "Last name is required"
+                        },
+                        "email": {
+                          "type": "object",
+                          "properties": {
+                            "missing": {
+                              "type": "string",
+                              "example": "Email is required"
+                            },
+                            "invalid": {
+                              "type": "string",
+                              "example": "Invalid email format"
+                            }
+                          }
+                        },
+                        "password": {
+                          "type": "object",
+                          "properties": {
+                            "missing": {
+                              "type": "string",
+                              "example": "Password is required"
+                            },
+                            "invalid": {
+                              "type": "string",
+                              "example": "Password must be at least 8 characters long"
+                            }
+                          }
+                        },
+                        "country_code": {
+                          "type": "string",
+                          "example": "Country code is required"
+                        },
+                        "phone_number": {
+                          "type": "object",
+                          "properties": {
+                            "missing": {
+                              "type": "string",
+                              "example": "Phone number is required"
+                            },
+                            "invalid": {
+                              "type": "string",
+                              "example": "Invalid phone number format"
+                            }
+                          }
+                        },
+                        "user_role": {
+                          "type": "object",
+                          "properties": {
+                            "missing": {
+                              "type": "string",
+                              "example": "User role is required"
+                            },
+                            "invalid": {
+                              "type": "string",
+                              "example": "Invalid user role, must be 'admin' or 'user'"
+                            }
+                          }
+                        }
+                      }
                     }
-                  },
-                  "example": {
-                    "error": "Invalid request",
-                    "message": "{\n  \"first_name\": \"First name is required\",\n  \"last_name\": \"Last name is required\",\n  \"email\": {\n    \"missing\": \"Email is required\",\n    \"invalid\": \"Invalid email format\"\n  },\n  \"country_code\": \"Country code is required\",\n  \"phone_number\": {\n    \"missing\": \"Phone number is required\",\n    \"invalid\": \"Invalid phone number format\"\n  },\n  \"user_role\": {\n    \"missing\": \"User role is required\",\n    \"invalid\": \"Invalid user role, must be 'admin' or 'user'\"\n  }\n}\n"
                   }
                 }
               }
@@ -136,11 +248,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "token": {
-                    "type": "string",
-                    "description": "The reset token sent to the user for verification",
-                    "example": "valid-reset-token"
-                  },
                   "new_password": {
                     "type": "string",
                     "description": "The new password to be set",
@@ -148,7 +255,7 @@
                   },
                   "user_id": {
                     "type": "string",
-                    "description": "id of user",
+                    "description": "ID of the user",
                     "example": "user_id"
                   }
                 },
@@ -169,9 +276,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Password reset successful"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "string",
+                          "example": "user_id"
+                        }
+                      }
                     }
                   }
                 }
@@ -185,16 +309,40 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid request"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "Reset token is required"
+                        },
+                        "new_password": {
+                          "type": "object",
+                          "properties": {
+                            "missing": {
+                              "type": "string",
+                              "example": "New password is required"
+                            },
+                            "too_short": {
+                              "type": "string",
+                              "example": "Password must be at least 8 characters long"
+                            }
+                          }
+                        }
+                      }
                     }
-                  },
-                  "example": {
-                    "error": "Invalid request",
-                    "message": "{\n  \"token\": \"Reset token is required\",\n  \"new_password\": {\n    \"missing\": \"New password is required\",\n    \"too_short\": \"Password must be at least 8 characters long\"\n  }\n}\n"
                   }
                 }
               }
@@ -207,16 +355,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid token"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "The reset token has expired or is invalid"
                     }
-                  },
-                  "example": {
-                    "error": "Invalid token",
-                    "message": "The reset token has expired or is invalid"
                   }
                 }
               }
@@ -229,16 +383,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Weak password"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Password does not meet security requirements"
                     }
-                  },
-                  "example": {
-                    "error": "Weak password",
-                    "message": "Password does not meet security requirements"
                   }
                 }
               }
@@ -251,16 +411,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No user associated with this token"
                     }
-                  },
-                  "example": {
-                    "error": "User not found",
-                    "message": "No user associated with this token"
                   }
                 }
               }
@@ -273,16 +439,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while resetting the password"
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while resetting the password"
                   }
                 }
               }
@@ -334,37 +506,64 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "message": {
                       "type": "string",
                       "example": "Login successful"
                     },
-                    "first_name": {
-                      "type": "string",
-                      "example": "John"
-                    },
-                    "last_name": {
-                      "type": "string",
-                      "example": "Doe"
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": "johndoe@example.com"
-                    },
-                    "password": {
-                      "type": "string",
-                      "example": "hashedpassword"
-                    },
-                    "country_code": {
-                      "type": "string",
-                      "example": "+1"
-                    },
-                    "phone_number": {
-                      "type": "string",
-                      "example": "1234567890"
-                    },
-                    "user_role": {
-                      "type": "string",
-                      "example": "user"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "string",
+                          "example": "65be12f8a23d1b002c4f7e9a"
+                        },
+                        "first_name": {
+                          "type": "string",
+                          "example": "John"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "example": "Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
+                        },
+                        "country_code": {
+                          "type": "string",
+                          "example": "+1"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "user_role": {
+                          "type": "string",
+                          "example": "user"
+                        },
+                        "access_token": {
+                          "type": "string",
+                          "description": "JWT access token for authentication",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        },
+                        "refresh_token": {
+                          "type": "string",
+                          "description": "JWT refresh token for renewing the access token",
+                          "example": "dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4gZXhhbXBsZQ=="
+                        }
+                      }
                     }
                   }
                 }
@@ -378,16 +577,31 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid request"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "example": "Email is required"
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "Password is required"
+                        }
+                      }
                     }
-                  },
-                  "example": {
-                    "error": "Invalid request",
-                    "message": "{\n  \"email\": \"Email is required\",\n  \"password\": \"Password is required\"\n}\n"
                   }
                 }
               }
@@ -400,16 +614,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid credentials"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Incorrect email or password"
                     }
-                  },
-                  "example": {
-                    "error": "Invalid credentials",
-                    "message": "Incorrect email or password"
                   }
                 }
               }
@@ -422,16 +642,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Account disabled"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "This account has been deactivated. Contact support."
                     }
-                  },
-                  "example": {
-                    "error": "Account disabled",
-                    "message": "This account has been deactivated. Contact support."
                   }
                 }
               }
@@ -444,16 +670,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No user exists with this email"
                     }
-                  },
-                  "example": {
-                    "error": "User not found",
-                    "message": "No user exists with this phone number"
                   }
                 }
               }
@@ -466,16 +698,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred during login"
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred during login"
                   }
                 }
               }
@@ -526,13 +764,40 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "message": {
                       "type": "string",
                       "example": "OTP verified successfully"
                     },
-                    "token": {
-                      "type": "string",
-                      "example": "jwt_token"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "string",
+                          "example": "123"
+                        },
+                        "access_token": {
+                          "type": "string",
+                          "description": "JWT access token for authentication",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        },
+                        "refresh_token": {
+                          "type": "string",
+                          "description": "JWT refresh token for renewing the access token",
+                          "example": "dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4gZXhhbXBsZQ=="
+                        }
+                      }
                     }
                   }
                 }
@@ -546,16 +811,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid OTP"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "The OTP is incorrect or expired"
                     }
-                  },
-                  "example": {
-                    "error": "Invalid OTP",
-                    "message": "The OTP is incorrect or expired"
                   }
                 }
               }
@@ -568,16 +843,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 429
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "OTP verification limit exceeded"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You have exceeded the number of OTP verifications allowed"
                     }
-                  },
-                  "example": {
-                    "error": "OTP verification limit exceeded",
-                    "message": "You have exceeded the number of OTP verifications allowed"
                   }
                 }
               }
@@ -590,16 +875,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while verifying OTP"
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while verifying OTP"
                   }
                 }
               }
@@ -644,18 +939,35 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "message": {
                       "type": "string",
                       "example": "OTP sent successfully"
                     },
-                    "otp_code": {
-                      "type": "string",
-                      "example": "123456"
-                    },
-                    "expiry_time": {
-                      "type": "string",
-                      "format": "date-time",
-                      "example": "2025-01-29T10:00:00Z"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "otp_code": {
+                          "type": "string",
+                          "example": "123456"
+                        },
+                        "expiry_time": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-01-29T10:00:00Z"
+                        }
+                      }
                     }
                   }
                 }
@@ -669,16 +981,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 429
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "OTP resend limit exceeded"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You have exceeded the number of OTP requests within the allowed time frame"
                     }
-                  },
-                  "example": {
-                    "error": "OTP resend limit exceeded",
-                    "message": "You have exceeded the number of OTP requests within the allowed time frame"
                   }
                 }
               }
@@ -691,16 +1013,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while resending OTP"
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while resending OTP"
                   }
                 }
               }
@@ -717,6 +1049,18 @@
         "summary": "Retrieves all users in the system (Admin Only)",
         "description": "Allows an admin to fetch all users in the system.",
         "operationId": "getAllUsers",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication (Admin Only)",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of all users",
@@ -774,16 +1118,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid token"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Admin authentication required. Please provide a valid admin token."
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "Admin authentication required. Please provide a valid admin token."
                   }
                 }
               }
@@ -796,16 +1146,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to access this resource. Ensure you have the required admin permissions."
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to access this resource. Ensure you have the required admin permissions."
                   }
                 }
               }
@@ -818,16 +1174,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No users found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "There are no users in the system."
                     }
-                  },
-                  "example": {
-                    "error": "No users found",
-                    "message": "There are no users in the system"
                   }
                 }
               }
@@ -840,16 +1202,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An unexpected error occurred while processing the request. Please try again later."
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An unexpected error occurred while processing the request. Please try again later."
                   }
                 }
               }
@@ -876,6 +1244,16 @@
               "type": "string",
               "example": "generated_user_id"
             }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
           }
         ],
         "responses": {
@@ -886,37 +1264,50 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "user_id": {
-                      "type": "string",
-                      "example": "generated_user_id"
+                    "status_code": {
+                      "type": "integer",
+                      "example": 200
                     },
-                    "first_name": {
+                    "message": {
                       "type": "string",
-                      "example": "John"
+                      "example": "User details retrieved successfully."
                     },
-                    "last_name": {
-                      "type": "string",
-                      "example": "Doe"
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": "johndoe@example.com"
-                    },
-                    "phone_number": {
-                      "type": "string",
-                      "example": "1234567890"
-                    },
-                    "country_code": {
-                      "type": "string",
-                      "example": "+1"
-                    },
-                    "user_role": {
-                      "type": "string",
-                      "example": "user"
-                    },
-                    "is_active": {
-                      "type": "boolean",
-                      "example": true
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "string",
+                          "example": "generated_user_id"
+                        },
+                        "first_name": {
+                          "type": "string",
+                          "example": "John"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "example": "Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "country_code": {
+                          "type": "string",
+                          "example": "+1"
+                        },
+                        "user_role": {
+                          "type": "string",
+                          "example": "user"
+                        },
+                        "is_active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
                     }
                   }
                 }
@@ -930,16 +1321,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 401
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required. Please provide a valid authentication token."
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "User authentication required. Please provide a valid authentication token."
                   }
                 }
               }
@@ -952,16 +1345,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 403
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to access this resource. Ensure you are authorized to view this user's details."
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to access this resource. Ensure you are authorized to view this user's details."
                   }
                 }
               }
@@ -974,16 +1369,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 404
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No user exists with the given user_id"
                     }
-                  },
-                  "example": {
-                    "error": "User not found",
-                    "message": "No user exists with the given user_id"
                   }
                 }
               }
@@ -996,16 +1393,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 500
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An unexpected error occurred while retrieving user details. Please try again later."
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An unexpected error occurred while retrieving user details. Please try again later."
                   }
                 }
               }
@@ -1029,6 +1428,16 @@
             "schema": {
               "type": "string",
               "example": "generated_user_id"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
             }
           }
         ],
@@ -1084,9 +1493,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
                     "message": {
                       "type": "string",
-                      "example": "User updated successfully"
+                      "example": "User updated successfully."
                     }
                   }
                 }
@@ -1100,38 +1513,58 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 400
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid request"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "object",
+                      "example": {
+                        "first_name": "First name is required",
+                        "last_name": "Last name is required",
+                        "email": {
+                          "missing": "Email is required",
+                          "invalid": "Invalid email format"
+                        },
+                        "country_code": "Country code is required",
+                        "phone_number": {
+                          "missing": "Phone number is required",
+                          "invalid": "Invalid phone number format"
+                        },
+                        "user_role": {
+                          "missing": "User role is required",
+                          "invalid": "Invalid user role, must be 'admin' or 'user'"
+                        }
+                      }
                     }
-                  },
-                  "example": {
-                    "error": "Invalid request",
-                    "message": "{\n  \"first_name\": \"First name is required\",\n  \"last_name\": \"Last name is required\",\n  \"email\": {\n    \"missing\": \"Email is required\",\n    \"invalid\": \"Invalid email format\"\n  },\n  \"country_code\": \"Country code is required\",\n  \"phone_number\": {\n    \"missing\": \"Phone number is required\",\n    \"invalid\": \"Invalid phone number format\"\n  },\n  \"user_role\": {\n    \"missing\": \"User role is required\",\n    \"invalid\": \"Invalid user role, must be 'admin' or 'user'\"\n  }\n}\n"
                   }
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized (Permission denied)",
+            "description": "Unauthorized (Authentication required)",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 401
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You must be authenticated as an admin to update user details."
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "You do not have permission to update this user. Ensure you are authenticated as an admin."
                   }
                 }
               }
@@ -1144,16 +1577,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 403
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to update this user."
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to update this user."
                   }
                 }
               }
@@ -1166,16 +1601,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 404
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No user exists with the given user_id."
                     }
-                  },
-                  "example": {
-                    "error": "User not found",
-                    "message": "No user exists with the given user_id"
                   }
                 }
               }
@@ -1188,16 +1625,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 500
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An unexpected error occurred while updating user details. Please try again later."
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An unexpected error occurred while updating user details. Please try again later."
                   }
                 }
               }
@@ -1234,6 +1673,16 @@
               "type": "string",
               "example": "case_id_example"
             }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication.",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
           }
         ],
         "responses": {
@@ -1244,72 +1693,85 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "case_id": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
                       "type": "string",
-                      "example": "case_id_example"
+                      "example": "Case details retrieved successfully"
                     },
-                    "parent_id": {
-                      "type": "string",
-                      "example": "parent_case_id_example"
-                    },
-                    "client_name": {
-                      "type": "string",
-                      "example": "Client A"
-                    },
-                    "ref_number": {
-                      "type": "string",
-                      "example": "ABC123"
-                    },
-                    "date_of_breach": {
-                      "type": "string",
-                      "format": "date",
-                      "example": "2025-01-01"
-                    },
-                    "case_status": {
-                      "type": "string",
-                      "example": "Open"
-                    },
-                    "parameters": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "example": [
-                        "param1",
-                        "param2"
-                      ]
-                    },
-                    "files": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "example": [
-                        "file1.pdf",
-                        "file2.pdf"
-                      ]
-                    },
-                    "is_deleted": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "created_by": {
-                      "type": "string",
-                      "example": "admin_user"
-                    },
-                    "modified_by": {
-                      "type": "string",
-                      "example": "admin_user"
-                    },
-                    "created_on": {
-                      "type": "string",
-                      "format": "date-time",
-                      "example": "2025-01-01T10:00:00Z"
-                    },
-                    "modified_on": {
-                      "type": "string",
-                      "format": "date-time",
-                      "example": "2025-01-01T10:00:00Z"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "case_id": {
+                          "type": "string",
+                          "example": "case_id_example"
+                        },
+                        "parent_id": {
+                          "type": "string",
+                          "example": "parent_case_id_example"
+                        },
+                        "client_name": {
+                          "type": "string",
+                          "example": "Client A"
+                        },
+                        "ref_number": {
+                          "type": "string",
+                          "example": "ABC123"
+                        },
+                        "date_of_breach": {
+                          "type": "string",
+                          "format": "date",
+                          "example": "2025-01-01"
+                        },
+                        "case_status": {
+                          "type": "string",
+                          "example": "Open"
+                        },
+                        "parameters": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "param1",
+                            "param2"
+                          ]
+                        },
+                        "files": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "file1.pdf",
+                            "file2.pdf"
+                          ]
+                        },
+                        "is_deleted": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "created_by": {
+                          "type": "string",
+                          "example": "admin_user"
+                        },
+                        "modified_by": {
+                          "type": "string",
+                          "example": "admin_user"
+                        },
+                        "created_on": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-01-01T10:00:00Z"
+                        },
+                        "modified_on": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-01-01T10:00:00Z"
+                        }
+                      }
                     }
                   }
                 }
@@ -1323,16 +1785,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 400
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid request"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "The provided user_id or case_id format is incorrect. Please ensure both values are valid strings."
                     }
-                  },
-                  "example": {
-                    "error": "Invalid request",
-                    "message": "The provided user_id or case_id format is incorrect. Please ensure both values are valid strings."
                   }
                 }
               }
@@ -1345,16 +1809,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 401
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required. Please authenticate before accessing this resource."
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "User authentication required. Please authenticate before accessing this resource."
                   }
                 }
               }
@@ -1367,16 +1833,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 403
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to view this case. Ensure you have the correct user permissions."
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to view this case. Ensure you have the correct user permissions."
                   }
                 }
               }
@@ -1389,16 +1857,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 404
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Case not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No case exists with the given case_id. Please verify the case_id."
                     }
-                  },
-                  "example": {
-                    "error": "Case not found",
-                    "message": "No case exists with the given case_id. Please verify the case_id."
                   }
                 }
               }
@@ -1411,16 +1881,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status_code": {
+                      "type": "integer",
+                      "example": 500
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An unexpected error occurred while fetching the case details. Please try again later."
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An unexpected error occurred while fetching the case details. Please try again later."
                   }
                 }
               }
@@ -1467,89 +1939,106 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "case_id": {
-                        "type": "string",
-                        "pattern": "^[a-fA-F0-9]{24}$",
-                        "example": "subcase_id_example"
-                      },
-                      "parent_id": {
-                        "type": "string",
-                        "pattern": "^[a-fA-F0-9]{24}$",
-                        "example": "parent_case_id_example"
-                      },
-                      "client_name": {
-                        "type": "string",
-                        "maxLength": 255,
-                        "example": "Subclient A"
-                      },
-                      "ref_number": {
-                        "type": "string",
-                        "maxLength": 100,
-                        "example": "XYZ987"
-                      },
-                      "date_of_breach": {
-                        "type": "string",
-                        "format": "date",
-                        "example": "2025-01-01"
-                      },
-                      "case_status": {
-                        "type": "string",
-                        "enum": [
-                          "Open",
-                          "Closed",
-                          "Pending"
-                        ],
-                        "example": "Open"
-                      },
-                      "parameters": {
-                        "type": "array",
-                        "items": {
-                          "type": "string",
-                          "maxLength": 255
-                        },
-                        "example": [
-                          "paramA",
-                          "paramB"
-                        ]
-                      },
-                      "files": {
-                        "type": "array",
-                        "items": {
-                          "type": "string",
-                          "format": "uri"
-                        },
-                        "example": [
-                          "fileA.pdf",
-                          "fileB.pdf"
-                        ]
-                      },
-                      "is_deleted": {
-                        "type": "boolean",
-                        "example": false
-                      },
-                      "created_by": {
-                        "type": "string",
-                        "pattern": "^[a-fA-F0-9]{24}$",
-                        "example": "admin_user"
-                      },
-                      "modified_by": {
-                        "type": "string",
-                        "pattern": "^[a-fA-F0-9]{24}$",
-                        "example": "admin_user"
-                      },
-                      "created_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
-                      },
-                      "modified_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
+                  "type": "object",
+                  "properties": {
+                    "success_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Fetched subcases successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "case_id": {
+                            "type": "string",
+                            "pattern": "^[a-fA-F0-9]{24}$",
+                            "example": "subcase_id_example"
+                          },
+                          "parent_id": {
+                            "type": "string",
+                            "pattern": "^[a-fA-F0-9]{24}$",
+                            "example": "parent_case_id_example"
+                          },
+                          "client_name": {
+                            "type": "string",
+                            "maxLength": 255,
+                            "example": "Subclient A"
+                          },
+                          "ref_number": {
+                            "type": "string",
+                            "maxLength": 100,
+                            "example": "XYZ987"
+                          },
+                          "date_of_breach": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-01-01"
+                          },
+                          "case_status": {
+                            "type": "string",
+                            "enum": [
+                              "Open",
+                              "Closed",
+                              "Pending"
+                            ],
+                            "example": "Open"
+                          },
+                          "parameters": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 255
+                            },
+                            "example": [
+                              "paramA",
+                              "paramB"
+                            ]
+                          },
+                          "files": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "example": [
+                              "fileA.pdf",
+                              "fileB.pdf"
+                            ]
+                          },
+                          "is_deleted": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "pattern": "^[a-fA-F0-9]{24}$",
+                            "example": "admin_user"
+                          },
+                          "modified_by": {
+                            "type": "string",
+                            "pattern": "^[a-fA-F0-9]{24}$",
+                            "example": "admin_user"
+                          },
+                          "created_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          },
+                          "modified_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          }
+                        }
                       }
                     }
                   }
@@ -1564,16 +2053,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid request"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "The provided user_id or parent_id format is incorrect. Ensure the IDs are in valid format."
                     }
-                  },
-                  "example": {
-                    "error": "Invalid request",
-                    "message": "The provided user_id or parent_id format is incorrect. Ensure the IDs are in valid format."
                   }
                 }
               }
@@ -1586,16 +2081,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required. Please authenticate to access this resource."
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "User authentication required. Please authenticate to access this resource."
                   }
                 }
               }
@@ -1608,16 +2109,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to view the subcases for this parent case."
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to view the subcases for this parent case."
                   }
                 }
               }
@@ -1630,16 +2137,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Not Found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No subcases exist for the provided parent_case_id."
                     }
-                  },
-                  "example": {
-                    "error": "Not Found",
-                    "message": "No subcases exist for the provided parent_case_id."
                   }
                 }
               }
@@ -1652,16 +2165,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while fetching the subcases. Please try again later."
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while fetching the subcases. Please try again later."
                   }
                 }
               }
@@ -1696,76 +2215,93 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "case_id": {
-                        "type": "string",
-                        "example": "case_id_example"
-                      },
-                      "parent_id": {
-                        "type": "string",
-                        "example": "parent_case_id_example"
-                      },
-                      "client_name": {
-                        "type": "string",
-                        "example": "Client A"
-                      },
-                      "ref_number": {
-                        "type": "string",
-                        "example": "ABC123"
-                      },
-                      "date_of_breach": {
-                        "type": "string",
-                        "format": "date",
-                        "example": "2025-01-01"
-                      },
-                      "case_status": {
-                        "type": "string",
-                        "example": "Open"
-                      },
-                      "parameters": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "example": [
-                          "param1",
-                          "param2"
-                        ]
-                      },
-                      "files": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "example": [
-                          "file1.pdf",
-                          "file2.pdf"
-                        ]
-                      },
-                      "is_deleted": {
-                        "type": "boolean",
-                        "example": false
-                      },
-                      "created_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      },
-                      "modified_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      },
-                      "created_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
-                      },
-                      "modified_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
+                  "type": "object",
+                  "properties": {
+                    "success_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Fetched all cases successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "case_id": {
+                            "type": "string",
+                            "example": "case_id_example"
+                          },
+                          "parent_id": {
+                            "type": "string",
+                            "example": "parent_case_id_example"
+                          },
+                          "client_name": {
+                            "type": "string",
+                            "example": "Client A"
+                          },
+                          "ref_number": {
+                            "type": "string",
+                            "example": "ABC123"
+                          },
+                          "date_of_breach": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-01-01"
+                          },
+                          "case_status": {
+                            "type": "string",
+                            "example": "Open"
+                          },
+                          "parameters": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "example": [
+                              "param1",
+                              "param2"
+                            ]
+                          },
+                          "files": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "example": [
+                              "file1.pdf",
+                              "file2.pdf"
+                            ]
+                          },
+                          "is_deleted": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "example": "admin_user"
+                          },
+                          "modified_by": {
+                            "type": "string",
+                            "example": "admin_user"
+                          },
+                          "created_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          },
+                          "modified_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          }
+                        }
                       }
                     }
                   }
@@ -1780,16 +2316,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 401
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required"
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "User authentication required"
                   }
                 }
               }
@@ -1802,16 +2344,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 403
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to access this resource"
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to access this resource"
                   }
                 }
               }
@@ -1824,16 +2372,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 404
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Not Found"
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No cases found"
                     }
-                  },
-                  "example": {
-                    "error": "No cases found",
-                    "message": "There are no cases in the system"
                   }
                 }
               }
@@ -1945,13 +2499,30 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "success_code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Case uploaded successfully"
                     },
-                    "case_id": {
-                      "type": "string",
-                      "example": "new_case_id"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "case_id": {
+                          "type": "string",
+                          "example": "new_case_id"
+                        }
+                      }
                     }
                   }
                 }
@@ -1965,9 +2536,17 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 400
+                    },
                     "error": {
                       "type": "string",
                       "example": "Invalid request"
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
                     },
                     "message": {
                       "type": "object",
@@ -2015,22 +2594,6 @@
                         }
                       }
                     }
-                  },
-                  "example": {
-                    "error": "Invalid request",
-                    "message": {
-                      "client_name": "Client name is required",
-                      "ref_number": {
-                        "missing": "Reference number is required",
-                        "invalid": "Invalid reference number format"
-                      },
-                      "date_of_breach": "Date of breach is required",
-                      "LOI_type": "LOI type is required",
-                      "instruction_type": "Instruction type is required",
-                      "parameters": "At least one parameter is required",
-                      "files": "At least one file is required",
-                      "created_by": "Created by (User ID) is required"
-                    }
                   }
                 }
               }
@@ -2043,16 +2606,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 401
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required"
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "User authentication required"
                   }
                 }
               }
@@ -2065,16 +2634,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 403
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to upload a case"
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to upload a case"
                   }
                 }
               }
@@ -2087,16 +2662,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "error_code": {
+                      "type": "integer",
+                      "example": 500
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while uploading the case"
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while uploading the case"
                   }
                 }
               }
@@ -2210,6 +2791,14 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "successCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Subcase added successfully"
@@ -2230,6 +2819,14 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "errorCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
                       "type": "string",
                       "example": "Invalid request"
@@ -2286,6 +2883,8 @@
                     }
                   },
                   "example": {
+                    "errorCode": 400,
+                    "method": "POST",
                     "error": "Invalid request",
                     "message": {
                       "case_id": "Invalid case ID format",
@@ -2313,17 +2912,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "errorCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required"
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "User authentication required"
                   }
+                },
+                "example": {
+                  "errorCode": 401,
+                  "method": "POST",
+                  "error": "Unauthorized",
+                  "message": "User authentication required"
                 }
               }
             }
@@ -2335,17 +2946,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "errorCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to create a subcase"
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to create a subcase"
                   }
+                },
+                "example": {
+                  "errorCode": 403,
+                  "method": "POST",
+                  "error": "Forbidden",
+                  "message": "You do not have permission to create a subcase"
                 }
               }
             }
@@ -2357,17 +2980,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "errorCode": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Parent case not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No case exists with the given parent case_id"
                     }
-                  },
-                  "example": {
-                    "error": "Parent case not found",
-                    "message": "No case exists with the given parent case_id"
                   }
+                },
+                "example": {
+                  "errorCode": 404,
+                  "method": "POST",
+                  "error": "Parent case not found",
+                  "message": "No case exists with the given parent case_id"
                 }
               }
             }
@@ -2379,17 +3014,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "errorCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while adding the subcase"
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while adding the subcase"
                   }
+                },
+                "example": {
+                  "errorCode": 500,
+                  "method": "POST",
+                  "error": "Server error",
+                  "message": "An error occurred while adding the subcase"
                 }
               }
             }
@@ -2414,6 +3061,16 @@
             "schema": {
               "type": "string",
               "example": "case_id_example"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "query",
+            "required": true,
+            "description": "The JWT token for user authentication.",
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
             }
           }
         ],
@@ -2482,17 +3139,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "errorCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid case_id"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "The provided case_id is not valid"
                     }
-                  },
-                  "example": {
-                    "error": "Invalid case_id",
-                    "message": "The provided case_id is not valid"
                   }
+                },
+                "example": {
+                  "errorCode": 400,
+                  "method": "GET",
+                  "error": "Invalid case_id",
+                  "message": "The provided case_id is not valid"
                 }
               }
             }
@@ -2504,17 +3173,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "errorCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required"
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "User authentication required"
                   }
+                },
+                "example": {
+                  "errorCode": 401,
+                  "method": "GET",
+                  "error": "Unauthorized",
+                  "message": "User authentication required"
                 }
               }
             }
@@ -2526,17 +3207,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "errorCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to view files for this case"
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to view files for this case"
                   }
+                },
+                "example": {
+                  "errorCode": 403,
+                  "method": "GET",
+                  "error": "Forbidden",
+                  "message": "You do not have permission to view files for this case"
                 }
               }
             }
@@ -2548,17 +3241,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "errorCode": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Case not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No case exists with the given case_id"
                     }
-                  },
-                  "example": {
-                    "error": "Case not found",
-                    "message": "No case exists with the given case_id"
                   }
+                },
+                "example": {
+                  "errorCode": 404,
+                  "method": "GET",
+                  "error": "Case not found",
+                  "message": "No case exists with the given case_id"
                 }
               }
             }
@@ -2570,17 +3275,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "errorCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while retrieving files"
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while retrieving files"
                   }
+                },
+                "example": {
+                  "errorCode": 500,
+                  "method": "GET",
+                  "error": "Server error",
+                  "message": "An error occurred while retrieving files"
                 }
               }
             }
@@ -2613,25 +3330,34 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "file_name": {
+                  "token": {
                     "type": "string",
-                    "example": "document.pdf"
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                   },
-                  "file_size": {
-                    "type": "integer",
-                    "example": 1024
-                  },
-                  "no_of_pages": {
-                    "type": "integer",
-                    "example": 10
-                  },
-                  "files_label": {
-                    "type": "string",
-                    "example": "Confidential Document"
-                  },
-                  "added_by": {
-                    "type": "string",
-                    "example": "admin_user"
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "file_name": {
+                        "type": "string",
+                        "example": "document.pdf"
+                      },
+                      "file_size": {
+                        "type": "integer",
+                        "example": 1024
+                      },
+                      "no_of_pages": {
+                        "type": "integer",
+                        "example": 10
+                      },
+                      "files_label": {
+                        "type": "string",
+                        "example": "Confidential Document"
+                      },
+                      "added_by": {
+                        "type": "string",
+                        "example": "admin_user"
+                      }
+                    }
                   }
                 }
               }
@@ -2666,16 +3392,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid file"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "The provided file is not valid or missing"
                     }
-                  },
-                  "example": {
-                    "error": "Invalid file",
-                    "message": "The provided file is not valid or missing"
                   }
                 }
               }
@@ -2688,16 +3420,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required. Please provide a valid JWT token."
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "User authentication required"
                   }
                 }
               }
@@ -2710,16 +3448,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to upload files to this case."
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to upload files to this case"
                   }
                 }
               }
@@ -2732,16 +3476,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Case not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No case exists with the given case_id."
                     }
-                  },
-                  "example": {
-                    "error": "Case not found",
-                    "message": "No case exists with the given case_id"
                   }
                 }
               }
@@ -2754,16 +3504,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 413
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "File size too large"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "The uploaded file exceeds the allowed size limit."
                     }
-                  },
-                  "example": {
-                    "error": "File size too large",
-                    "message": "The uploaded file exceeds the allowed size limit"
                   }
                 }
               }
@@ -2776,16 +3532,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while uploading the file. Please try again later."
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while uploading the file"
                   }
                 }
               }
@@ -2821,9 +3583,9 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "label": {
+                  "token": {
                     "type": "string",
-                    "example": "Confidential Document"
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                   }
                 }
               }
@@ -2857,22 +3619,28 @@
             }
           },
           "400": {
-            "description": "Bad Request (Invalid label)",
+            "description": "Bad Request (Invalid label or missing token)",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid label or missing token"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Label is required, and token must be valid."
                     }
-                  },
-                  "example": {
-                    "error": "Invalid label",
-                    "message": "Label is required and must be a valid string"
                   }
                 }
               }
@@ -2885,16 +3653,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required. Please provide a valid JWT token."
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "User authentication required"
                   }
                 }
               }
@@ -2907,16 +3681,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to update this file label."
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to update this file label"
                   }
                 }
               }
@@ -2929,16 +3709,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "File not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No file exists with the given file_id."
                     }
-                  },
-                  "example": {
-                    "error": "File not found",
-                    "message": "No file exists with the given file_id"
                   }
                 }
               }
@@ -2951,16 +3737,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while updating the file label. Please try again later."
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while updating the file label"
                   }
                 }
               }
@@ -2977,6 +3769,18 @@
         "summary": "Fetch all Letter of Intent (LOI) types",
         "description": "Retrieves all available LOI types.",
         "operationId": "getAllLoiTypes",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication.",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successfully fetched LOI types",
@@ -3026,16 +3830,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required. Please provide a valid JWT token."
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized",
-                    "message": "User authentication required"
                   }
                 }
               }
@@ -3048,16 +3858,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to access LOI types."
                     }
-                  },
-                  "example": {
-                    "error": "Forbidden",
-                    "message": "You do not have permission to access LOI types"
                   }
                 }
               }
@@ -3070,16 +3886,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No LOI types found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "There are no LOI types in the system."
                     }
-                  },
-                  "example": {
-                    "error": "No LOI types found",
-                    "message": "There are no LOI types in the system"
                   }
                 }
               }
@@ -3092,16 +3914,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while fetching LOI types. Please try again later."
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while fetching LOI types"
                   }
                 }
               }
@@ -3127,6 +3955,16 @@
             "schema": {
               "type": "string",
               "example": "loi_id_example"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication.",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
             }
           }
         ],
@@ -3183,17 +4021,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid LOI ID"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "The provided LOI ID is not in a valid format"
                     }
                   }
-                },
-                "example": {
-                  "error": "Invalid LOI ID",
-                  "message": "The provided LOI ID is not in a valid format"
                 }
               }
             }
@@ -3205,17 +4049,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required. Please provide a valid JWT token."
                     }
                   }
-                },
-                "example": {
-                  "error": "Unauthorized",
-                  "message": "User authentication required"
                 }
               }
             }
@@ -3227,17 +4077,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to access instruction types."
                     }
                   }
-                },
-                "example": {
-                  "error": "Forbidden",
-                  "message": "You do not have permission to access instruction types"
                 }
               }
             }
@@ -3249,17 +4105,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "LOI not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No LOI exists with the given loi_id"
                     }
                   }
-                },
-                "example": {
-                  "error": "LOI not found",
-                  "message": "No LOI exists with the given loi_id"
                 }
               }
             }
@@ -3271,17 +4133,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while fetching instruction types. Please try again later."
                     }
                   }
-                },
-                "example": {
-                  "error": "Server error",
-                  "message": "An error occurred while fetching instruction types"
                 }
               }
             }
@@ -3306,6 +4174,16 @@
             "schema": {
               "type": "string",
               "example": "instruction_id_example"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication.",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
             }
           }
         ],
@@ -3370,17 +4248,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid Instruction ID"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "The provided instruction ID is not in a valid format"
                     }
                   }
-                },
-                "example": {
-                  "error": "Invalid Instruction ID",
-                  "message": "The provided instruction ID is not in a valid format"
                 }
               }
             }
@@ -3392,17 +4276,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Unauthorized"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "User authentication required"
                     }
                   }
-                },
-                "example": {
-                  "error": "Unauthorized",
-                  "message": "User authentication required"
                 }
               }
             }
@@ -3414,17 +4304,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Forbidden"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "You do not have permission to access parameters"
                     }
                   }
-                },
-                "example": {
-                  "error": "Forbidden",
-                  "message": "You do not have permission to access parameters"
                 }
               }
             }
@@ -3436,17 +4332,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Instruction not found"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No instruction exists with the given instruction_id"
                     }
                   }
-                },
-                "example": {
-                  "error": "Instruction not found",
-                  "message": "No instruction exists with the given instruction_id"
                 }
               }
             }
@@ -3458,17 +4360,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while fetching parameters"
                     }
                   }
-                },
-                "example": {
-                  "error": "Server error",
-                  "message": "An error occurred while fetching parameters"
                 }
               }
             }
@@ -3484,6 +4392,26 @@
         "summary": "Logs out the user by invalidating the token",
         "description": "This endpoint allows a user to log out by invalidating their active session token.",
         "operationId": "logoutUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "The JWT token to be invalidated",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  }
+                },
+                "required": [
+                  "token"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Logout successful",
@@ -3492,6 +4420,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "message": {
                       "type": "string",
                       "example": "Logout successful"
@@ -3508,16 +4448,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No active session"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "No user is logged in to log out"
                     }
-                  },
-                  "example": {
-                    "error": "No active session",
-                    "message": "No user is logged in to log out"
                   }
                 }
               }
@@ -3530,16 +4480,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid token"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Token is invalid or expired"
                     }
-                  },
-                  "example": {
-                    "error": "Invalid token",
-                    "message": "Token is invalid or expired"
                   }
                 }
               }
@@ -3552,16 +4512,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
                     "error": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Server error"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "An error occurred while logging out"
                     }
-                  },
-                  "example": {
-                    "error": "Server error",
-                    "message": "An error occurred while logging out"
                   }
                 }
               }
