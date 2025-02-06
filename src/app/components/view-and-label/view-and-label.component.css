@@ -16,10 +16,11 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  width: 80%;
+  width: 90%; /* Adjust width to be more flexible on small screens */
   max-width: 600px;
-  overflow: scroll;
+  overflow: auto;
   height: 29rem;
+  box-sizing: border-box;
 }
 
 .view-and-label__title {
@@ -39,6 +40,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  flex-wrap: wrap; /* Make items responsive */
 }
 
 .view-and-label__file-item-icon {
@@ -48,6 +50,7 @@
 
 .view-and-label__file-item-name {
   flex-grow: 1;
+  word-break: break-word; /* Ensures long file names wrap */
 }
 
 .view-and-label__file-item-label-input {
@@ -55,8 +58,10 @@
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 18rem;
+  width: 100%; /* Ensure input takes full width */
+  max-width: 18rem; /* Limit max width */
   height: 2.5rem;
+  box-sizing: border-box;
 }
 
 .view-and-label__file-item-label-input::placeholder {
@@ -69,16 +74,74 @@
   height: 3rem;
   border-style: solid;
   border-radius: 30px;
-  width: 11rem;
+  width: 100%; /* Make the button full width */
+  max-width: 11rem; /* Limit the button width */
   color: white;
   background-color: #012447;
   font-size: 1.1rem;
   cursor: pointer;
-  margin-left: calc(50% - 5rem);
+  margin-left: auto;
+  margin-right: auto;
   display: block;
   text-align: center;
 }
 
 .view-and-label__button:hover {
   background-color: #0056b3;
+}
+
+
+@media (max-width: 768px) {
+  .view-and-label__content {
+    height: auto; /* Allow content to adjust based on height */
+    width: 90%; /* Make it more flexible for smaller screens */
+  }
+
+  .view-and-label__title {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .view-and-label__file-item-name {
+    margin-bottom: 0.6rem;
+    /* padding-bottom: 0.4rem 0; */
+  }
+  .view-and-label__file-item-icon {
+    /* visibility: hidden; */
+    display: none;
+    font-size: 1.5rem;
+  }
+
+  .view-and-label__file-item-label-input {
+    width: 100%; /* Full width for small screens */
+    max-width: none; /* Remove max-width on smaller screens */
+    margin-left: 0;
+  }
+
+  .view-and-label__button {
+    width: 100%; /* Full width button on small screens */
+    max-width: none; /* Remove max-width */
+  }
+}
+
+@media (max-width: 480px) {
+  .view-and-label__content {
+    width: 95%; /* Take up more space on very small screens */
+  }
+
+  .view-and-label__title {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .view-and-label__file-item {
+    flex-direction: column; /* Stack file item components vertically */
+  }
+
+  .view-and-label__file-item-icon {
+    margin-bottom: 5px; /* Space for stacked items */
+  }
+
+  .view-and-label__file-item-name {
+    margin-bottom: 5px;
+  }
 }

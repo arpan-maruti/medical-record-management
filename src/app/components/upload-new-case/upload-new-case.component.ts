@@ -105,12 +105,14 @@ export class UploadNewCaseComponent implements OnInit {
 
   // Toggle the selection of a parameter
   toggleSelection(paramId: string): void {
+    console.log("hey");
     this.selectedParameters[paramId] = !this.selectedParameters[paramId];
     if (Object.values(this.selectedParameters).includes(true)) {
       // If at least one parameter is selected, clear the error message
       this.parametersError = null;
     }
   }
+
 
   submitForm(): void {
     this.isSubmitted = true;
