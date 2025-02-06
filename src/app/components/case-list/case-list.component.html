@@ -47,7 +47,7 @@
       </thead>
       <tbody>
         <ng-container *ngFor="let caseItem of filteredData">
-          <tr (click)="toggleSubCases(caseItem)" class="clickable-row main-case">
+          <tr (click)="toggleSubCases(caseItem)" class="clickable-row main-case" [ngClass]="{ 'expanded-row': caseItem.expanded }">
             <td>
               <span *ngIf="caseItem.expanded; else downArrow">
                 <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="#4A6F81">

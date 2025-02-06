@@ -13,6 +13,10 @@
  width: 100%;
 }
 
+.expanded-row {
+  background-color: #d1d2d2 !important; /* Light blue background */
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
