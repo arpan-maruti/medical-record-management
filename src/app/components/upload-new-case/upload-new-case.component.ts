@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../../services/data.service';
+import axios from 'axios';
 
 @Component({
   selector: 'app-upload-new-case',
@@ -28,12 +29,29 @@ export class UploadNewCaseComponent implements OnInit {
   parametersError: string | null = null;
   constructor(private dataService: DataService) {}
 
-  ngOnInit() {
-    this.loiTypes = this.dataService.getLoiTypes();
-    if (this.loiTypes && this.loiTypes.length > 0) {
-      this.selectedLoi = this.loiTypes[0]._id;
-      this.onLoiChange();
-    }
+  ngOnInit(): void {
+    this.fetchLoiTypes();
+  }
+
+  // Fetch loiTypes from the API
+  fetchLoiTypes(): void {
+    axios.get('http://localhost:5000/loiType')
+      .then(response => {
+        // Store loiTypes data (assuming you want to store only loi_msg)
+        this.loiTypes = response.data.map((item: any) => ({
+          _id: item._id,
+          loi_msg: item.loi_msg
+        }));
+
+        // Set the first loiType as selected
+        if (this.loiTypes && this.loiTypes.length > 0) {
+          this.selectedLoi = this.loiTypes[0]._id;
+          this.onLoiChange();
+        }
+      })
+      .catch(error => {
+        console.error('There was an error fetching loiTypes:', error);
+      });
   }
 
   onInputChange() {
@@ -42,32 +60,43 @@ export class UploadNewCaseComponent implements OnInit {
     this.dateError = null;
   }
 
-  onLoiChange() {
-    // Fetch instructions based on the selected LOI ID
-    this.instructionTypes = this.dataService.getInstructionTypesByLoiId(
-      this.selectedLoi
-    );
+  onLoiChange(): void {
+    axios.get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`)
+      .then(response => {
+        this.instructionTypes = response.data;
 
-    // Reset selected instruction when LOI changes
-    this.selectedInstruction =
-      this.instructionTypes.length > 0 ? this.instructionTypes[0]._id : '';
+        // Reset selected instruction when LOI changes
+        this.selectedInstruction = this.instructionTypes.length > 0 ? this.instructionTypes[0]._id : '';
 
-    // Fetch parameters when LOI changes (only if an instruction is selected)
-    if (this.selectedInstruction) {
-      this.onInstructionChange();
-    }
+        // Fetch parameters when an instruction is selected
+        if (this.selectedInstruction) {
+          this.onInstructionChange();  // Call this method if needed
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching instructions:', error);
+      });
   }
 
-  onInstructionChange() {
-    console.log(this.selectedInstruction);
-    this.parameters = this.dataService.getParametersByInstructionId(
-      this.selectedInstruction
-    );
-
-    this.parameters.forEach((param) => {
-      param.selected = false;
-    });
-
+  onInstructionChange(): void {
+    console.log('Selected Instruction:', this.selectedInstruction);
+  
+    // Make API call to fetch parameters based on the selected instruction
+    axios.get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`)
+      .then(response => {
+        // Store parameters in the component
+        this.parameters = response.data;
+  
+        // Add 'selected' field to each parameter and set it to false
+        this.parameters.forEach(param => {
+          param.selected = false;
+        });
+  
+        console.log('Fetched Parameters:', this.parameters);
+      })
+      .catch(error => {
+        console.error('Error fetching parameters:', error);
+      });
   }
 
   isSelected(paramId: string): boolean {

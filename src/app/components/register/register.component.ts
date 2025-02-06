@@ -158,7 +158,7 @@ export class RegisterComponent {
   
       try {
         // Send POST request using axios
-        const response = await axios.post('http://localhost:5000/api/users', registrationData, {
+        const response = await axios.post('http://localhost:5000/user/register', registrationData, {
           headers: {
             'Content-Type': 'application/json',
           },
