@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { CustomAlertComponent } from '../custom-alert/custom-alert.component';
 
 @Component({
   selector: 'app-otp',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, CustomAlertComponent],
   templateUrl: './otp.component.html',
   styleUrls: ['./otp.component.css'],
 })
@@ -19,6 +20,7 @@ export class OtpComponent {
   resendVisible: boolean = false;
   timer: number = 30; // Countdown timer in seconds
 
+  @ViewChild('customAlert') customAlert!: CustomAlertComponent;
   constructor(private router: Router) {}
 
   login(): void {
@@ -72,6 +74,17 @@ export class OtpComponent {
    */
   resendOtp(): void {
     console.log('Resending OTP...');
+    this.customAlert.show(
+      'Resend OTP Successful',
+      'Resend OTP',
+      'OK'
+    );
     this.startResendTimer(); // Restart the timer
+
   }
+
+  onCustomAlertConfirm() {
+    console.log('Alert confirmed');
+  }
+
 }

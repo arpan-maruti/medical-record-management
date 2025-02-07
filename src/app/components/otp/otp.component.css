@@ -167,16 +167,20 @@ html {
 
 /* Resend Link */
 .otp__resend {
-  display: inline;
-  margin-right: -15rem;
-  font-size: 0.9rem;
-  color: #3b3b3b;
-  text-decoration: underline;
+  
+  color: #888;
+  border: none;
+  padding: 10px;
+  cursor: not-allowed;
+  margin-right: -14rem;
 }
 
-.otp__resend:hover {
-  text-decoration: underline;
+.otp__resend:enabled {
+  color: #888;
+  cursor: pointer;
 }
+
+
 
 /* Responsive Styles */
 @media (max-width: 1024px) {

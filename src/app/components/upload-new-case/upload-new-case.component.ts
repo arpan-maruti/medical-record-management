@@ -14,16 +14,20 @@ export class UploadNewCaseComponent implements OnInit {
   clientName: string = '';
   caseReference: string | undefined;
   dateOfBranch: string | undefined;
-  loiTypes: any[] = []; // To hold the LOI Types fetched from DataService
-  selectedLoi: string = ''; // To store the selected LOI ID
-  instructionTypes: any[] = [];
-  selectedInstruction: string = ''; // To store the selected Instruction ID
-  parameters: any[] = []; // To store the fetched parameters based on selected instruction
+  loiTypes: any[] = []; // Holds the LOI Types
+  selectedLoi: string = ''; // Initially empty
+  instructionTypes: any[] = []; // Holds Instruction Types
+  selectedInstruction: string = ''; // Initially empty
+  parameters: any[] = []; // Holds Parameters
   selectedParameters: { [key: string]: boolean } = {};
+  
+  // Validation errors
   isSubmitted: boolean = false;
   clientNameError: string | null = null;
   caseReferenceError: string | null = null;
   dateError: string | null = null;
+  loiError: string | null = null;
+  instructionError: string | null = null;
   parametersError: string | null = null;
   constructor(private dataService: DataService) {}
   ngOnInit(): void {
@@ -40,7 +44,7 @@ export class UploadNewCaseComponent implements OnInit {
         }));
         // Set the first loiType as selected
         if (this.loiTypes && this.loiTypes.length > 0) {
-          this.selectedLoi = this.loiTypes[0]._id;
+        
           this.onLoiChange();
         }
       })
@@ -52,36 +56,34 @@ export class UploadNewCaseComponent implements OnInit {
     this.clientNameError = null;
     this.caseReferenceError = null;
     this.dateError = null;
+    this.loiError=null;
+    this.instructionError=null;
+    this.parametersError=null;
   }
   onLoiChange(): void {
+    if (!this.selectedLoi) {
+      this.instructionTypes = []; // Reset instruction types if no LOI is selected
+      this.selectedInstruction = ''; // Clear selected instruction
+      return;
+    }
+    
     axios.get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`)
       .then(response => {
-        console.log(response.data);
         this.instructionTypes = response.data.data;
-        // Reset selected instruction when LOI changes
-        this.selectedInstruction = this.instructionTypes.length > 0 ? this.instructionTypes[0]._id : '';
-        console.log(this.selectedInstruction);
-        // Fetch parameters when an instruction is selected
-        if (this.selectedInstruction) {
-          this.onInstructionChange();  // Call this method if needed
-        }
       })
       .catch(error => {
-        console.error('Error fetching instructions:', error);
+        console.error('Error fetching Instruction Types:', error);
       });
   }
   onInstructionChange(): void {
-    console.log('Selected Instruction:', this.selectedInstruction);
-    // Make API call to fetch parameters based on the selected instruction
+    if (!this.selectedInstruction) {
+      this.parameters = []; // Reset parameters if no instruction is selected
+      return;
+    }
+
     axios.get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`)
       .then(response => {
-        // Store parameters in the component
         this.parameters = response.data.data;
-        // Add 'selected' field to each parameter and set it to false
-        this.parameters.forEach(param => {
-          param.selected = false;
-        });
-        console.log('Fetched Parameters:', this.parameters);
       })
       .catch(error => {
         console.error('Error fetching parameters:', error);
@@ -100,6 +102,13 @@ export class UploadNewCaseComponent implements OnInit {
   }
   submitForm(): void {
     this.isSubmitted = true;
+    this.clientNameError = null;
+    this.caseReferenceError = null;
+    this.dateError = null;
+    this.loiError = null;
+    this.instructionError = null;
+    this.parametersError = null;
+
     // Validate client name
     if (!this.clientName) {
       this.clientNameError = 'Client Name is required.';
@@ -110,21 +119,38 @@ export class UploadNewCaseComponent implements OnInit {
     ) {
       this.clientNameError = 'Invalid input. Please enter a valid client name.';
     }
-    // Validate case reference(todo: : "This case reference number already exists. Please enter a unique reference number." )
+
+    // Validate case reference
     if (!this.caseReference) {
       this.caseReferenceError = 'Case Reference Number is required.';
     }
-    if (this.dateOfBranch == undefined) {
+
+    // Validate date of breach
+    if (!this.dateOfBranch) {
       this.dateError = 'Date is required.';
-      console.log('Date:', this.dateOfBranch);
-    } else if(!this.dateOfBranch.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    } else if (!this.dateOfBranch.match(/^\d{4}-\d{2}-\d{2}$/)) {
       this.dateError = 'Invalid date format. Please enter a valid date.';
     }
-    // Validate parameters
-    if (Object.keys(this.selectedParameters).length === 0 || !Object.values(this.selectedParameters).includes(true)) {
+
+    // Validate LOI Type
+    if (!this.selectedLoi) {
+      this.loiError = 'LOI Type is required.';
+    }
+
+    // Validate Instruction Type
+    if (!this.selectedInstruction) {
+      this.instructionError = 'Instruction Type is required.';
+    }
+
+    // Validate Parameters
+    if (Object.keys(this.selectedParameters).length === 0 || 
+        !Object.values(this.selectedParameters).includes(true)) {
       this.parametersError = 'At least one parameter should be selected.';
     }
-    if (!this.clientNameError && !this.caseReferenceError && !this.dateError && !this.parametersError) {
+
+    // If no errors, proceed with form submission
+    if (!this.clientNameError && !this.caseReferenceError && !this.dateError && 
+        !this.loiError && !this.instructionError && !this.parametersError) {
       const formData = {
         parent_id: 'case1',
         client_name: this.clientName,

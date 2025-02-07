@@ -48,15 +48,20 @@
         <div class="form-group">
           <label for="loi-type">What type of LOI?</label>
           <select
+           (input)="onInputChange()"
             id="loi-type"
             [(ngModel)]="selectedLoi"
             [ngModelOptions]="{ standalone: true }"
             (ngModelChange)="onLoiChange()"
           >
+            <option value="" disabled selected>Select LOI Type</option>
             <option *ngFor="let loi of loiTypes" [value]="loi._id">
               {{ loi.loi_msg }}
             </option>
           </select>
+          <div *ngIf="isSubmitted && loiError" class="error-message">
+            {{ loiError }}
+          </div>
         </div>
 
         <!-- Date of Branch / Liability -->
@@ -78,21 +83,23 @@
       </div>
 
       <!-- Instruction Type -->
-      <div class="form-group-instruction-type">
+      <div class="form-group">
         <label for="instruction-type">Instruction Type (DDP)</label>
         <select
           id="instruction-type"
+          (input)="onInputChange()"
           [(ngModel)]="selectedInstruction"
           [ngModelOptions]="{ standalone: true }"
           (ngModelChange)="onInstructionChange()"
         >
-          <option
-            *ngFor="let instruction of instructionTypes"
-            [value]="instruction._id"
-          >
+          <option value="" disabled selected>Select Instruction Type</option>
+          <option *ngFor="let instruction of instructionTypes" [value]="instruction._id">
             {{ instruction.instruction_msg }}
           </option>
         </select>
+        <div *ngIf="isSubmitted && instructionError" class="error-message">
+          {{ instructionError }}
+        </div>
       </div>
     </form>
 
@@ -105,10 +112,10 @@
       <h3 class="upload-new-case__form-title">SELECT THE PARAMETERS</h3>
       <div class="form-group" *ngIf="parameters.length > 0">
         <ul class="parameter-list">
-          <li *ngFor="let param of parameters">
+          <li *ngFor="let param of parameters" (click)="toggleSelection(param._id)">
             <div
               class="checkbox-container"
-              (click)="toggleSelection(param._id)"
+              
             >
               <svg
                 *ngIf="!isSelected(param._id)"

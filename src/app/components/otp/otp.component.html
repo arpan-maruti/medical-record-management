@@ -8,7 +8,6 @@
   <div class="otp__form">
     <div class="otp__content">
       <div class="otp__heading">MediScan - AI Tool</div>
-      <div class="otp__subheading">Verify the OTP</div>
 
       <div class="otp__input">
         <div class="otp__title">Enter OTP</div>
@@ -48,19 +47,27 @@
 
       <div class="otp__buttons">
         <button class="otp__login" (click)="login()">Back to Login</button>
-        <button class="otp__verify" (click)="verifyOtp(otpInput)">Verify OTP</button>
+        <button class="otp__verify" (click)="verifyOtp(otpInput)">
+          Verify OTP
+        </button>
       </div>
 
       <!-- Resend OTP Section -->
       <div class="otp__resend-section">
-        <button 
+        <button
           class="otp__resend"
           [disabled]="!resendVisible"
           (click)="resendOtp()"
         >
-          Resend OTP
+          <span *ngIf="timer > 0">Resend OTP ({{ timer }})</span>
+          <span *ngIf="timer === 0">Resend OTP</span>
         </button>
-        <p *ngIf="!resendVisible" class="otp__timer">Resend available in {{ timer }}s</p>
       </div>
+    </div>
+
+    <app-custom-alert
+      #customAlert
+      (confirm)="onCustomAlertConfirm()"
+    ></app-custom-alert>
   </div>
 </div>
