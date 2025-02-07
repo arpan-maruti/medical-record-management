@@ -15,7 +15,7 @@ import validator from 'validator'; // Import validator
 export class LoginComponent {
   email: string = '';
   password: string = '';
-  generalError: string = ''; // Combined error message
+  generalError: string = '';
   formSubmitted: boolean = false;
   isPasswordVisible: boolean = false;
 
@@ -25,39 +25,23 @@ export class LoginComponent {
 
   onLogin() {
     this.formSubmitted = true;
-
-    // Validate the fields
     this.validateInputs();
-
-    // If there's any error, don't proceed with login
     if (this.generalError) {
       return;
     }
-
-    // Proceed to the next page (OTP)
     this.router.navigate(['/otp']);
   }
 
   validateInputs() {
-    // Reset the general error message before validating
     this.generalError = '';
-
-    // Check if email and password are both entered
     if (!this.email || !this.password) {
       this.generalError = 'Please enter both email and password.';
-      return; // Exit early if one of them is missing
+      return;
     }
 
-    // Validate if the email is invalid
-    if (!this.isValidEmail(this.email)) {
+    if (!this.isValidEmail(this.email) || !this.isValidPassword(this.password)) {
       this.generalError = 'Invalid email or password.';
-      return; // Exit early if email is invalid
-    }
-
-    // Validate if the password is invalid
-    if (!this.isValidPassword(this.password)) {
-      this.generalError = 'Invalid email or password.';
-      return; // Exit early if password is invalid
+      return;
     }
   }
 
@@ -84,13 +68,12 @@ export class LoginComponent {
   }
 
   isValidPassword(password: string): boolean {
-    if (!validator.isLength(password, { min: 6 })) {
-      return false;
-    }
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasNumber = /\d/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    return hasUpperCase && hasNumber && hasSpecialChar;
+    return (
+      validator.isLength(password, { min: 6 }) &&
+      /[A-Z]/.test(password) &&
+      /\d/.test(password) &&
+      /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    );
   }
 }
 
