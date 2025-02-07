@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Medical Record Management API",
-    "description": "API for managing medical records, user registration, user authentication, and OTP verification.",
+    "description": "Case Management System is a web-based application designed to streamline the process of managing legal and compliance cases efficiently. Built using Angular for the frontend and MongoDB for data storage, the system enables secure user authentication with OTP verification  and JWT-based session management. The platform allows admins to register users, upload case files with drag-and-drop functionality, and manage cases, subcases, and associated parameters. It supports role-based access control, ensuring that only authorized users can perform specific actions. The system also provides a responsive dashboard optimized for multiple screen sizes.",
     "version": "1.0.0"
   },
   "paths": {
@@ -14,6 +14,18 @@
         "summary": "Registers a new user (Admin only)",
         "description": "Allows an admin to register a new user with details like name, email, and role.",
         "operationId": "registerUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -23,33 +35,41 @@
                 "properties": {
                   "first_name": {
                     "type": "string",
-                    "description": "The first name of the user",
+                    "description": "The first name of the user (only alphabets allowed, max length 50)",
+                    "pattern": "^[A-Za-z]+$",
+                    "maxLength": 50,
                     "example": "John"
                   },
                   "last_name": {
                     "type": "string",
-                    "description": "The last name of the user",
+                    "description": "The last name of the user (only alphabets allowed, max length 50)",
+                    "pattern": "^[A-Za-z]+$",
+                    "maxLength": 50,
                     "example": "Doe"
                   },
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "description": "The email of the user",
+                    "description": "The email of the user (must be a valid email format)",
+                    "maxLength": 100,
                     "example": "johndoe@example.com"
                   },
                   "password": {
                     "type": "string",
-                    "description": "The password",
-                    "example": "plaintext"
+                    "description": "The password must be at least 8 characters long and contain at least:\n- 1 uppercase letter (A-Z)\n- 1 lowercase letter (a-z)\n- 1 digit (0-9)\n- 1 special character (!@#$%^&*)\n",
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,}$",
+                    "example": "StrongP@ss123"
                   },
                   "country_code": {
                     "type": "string",
-                    "description": "The country code of the phone number (e.g., +1)",
+                    "description": "The country code of the phone number (e.g., +1, +91)",
+                    "pattern": "^\\+[1-9]{1,3}$",
                     "example": "+1"
                   },
                   "phone_number": {
                     "type": "string",
-                    "description": "The phone number of the user",
+                    "description": "The phone number of the user (only digits, 7-15 characters)",
+                    "pattern": "^\\d{7,15}$",
                     "example": "1234567890"
                   },
                   "user_role": {
@@ -58,7 +78,7 @@
                       "admin",
                       "user"
                     ],
-                    "description": "The role of the user (admin or user)",
+                    "description": "The role of the user (only 'admin' or 'user' allowed)",
                     "example": "user"
                   }
                 },
@@ -161,11 +181,11 @@
                       "properties": {
                         "first_name": {
                           "type": "string",
-                          "example": "First name is required"
+                          "example": "First name is required and should only contain alphabets"
                         },
                         "last_name": {
                           "type": "string",
-                          "example": "Last name is required"
+                          "example": "Last name is required and should only contain alphabets"
                         },
                         "email": {
                           "type": "object",
@@ -189,13 +209,22 @@
                             },
                             "invalid": {
                               "type": "string",
-                              "example": "Password must be at least 8 characters long"
+                              "example": "Password must contain at least one uppercase, one lowercase, one number, and one special character"
                             }
                           }
                         },
                         "country_code": {
-                          "type": "string",
-                          "example": "Country code is required"
+                          "type": "object",
+                          "properties": {
+                            "missing": {
+                              "type": "string",
+                              "example": "Country code is required"
+                            },
+                            "invalid": {
+                              "type": "string",
+                              "example": "Invalid country code format"
+                            }
+                          }
                         },
                         "phone_number": {
                           "type": "object",
@@ -206,7 +235,7 @@
                             },
                             "invalid": {
                               "type": "string",
-                              "example": "Invalid phone number format"
+                              "example": "Phone number must be between 7 to 15 digits"
                             }
                           }
                         },
@@ -229,18 +258,114 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized (User authentication required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User authentication required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (Permission denied)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Forbidden"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permission to register a user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Error registering user)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Server error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred while registering the user"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/user/password/reset-request": {
-      "post": {
+      "patch": {
         "tags": [
           "Login, Logout, Register"
         ],
         "summary": "Allows the user to reset their password using a token",
         "description": "This endpoint allows a user to reset their password by providing a valid token and a new password.",
         "operationId": "resetPassword",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1041,7 +1166,7 @@
         }
       }
     },
-    "/users": {
+    "/user": {
       "get": {
         "tags": [
           "Case Management"
@@ -1069,39 +1194,56 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "users": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "user_id": {
-                            "type": "string",
-                            "example": "1"
-                          },
-                          "first_name": {
-                            "type": "string",
-                            "example": "John"
-                          },
-                          "last_name": {
-                            "type": "string",
-                            "example": "Doe"
-                          },
-                          "email": {
-                            "type": "string",
-                            "example": "johndoe@example.com"
-                          },
-                          "user_role": {
-                            "type": "string",
-                            "example": "admin"
-                          },
-                          "is_active": {
-                            "type": "boolean",
-                            "example": true
-                          },
-                          "created_on": {
-                            "type": "string",
-                            "format": "date-time",
-                            "example": "2025-01-01T10:00:00Z"
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Users retrieved successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "user_id": {
+                                "type": "string",
+                                "example": "1"
+                              },
+                              "first_name": {
+                                "type": "string",
+                                "example": "John"
+                              },
+                              "last_name": {
+                                "type": "string",
+                                "example": "Doe"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "johndoe@example.com"
+                              },
+                              "user_role": {
+                                "type": "string",
+                                "example": "admin"
+                              },
+                              "is_active": {
+                                "type": "boolean",
+                                "example": true
+                              },
+                              "created_on": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-01-01T10:00:00Z"
+                              }
+                            }
                           }
                         }
                       }
@@ -1226,7 +1368,7 @@
         }
       }
     },
-    "/users/{user_id}": {
+    "/user/{user_id}": {
       "get": {
         "tags": [
           "Case Management"
@@ -1264,7 +1406,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 200
                     },
@@ -1321,7 +1467,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 401
                     },
@@ -1345,7 +1495,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 403
                     },
@@ -1369,7 +1523,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 404
                     },
@@ -1393,7 +1551,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 500
                     },
@@ -1487,19 +1649,60 @@
         },
         "responses": {
           "200": {
-            "description": "User updated successfully",
+            "description": "User details retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 200
                     },
                     "message": {
                       "type": "string",
-                      "example": "User updated successfully."
+                      "example": "User details Updated successfully."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "string",
+                          "example": "generated_user_id"
+                        },
+                        "first_name": {
+                          "type": "string",
+                          "example": "John"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "example": "Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "country_code": {
+                          "type": "string",
+                          "example": "+1"
+                        },
+                        "user_role": {
+                          "type": "string",
+                          "example": "user"
+                        },
+                        "is_active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
                     }
                   }
                 }
@@ -1513,7 +1716,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 400
                     },
@@ -1553,7 +1760,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 401
                     },
@@ -1577,7 +1788,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 403
                     },
@@ -1601,7 +1816,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 404
                     },
@@ -1625,7 +1844,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "PATCH"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 500
                     },
@@ -1645,7 +1868,7 @@
         }
       }
     },
-    "/users/{user_id}/cases/{case_id}": {
+    "/user/{user_id}/cases/{case_id}": {
       "get": {
         "tags": [
           "Case Management"
@@ -1693,7 +1916,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 200
                     },
@@ -1785,7 +2012,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 400
                     },
@@ -1809,7 +2040,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 401
                     },
@@ -1833,7 +2068,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 403
                     },
@@ -1857,7 +2096,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 404
                     },
@@ -1881,7 +2124,11 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status_code": {
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "statusCode": {
                       "type": "integer",
                       "example": 500
                     },
@@ -1901,7 +2148,7 @@
         }
       }
     },
-    "/users/{user_id}/cases/{parent_id}/subcases": {
+    "/user/{user_id}/cases/{parent_id}/subcases": {
       "get": {
         "tags": [
           "Case Management"
@@ -1931,6 +2178,16 @@
               "pattern": "^[a-fA-F0-9]{24}$",
               "example": "60d5f48722e7bfcf8b349a45"
             }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
           }
         ],
         "responses": {
@@ -1941,7 +2198,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success_code": {
+                    "statusCode": {
                       "type": "integer",
                       "example": 200
                     },
@@ -2189,7 +2446,7 @@
         }
       }
     },
-    "/users/{user_id}/cases": {
+    "/user/{user_id}/cases": {
       "get": {
         "tags": [
           "Case Management"
@@ -2207,6 +2464,16 @@
               "type": "string",
               "example": "user_id_example"
             }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
           }
         ],
         "responses": {
@@ -2217,7 +2484,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success_code": {
+                    "statusCode": {
                       "type": "integer",
                       "example": 200
                     },
@@ -2413,6 +2680,16 @@
               "pattern": "^[a-fA-F0-9]{24}$",
               "example": "60d5f48722e7bfcf8b349a44"
             }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
           }
         ],
         "requestBody": {
@@ -2499,7 +2776,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success_code": {
+                    "statusCode": {
                       "type": "integer",
                       "example": 200
                     },
@@ -2705,6 +2982,16 @@
               "pattern": "^[a-fA-F0-9]{24}$",
               "example": "60d5f48722e7bfcf8b349a44"
             }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
           }
         ],
         "requestBody": {
@@ -2791,7 +3078,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "successCode": {
+                    "statusCode": {
                       "type": "integer",
                       "example": 200
                     },
@@ -3080,51 +3367,68 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "file_id": {
-                        "type": "string",
-                        "example": "file_id_example"
-                      },
-                      "file_name": {
-                        "type": "string",
-                        "example": "document.pdf"
-                      },
-                      "file_size": {
-                        "type": "integer",
-                        "example": 1024
-                      },
-                      "no_of_pages": {
-                        "type": "integer",
-                        "example": 10
-                      },
-                      "files_label": {
-                        "type": "string",
-                        "example": "Confidential Document"
-                      },
-                      "is_deleted": {
-                        "type": "boolean",
-                        "example": false
-                      },
-                      "added_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      },
-                      "modified_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      },
-                      "added_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
-                      },
-                      "modified_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Files retrieved successfully."
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "file_id": {
+                            "type": "string",
+                            "example": "file_id_example"
+                          },
+                          "file_name": {
+                            "type": "string",
+                            "example": "document.pdf"
+                          },
+                          "file_size": {
+                            "type": "integer",
+                            "example": 1024
+                          },
+                          "no_of_pages": {
+                            "type": "integer",
+                            "example": 10
+                          },
+                          "files_label": {
+                            "type": "string",
+                            "example": "Confidential Document"
+                          },
+                          "is_deleted": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "added_by": {
+                            "type": "string",
+                            "example": "admin_user"
+                          },
+                          "modified_by": {
+                            "type": "string",
+                            "example": "admin_user"
+                          },
+                          "added_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          },
+                          "modified_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          }
+                        }
                       }
                     }
                   }
@@ -3321,6 +3625,16 @@
               "type": "string",
               "example": "case_id_example"
             }
+          },
+          {
+            "name": "Authorization",
+            "in": "query",
+            "required": true,
+            "description": "The JWT token for user authentication.",
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
           }
         ],
         "requestBody": {
@@ -3330,34 +3644,25 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "token": {
+                  "file_name": {
                     "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    "example": "document.pdf"
                   },
-                  "data": {
-                    "type": "object",
-                    "properties": {
-                      "file_name": {
-                        "type": "string",
-                        "example": "document.pdf"
-                      },
-                      "file_size": {
-                        "type": "integer",
-                        "example": 1024
-                      },
-                      "no_of_pages": {
-                        "type": "integer",
-                        "example": 10
-                      },
-                      "files_label": {
-                        "type": "string",
-                        "example": "Confidential Document"
-                      },
-                      "added_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      }
-                    }
+                  "file_size": {
+                    "type": "integer",
+                    "example": 1024
+                  },
+                  "no_of_pages": {
+                    "type": "integer",
+                    "example": 10
+                  },
+                  "files_label": {
+                    "type": "string",
+                    "example": "Confidential Document"
+                  },
+                  "added_by": {
+                    "type": "string",
+                    "example": "admin_user"
                   }
                 }
               }
@@ -3372,13 +3677,46 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "POST"
+                    },
                     "message": {
                       "type": "string",
                       "example": "File uploaded successfully"
                     },
-                    "file_id": {
-                      "type": "string",
-                      "example": "file_id_example"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "file_id": {
+                          "type": "string",
+                          "example": "file_id_example"
+                        },
+                        "file_name": {
+                          "type": "string",
+                          "example": "document.pdf"
+                        },
+                        "file_size": {
+                          "type": "integer",
+                          "example": 1024
+                        },
+                        "no_of_pages": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "files_label": {
+                          "type": "string",
+                          "example": "Confidential Document"
+                        },
+                        "added_by": {
+                          "type": "string",
+                          "example": "admin_user"
+                        }
+                      }
                     }
                   }
                 }
@@ -3574,24 +3912,18 @@
               "type": "string",
               "example": "file_id_example"
             }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "token": {
-                    "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                  }
-                }
-              }
+          },
+          {
+            "name": "Authorization",
+            "in": "query",
+            "required": true,
+            "description": "The JWT token for user authentication.",
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "File label updated successfully",
@@ -3600,18 +3932,35 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "file_id": {
-                      "type": "string",
-                      "example": "file_id_example"
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
                     },
-                    "label": {
+                    "method": {
                       "type": "string",
-                      "example": "Confidential Document"
+                      "example": "PATCH"
                     },
-                    "updated_on": {
+                    "message": {
                       "type": "string",
-                      "format": "date-time",
-                      "example": "2025-01-29T10:00:00Z"
+                      "example": "File label updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "file_id": {
+                          "type": "string",
+                          "example": "file_id_example"
+                        },
+                        "label": {
+                          "type": "string",
+                          "example": "Confidential Document"
+                        },
+                        "updated_on": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-01-29T10:00:00Z"
+                        }
+                      }
                     }
                   }
                 }
@@ -3787,35 +4136,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "loi_id": {
-                        "type": "string",
-                        "example": "loi_id_example"
-                      },
-                      "loi_msg": {
-                        "type": "string",
-                        "example": "Message for LOI"
-                      },
-                      "created_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      },
-                      "modified_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      },
-                      "created_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
-                      },
-                      "modified_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "LOI types retrieved successfully."
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "loi_id": {
+                            "type": "string",
+                            "example": "loi_id_example"
+                          },
+                          "loi_msg": {
+                            "type": "string",
+                            "example": "Message for LOI"
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "example": "admin_user"
+                          },
+                          "modified_by": {
+                            "type": "string",
+                            "example": "admin_user"
+                          },
+                          "created_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          },
+                          "modified_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          }
+                        }
                       }
                     }
                   }
@@ -3974,39 +4340,56 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "instruction_id": {
-                        "type": "string",
-                        "example": "instruction_id_example"
-                      },
-                      "instruction_msg": {
-                        "type": "string",
-                        "example": "Instruction message example"
-                      },
-                      "loi_id": {
-                        "type": "string",
-                        "example": "loi_id_example"
-                      },
-                      "created_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      },
-                      "modified_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      },
-                      "created_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
-                      },
-                      "modified_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Instruction types retrieved successfully."
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "instruction_id": {
+                            "type": "string",
+                            "example": "instruction_id_example"
+                          },
+                          "instruction_msg": {
+                            "type": "string",
+                            "example": "Instruction message example"
+                          },
+                          "loi_id": {
+                            "type": "string",
+                            "example": "loi_id_example"
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "example": "admin_user"
+                          },
+                          "modified_by": {
+                            "type": "string",
+                            "example": "admin_user"
+                          },
+                          "created_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          },
+                          "modified_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          }
+                        }
                       }
                     }
                   }
@@ -4193,47 +4576,64 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "parameter_id": {
-                        "type": "string",
-                        "example": "parameter_id_example"
-                      },
-                      "instruction_id": {
-                        "type": "string",
-                        "example": "instruction_id_example"
-                      },
-                      "parameter_msg": {
-                        "type": "string",
-                        "example": "Parameter message example"
-                      },
-                      "significance_level": {
-                        "type": "integer",
-                        "example": 3
-                      },
-                      "is_deleted": {
-                        "type": "boolean",
-                        "example": false
-                      },
-                      "created_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      },
-                      "modified_by": {
-                        "type": "string",
-                        "example": "admin_user"
-                      },
-                      "created_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
-                      },
-                      "modified_on": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T10:00:00Z"
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "method": {
+                      "type": "string",
+                      "example": "GET"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Parameters retrieved successfully."
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "parameter_id": {
+                            "type": "string",
+                            "example": "parameter_id_example"
+                          },
+                          "instruction_id": {
+                            "type": "string",
+                            "example": "instruction_id_example"
+                          },
+                          "parameter_msg": {
+                            "type": "string",
+                            "example": "Parameter message example"
+                          },
+                          "significance_level": {
+                            "type": "integer",
+                            "example": 3
+                          },
+                          "is_deleted": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "example": "admin_user"
+                          },
+                          "modified_by": {
+                            "type": "string",
+                            "example": "admin_user"
+                          },
+                          "created_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          },
+                          "modified_on": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-01T10:00:00Z"
+                          }
+                        }
                       }
                     }
                   }
@@ -4392,6 +4792,18 @@
         "summary": "Logs out the user by invalidating the token",
         "description": "This endpoint allows a user to log out by invalidating their active session token.",
         "operationId": "logoutUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
