@@ -67,7 +67,7 @@ export class UploadNewCaseComponent implements OnInit {
 
         // Reset selected instruction when LOI changes
         this.selectedInstruction = this.instructionTypes.length > 0 ? this.instructionTypes[0]._id : '';
-
+        console.log(this.selectedInstruction);
         // Fetch parameters when an instruction is selected
         if (this.selectedInstruction) {
           this.onInstructionChange();  // Call this method if needed
