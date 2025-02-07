@@ -47,4 +47,46 @@
     cursor: pointer;
     font-size: clamp(1rem, 1.5vw, 1.25rem);
   }
+
+  @media (max-width: 768px) {
+    .modal-container {
+      width: 85%;
+      padding: 1.5rem;
+      height: 15rem;
+    }
+  
+    .modal-title {
+      font-size: 1.5rem;
+    }
+  
+    .modal-message {
+      font-size: 1rem;
+    }
+  
+    .btn-confirm {
+      width: 7rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .modal-container {
+      width: 95%;
+      padding: 1.25rem;
+      height: 12rem;
+    }
+  
+    .modal-title {
+      font-size: 1.25rem;
+    }
+  
+    .modal-message {
+      font-size: 0.8rem;
+    }
+  
+    .btn-confirm {
+      width: 6.5rem;
+      padding: 0.5rem 0.75rem;
+    }
+  }
   

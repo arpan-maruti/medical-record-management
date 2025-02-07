@@ -167,7 +167,7 @@ html {
 
 /* Resend Link */
 .otp__resend {
-  
+  background-color: transparent;
   color: #888;
   border: none;
   padding: 10px;
@@ -222,6 +222,10 @@ html {
     justify-content: center;
     background: transparent; /* Transparent background to show the image */
   }
+
+  .otp__resend {
+    margin-right: -13rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -268,7 +272,7 @@ html {
   }
   
   .otp__resend {
-    margin-right: -9rem;
+    margin-right: -8rem;
   }
 
   .otp__search input {
