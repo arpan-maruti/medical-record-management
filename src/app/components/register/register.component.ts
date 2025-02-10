@@ -8,6 +8,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import emailValidator from 'email-validator';  // Import email-validator package
 import axios from 'axios';
 
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
