@@ -14,6 +14,7 @@ import { TableViewComponent } from './table-view/table-view.component';
 import { ViewAndLabelComponent } from './components/view-and-label/view-and-label.component'
 import { AgGridComponent } from './components/ag-grid/ag-grid.component';
 import { SwaggerViewerComponent } from './components/swagger-viewer/swagger-viewer.component';
+import { SetPasswordComponent } from './components/set-password/set-password.component';
 
 export const routes: Routes = [
 
@@ -23,7 +24,7 @@ export const routes: Routes = [
     {path:'register', component: RegisterComponent, pathMatch:'full'},
     {path:'a', component: AgGridComponent, pathMatch:'full'},
     {path:'swagger', component: SwaggerViewerComponent, pathMatch:'full'},
-    
+    {path: 'set-password', component:SetPasswordComponent , pathMatch:'full'},
     {
         path: 'case-management', 
         component: DashboardComponent,

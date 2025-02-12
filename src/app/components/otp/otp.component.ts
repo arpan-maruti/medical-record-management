@@ -17,7 +17,7 @@ export class OtpComponent {
   inputType: string = 'password';
   otpError1: string = '';
   formSubmitted: boolean = false;
-  resendVisible: boolean = false;
+  resendVisible: boolean = true;
   timer: number = 30; // Countdown timer in seconds
 
   @ViewChild('customAlert') customAlert!: CustomAlertComponent;

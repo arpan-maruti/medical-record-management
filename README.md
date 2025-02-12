@@ -1,59 +1,59 @@
-# MedicalRecordManagement
-
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
-
-## Development server
-
-To start a local development server, run:
-
+# medical-record-management
+MediScan - AI Tool
+### Setup
+Before you begin, ensure you have the following prerequisites:
+- **Node.js** - 22.12.0
+- **Angular** - 19.0.6
+- **Git** - For cloning the repository
+### Cloning the Repository
 ```bash
-ng serve
+git clone https://github.com/arpan-maruti/medical-record-management.git
 ```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+Navigate into the project directory:
 ```bash
-ng generate component component-name
+cd medical-record-management
 ```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+### Install dependencies
 ```bash
-ng generate --help
+npm install
 ```
-
-## Building
-
-To build the project run:
-
+### Add component
+```bash
+ng g c component-name
+```
+### Add service
+```bash
+ng g s serviceName
+```
+### Build the Project
 ```bash
 ng build
 ```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
+### Run test
 ```bash
 ng test
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
+### Run the development server
 ```bash
-ng e2e
+ng serve
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+or, to directly open in browser
+```bash
+ng serve -o
+```
+By default, the app will be accessible at http://localhost:4200.
+## Components
+### Major Components
+- **login**
+- **register**
+- **otp**
+- **page-not-found**
+- **dashboard**
+- **case-list**
+- **main-layout**
+- **navbar**
+- **sidebar**
+- **custom-alert**
+- **main-layout**
+## json-files
+country-phone-validation.json - Data to validate phone numbers country wise.

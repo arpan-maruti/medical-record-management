@@ -346,7 +346,7 @@
         }
       }
     },
-    "/user/password/reset-request": {
+    "/user/reset-request": {
       "patch": {
         "tags": [
           "Login, Logout, Register"
@@ -847,7 +847,7 @@
         }
       }
     },
-    "/user/otp/verify": {
+    "/user/verify-otp": {
       "post": {
         "tags": [
           "Login, Logout, Register"
@@ -1028,7 +1028,7 @@
         }
       }
     },
-    "/user/otp/resend": {
+    "/user/resend-otp": {
       "post": {
         "tags": [
           "Login, Logout, Register"
@@ -1868,7 +1868,7 @@
         }
       }
     },
-    "/user/{user_id}/cases/{case_id}": {
+    "/cases/{case_id}": {
       "get": {
         "tags": [
           "Case Management"
@@ -1877,16 +1877,6 @@
         "description": "Fetches details of a specific case by its case_id.",
         "operationId": "getCaseDetails",
         "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "description": "The user ID associated with the case.",
-            "schema": {
-              "type": "string",
-              "example": "user_id_example"
-            }
-          },
           {
             "name": "case_id",
             "in": "path",
@@ -2148,7 +2138,7 @@
         }
       }
     },
-    "/user/{user_id}/cases/{parent_id}/subcases": {
+    "/cases/{parent_id}/subcases": {
       "get": {
         "tags": [
           "Case Management"
@@ -2157,17 +2147,6 @@
         "description": "Retrieves all subcases of a specific case by parent_id.",
         "operationId": "getSubcases",
         "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "description": "The user ID associated with the subcases.",
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "60d5f48722e7bfcf8b349a44"
-            }
-          },
           {
             "name": "parent_id",
             "in": "path",
@@ -2446,7 +2425,7 @@
         }
       }
     },
-    "/user/{user_id}/cases": {
+    "/cases": {
       "get": {
         "tags": [
           "Case Management"
@@ -2455,16 +2434,6 @@
         "description": "Fetches all cases associated with a specific user.",
         "operationId": "getAllCases",
         "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "description": "The user ID to fetch the cases for.",
-            "schema": {
-              "type": "string",
-              "example": "user_id_example"
-            }
-          },
           {
             "name": "Authorization",
             "in": "header",
@@ -2670,17 +2639,6 @@
         "description": "Allows a user to upload a new case.",
         "operationId": "createNewCase",
         "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "description": "The user ID uploading the new case.",
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "60d5f48722e7bfcf8b349a44"
-            }
-          },
           {
             "name": "Authorization",
             "in": "header",

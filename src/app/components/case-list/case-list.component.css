@@ -282,7 +282,7 @@ button:hover {
 }
 
 .upload-files-popup button {
-  background-color: #007bff;
+  background-color: #2e4e5b;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -292,7 +292,7 @@ button:hover {
 }
 
 .upload-files-popup button:hover {
-  background-color: #0056b3;
+  background-color: #2e4e5b;
 }
 
 .case-card-actions a:hover {
@@ -427,7 +427,7 @@ button:hover {
  
  
  .btn-primary {
-  background-color: #007bff;
+  background-color: #2e4e5b;
   color: white;
  }
  
@@ -439,29 +439,97 @@ button:hover {
 
  .filter-container {
   display: flex;
+  justify-content: center;
   align-items: center;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  padding: 8px 12px;
-  width: 220px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 1rem 0;
 }
 
-.filter-container select {
+/* Custom Dropdown */
+.custom-dropdown {
+  position: relative;
+  width: 12rem; /* Adjust width as needed */
+}
+
+/* Style the select element */
+.custom-dropdown select {
+  appearance: none; /* Removes default dropdown styles */
   width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  color: #374151;
-  border: none;
-  background: transparent;
+  padding: 0.75rem;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fff;
+  border: 0.125rem solid #012447;
+  border-radius: 0.5rem;
   cursor: pointer;
   outline: none;
-  appearance: none;
+  box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  position: relative;
+}
+
+/* Custom down arrow */
+.custom-dropdown::after {
+  content: '\25BC'; /* Unicode for downward arrow */
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  color: #012447;
+  pointer-events: none; /* Prevents clicking the arrow */
+  font-size: 1rem;
+}
+
+/* Hover and focus effect */
+.custom-dropdown select:hover,
+.custom-dropdown select:focus {
+  border-color: #013b6f;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
 }
 
 
 
+
+
+.subcase-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 0.75rem;
+  border-left: 5px solid #467180; /* Highlight for subcases */
+}
+
+.subcase-card h4 {
+  color: #012447;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.subcase-card p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.25rem 0;
+}
+
+/* Subcase Action Buttons */
+.subcase-card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 0.5rem;
+}
+
+.subcase-card-actions a {
+  color: #467180;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.subcase-card-actions a:hover {
+  color: #0056b3;
+}
 
 
 
