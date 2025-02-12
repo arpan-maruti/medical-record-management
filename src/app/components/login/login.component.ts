@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { CustomAlertComponent } from '../custom-alert/custom-alert.component';
 import { RouterLink } from '@angular/router';
 import validator from 'validator'; // Import validator
+import axios from 'axios';
 
 @Component({
   selector: 'app-login',
@@ -23,13 +24,43 @@ export class LoginComponent {
 
   constructor(private router: Router) {}
 
-  onLogin() {
+  async onLogin() {
     this.formSubmitted = true;
     this.validateInputs();
     if (this.generalError) {
       return;
     }
-    this.router.navigate(['/otp']);
+
+    try {
+      // 1️⃣ Fetch user details from the backend
+      const userResponse = await axios.post('https://your-backend.com/api/auth/login', {
+        email: this.email,
+        password: this.password,
+      });
+
+      if (userResponse.data.success) {
+        const phoneNumber = userResponse.data.phone; // Extract phone number
+
+        // 2️⃣ Send OTP to the user's phone
+        const otpResponse = await axios.post('https://your-backend.com/api/auth/send-otp', {
+          phone: phoneNumber,
+        });
+
+        if (otpResponse.data.success) {
+          console.log('✅ OTP sent successfully to:', phoneNumber);
+          this.router.navigate(['/verify-otp'], {
+            queryParams: { email: this.email },
+          });
+        } else {
+          this.generalError = 'Failed to send OTP. Try again later.';
+        }
+      } else {
+        this.generalError = userResponse.data.message || 'Invalid email or password.';
+      }
+    } catch (error) {
+      console.error('❌ Login Error:', error);
+      this.generalError = 'Something went wrong. Please try again.';
+    }
   }
 
   validateInputs() {
