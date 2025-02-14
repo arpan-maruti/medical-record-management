@@ -56,9 +56,15 @@ export class RegisterComponent {
 
   // Update the phone number mask based on selected country
   updatePhoneMask() {
-    this.phoneMask = this.phoneMaskService.getMask(this.selectedCountryCode);
+    if (this.selectedCountryCode) {
+      this.phoneMask = this.phoneMaskService.getMask(this.selectedCountryCode);
+      // If the mask isn't found, set a default or show a warning
+      if (!this.phoneMask) {
+        console.warn(`Mask not found for country code: ${this.selectedCountryCode}`);
+        this.phoneMask = '000-000-0000'; // Default mask
+      }
+    }
   }
-
   // Fetch the valid TLDs from an API (or use a static list)
   async fetchValidTlds(): Promise<string[]> {
     // In this case, using a static list of common TLDs
