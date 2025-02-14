@@ -38,10 +38,12 @@ export class UploadNewCaseComponent implements OnInit {
     axios.get('http://localhost:5000/loiType')
       .then(response => {
         // Store loiTypes data (assuming you want to store only loi_msg)
+        console.log(response.data);
         this.loiTypes = response.data.map((item: any) => ({
           _id: item._id,
-          loi_msg: item.loi_msg
+          loi_msg: item.loiMsg
         }));
+        console.log(this.loiTypes);
         // Set the first loiType as selected
         if (this.loiTypes && this.loiTypes.length > 0) {
         
@@ -69,7 +71,13 @@ export class UploadNewCaseComponent implements OnInit {
     
     axios.get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`)
       .then(response => {
-        this.instructionTypes = response.data.data;
+        // this.instructionTypes = response.data.data;
+
+        this.instructionTypes = response.data.data.map((item: any) => ({
+          _id: item._id,
+          instruction_msg: item.instructionMsg
+        }));
+        console.log(this.instructionTypes);
       })
       .catch(error => {
         console.error('Error fetching Instruction Types:', error);
@@ -83,7 +91,13 @@ export class UploadNewCaseComponent implements OnInit {
 
     axios.get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`)
       .then(response => {
-        this.parameters = response.data.data;
+        
+        this.parameters = response.data.data.map((item: any) => ({
+          _id: item._id,
+          parameter_msg: item.parameterMsg
+        }));
+
+        console.log(this.parameters);
       })
       .catch(error => {
         console.error('Error fetching parameters:', error);

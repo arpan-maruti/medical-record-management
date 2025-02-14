@@ -102,22 +102,7 @@ export class CaseListComponent {
   }
  
 
-  // Define the type for the sortOrder object
-  sortOrder: { 
-    [key in 'ref_number' | 'instruction_type' | 'client_name' | 'total_files' | 'total_pages' | 'created_on' | 'uploaded_by' | 'case_status' | 'loi' | 'action' | 'subcase']: 'asc' | 'desc' 
-  } = {
-    ref_number: 'asc',
-    instruction_type: 'asc',
-    client_name: 'asc',
-    total_files: 'asc',
-    total_pages: 'asc',
-    created_on: 'asc',
-    uploaded_by: 'asc',
-    case_status: 'asc',
-    loi: 'asc',
-    action: 'asc',
-    subcase: 'asc',
-  };
+ 
 
   // Filter data based on search query
   onSearch() {
@@ -132,22 +117,7 @@ export class CaseListComponent {
     }
   }
 
-  // Sort the data based on column and direction
-  sortData(column: 'ref_number' | 'instruction_type' | 'client_name' | 'total_files' | 'total_pages' | 'created_on' | 'uploaded_by' | 'case_status' | 'loi' | 'action' | 'subcase', currentOrder: 'asc' | 'desc') {
-    // Toggle sorting order
-    console.log('column', column);
-    const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
-    this.sortOrder[column] = newOrder;
 
-    // Sort filteredData based on the selected column and order
-    this.filteredData.sort((a, b) => {
-      if (newOrder === 'asc') {
-        return a[column] > b[column] ? 1 : (a[column] < b[column] ? -1 : 0);
-      } else {
-        return a[column] < b[column] ? 1 : (a[column] > b[column] ? -1 : 0);
-      }
-    });
-  }
 
   openPdfPreview(fileName: string) {
     const unsafeUrl = `/assets/q.pdf`;
@@ -211,5 +181,33 @@ export class CaseListComponent {
   
   closeViewLabel() {
     this.isViewLabelVisible = false;
+  }
+
+  sortKey: string = ''; // Key by which to sort
+  sortDirection: string = 'asc'; // 'asc' for ascending, 'desc' for descending
+
+  // Sort data based on column and direction
+  sortData(key: string): void {
+    if (this.sortKey === key) {
+      // Toggle sort direction if the same column is clicked
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // Set the new column and default to ascending order
+      this.sortKey = key;
+      this.sortDirection = 'asc';
+    }
+
+    this.filteredData.sort((a, b) => {
+      const aValue = a[key];
+      const bValue = b[key];
+      console.log(aValue+" "+bValue)
+      if (aValue < bValue) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
   }
 }
