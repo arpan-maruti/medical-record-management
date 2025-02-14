@@ -6,7 +6,6 @@ import { CustomAlertComponent } from '../custom-alert/custom-alert.component';
 import { RouterLink } from '@angular/router';
 import validator from 'validator'; // Import validator
 import axios from 'axios';
-
 @Component({
   selector: 'app-login',
   imports: [FormsModule, CommonModule, CustomAlertComponent, RouterLink],
@@ -19,69 +18,58 @@ export class LoginComponent {
   generalError: string = '';
   formSubmitted: boolean = false;
   isPasswordVisible: boolean = false;
-
   @ViewChild('customAlert') customAlert!: CustomAlertComponent;
-
   constructor(private router: Router) {}
-
   async onLogin() {
     this.formSubmitted = true;
+    // Validate inputs
     this.validateInputs();
     if (this.generalError) {
       return;
     }
-
     try {
-      // 1️⃣ Fetch user details from the backend
-      const userResponse = await axios.post('https://your-backend.com/api/auth/login', {
+      // Step 1: Login the user
+      const userResponse = await axios.post('http://localhost:5000/user/login', {
         email: this.email,
         password: this.password,
       });
-
-      if (userResponse.data.success) {
-        const phoneNumber = userResponse.data.phone; // Extract phone number
-
-        // 2️⃣ Send OTP to the user's phone
-        const otpResponse = await axios.post('https://your-backend.com/api/auth/send-otp', {
-          phone: phoneNumber,
-        });
-
-        if (otpResponse.data.success) {
-          console.log('✅ OTP sent successfully to:', phoneNumber);
-          this.router.navigate(['/verify-otp'], {
-            queryParams: { email: this.email },
-          });
-        } else {
-          this.generalError = 'Failed to send OTP. Try again later.';
-        }
-      } else {
+      if (!userResponse.data.success) {
         this.generalError = userResponse.data.message || 'Invalid email or password.';
+        return;
       }
-    } catch (error) {
-      console.error('❌ Login Error:', error);
-      this.generalError = 'Something went wrong. Please try again.';
+      // Step 2: Send OTP to the user's phone
+      const otpResponse = await axios.post('http://localhost:5000/user/send-otp', {
+        email: this.email,
+      });
+      if (otpResponse.data.success) {
+        console.log(':white_check_mark: OTP sent successfully.');
+        this.router.navigate(['/otp'], {
+          queryParams: { email: this.email },
+        });
+      } else {
+        this.generalError = otpResponse.data.message || 'Failed to send OTP. Try again later.';
+      }
+    } catch (error:any) {
+      console.error(':x: Login Error:', error);
+      this.generalError = error.response?.data?.error || 'Something went wrong. Please try again.';
     }
   }
-
   validateInputs() {
     this.generalError = '';
     if (!this.email || !this.password) {
       this.generalError = 'Please enter both email and password.';
       return;
     }
-
     if (!this.isValidEmail(this.email) || !this.isValidPassword(this.password)) {
       this.generalError = 'Invalid email or password.';
       return;
     }
   }
-
   onInputChange() {
     if (this.formSubmitted) {
       this.validateInputs();
     }
   }
-
   onForgotPassword() {
     this.customAlert.show(
       'Please contact BME to reset your password.',
@@ -89,15 +77,12 @@ export class LoginComponent {
       'OK'
     );
   }
-
   onCustomAlertConfirm() {
     console.log('Alert confirmed');
   }
-
   isValidEmail(email: string): boolean {
     return validator.isEmail(email);
   }
-
   isValidPassword(password: string): boolean {
     return (
       validator.isLength(password, { min: 6 }) &&
@@ -107,4 +92,3 @@ export class LoginComponent {
     );
   }
 }
-

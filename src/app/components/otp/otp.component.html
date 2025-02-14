@@ -3,12 +3,10 @@
   <div class="otp__image">
     <img src="assets/image.png" alt="image not displaying" />
   </div>
-
   <!-- Right Component -->
   <div class="otp__form">
     <div class="otp__content">
       <div class="otp__heading">MediScan - AI Tool</div>
-
       <div class="otp__input">
         <div class="otp__title">Enter OTP</div>
         <div class="otp__search">
@@ -40,18 +38,15 @@
             />
           </svg>
         </div>
-
         <!-- Error Message -->
         <div class="otp__error-message">{{ otpError1 }}</div>
       </div>
-
       <div class="otp__buttons">
         <button class="otp__login" (click)="login()">Back to Login</button>
-        <button class="otp__verify" (click)="verifyOtp(otpInput)">
+        <button class="otp__verify" (click)="onVerifyClick()">
           Verify OTP
         </button>
       </div>
-
       <!-- Resend OTP Section -->
       <div class="otp__resend-section">
         <button
@@ -64,7 +59,6 @@
         </button>
       </div>
     </div>
-
     <app-custom-alert
       #customAlert
       (confirm)="onCustomAlertConfirm()"

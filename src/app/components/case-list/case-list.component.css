@@ -533,10 +533,79 @@ button:hover {
 
 
 
- 
- 
+@media (min-width: 1440px) {
+  .filter-container {
+    justify-content: flex-end;
+    width: 20rem;
+    height: 5rem;
+    .custom-dropdown select {
+      max-width: 300px;
+    }
+  }
 
+  .search-upload-container {
+    .search-container .search-input {
+      max-width: 500px; 
+    }
+  }
+}
+
+/* 1024px - Medium screens */
+@media (max-width: 1024px) {
+  .filter-container {
+    justify-content: flex-end;
+    width: 10rem;
+    height: 4.5rem;
+    .custom-dropdown select {
+      max-width: 250px;
+    }
+  }
+
+  .search-upload-container {
+    .search-container .search-input {
+      max-width: 400px;
+    }
+
+    .upload-container .upload-btn {
+      padding: 10px 14px;
+    }
+  }
+}
+
+/* 768px - Tablet */
+@media (max-width: 768px) {
+  .filter-container {
+    width: 8rem;
+    height: 4.5rem;
+    justify-content: flex-end;
+
+    .custom-dropdown select {
+      max-width: 100%;
+    }
+  }
+
+  .search-upload-container {
+   
+
+    .search-container {
+      .search-input {
+        max-width: 100%;
+      }
+    }
+
+    .upload-container {
+      text-align: center;
+
+      .upload-btn {
+        width: 100%; 
+      }
+    }
+  }
+}
+
+/* 425px - Small Mobile */
 @media (max-width: 425px) {
+
   .pdf-modal-content {
     /* padding: 10px; */
     max-height: 100%;
@@ -557,4 +626,87 @@ button:hover {
   .cards-container {
     display: block;
   }
+  
+  .filter-container {
+    justify-content: flex-end;
+    width: 8rem;
+    height: 4.5rem;
+    justify-content: flex-end;
+
+    .custom-dropdown select {
+      max-width: 100%;
+    }
+  }
+
+  .search-upload-container {
+
+    flex-direction: column;
+    gap: 12px;
+    
+    .search-container {
+      .search-input {
+        padding: 8px; 
+        font-size: 12px;
+      }
+    }
+
+    .upload-container {
+      .upload-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+    }
+  }
 }
+
+/* 375px - Extra Small Mobile */
+@media (max-width: 375px) {
+  .filter-container {
+    justify-content: flex-end;
+    width: 8rem;
+    height: 4.5rem;
+
+    .custom-dropdown select {
+      font-size: 12px;
+    }
+  }
+
+  .search-upload-container {
+    .search-container .search-input {
+      padding: 6px 10px; 
+    }
+
+    .upload-container .upload-btn {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+  }
+}
+
+/* 325px - Smallest Devices */
+@media (max-width: 325px) {
+  .filter-container {
+    justify-content: flex-end;
+    width: 8rem;
+    height: 4.5rem;
+
+    .custom-dropdown select {
+      font-size: 11px;
+      padding: 6px 8px; 
+    }
+  }
+
+  .search-upload-container {
+    .search-container .search-input {
+      padding: 5px 8px;
+      font-size: 10px; 
+    }
+
+    .upload-container .upload-btn {
+      padding: 5px 8px;
+      font-size: 10px;
+    }
+  }
+}
+ 
+
