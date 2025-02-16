@@ -35,7 +35,7 @@ export class UploadNewCaseComponent implements OnInit {
   }
   // Fetch loiTypes from the API
   fetchLoiTypes(): void {
-    axios.get('http://localhost:5000/loiType')
+    axios.get('http://localhost:5000/loiType', { withCredentials: true })
       .then(response => {
         // Store loiTypes data (assuming you want to store only loi_msg)
         console.log(response.data);

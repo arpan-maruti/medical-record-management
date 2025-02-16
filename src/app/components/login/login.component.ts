@@ -32,7 +32,7 @@ export class LoginComponent {
       const userResponse = await axios.post('http://localhost:5000/user/login', {
         email: this.email,
         password: this.password,
-      });
+      }, {withCredentials:true});
       if (!userResponse.data.success) {
         this.generalError = userResponse.data.message || 'Invalid email or password.';
         return;
@@ -40,7 +40,7 @@ export class LoginComponent {
       // Step 2: Send OTP to the user's phone
       const otpResponse = await axios.post('http://localhost:5000/user/send-otp', {
         email: this.email,
-      });
+      }, {withCredentials:true});
       if (otpResponse.data.success) {
         console.log(':white_check_mark: OTP sent successfully.');
         this.router.navigate(['/otp'], {
