@@ -9,6 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
 import {jwtDecode} from 'jwt-decode';
 import {Router} from '@angular/router';
+
 @Component({
   selector: 'app-upload-new-case',
   imports: [FormsModule, CommonModule],
@@ -34,14 +35,53 @@ export class UploadNewCaseComponent {
   loiError: string | null = null;
   instructionError: string | null = null;
   parametersError: string | null = null;
+
+  caseData: any;
+  viewOnly: boolean = false;
   constructor(
     private dataService: DataService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private cookieService: CookieService,
     private router:Router
-  ) {}
+  ) {
 
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      this.caseData = navigation.extras.state['caseData'];
+      this.viewOnly = navigation.extras.state['viewOnly'];
+    }
+  }
+
+  getInstructionType(caseItem: any) {
+    return this.dataService.getInstructionType(caseItem);
+  }
+  getLoi(caseItem: any)
+  {
+    return this.dataService.getLoi(caseItem);
+  }
+
+  ngOnInit() {
+    if (this.caseData) {
+      console.log(this.caseData);
+      // Populate basic case details
+      this.clientName = this.caseData.client_name;
+      this.caseReference = this.caseData.ref_number;
+      this.dateOfBranch = this.caseData.date_of_breach; // Adjust based on your data structure
   
+      // Populate LOI Type
+      this.selectedLoi = this.getLoi(this.caseData); // Assuming loi_type is the ID of the selected LOI
+      console.log("loi:"+this.selectedLoi);
+      // Populate Instruction Type
+      
+      this.selectedInstruction = this.getInstructionType(this.caseData); // Assuming instruction_type is the ID of the selected instruction
+      console.log("instr:"+this.selectedInstruction);
+      // Populate Parameters
+      this.selectedParameters = this.caseData.parameters || []; // Assuming parameters is an array of selected parameter IDs
+      console.log(this.selectedParameters);
+  
+    
+    }
+  }
 
   ngAfterViewInit(): void {
     this.fetchLoiTypes();
@@ -102,6 +142,7 @@ export class UploadNewCaseComponent {
       });
   }
 
+  
   onInputChange() {
     // this.fetchLoiTypes();
     this.clientNameError = null;

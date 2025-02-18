@@ -83,7 +83,7 @@
                 </svg>
               </ng-template>
             </td>
-            <td class="case-list__utext">{{ caseItem.ref_number }}</td>
+            <td class="case-list__utext" (click)="viewCaseDetails(caseItem)">{{ caseItem.ref_number }}</td>
             <td>{{ getInstructionType(caseItem) }}</td>
             <td>{{ caseItem.client_name }}</td>
             <td>{{ getTotalFiles(caseItem) }}</td>
