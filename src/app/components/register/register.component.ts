@@ -7,7 +7,7 @@ import { PhoneMaskService } from '../../services/phone-mask.service';  // Import
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask'; 
 import emailValidator from 'email-validator';  // Import email-validator package
 import axios from 'axios';
-
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-register',
@@ -34,7 +34,7 @@ export class RegisterComponent {
   constructor(
     private cdr: ChangeDetectorRef,
     private phoneMaskService: PhoneMaskService,
-   
+    private cookieService: CookieService
   ) {}
 
   ngAfterViewInit() {
@@ -164,11 +164,19 @@ export class RegisterComponent {
       };
   
       try {
+        const getCookie= (name: string): string | null =>{
+          return this.cookieService.get(name) || null;
+      }
+      const token = getCookie('jwt');
+    console.log('Retrieved Token:1', token);
+
         // Send POST request using axios
         const response = await axios.post('http://localhost:5000/user/register', registrationData, {
           headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
-          },
+        },
+        withCredentials: true
         });
   
         console.log('Registration successful:', response.data);
