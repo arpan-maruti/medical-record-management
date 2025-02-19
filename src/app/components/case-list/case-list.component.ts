@@ -6,7 +6,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ViewAndLabelComponent } from '../view-and-label/view-and-label.component';
 import { UploadFilesComponent } from '../upload-files/upload-files.component';
-
+import axios from 'axios';
 @Component({
   selector: 'app-case-list',
   imports: [CommonModule, FormsModule, ViewAndLabelComponent, UploadFilesComponent],
@@ -51,14 +51,27 @@ export class CaseListComponent {
    
 
   ngAfterViewInit() {
-    // Fetching case data
-    this.data = this.dataService.getMainCases();
-    this.filteredData = [...this.data];
-    if (this.data.length > 0) {
-      this.isDataAvailable = true;
-    }
-    this.applyFilters(); // Initial filtering based on the status
-    this.cdr.detectChanges();
+    this.fetchCases();
+  }
+  
+  fetchCases() {
+    axios.get('http://localhost:5000/case')
+      .then(response => {
+        console.log(response.data);
+        if (response.data.code === 'Success') {
+          this.data = response.data.data; // Assign the fetched data
+          this.filteredData = [...this.data]; // Initialize filtered data
+          console.log(this.filteredData);
+          this.isDataAvailable = this.data.length > 0; // Set data availability flag
+          // this.applyFilters(); // Apply initial filters
+          // this.cdr.detectChanges(); // Trigger change detection
+        } else {
+          console.error('Failed to fetch cases:', response.data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching cases:', error);
+      });
   }
 
   openUploadFiles() {
