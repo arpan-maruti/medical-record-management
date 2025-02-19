@@ -4,13 +4,18 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../../services/data.service';
 import axios from 'axios';
+import { CookieService } from 'ngx-cookie-service';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import {jwtDecode} from 'jwt-decode';
+import {Router} from '@angular/router';
 @Component({
   selector: 'app-upload-new-case',
   imports: [FormsModule, CommonModule],
   templateUrl: './upload-new-case.component.html',
   styleUrls: ['./upload-new-case.component.css'],
 })
-export class UploadNewCaseComponent implements OnInit {
+export class UploadNewCaseComponent {
   clientName: string = '';
   caseReference: string | undefined;
   dateOfBranch: string | undefined;
@@ -19,8 +24,8 @@ export class UploadNewCaseComponent implements OnInit {
   instructionTypes: any[] = []; // Holds Instruction Types
   selectedInstruction: string = ''; // Initially empty
   parameters: any[] = []; // Holds Parameters
-  selectedParameters: { [key: string]: boolean } = {};
-  
+  selectedParameters: string[] = []; // Holds only IDs of selected parameters
+
   // Validation errors
   isSubmitted: boolean = false;
   clientNameError: string | null = null;
@@ -29,38 +34,82 @@ export class UploadNewCaseComponent implements OnInit {
   loiError: string | null = null;
   instructionError: string | null = null;
   parametersError: string | null = null;
-  constructor(private dataService: DataService) {}
-  ngOnInit(): void {
+  constructor(
+    private dataService: DataService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private cookieService: CookieService,
+    private router:Router
+  ) {}
+
+  
+
+  ngAfterViewInit(): void {
     this.fetchLoiTypes();
+  }
+  getCookie(name: string): string | null {
+    return this.cookieService.get(name) || null;
   }
   // Fetch loiTypes from the API
   fetchLoiTypes(): void {
-    axios.get('http://localhost:5000/loiType')
-      .then(response => {
-        // Store loiTypes data (assuming you want to store only loi_msg)
+    // const getCookie = (name: string) => {
+
+    //   if (isPlatformBrowser(this.platformId)) {
+    //     const value = `; ${document.cookie}`;
+    //     console.log('Cookies:', document.cookie); // Debug cookies
+    //     const parts = value.split(`; ${name}=`);
+    //     if (parts.length === 2) {
+    //       const tokenSegment = parts.pop()?.split(';').shift();
+    //       return tokenSegment !== undefined ? tokenSegment : null;
+    //     }
+    //   }
+    //   return null;
+    // };
+
+    // Get the token from the cookie
+    const token = this.getCookie('jwt');
+    console.log('Retrieved Token:1', token); // Log the retrieved token to debug
+
+    if (!token) {
+      console.error('No JWT token found in cookies');
+      return; // Prevent making the API call if the token is not found
+    }
+
+    axios
+      .get('http://localhost:5000/loiType', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Ensure cookies are sent with the request
+      })
+      .then((response) => {
         console.log(response.data);
-        this.loiTypes = response.data.map((item: any) => ({
-          _id: item._id,
-          loi_msg: item.loiMsg
-        }));
-        console.log(this.loiTypes);
-        // Set the first loiType as selected
-        if (this.loiTypes && this.loiTypes.length > 0) {
-        
-          this.onLoiChange();
+        if (response.data && Array.isArray(response.data.data)) {
+          this.loiTypes = response.data.data.map((item: any) => ({
+            _id: item._id,
+            loi_msg: item.loiMsg,
+          }));
+          console.log(this.loiTypes);
+          if (this.loiTypes.length > 0) {
+            this.onLoiChange();
+          }
+        } else {
+          console.error('Unexpected response structure:', response.data);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('There was an error fetching loiTypes:', error);
       });
   }
+
   onInputChange() {
+    // this.fetchLoiTypes();
     this.clientNameError = null;
     this.caseReferenceError = null;
     this.dateError = null;
-    this.loiError=null;
-    this.instructionError=null;
-    this.parametersError=null;
+    this.loiError = null;
+    this.instructionError = null;
+    this.parametersError = null;
   }
   onLoiChange(): void {
     if (!this.selectedLoi) {
@@ -68,18 +117,26 @@ export class UploadNewCaseComponent implements OnInit {
       this.selectedInstruction = ''; // Clear selected instruction
       return;
     }
-    
-    axios.get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`)
-      .then(response => {
+    const token = this.getCookie('jwt');
+    console.log('Retrieved Token:1', token);
+    axios
+      .get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`,  {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Ensure cookies are sent with the request
+      })
+      .then((response) => {
         // this.instructionTypes = response.data.data;
 
         this.instructionTypes = response.data.data.map((item: any) => ({
           _id: item._id,
-          instruction_msg: item.instructionMsg
+          instruction_msg: item.instructionMsg,
         }));
         console.log(this.instructionTypes);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching Instruction Types:', error);
       });
   }
@@ -88,32 +145,50 @@ export class UploadNewCaseComponent implements OnInit {
       this.parameters = []; // Reset parameters if no instruction is selected
       return;
     }
-
-    axios.get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`)
-      .then(response => {
-        
+    const token = this.getCookie('jwt');
+    console.log('Retrieved Token:1', token);
+    axios
+      .get(
+        `http://localhost:5000/parameters/instruction/${this.selectedInstruction}` ,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true, // Ensure cookies are sent with the request
+        }
+      )
+      .then((response) => {
         this.parameters = response.data.data.map((item: any) => ({
           _id: item._id,
-          parameter_msg: item.parameterMsg
+          parameter_msg: item.parameterMsg,
         }));
 
         console.log(this.parameters);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching parameters:', error);
       });
   }
   isSelected(paramId: string): boolean {
-    return !!this.selectedParameters[paramId];
+    return this.selectedParameters.includes(paramId);
+
+
   }
   // Toggle the selection of a parameter
   toggleSelection(paramId: string): void {
-    this.selectedParameters[paramId] = !this.selectedParameters[paramId];
-    if (Object.values(this.selectedParameters).includes(true)) {
+    const index = this.selectedParameters.indexOf(paramId);
+    if (index === -1) {
+      this.selectedParameters.push(paramId); // Add to selected if not already present
+    } else {
+      this.selectedParameters.splice(index, 1); // Remove if already selected
+    }
+
+    if (this.selectedParameters.length > 0) {
       // If at least one parameter is selected, clear the error message
       this.parametersError = null;
     }
   }
+
   submitForm(): void {
     this.isSubmitted = true;
     this.clientNameError = null;
@@ -157,30 +232,74 @@ export class UploadNewCaseComponent implements OnInit {
     }
 
     // Validate Parameters
-    if (Object.keys(this.selectedParameters).length === 0 || 
-        !Object.values(this.selectedParameters).includes(true)) {
+    if (this.selectedParameters.length === 0) {
       this.parametersError = 'At least one parameter should be selected.';
     }
 
     // If no errors, proceed with form submission
-    if (!this.clientNameError && !this.caseReferenceError && !this.dateError && 
-        !this.loiError && !this.instructionError && !this.parametersError) {
+    if (
+      !this.clientNameError &&
+      !this.caseReferenceError &&
+      !this.dateError &&
+      !this.loiError &&
+      !this.instructionError &&
+      !this.parametersError
+    ) {
+      // Decode the JWT token to extract user_id
+      const token = this.getCookie('jwt');
+      let userId: string | null = null;
+
+      if (token) {
+        try {
+          const decodedToken: any = jwtDecode(token);
+          userId = decodedToken?.id || null; // Adjust based on your token structure
+        } catch (error) {
+          console.error('Error decoding JWT token:', error);
+        }
+      }
+
+      if (!userId) {
+        console.error('Unable to extract user ID from JWT token.');
+        return; // Abort submission if user ID cannot be retrieved
+      }
+
       const formData = {
-        parent_id: 'case1',
-        client_name: this.clientName,
-        ref_number: this.caseReference,
-        is_deleted: false,
-        date_of_breach: this.dateOfBranch,
-        created_by: 'user1',
-        modified_by: 'user2',
-        created_on: new Date().toISOString(),
-        modified_on: new Date().toISOString(),
-        case_uploaded_by: 'John Doe',
-        case_status: 'status4',
+        parentId: null,
+        clientName: this.clientName,
+        refNumber: this.caseReference,
+        dateOfBreach: this.dateOfBranch,
+        caseStatus: 'uploaded',
+        parameters: this.selectedParameters, // Pass only IDs
         files: [],
-        parameters: this.selectedParameters,
+        isLoi: !!this.selectedLoi,
+        isDeleted: false,
+        createdBy: userId, // Set createdBy from the decoded token
+        modifiedBy: userId, // Set modifiedBy from the decoded token
       };
-      console.log('Form Data:', formData);
+
+      console.log('Form data:', formData);
+
+      // Call the API
+      axios
+        .post('http://localhost:5000/case/', formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        })
+        .then((response) => {
+          console.log('Case created successfully:', response.data);
+          this.router.navigate(['/case-management']);
+        })
+        .catch((error) => {
+          console.error(
+            'Error creating case:',
+            error.response?.data || error.message
+          );
+          // Handle error - e.g., show an error message
+        });
     }
   }
+
 }

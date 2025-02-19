@@ -51,7 +51,7 @@ export class OtpComponent {
       // Call the /user/verify-otp API with credentials
       const response = await axios.post(
         'http://localhost:5000/user/verify-otp',
-        { email: this.email, otp: this.otp }
+        { email: this.email, otp: this.otp },{withCredentials:true}
       );
       if (response.status === 200) {
         console.log('OTP Verified Successfully:', response.data.message);
