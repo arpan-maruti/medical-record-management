@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../../services/data.service';
 import axios from 'axios';
+
+import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-upload-subcase',
   imports: [FormsModule, CommonModule],
@@ -27,34 +29,52 @@ export class UploadSubcaseComponent {
   isSubmitted: boolean = false;
   loiError: string | null = null;
   instructionError: string | null = null;
-  constructor(private dataService: DataService) {}
-
+  constructor(private dataService: DataService, private cookieService: CookieService) {}
+  token: string|null = null;
   ngOnInit() {
     this.fetchLoiTypes();
   }
 
+  getCookie(name: string): string | null {
+    return this.cookieService.get(name) || null;
+  }
 
-
-
+  
   fetchLoiTypes(): void {
-    axios.get('http://localhost:5000/loiType')
+
+    this.token = this.getCookie('jwt');
+    console.log('Retrieved Token:1', this.token); // Log the retrieved token to debug
+
+    if (!this.token) {
+      console.error('No JWT token found in cookies');
+      return; // Prevent making the API call if the token is not found
+    }
+    axios.get('http://localhost:5000/loiType', {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    })
       .then(response => {
-        // Store loiTypes data (assuming you want to store only loi_msg)
         console.log(response.data);
-        this.loiTypes = response.data.map((item: any) => ({
-          _id: item._id,
-          loi_msg: item.loiMsg
-        }));
-        console.log(this.loiTypes);
-        // Set the first loiType as selected
-        if (this.loiTypes && this.loiTypes.length > 0) {
-        
-          this.onLoiChange();
+        if (response.data && Array.isArray(response.data.data)) {
+          this.loiTypes = response.data.data.map((item: any) => ({
+            _id: item._id,
+            loi_msg: item.loiMsg,
+          }));
+          console.log(this.loiTypes);
+          if (this.loiTypes.length > 0) {
+            this.onLoiChange();
+          }
+        } else {
+          console.error('Unexpected response structure:', response.data);
         }
       })
       .catch(error => {
         console.error('There was an error fetching loiTypes:', error);
       });
+    
   }
   onInputChange() {
     this.subCaseReferenceError = null;
@@ -70,18 +90,25 @@ export class UploadSubcaseComponent {
       this.selectedInstruction = ''; // Clear selected instruction
       return;
     }
-    
-    axios.get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`)
-      .then(response => {
+   
+    axios
+      .get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`,  {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Ensure cookies are sent with the request
+      })
+      .then((response) => {
         // this.instructionTypes = response.data.data;
 
         this.instructionTypes = response.data.data.map((item: any) => ({
           _id: item._id,
-          instruction_msg: item.instructionMsg
+          instruction_msg: item.instructionMsg,
         }));
         console.log(this.instructionTypes);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching Instruction Types:', error);
       });
   }
@@ -91,7 +118,13 @@ export class UploadSubcaseComponent {
       return;
     }
 
-    axios.get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`)
+    axios.get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true, // Ensure cookies are sent with the request
+    })
       .then(response => {
         
         this.parameters = response.data.data.map((item: any) => ({
