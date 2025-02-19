@@ -83,14 +83,14 @@
                 </svg>
               </ng-template>
             </td>
-            <td class="case-list__utext" (click)="viewCaseDetails(caseItem)">{{ caseItem.ref_number }}</td>
-            <td>{{ getInstructionType(caseItem) }}</td>
-            <td>{{ caseItem.client_name }}</td>
-            <td>{{ getTotalFiles(caseItem) }}</td>
+            <td class="case-list__utext" (click)="viewCaseDetails(caseItem)">{{ caseItem.refNumber }}</td>
+            <td>{{ caseItem.instructionMsg }}</td>
+            <td>{{ caseItem.clientName }}</td>
+            <td>{{ caseItem.files.length }}</td>
             <td>{{ getTotalPages(caseItem) }}</td>
-            <td>{{ caseItem.created_on | date }}</td>
-            <td>{{ getCaseUploader(caseItem) }}</td>
-            <td>{{ getCaseStatus(caseItem) }}</td>
+            <td>{{ caseItem.createdAt | date }}</td>
+            <td>{{ caseItem.uploadedBy }}</td>
+            <td>{{ caseItem.caseStatus }}</td>
             <td>
               <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')">View LOI</a>
             </td>
@@ -176,19 +176,19 @@
   <ng-container *ngFor="let caseItem of filteredData">
     <div class="case-card">
       <div class="case-card-header">
-        <h3>{{ caseItem.ref_number }}</h3>
+        <h3>{{  caseItem.refNumber }}</h3>
         <button (click)="toggleSubCases(caseItem)">Toggle Subcases</button>
       </div>
       <div class="case-card-details">
-        <p><strong>Client Name:</strong> {{ caseItem.client_name }}</p>
+        <p><strong>Client Name:</strong> {{ caseItem.clientName }}</p>
         <p>
-          <strong>Instruction Type:</strong> {{ getInstructionType(caseItem) }}
+          <strong>Instruction Type:</strong> {{ caseItem.instructionMsg }}
         </p>
-        <p><strong>Total Files:</strong> {{ getTotalFiles(caseItem) }}</p>
+        <p><strong>Total Files:</strong> {{ caseItem.files.length }}</p>
         <p><strong>Total Pages:</strong> {{ getTotalPages(caseItem) }}</p>
-        <p><strong>Date Uploaded:</strong> {{ caseItem.created_on | date }}</p>
-        <p><strong>Uploaded By:</strong> {{ getCaseUploader(caseItem) }}</p>
-        <p><strong>Status:</strong> {{ getCaseStatus(caseItem) }}</p>
+        <p><strong>Date Uploaded:</strong> {{ caseItem.createdAt | date }}</p>
+        <p><strong>Uploaded By:</strong> {{ caseItem.uploadedBy }}</p>
+        <p><strong>Status:</strong> {{ caseItem.caseStatus }}</p>
       </div>
       <div class="case-card-actions">
         <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')">View LOI</a>
