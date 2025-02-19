@@ -1,6 +1,7 @@
 <div class="upload-new-case__container">
   <div class="upload-new-case__header">
-    <h2 class="upload-new-case__title">Upload New Case</h2>
+    <h2 class="upload-new-case__title" *ngIf="!viewOnly">Upload New Case</h2>
+    <h2 class="upload-new-case__title" *ngIf="viewOnly">Main Case View</h2>
   </div>
 
   <!-- Form container -->
@@ -24,6 +25,7 @@
             minlength="2"
             maxlength="50"
             pattern="^[A-Za-z]"
+            [disabled]="viewOnly"
           />
           <div *ngIf="isSubmitted && clientNameError" class="error-message">
             {{ clientNameError }}
@@ -39,6 +41,7 @@
             placeholder="Enter reference number"
             [(ngModel)]="caseReference"
             [ngModelOptions]="{ standalone: true }"
+            [disabled]="viewOnly"
           />
           <div *ngIf="isSubmitted && caseReferenceError" class="error-message">
             {{ caseReferenceError }}
@@ -53,6 +56,7 @@
             [(ngModel)]="selectedLoi"
             [ngModelOptions]="{ standalone: true }"
             (ngModelChange)="onLoiChange()"
+            [disabled]="viewOnly"
           >
             <option value="" disabled selected>Select LOI Type</option>
             <option *ngFor="let loi of loiTypes" [value]="loi._id">
@@ -67,7 +71,7 @@
         <!-- Date of Branch / Liability -->
         <div class="form-group">
           <label for="date-of-branch">Date of Breach / Liability</label>
-          <input (input)="onInputChange()" type="date" id="date-of-branch" name="dateOfBranch" [(ngModel)]="dateOfBranch"/>
+          <input (input)="onInputChange()" type="date" id="date-of-branch" name="dateOfBranch" [(ngModel)]="dateOfBranch" [disabled]="viewOnly"/>
           <div *ngIf="isSubmitted && dateError" class="error-message">
             {{ dateError }}
           </div>
@@ -76,7 +80,7 @@
 
       <!-- Upload LOI -->
       <div class="form-group">
-        <label for="loi-upload" class="loi-upload-label">
+        <label for="loi-upload" class="loi-upload-label" >
           <span class="loi-text">Upload Letter of Instruction</span>
           <span class="upload-icon">📎</span>
         </label>
@@ -91,11 +95,14 @@
           [(ngModel)]="selectedInstruction"
           [ngModelOptions]="{ standalone: true }"
           (ngModelChange)="onInstructionChange()"
+          [disabled]="viewOnly"
         >
-          <option value="" disabled selected>Select Instruction Type</option>
-          <option *ngFor="let instruction of instructionTypes" [value]="instruction._id">
+          <option value="" disabled selected *ngIf="!viewOnly">Select Instruction Type</option>
+          <option *ngFor="let instruction of instructionTypes" [value]="instruction._id" >
             {{ instruction.instruction_msg }}
           </option>
+
+         
         </select>
         <div *ngIf="isSubmitted && instructionError" class="error-message">
           {{ instructionError }}
@@ -108,11 +115,12 @@
       id="upload-new-case__form2"
       class="upload-new-case__form"
       (input)="onInputChange()"
+      
     >
       <h3 class="upload-new-case__form-title">SELECT THE PARAMETERS</h3>
       <div class="form-group" *ngIf="parameters.length > 0">
         <ul class="parameter-list">
-          <li *ngFor="let param of parameters" (click)="toggleSelection(param._id)">
+          <li *ngFor="let param of parameters" (click)="toggleSelection(param._id)" >
             <div
               class="checkbox-container"
               
@@ -142,8 +150,15 @@
                 />
               </svg>
             </div>
-            <div class="parameter-details">
+            <div class="parameter-details" >
               {{ param.parameter_msg }}
+            </div>
+          </li>
+        </ul>
+        <ul class="parameter-list" *ngIf="viewOnly">
+          <li *ngFor="let param of selectedParameters" >
+            <div class="parameter-details" >
+              {{ selectedParameters[0] }}
             </div>
           </li>
         </ul>
@@ -153,7 +168,7 @@
       </div>
 
       <!-- Submit Button -->
-      <div class="form-group">
+      <div class="form-group" *ngIf="!viewOnly">
         <button type="button" (click)="submitForm()" class="submit-button">
           Submit
         </button>

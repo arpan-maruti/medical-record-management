@@ -40,9 +40,14 @@ export class CaseListComponent {
   
 
   
-  
+  viewCaseDetails(caseItem: any) {
+    this.router.navigate(['/case-management/main-case-view'], {
+      state: { caseData: caseItem, viewOnly: true }
+    });
+  }
+
  
-   // Optional: Method to update the screen width dynamically on page load
+  
    
 
   ngAfterViewInit() {

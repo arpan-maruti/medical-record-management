@@ -443,6 +443,36 @@ export class DataService {
 
     return instructionType.instruction_msg;
   }
+  getInstructions()
+  {
+    return this.mockData.instruction_types;
+  }
+  getLoi(caseItem: any) {
+    const instructionType= this.getInstructionType(caseItem);
+    const totalInstruction = this.getInstructions();
+    console.log(totalInstruction);
+    const matchingParam = totalInstruction.find(
+      (param: any) => param.instruction_msg === instructionType
+    );
+    if (!matchingParam) {
+      return null; // or a default value
+    }
+  
+    const loi = matchingParam.loi_id;
+    const loiType = this.getLoiTypes().find(
+      (msg: any) => msg._id === loi
+    );
+    console.log(loiType);
+    if (!loiType) {
+      console.error(
+        'No matching loi type found for loi_id:',
+        loi
+      );
+      return null; // or a default value
+    }
+
+    return loiType.loi_msg;
+  }
 
   getCases(): Array<any> {
     return this.mockData.cases;
