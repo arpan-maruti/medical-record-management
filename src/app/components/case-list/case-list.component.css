@@ -400,6 +400,10 @@ button:hover {
   margin: 0 10px;
 }
 
+.underline {
+  text-decoration: underline;
+}
+
 @media (max-width: 1024px) {
   .table th, .table td {
     padding: 0.5rem;
