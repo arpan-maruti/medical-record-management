@@ -6,8 +6,10 @@
       <div class="custom-dropdown">
         <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
           <option value="">All Status</option>
-          <option value="Open">Open</option>
-          <option value="Closed">Closed</option>
+          <option value="uploaded">uploaded</option>
+          <option value="inProgress">in progress</option>
+          <option value="aiAnalysisCompleted">AI Analysis Completed</option>
+          <option value="error">error</option>
         </select>
       </div>
     </div>
@@ -28,7 +30,7 @@
   </div>
 
   <!-- Desktop/Table view with table -->
-  <div *ngIf="isDataAvailable" class="table-container desktop-table-view">
+  <div *ngIf="isDataAvailable && filteredData.length > 0" class="table-container desktop-table-view">
     <table class="table table-striped">
       <thead>
         <tr class="table-header">
@@ -39,9 +41,7 @@
               <span *ngIf="sortDirection === 'desc'">▼</span>
             </span>
           </th>
-          <th>Instruction Type
-           
-          </th>
+          <th>Instruction Type</th>
           <th (click)="sortData('client_name')">Client Name
             <span *ngIf="sortKey === 'client_name'">
               <span *ngIf="sortDirection === 'asc'">▲</span>
@@ -97,31 +97,27 @@
             <td>
               <a class="text-primary" (click)="openUploadFiles()">Upload File</a>
             </td>
-            <!-- <td *ngIf="uploadedFileName"> -->
-            <!-- <p>Uploaded: {{ uploadedFileName }}</p> -->
-            <!-- </td> -->
             <td>
               <a class="text-primary" (click)="openViewLabel()">View/Label</a>
             </td>
             <td>
               <a class="text-primary">Generate Summary</a>
             </td>
-
             <td>
-              <img src="assets/plus.png" class="plus-icon" (click)="addSubcase()" />
+              <img src="assets/plus.png" class="plus-icon" (click)="addSubcase(caseItem)" />
             </td>
           </tr>
           <!-- Subcases -->
-          <tr *ngFor="let subCase of getSubCases(caseItem._id)" [hidden]="!caseItem.expanded" class="subcase-row">
+          <tr *ngFor="let subCase of caseItem.subCases" [hidden]="!caseItem.expanded" class="subcase-row">
             <td></td>
-            <td class="case-list__utext">{{ subCase.ref_number }}</td>
-            <td>{{ getInstructionType(subCase) }}</td>
-            <td>{{ subCase.client_name }}</td>
-            <td>{{ getTotalFiles(subCase) }}</td>
+            <td class="case-list__utext">{{ subCase.refNumber }}</td>
+            <td>{{ subCase.instructionMsg}}</td>
+            <td>{{ subCase.clientName }}</td> <!-- Updated from client_name to clientName -->
+            <td>{{ subCase.files.length }}</td>
             <td>{{ getTotalPages(subCase) }}</td>
-            <td>{{ subCase.created_on | date }}</td>
-            <td>{{ getCaseUploader(subCase) }}</td>
-            <td>{{ getCaseStatus(subCase) }}</td>
+            <td>{{ subCase.createdAt | date }}</td> <!-- Updated from created_on to createdAt -->
+            <td>{{ subCase.uploadedBy }}</td>
+            <td>{{ subCase.caseStatus }}</td> 
             <td>
               <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')">View LOI</a>
             </td>
@@ -140,6 +136,7 @@
       </tbody>
     </table>
   </div>
+
   <!-- View/Label Popup -->
   <div *ngIf="isViewLabelVisible" class="view-label-popup">
     <app-view-and-label [selectedFiles]="selectedFiles" (closePopup)="closeViewLabel()">
@@ -170,20 +167,18 @@
     <app-upload-files (closePopup)="closeUploadFiles()"> </app-upload-files>
   </div>
 </div>
-<!-- <button class="btn btn-secondary" (click)="closePdfPreview()">Close</button> -->
+
 <!-- Mobile view with card layout -->
 <div class="cards-container mobile-card-view">
   <ng-container *ngFor="let caseItem of filteredData">
     <div class="case-card">
       <div class="case-card-header">
-        <h3>{{  caseItem.refNumber }}</h3>
+        <h3>{{ caseItem.refNumber }}</h3>
         <button (click)="toggleSubCases(caseItem)">Toggle Subcases</button>
       </div>
       <div class="case-card-details">
         <p><strong>Client Name:</strong> {{ caseItem.clientName }}</p>
-        <p>
-          <strong>Instruction Type:</strong> {{ caseItem.instructionMsg }}
-        </p>
+        <p><strong>Instruction Type:</strong> {{ caseItem.instructionMsg }}</p>
         <p><strong>Total Files:</strong> {{ caseItem.files.length }}</p>
         <p><strong>Total Pages:</strong> {{ getTotalPages(caseItem) }}</p>
         <p><strong>Date Uploaded:</strong> {{ caseItem.createdAt | date }}</p>
@@ -195,26 +190,24 @@
         <a class="text-primary" (click)="openUploadFiles()">Upload File</a>
         <a class="text-primary" (click)="openViewLabel()">View/Label</a>
         <a class="text-primary">Generate Summary</a>
-        <img src="assets/plus.png" class="plus-icon" (click)="addSubcase()" />
+        <img src="assets/plus.png" class="plus-icon" (click)="addSubcase(caseItem)"/>
       </div>
 
       <!-- Display Subcases in Card Layout -->
       <div *ngIf="caseItem.expanded">
-        <div *ngFor="let subCase of getSubCases(caseItem._id)" class="subcase-card">
-          <h4>Subcase Ref No: {{ subCase.ref_number }}</h4>
-          <p><strong>Client Name:</strong> {{ subCase.client_name }}</p>
-          <p>
-            <strong>Instruction Type:</strong> {{ getInstructionType(subCase) }}
-          </p>
-          <p><strong>Total Files:</strong> {{ getTotalFiles(subCase) }}</p>
+        <div *ngFor="let subCase of caseItem.subCases" class="subcase-card">
+          <h4>Subcase Ref No: {{ subCase.refNumber }}</h4>
+          <p><strong>Client Name:</strong> {{ subCase.clientName }}</p>
+          <p><strong>Instruction Type:</strong> {{ subCase.instructionMsg }}</p>
+          <p><strong>Total Files:</strong> {{ subCase.files.length }}</p>
           <p><strong>Total Pages:</strong> {{ getTotalPages(subCase) }}</p>
-          <p><strong>Date Uploaded:</strong> {{ subCase.created_on | date }}</p>
-          <p><strong>Uploaded By:</strong> {{ getCaseUploader(subCase) }}</p>
-          <p><strong>Status:</strong> {{ getCaseStatus(subCase) }}</p>
+          <p><strong>Date Uploaded:</strong> {{ subCase.createdAt | date }}</p>
+          <p><strong>Uploaded By:</strong> {{ subCase.uploadedBy }}</p>
+          <p><strong>Status:</strong> {{ subCase.caseStatus }}</p>
 
           <!-- Action Buttons for Subcases -->
           <div class="subcase-card-actions">
-            <a class="text-primary" (click)="openPdfPreview(subCase.ref_number + '.pdf')">View LOI</a>
+            <a class="text-primary" (click)="openPdfPreview(subCase.refNumber + '.pdf')">View LOI</a>
             <a class="text-primary" (click)="openUploadFiles()">Upload File</a>
             <a class="text-primary" (click)="openViewLabel()">View/Label</a>
             <a class="text-primary">Generate Summary</a>
@@ -223,4 +216,15 @@
       </div>
     </div>
   </ng-container>
+</div>
+
+<div class="pagination-bar">
+  <button (click)="previousPage()" [disabled]="currentPage === 1" class="pagination-button">Previous</button>
+  <span class="pagination-info">Page</span>
+  <select [(ngModel)]="currentPage" (ngModelChange)="goToPage($event)" class="pagination-select">
+    <option *ngFor="let page of getPages()" [value]="page">{{ page }}</option>
+  </select>
+  <span class="pagination-info">of {{ totalPages }}</span>
+  <input type="number" [(ngModel)]="inputPage" (change)="goToInputPage()" class="pagination-input" min="1" [max]="totalPages" />
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="pagination-button">Next</button>
 </div>

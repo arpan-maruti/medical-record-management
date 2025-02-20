@@ -3,17 +3,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../../services/data.service';
 import axios from 'axios';
-
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { jwtDecode } from 'jwt-decode';
+
 @Component({
   selector: 'app-upload-subcase',
   imports: [FormsModule, CommonModule],
   templateUrl: './upload-subcase.component.html',
   styleUrl: './upload-subcase.component.css',
 })
-export class UploadSubcaseComponent {
+export class UploadSubcaseComponent implements OnInit {
   clientName: string | undefined;
   parentCaseReference: string | undefined;
+  parentCaseId: string | undefined;
   subCaseReference: string | undefined;
   dateOfBranch: string | undefined;
   loiTypes: Array<any> = [];
@@ -29,8 +32,16 @@ export class UploadSubcaseComponent {
   isSubmitted: boolean = false;
   loiError: string | null = null;
   instructionError: string | null = null;
-  constructor(private dataService: DataService, private cookieService: CookieService) {}
-  token: string|null = null;
+  token: string | null = null;
+
+  constructor(private dataService: DataService, private cookieService: CookieService, private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as { clientName: string, parentCaseReference: string, parentCaseId: string };
+    this.clientName = state?.clientName;
+    this.parentCaseReference = state?.parentCaseReference;
+    this.parentCaseId = state?.parentCaseId; // Add this line
+  }
+
   ngOnInit() {
     this.fetchLoiTypes();
   }
@@ -39,11 +50,9 @@ export class UploadSubcaseComponent {
     return this.cookieService.get(name) || null;
   }
 
-  
   fetchLoiTypes(): void {
-
     this.token = this.getCookie('jwt');
-    console.log('Retrieved Token:1', this.token); // Log the retrieved token to debug
+    console.log('Retrieved Token:', this.token); // Log the retrieved token to debug
 
     if (!this.token) {
       console.error('No JWT token found in cookies');
@@ -74,25 +83,25 @@ export class UploadSubcaseComponent {
       .catch(error => {
         console.error('There was an error fetching loiTypes:', error);
       });
-    
   }
+
   onInputChange() {
     this.subCaseReferenceError = null;
     this.dateError = null;
     this.parametersError = null;
-    this.loiError=null;
-    this.instructionError=null;
-    
+    this.loiError = null;
+    this.instructionError = null;
   }
+
   onLoiChange(): void {
     if (!this.selectedLoi) {
       this.instructionTypes = []; // Reset instruction types if no LOI is selected
       this.selectedInstruction = ''; // Clear selected instruction
       return;
     }
-   
+
     axios
-      .get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`,  {
+      .get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`, {
         headers: {
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
@@ -100,8 +109,6 @@ export class UploadSubcaseComponent {
         withCredentials: true, // Ensure cookies are sent with the request
       })
       .then((response) => {
-        // this.instructionTypes = response.data.data;
-
         this.instructionTypes = response.data.data.map((item: any) => ({
           _id: item._id,
           instruction_msg: item.instructionMsg,
@@ -112,6 +119,7 @@ export class UploadSubcaseComponent {
         console.error('Error fetching Instruction Types:', error);
       });
   }
+
   onInstructionChange(): void {
     if (!this.selectedInstruction) {
       this.parameters = []; // Reset parameters if no instruction is selected
@@ -126,12 +134,10 @@ export class UploadSubcaseComponent {
       withCredentials: true, // Ensure cookies are sent with the request
     })
       .then(response => {
-        
         this.parameters = response.data.data.map((item: any) => ({
           _id: item._id,
           parameter_msg: item.parameterMsg
         }));
-
         console.log(this.parameters);
       })
       .catch(error => {
@@ -140,15 +146,12 @@ export class UploadSubcaseComponent {
   }
 
   isSelected(paramId: string): boolean {
-    // console.log("Selected Parameters:", this.selectedParameters);
     return !!this.selectedParameters[paramId];
   }
 
-  // Toggle the selection of a parameter
   toggleSelection(paramId: string): void {
     this.selectedParameters[paramId] = !this.selectedParameters[paramId];
     if (Object.values(this.selectedParameters).includes(true)) {
-      // If at least one parameter is selected, clear the error message
       this.parametersError = null;
     }
   }
@@ -160,35 +163,29 @@ export class UploadSubcaseComponent {
     this.parametersError = null;
     this.loiError = null;
     this.instructionError = null;
-
-    // Validate subCaseReference
+  
     if (!this.subCaseReference || this.subCaseReference.trim() === '') {
       this.subCaseReferenceError = 'Subcase Reference is required.';
     }
-
-    // Validate dateOfBranch
+  
     if (!this.dateOfBranch) {
       this.dateError = 'Date is required.';
     } else if (!/^\d{4}-\d{2}-\d{2}$/.test(this.dateOfBranch)) {
       this.dateError = 'Invalid date format. Please enter a valid date (YYYY-MM-DD).';
     }
-
-    // Validate LOI selection
+  
     if (!this.selectedLoi) {
       this.loiError = 'LOI Type is required.';
     }
-
-    // Validate Instruction selection
+  
     if (!this.selectedInstruction) {
       this.instructionError = 'Instruction Type is required.';
     }
-
-    // Validate parameters selection
+  
     if (Object.values(this.selectedParameters).every(value => !value)) {
       this.parametersError = 'At least one parameter must be selected.';
     }
-
-    // Check if there are any errors before proceeding
+  
     if (this.subCaseReferenceError || this.dateError || this.parametersError || this.loiError || this.instructionError) {
       console.error('Validation errors:', {
         subCaseReferenceError: this.subCaseReferenceError,
@@ -197,30 +194,59 @@ export class UploadSubcaseComponent {
         instructionError: this.instructionError,
         parametersError: this.parametersError
       });
-      return; // Stop form submission if there are errors
+      return;
     }
-
-    // Prepare the form data to be submitted
+  
+    // Decode the JWT token to extract user_id
+    const token = this.getCookie('jwt');
+    let userId: string | null = null;
+  
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        userId = decodedToken?.id || null; // Adjust based on your token structure
+      } catch (error) {
+        console.error('Error decoding JWT token:', error);
+      }
+    }
+  
+    if (!userId) {
+      console.error('Unable to extract user ID from JWT token.');
+      return; // Abort submission if user ID cannot be retrieved
+    }
+  
     const formData = {
-      parent_id: 'case1', // Parent ID can be set dynamically
-      client_name: this.clientName?.trim() || '',
-      subCaseReference_no: this.subCaseReference?.trim() || '',
-      parentCaseReference_no: this.parentCaseReference?.trim() || '',
-      is_deleted: false,
-      date_of_breach: this.dateOfBranch?.trim() || '',
-      created_by: 'user1', // Set dynamically as needed (e.g., current user)
-      modified_by: 'user2', // Set dynamically as needed
-      created_on: new Date().toISOString(),
-      modified_on: new Date().toISOString(),
-      case_uploaded_by: 'John Doe', // Can be dynamic if needed
-      case_status: 'status4', // Set dynamically if required
-      files: [], // Empty array as per requirement
+      parentId: this.parentCaseId, // Use parentCaseId instead of parentCaseReference
+      clientName: this.clientName?.trim() || '',
+      refNumber: this.subCaseReference?.trim() || '',
+      dateOfBreach: this.dateOfBranch?.trim() || '',
+      caseStatus: 'uploaded',
       parameters: Object.keys(this.selectedParameters).filter(param => this.selectedParameters[param]), // Only include selected parameters
+      files: [],
+      isLoi: !!this.selectedLoi,
+      isDeleted: false,
+      createdBy: userId, // Set createdBy from the decoded token
+      modifiedBy: userId, // Set modifiedBy from the decoded token
     };
-
+  
     console.log('Form Data:', formData);
-    // You can now proceed with API submission here
+  
+    // Call the API
+    axios
+      .post('http://localhost:5000/case/', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log('Subcase created successfully:', response.data);
+        this.router.navigate(['/case-management']);
+      })
+      .catch((error) => {
+        console.error('Error creating subcase:', error.response?.data || error.message);
+        // Handle error - e.g., show an error message
+      });
   }
-
-
 }
