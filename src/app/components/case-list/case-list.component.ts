@@ -6,6 +6,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ViewAndLabelComponent } from '../view-and-label/view-and-label.component';
 import { UploadFilesComponent } from '../upload-files/upload-files.component';
+import { CookieService } from 'ngx-cookie-service';
 import axios from 'axios';
 @Component({
   selector: 'app-case-list',
@@ -34,7 +35,8 @@ export class CaseListComponent {
   constructor(private cdr: ChangeDetectorRef,
     private dataService: DataService, 
     private sanitizer: DomSanitizer,
-    private router: Router) {
+    private router: Router,
+  private cookieService: CookieService) {
     
   }
   
@@ -55,7 +57,18 @@ export class CaseListComponent {
   }
   
   fetchCases() {
-    axios.get('http://localhost:5000/case')
+    const getCookie= (name: string): string | null =>{
+      return this.cookieService.get(name) || null;
+  }
+  const token = getCookie('jwt');
+console.log('Retrieved Token:1', token);
+    axios.get('http://localhost:5000/case', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+    },
+    withCredentials: true
+    })
       .then(response => {
         console.log(response.data);
         if (response.data.code === 'Success') {
