@@ -21,7 +21,7 @@ export class ProfileComponent{
   // Fetch user profile data
   getUserProfile() {
     const token = this.cookieService.get('jwt'); // Get the JWT token from cookies
-
+    
     if (token) {
       const decodedToken: any = jwtDecode(token); // Decode the JWT token
       const userId = decodedToken.id; // Extract the user_id from the token payload
@@ -42,7 +42,7 @@ export class ProfileComponent{
         console.error('Error fetching user data:', error);
       });
     } else {
-      console.error('No JWT token found');
+      // console.error('No JWT token found');
     }
   }
 }

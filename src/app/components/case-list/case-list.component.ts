@@ -28,6 +28,9 @@ export class CaseListComponent {
   searchQuery: string = '';  // Search query
   selectedStatus: string  = '';
   data: any[] = [];
+  currentPage: number = 1; // Current page
+  totalPages: number = 1; // Total pages
+  inputPage: number = 1; // Input page number
 
 
 
@@ -56,37 +59,63 @@ export class CaseListComponent {
     this.fetchCases();
   }
   
-  fetchCases() {
-    const getCookie= (name: string): string | null =>{
+  fetchCases(page: number = 1, caseStatus: string = '') {
+    const getCookie = (name: string): string | null => {
       return this.cookieService.get(name) || null;
-  }
-  const token = getCookie('jwt');
-console.log('Retrieved Token:1', token);
-    axios.get('http://localhost:5000/case', {
+    }
+    const token = getCookie('jwt');
+    
+    if (!token) {
+      // console.error('Token is null. Unable to fetch cases.');
+      this.isDataAvailable = false;
+      return;
+    }
+  
+    console.log('Retrieved Token:', token);
+  
+    let apiUrl = `http://localhost:5000/case?page=${page}`;
+    if (caseStatus) {
+      apiUrl += `&caseStatus=${caseStatus}`;
+    }
+  
+    axios.get(apiUrl, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
-    },
-    withCredentials: true
+      },
+      withCredentials: true
     })
       .then(response => {
         console.log(response.data);
         if (response.data.code === 'Success') {
           this.data = response.data.data; // Assign the fetched data
           this.filteredData = [...this.data]; // Initialize filtered data
-          console.log(this.filteredData);
           this.isDataAvailable = this.data.length > 0; // Set data availability flag
-          // this.applyFilters(); // Apply initial filters
-          // this.cdr.detectChanges(); // Trigger change detection
+          this.totalPages = response.data.pagination.totalPages; // Set total pages
         } else {
           console.error('Failed to fetch cases:', response.data.message);
+          this.isDataAvailable = false;
         }
       })
       .catch(error => {
         console.error('Error fetching cases:', error);
+        this.isDataAvailable = false;
       });
   }
 
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.fetchCases(this.currentPage, this.selectedStatus);
+    }
+  }
+  
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.fetchCases(this.currentPage, this.selectedStatus);
+    }
+  }
   openUploadFiles() {
     this.isUploadFilesVisible = true;
   }
@@ -94,13 +123,11 @@ console.log('Retrieved Token:1', token);
   closeUploadFiles() {
     this.isUploadFilesVisible = false;
   }
-  // Filter data by search query
-  onSearchChange() {
-    this.applyFilters();  // Reapply both search and status filters
-  }
-
-  // Filter data by selected status
   onStatusChange() {
+    this.fetchCases(this.currentPage, this.selectedStatus);
+  }
+  
+  onSearchChange() {
     this.applyFilters();  // Reapply both search and status filters
   }
 
@@ -130,6 +157,67 @@ console.log('Retrieved Token:1', token);
   // Toggle visibility of subcases
   toggleSubCases(caseItem: any) {
     caseItem.expanded = !caseItem.expanded; // Toggle subcase visibility
+  
+    // Fetch subcases only if the case is expanded and subcases are not already fetched
+    if (caseItem.expanded && !caseItem.subCases) {
+      this.fetchSubCases(caseItem._id).then(subCases => {
+        caseItem.subCases = subCases; // Store the fetched subcases in the caseItem object
+      });
+    }
+  }
+
+
+  fetchSubCases(parentId: string): Promise<any[]> {
+    console.log(parentId);
+    return new Promise((resolve, reject) => {
+      const token = this.cookieService.get('jwt');
+      axios.get(`http://localhost:5000/case/${parentId}/subcases/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true
+      })
+      .then(response => {
+        console.log(response.data);
+        if (response.data.code === 'Success') {
+          
+          resolve(response.data.data); // Resolve with the fetched subcases
+        } else {
+          console.error('Failed to fetch subcases:', response.data.message);
+          reject(response.data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching subcases:', error);
+        reject(error);
+      });
+    });
+  }
+
+
+  getPages(): number[] {
+    const pages: number[] = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  goToPage(page: number) {
+    if (page !== this.currentPage) {
+      this.currentPage = page;
+      this.fetchCases(this.currentPage, this.selectedStatus);
+    }
+  }
+  
+  goToInputPage() {
+    if (this.inputPage >= 1 && this.inputPage <= this.totalPages) {
+      this.currentPage = this.inputPage;
+      this.fetchCases(this.currentPage, this.selectedStatus);
+    } else {
+      this.inputPage = this.currentPage; // Reset input to current page if out of range
+    }
   }
  
 
@@ -161,8 +249,9 @@ console.log('Retrieved Token:1', token);
     this.isPdfPreviewVisible = false;
   }
 
-  getSubCases(parentId: string) {
-    return this.dataService.getSubCases(parentId);
+  getSubCases(caseItem: any): any[] {
+    
+    return caseItem.subCases || []; // Return the stored subcases or an empty array if none
   }
 
   getInstructionType(caseItem: any) {
@@ -189,10 +278,15 @@ console.log('Retrieved Token:1', token);
   onFileUploaded(fileName: string) {
     this.uploadedFileName = fileName;  // Store the file name in the parent component
   }
-
-  addSubcase() {
-    this.router.navigate(['case-management/main-case/upload-subcase']);
-  };
+  addSubcase(caseItem: any) {
+    this.router.navigate(['case-management/main-case/upload-subcase'], {
+      state: {
+        parentCaseId: caseItem._id,
+        clientName: caseItem.clientName,
+        parentCaseReference: caseItem.refNumber
+      }
+    });
+  }
 
   addCase() {
     this.router.navigate(['case-management/upload-new-case']);
