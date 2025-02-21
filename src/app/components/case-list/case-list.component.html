@@ -115,7 +115,7 @@
             <td>{{ subCase.clientName }}</td> <!-- Updated from client_name to clientName -->
             <td>{{ subCase.files.length }}</td>
             <td>{{ getTotalPages(subCase) }}</td>
-            <td>{{ subCase.createdAt | date }}</td> <!-- Updated from created_on to createdAt -->
+            <td>{{ subCase.createdAt | date: 'dd MMM yyyy' }}</td> <!-- Updated from created_on to createdAt -->
             <td>{{ subCase.uploadedBy }}</td>
             <td>{{ subCase.caseStatus }}</td> 
             <td>
@@ -173,7 +173,7 @@
   <ng-container *ngFor="let caseItem of filteredData">
     <div class="case-card">
       <div class="case-card-header">
-        <h3>{{ caseItem.refNumber }}</h3>
+        <h3>{{ caseItem.ref_number }}</h3>
         <button (click)="toggleSubCases(caseItem)">Toggle Subcases</button>
       </div>
       <div class="case-card-details">
@@ -183,8 +183,8 @@
         </p>
         <p><strong>Total Files:</strong> {{ caseItem.files.length }}</p>
         <p><strong>Total Pages:</strong> {{ getTotalPages(caseItem) }}</p>
-        <p><strong>Date Uploaded:</strong> {{ caseItem.created_at | date }}</p>
-        <p><strong>Uploaded By:</strong> {{ caseItem.modified_by.firstName }}</p>
+        <p><strong>Date Uploaded:</strong> {{ caseItem.created_at | date: 'dd MMM yyyy' }}</p>
+        <p><strong>Uploaded By:</strong> {{ caseItem.modified_by.firstName }} {{ caseItem.modified_by.lastName }}</p>
         <p><strong>Status:</strong> {{ caseItem.case_status }}</p>
       </div>
       <div class="case-card-actions">
@@ -203,9 +203,9 @@
           <p><strong>Instruction Type:</strong> {{ subCase.instructionMsg }}</p>
           <p><strong>Total Files:</strong> {{ subCase.files.length }}</p>
           <p><strong>Total Pages:</strong> {{ getTotalPages(subCase) }}</p>
-          <p><strong>Date Uploaded:</strong> {{ subCase.createdAt | date }}</p>
+          <p><strong>Date Uploaded:</strong> {{ subCase.createdAt | date: 'dd MMM yyyy' }}</p>
           <p><strong>Uploaded By:</strong> {{ subCase.uploadedBy }}</p>
-          <p><strong>Status:</strong> {{ subCase.caseStatus }}</p>
+          <p><strong>Status:</strong> {{ subCase.case_status }}</p>
 
           <!-- Action Buttons for Subcases -->
           <div class="subcase-card-actions">
