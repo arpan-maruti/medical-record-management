@@ -68,7 +68,7 @@ export class UploadNewCaseComponent implements OnInit {
       console.log("instr:" + this.selectedInstruction);
   
       // Populate Parameters
-      this.selectedParameters = this.caseData.parameters || []; // Assuming parameters is an array of selected parameter IDs
+      this.selectedParameters = this.caseData.parameters|| []; // Assuming parameters is an array of selected parameter IDs
       console.log(this.selectedParameters);
     }
   
@@ -110,7 +110,7 @@ export class UploadNewCaseComponent implements OnInit {
       if (response.data && Array.isArray(response.data.data)) {
         this.loiTypes = response.data.data.map((item: any) => ({
           _id: item._id,
-          loi_msg: item.loiMsg,
+          loi_msg: item.loi_msg,
         }));
         console.log(this.loiTypes);
         if (this.loiTypes.length > 0) {
@@ -152,7 +152,7 @@ export class UploadNewCaseComponent implements OnInit {
       .then((response) => {
         this.instructionTypes = response.data.data.map((item: any) => ({
           _id: item._id,
-          instruction_msg: item.instructionMsg,
+          instruction_msg: item.instruction_msg,
         }));
         console.log(this.instructionTypes);
       })
@@ -179,7 +179,7 @@ export class UploadNewCaseComponent implements OnInit {
       .then((response) => {
         this.parameters = response.data.data.map((item: any) => ({
           _id: item._id,
-          parameter_msg: item.parameterMsg,
+          parameter_msg: item.parameter_msg,
         }));
         console.log(this.parameters);
       })
