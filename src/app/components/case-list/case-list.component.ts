@@ -91,7 +91,7 @@ export class CaseListComponent {
           this.data = response.data.data; // Assign the fetched data
           this.filteredData = [...this.data]; // Initialize filtered data
           this.isDataAvailable = this.data.length > 0; // Set data availability flag
-          this.totalPages = response.data.pagination.totalPages; // Set total pages
+          this.totalPages = response.data.pagination.total_pages; // Set total pages
         } else {
           console.error('Failed to fetch cases:', response.data.message);
           this.isDataAvailable = false;
@@ -282,8 +282,8 @@ export class CaseListComponent {
     this.router.navigate(['case-management/main-case/upload-subcase'], {
       state: {
         parentCaseId: caseItem._id,
-        clientName: caseItem.clientName,
-        parentCaseReference: caseItem.refNumber
+        clientName: caseItem.client_name,
+        parentCaseReference: caseItem.ref_number
       }
     });
   }
