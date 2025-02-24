@@ -94,8 +94,7 @@
             <input
               type="text"
               id="date-of-branch"
-              [(ngModel)]="dateOfBranch"
-              [ngModelOptions]="{ standalone: true }"
+              [value]="dateOfBranch | date: 'dd MMM yyyy'"
               disabled
             />
           </ng-container>
@@ -190,7 +189,7 @@
         <ul class="parameter-list" *ngIf="viewOnly">
           <li *ngFor="let param of selectedParameters">
             <div class="parameter-details">
-              {{ param }}
+              {{ getParameterMsg(param) }}
             </div>
           </li>
         </ul>

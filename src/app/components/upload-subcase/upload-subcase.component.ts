@@ -55,7 +55,7 @@ export class UploadSubcaseComponent implements OnInit {
     console.log('Retrieved Token:', this.token); // Log the retrieved token to debug
 
     if (!this.token) {
-      console.error('No JWT token found in cookies');
+      // console.error('No JWT token found in cookies');
       return; // Prevent making the API call if the token is not found
     }
     axios.get('http://localhost:5000/loiType', {
