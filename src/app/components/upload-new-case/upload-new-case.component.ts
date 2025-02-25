@@ -55,16 +55,16 @@ export class UploadNewCaseComponent implements OnInit {
     if (this.caseData) {
       console.log(this.caseData);
       // Populate basic case details
-      this.clientName = this.caseData.clientName;
-      this.caseReference = this.caseData.refNumber;
-      this.dateOfBranch = this.caseData.dateOfBreach; // Adjust based on your data structure
+      this.clientName = this.caseData.client_name;
+      this.caseReference = this.caseData.ref_number;
+      this.dateOfBranch = this.caseData.date_of_breach ; // Adjust based on your data structure
   
       // Populate LOI Type
-      this.selectedLoi = this.caseData.loiType; // Assuming loiType is the ID of the selected LOI
+      this.selectedLoi = this.caseData.loiType||"hello"; // Assuming loiType is the ID of the selected LOI
       console.log("loi:" + this.selectedLoi);
   
       // Populate Instruction Type
-      this.selectedInstruction = this.caseData.instructionMsg; // Assuming instructionType is the ID of the selected instruction
+      this.selectedInstruction = this.caseData.parameters[0].instructionId.instructionMsg; // Assuming instructionType is the ID of the selected instruction
       console.log("instr:" + this.selectedInstruction);
   
       // Populate Parameters
@@ -88,13 +88,19 @@ export class UploadNewCaseComponent implements OnInit {
     return this.cookieService.get(name) || null;
   }
 
+  getParameterMsg(param: any): string {
+    
+    console.log(param)// Use parameterMsg or parameter_msg based on available property
+    return (param && (param.parameterMsg || param.parameter_msg)) || '';
+  }
+
   // Fetch loiTypes from the API
   async fetchLoiTypes(): Promise<void> {
     const token = this.getCookie('jwt');
     console.log('Retrieved Token:1', token); // Log the retrieved token to debug
 
     if (!token) {
-      console.error('No JWT token found in cookies');
+      // console.error('No JWT token found in cookies');
       return; // Prevent making the API call if the token is not found
     }
 
