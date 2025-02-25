@@ -123,6 +123,7 @@ button:hover {
   grid-template-columns: 50% 50%;
   width: 100%;
  }
+
  .parameter-list li {
     display: flex;
   flex-direction: row;
@@ -137,6 +138,8 @@ button:hover {
   .parameter-list li:nth-child(even) {
     grid-column-start: 2;
   }
+
+  
  .checkbox-container {
     padding: 1rem;
   }

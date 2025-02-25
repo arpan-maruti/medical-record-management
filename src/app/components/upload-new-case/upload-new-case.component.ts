@@ -25,7 +25,7 @@ export class UploadNewCaseComponent implements OnInit {
   selectedInstruction: string = ''; // Initially empty
   parameters: any[] = []; // Holds Parameters
   selectedParameters: string[] = []; // Holds only IDs of selected parameters
-
+  selectedParametersView: string[] = [];
   // Validation errors
   isSubmitted: boolean = false;
   clientNameError: string | null = null;
@@ -60,7 +60,7 @@ export class UploadNewCaseComponent implements OnInit {
       this.dateOfBranch = this.caseData.date_of_breach ; // Adjust based on your data structure
   
       // Populate LOI Type
-      this.selectedLoi = this.caseData.loiType||"hello"; // Assuming loiType is the ID of the selected LOI
+      this.selectedLoi = this.caseData.parameters[0].instructionId.loiId.loiMsg||"hello"; // Assuming loiType is the ID of the selected LOI
       console.log("loi:" + this.selectedLoi);
   
       // Populate Instruction Type
@@ -68,8 +68,8 @@ export class UploadNewCaseComponent implements OnInit {
       console.log("instr:" + this.selectedInstruction);
   
       // Populate Parameters
-      this.selectedParameters = this.caseData.parameters|| []; // Assuming parameters is an array of selected parameter IDs
-      console.log(this.selectedParameters);
+      this.selectedParametersView = this.caseData.parameters|| []; // Assuming parameters is an array of selected parameter IDs
+      console.log(this.selectedParametersView);
     }
   
     // Fetch LOI Types and Instruction Types
@@ -89,8 +89,6 @@ export class UploadNewCaseComponent implements OnInit {
   }
 
   getParameterMsg(param: any): string {
-    
-    console.log(param)// Use parameterMsg or parameter_msg based on available property
     return (param && (param.parameterMsg || param.parameter_msg)) || '';
   }
 

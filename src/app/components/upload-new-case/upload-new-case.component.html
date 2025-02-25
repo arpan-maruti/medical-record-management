@@ -152,7 +152,7 @@
       (input)="onInputChange()"
     >
       <h3 class="upload-new-case__form-title">SELECT THE PARAMETERS</h3>
-      <div class="form-group" *ngIf="parameters.length > 0">
+      <div class="form-group" *ngIf="(viewOnly ? selectedParametersView.length : parameters.length) > 0">
         <ul class="parameter-list" *ngIf="!viewOnly">
           <li *ngFor="let param of parameters" (click)="toggleSelection(param._id)">
             <div class="checkbox-container">
@@ -187,8 +187,8 @@
           </li>
         </ul>
         <ul class="parameter-list" *ngIf="viewOnly">
-          <li *ngFor="let param of selectedParameters">
-            <div class="parameter-details">
+          <li *ngFor="let param of selectedParametersView">
+            <div class="parameter-details" style="margin: 0.5rem;">
               {{ getParameterMsg(param) }}
             </div>
           </li>
