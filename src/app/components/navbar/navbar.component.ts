@@ -51,7 +51,7 @@ export class NavbarComponent {
         console.error('Error decoding JWT token:', error);
       }
     } else {
-      console.error('No JWT token found');
+      // console.error('No JWT token found');
     }
   }
   toggleDropdown(event: MouseEvent) {

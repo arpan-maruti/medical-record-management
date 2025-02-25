@@ -6,7 +6,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ViewAndLabelComponent } from '../view-and-label/view-and-label.component';
 import { UploadFilesComponent } from '../upload-files/upload-files.component';
-
+import { CookieService } from 'ngx-cookie-service';
+import axios from 'axios';
 @Component({
   selector: 'app-case-list',
   imports: [CommonModule, FormsModule, ViewAndLabelComponent, UploadFilesComponent],
@@ -27,6 +28,9 @@ export class CaseListComponent {
   searchQuery: string = '';  // Search query
   selectedStatus: string  = '';
   data: any[] = [];
+  currentPage: number = 1; // Current page
+  totalPages: number = 1; // Total pages
+  inputPage: number = 1; // Input page number
 
 
 
@@ -34,28 +38,88 @@ export class CaseListComponent {
   constructor(private cdr: ChangeDetectorRef,
     private dataService: DataService, 
     private sanitizer: DomSanitizer,
-    private router: Router) {
+    private router: Router,
+  private cookieService: CookieService) {
     
   }
   
 
   
+  viewCaseDetails(caseItem: any) {
+    this.router.navigate(['/case-management/main-case-view'], {
+      state: { caseData: caseItem, viewOnly: true }
+    });
+  }
+
+  viewSubCaseDetails(subCase: any) {
+    this.router.navigate(['/case-management/sub-case-view'], {
+      state: { caseData: subCase, viewOnly: true }
+    });
+  }
   
- 
-   // Optional: Method to update the screen width dynamically on page load
    
 
   ngAfterViewInit() {
-    // Fetching case data
-    this.data = this.dataService.getMainCases();
-    this.filteredData = [...this.data];
-    if (this.data.length > 0) {
-      this.isDataAvailable = true;
+    this.fetchCases();
+  }
+  
+  fetchCases(page: number = 1, caseStatus: string = '') {
+    const getCookie = (name: string): string | null => {
+      return this.cookieService.get(name) || null;
     }
-    this.applyFilters(); // Initial filtering based on the status
-    this.cdr.detectChanges();
+    const token = getCookie('jwt');
+    
+    if (!token) {
+      // console.error('Token is null. Unable to fetch cases.');
+      this.isDataAvailable = false;
+      return;
+    }
+  
+    console.log('Retrieved Token:', token);
+  
+    let apiUrl = `http://localhost:5000/case?page=${page}`;
+    if (caseStatus) {
+      apiUrl += `&caseStatus=${caseStatus}`;
+    }
+  
+    axios.get(apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true
+    })
+      .then(response => {
+        console.log(response.data);
+        if (response.data.code === 'Success') {
+          this.data = response.data.data; // Assign the fetched data
+          this.filteredData = [...this.data]; // Initialize filtered data
+          this.isDataAvailable = this.data.length > 0; // Set data availability flag
+          this.totalPages = response.data.pagination.total_pages; // Set total pages
+        } else {
+          console.error('Failed to fetch cases:', response.data.message);
+          this.isDataAvailable = false;
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching cases:', error);
+        this.isDataAvailable = false;
+      });
   }
 
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.fetchCases(this.currentPage, this.selectedStatus);
+    }
+  }
+  
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.fetchCases(this.currentPage, this.selectedStatus);
+    }
+  }
   openUploadFiles() {
     this.isUploadFilesVisible = true;
   }
@@ -63,13 +127,11 @@ export class CaseListComponent {
   closeUploadFiles() {
     this.isUploadFilesVisible = false;
   }
-  // Filter data by search query
-  onSearchChange() {
-    this.applyFilters();  // Reapply both search and status filters
-  }
-
-  // Filter data by selected status
   onStatusChange() {
+    this.fetchCases(this.currentPage, this.selectedStatus);
+  }
+  
+  onSearchChange() {
     this.applyFilters();  // Reapply both search and status filters
   }
 
@@ -99,6 +161,67 @@ export class CaseListComponent {
   // Toggle visibility of subcases
   toggleSubCases(caseItem: any) {
     caseItem.expanded = !caseItem.expanded; // Toggle subcase visibility
+  
+    // Fetch subcases only if the case is expanded and subcases are not already fetched
+    if (caseItem.expanded && !caseItem.subCases) {
+      this.fetchSubCases(caseItem._id).then(subCases => {
+        caseItem.subCases = subCases; // Store the fetched subcases in the caseItem object
+      });
+    }
+  }
+
+
+  fetchSubCases(parentId: string): Promise<any[]> {
+    console.log(parentId);
+    return new Promise((resolve, reject) => {
+      const token = this.cookieService.get('jwt');
+      axios.get(`http://localhost:5000/case/${parentId}/subcases/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true
+      })
+      .then(response => {
+        console.log(response.data);
+        if (response.data.code === 'Success') {
+          
+          resolve(response.data.data); // Resolve with the fetched subcases
+        } else {
+          console.error('Failed to fetch subcases:', response.data.message);
+          reject(response.data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching subcases:', error);
+        reject(error);
+      });
+    });
+  }
+
+
+  getPages(): number[] {
+    const pages: number[] = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  goToPage(page: number) {
+    if (page !== this.currentPage) {
+      this.currentPage = page;
+      this.fetchCases(this.currentPage, this.selectedStatus);
+    }
+  }
+  
+  goToInputPage() {
+    if (this.inputPage >= 1 && this.inputPage <= this.totalPages) {
+      this.currentPage = this.inputPage;
+      this.fetchCases(this.currentPage, this.selectedStatus);
+    } else {
+      this.inputPage = this.currentPage; // Reset input to current page if out of range
+    }
   }
  
 
@@ -130,8 +253,9 @@ export class CaseListComponent {
     this.isPdfPreviewVisible = false;
   }
 
-  getSubCases(parentId: string) {
-    return this.dataService.getSubCases(parentId);
+  getSubCases(caseItem: any): any[] {
+    
+    return caseItem.subCases || []; // Return the stored subcases or an empty array if none
   }
 
   getInstructionType(caseItem: any) {
@@ -158,10 +282,15 @@ export class CaseListComponent {
   onFileUploaded(fileName: string) {
     this.uploadedFileName = fileName;  // Store the file name in the parent component
   }
-
-  addSubcase() {
-    this.router.navigate(['case-management/main-case/upload-subcase']);
-  };
+  addSubcase(caseItem: any) {
+    this.router.navigate(['case-management/main-case/upload-subcase'], {
+      state: {
+        parentCaseId: caseItem._id,
+        clientName: caseItem.client_name,
+        parentCaseReference: caseItem.ref_number
+      }
+    });
+  }
 
   addCase() {
     this.router.navigate(['case-management/upload-new-case']);

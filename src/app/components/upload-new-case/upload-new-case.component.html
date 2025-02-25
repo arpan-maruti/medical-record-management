@@ -1,6 +1,7 @@
 <div class="upload-new-case__container">
   <div class="upload-new-case__header">
-    <h2 class="upload-new-case__title">Upload New Case</h2>
+    <h2 class="upload-new-case__title" *ngIf="!viewOnly">Upload New Case</h2>
+    <h2 class="upload-new-case__title" *ngIf="viewOnly">Main Case View</h2>
   </div>
 
   <!-- Form container -->
@@ -24,6 +25,7 @@
             minlength="2"
             maxlength="50"
             pattern="^[A-Za-z]"
+            [disabled]="viewOnly"
           />
           <div *ngIf="isSubmitted && clientNameError" class="error-message">
             {{ clientNameError }}
@@ -39,6 +41,7 @@
             placeholder="Enter reference number"
             [(ngModel)]="caseReference"
             [ngModelOptions]="{ standalone: true }"
+            [disabled]="viewOnly"
           />
           <div *ngIf="isSubmitted && caseReferenceError" class="error-message">
             {{ caseReferenceError }}
@@ -47,18 +50,29 @@
         <!-- LOI (Letter of Instruction) Type -->
         <div class="form-group">
           <label for="loi-type">What type of LOI?</label>
-          <select
-           (input)="onInputChange()"
-            id="loi-type"
-            [(ngModel)]="selectedLoi"
-            [ngModelOptions]="{ standalone: true }"
-            (ngModelChange)="onLoiChange()"
-          >
-            <option value="" disabled selected>Select LOI Type</option>
-            <option *ngFor="let loi of loiTypes" [value]="loi._id">
-              {{ loi.loi_msg }}
-            </option>
-          </select>
+          <ng-container *ngIf="!viewOnly">
+            <select
+              id="loi-type"
+              [(ngModel)]="selectedLoi"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="onLoiChange()"
+              [disabled]="viewOnly"
+            >
+              <option value="" disabled>Select LOI Type</option>
+              <option *ngFor="let loi of loiTypes" [value]="loi._id">
+                {{ loi.loi_msg }}
+              </option>
+            </select>
+          </ng-container>
+          <ng-container *ngIf="viewOnly">
+            <input
+              type="text"
+              id="loi-type"
+              [(ngModel)]="selectedLoi"
+              [ngModelOptions]="{ standalone: true }"
+              disabled
+            />
+          </ng-container>
           <div *ngIf="isSubmitted && loiError" class="error-message">
             {{ loiError }}
           </div>
@@ -67,7 +81,23 @@
         <!-- Date of Branch / Liability -->
         <div class="form-group">
           <label for="date-of-branch">Date of Breach / Liability</label>
-          <input (input)="onInputChange()" type="date" id="date-of-branch" name="dateOfBranch" [(ngModel)]="dateOfBranch"/>
+          <ng-container *ngIf="!viewOnly">
+            <input
+              type="date"
+              id="date-of-branch"
+              name="dateOfBranch"
+              [(ngModel)]="dateOfBranch"
+              [disabled]="viewOnly"
+            />
+          </ng-container>
+          <ng-container *ngIf="viewOnly">
+            <input
+              type="text"
+              id="date-of-branch"
+              [value]="dateOfBranch | date: 'dd MMM yyyy'"
+              disabled
+            />
+          </ng-container>
           <div *ngIf="isSubmitted && dateError" class="error-message">
             {{ dateError }}
           </div>
@@ -85,18 +115,30 @@
       <!-- Instruction Type -->
       <div class="form-group">
         <label for="instruction-type">Instruction Type</label>
-        <select
-          id="instruction-type"
-          (input)="onInputChange()"
-          [(ngModel)]="selectedInstruction"
-          [ngModelOptions]="{ standalone: true }"
-          (ngModelChange)="onInstructionChange()"
-        >
-          <option value="" disabled selected>Select Instruction Type</option>
-          <option *ngFor="let instruction of instructionTypes" [value]="instruction._id">
-            {{ instruction.instruction_msg }}
-          </option>
-        </select>
+        <ng-container *ngIf="!viewOnly">
+          <select
+            id="instruction-type"
+            [(ngModel)]="selectedInstruction"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onInstructionChange()"
+            [disabled]="viewOnly"
+          >
+            <option value="" disabled>Select Instruction Type</option>
+            <option *ngFor="let instruction of instructionTypes" [value]="instruction._id">
+              {{ instruction.instruction_msg }}
+            </option>
+          </select>
+        </ng-container>
+        <ng-container *ngIf="viewOnly">
+          <input
+            type="text"
+            id="instruction-type"
+            [(ngModel)]="selectedInstruction"
+            [ngModelOptions]="{ standalone: true }"
+            disabled
+          />
+          
+        </ng-container>
         <div *ngIf="isSubmitted && instructionError" class="error-message">
           {{ instructionError }}
         </div>
@@ -110,13 +152,10 @@
       (input)="onInputChange()"
     >
       <h3 class="upload-new-case__form-title">SELECT THE PARAMETERS</h3>
-      <div class="form-group" *ngIf="parameters.length > 0">
-        <ul class="parameter-list">
+      <div class="form-group" *ngIf="(viewOnly ? selectedParametersView.length : parameters.length) > 0">
+        <ul class="parameter-list" *ngIf="!viewOnly">
           <li *ngFor="let param of parameters" (click)="toggleSelection(param._id)">
-            <div
-              class="checkbox-container"
-              
-            >
+            <div class="checkbox-container">
               <svg
                 *ngIf="!isSelected(param._id)"
                 xmlns="http://www.w3.org/2000/svg"
@@ -147,13 +186,20 @@
             </div>
           </li>
         </ul>
+        <ul class="parameter-list" *ngIf="viewOnly">
+          <li *ngFor="let param of selectedParametersView">
+            <div class="parameter-details" style="margin: 0.5rem;">
+              {{ getParameterMsg(param) }}
+            </div>
+          </li>
+        </ul>
         <div *ngIf="isSubmitted && parametersError" class="error-message">
           {{ parametersError }}
         </div>
       </div>
 
       <!-- Submit Button -->
-      <div class="form-group">
+      <div class="form-group" *ngIf="!viewOnly">
         <button type="button" (click)="submitForm()" class="submit-button">
           Submit
         </button>

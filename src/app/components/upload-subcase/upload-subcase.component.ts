@@ -1,105 +1,169 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import axios from 'axios';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { jwtDecode } from 'jwt-decode';
+
 @Component({
   selector: 'app-upload-subcase',
+  standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './upload-subcase.component.html',
-  styleUrl: './upload-subcase.component.css',
+  styleUrls: ['./upload-subcase.component.css']
 })
-export class UploadSubcaseComponent {
-  clientName: string | undefined;
-  parentCaseReference: string | undefined;
-  subCaseReference: string | undefined;
-  dateOfBranch: string | undefined;
-  loiTypes: Array<any> = [];
+export class UploadSubcaseComponent implements OnInit {
+  // Case details
+  clientName: string = '';
+  parentCaseReference: string = '';
+  subCaseReference: string = '';
+  dateOfBranch: string = '';
+  loiTypes: any[] = [];
   selectedLoi: string = '';
-  instructionTypes: Array<any> = [];
-  selectedInstruction: string = ''; // To store the selected Instruction ID
-  parameters: Array<any> = []; // To store the fetched parameters based on selected instruction
+  instructionTypes: any[] = [];
+  selectedInstruction: string = '';
+  parameters: any[] = [];
+  // For parameter selection (when not viewOnly)
   selectedParameters: { [key: string]: boolean } = {};
+  // For view-only mode
+  selectedParametersView: any[] = [];
 
+  // Validation errors
   subCaseReferenceError: string | null = null;
   dateError: string | null = null;
   parametersError: string | null = null;
-  isSubmitted: boolean = false;
   loiError: string | null = null;
   instructionError: string | null = null;
-  constructor(private dataService: DataService) {}
+  isSubmitted: boolean = false;
+  token: string | null = null;
 
-  ngOnInit() {
-    this.fetchLoiTypes();
-  }
+  // Flag to indicate if the component is in viewOnly mode
+  viewOnly: boolean = false;
+  caseData: any = null;
 
-
-
-
-  fetchLoiTypes(): void {
-    axios.get('http://localhost:5000/loiType')
-      .then(response => {
-        // Store loiTypes data (assuming you want to store only loi_msg)
-        console.log(response.data);
-        this.loiTypes = response.data.map((item: any) => ({
-          _id: item._id,
-          loi_msg: item.loiMsg
-        }));
-        console.log(this.loiTypes);
-        // Set the first loiType as selected
-        if (this.loiTypes && this.loiTypes.length > 0) {
-        
-          this.onLoiChange();
+  constructor(private dataService: DataService,
+              private cookieService: CookieService,
+              private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      // Expecting state to have 'caseData' and optionally 'viewOnly'
+      this.caseData = navigation.extras.state['caseData'];
+      this.viewOnly = navigation.extras.state['viewOnly'] || false;
+      if (this.caseData) {
+        console.log(this.caseData);
+        // Populate fields with the existing sub case data
+        this.clientName = this.caseData.client_name || '';
+        this.parentCaseReference = this.caseData.parent_id.clientName|| '';
+        this.subCaseReference = this.caseData.ref_number || '';
+        this.dateOfBranch = this.caseData.date_of_breach || '';
+        // For LOI and Instruction details assume parameters[0] holds necessary info
+        if (this.caseData.parameters && this.caseData.parameters.length > 0) {
+          // Make sure to adjust the object structure as per your API response
+          this.selectedLoi = this.caseData.parameters[0].instructionId?.loiId?.loiMsg || '';
+          this.selectedInstruction = this.caseData.parameters[0].instructionId?.instructionMsg || '';
+          this.selectedParametersView = this.caseData.parameters;
         }
-      })
-      .catch(error => {
-        console.error('There was an error fetching loiTypes:', error);
-      });
+      }
+    }
   }
-  onInputChange() {
+
+  ngOnInit(): void {
+    this.token = this.getCookie('jwt');
+    this.fetchLoiTypes().then(() => {
+      // For editable mode, you may allow further changes.
+      // In viewOnly mode, if there is a LOI selected, trigger fetching instruction types.
+      if (this.selectedLoi) {
+        this.onLoiChange();
+      }
+    });
+  }
+
+  getCookie(name: string): string | null {
+    return this.cookieService.get(name) || null;
+  }
+
+  onInputChange(): void {
+    // Clear error messages on input change
     this.subCaseReferenceError = null;
     this.dateError = null;
     this.parametersError = null;
-    this.loiError=null;
-    this.instructionError=null;
-    
+    this.loiError = null;
+    this.instructionError = null;
   }
-  onLoiChange(): void {
-    if (!this.selectedLoi) {
-      this.instructionTypes = []; // Reset instruction types if no LOI is selected
-      this.selectedInstruction = ''; // Clear selected instruction
+
+  async fetchLoiTypes(): Promise<void> {
+    if (!this.token) {
+      console.error('No JWT token found.');
       return;
     }
-    
-    axios.get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`)
-      .then(response => {
-        // this.instructionTypes = response.data.data;
+    try {
+      const response = await axios.get('http://localhost:5000/loiType', {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
+      if (response.data && Array.isArray(response.data.data)) {
+        this.loiTypes = response.data.data.map((item: any) => ({
+          _id: item._id,
+          loi_msg: item.loi_msg,
+        }));
+      } else {
+        console.error('Unexpected response structure:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching LOI Types:', error);
+    }
+  }
 
+  onLoiChange(): void {
+    if (!this.selectedLoi) {
+      this.instructionTypes = [];
+      this.selectedInstruction = '';
+      return;
+    }
+    if (!this.token) return;
+    axios
+      .get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`, {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
+      .then(response => {
         this.instructionTypes = response.data.data.map((item: any) => ({
           _id: item._id,
-          instruction_msg: item.instructionMsg
+          instruction_msg: item.instruction_msg,
         }));
-        console.log(this.instructionTypes);
       })
       .catch(error => {
         console.error('Error fetching Instruction Types:', error);
       });
   }
+
   onInstructionChange(): void {
     if (!this.selectedInstruction) {
-      this.parameters = []; // Reset parameters if no instruction is selected
+      this.parameters = [];
       return;
     }
-
-    axios.get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`)
+    if (!this.token) return;
+    axios
+      .get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`, {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
       .then(response => {
-        
         this.parameters = response.data.data.map((item: any) => ({
           _id: item._id,
-          parameter_msg: item.parameterMsg
+          parameter_msg: item.parameter_msg,
         }));
-
-        console.log(this.parameters);
       })
       .catch(error => {
         console.error('Error fetching parameters:', error);
@@ -107,87 +171,99 @@ export class UploadSubcaseComponent {
   }
 
   isSelected(paramId: string): boolean {
-    // console.log("Selected Parameters:", this.selectedParameters);
     return !!this.selectedParameters[paramId];
   }
 
-  // Toggle the selection of a parameter
   toggleSelection(paramId: string): void {
     this.selectedParameters[paramId] = !this.selectedParameters[paramId];
     if (Object.values(this.selectedParameters).includes(true)) {
-      // If at least one parameter is selected, clear the error message
       this.parametersError = null;
     }
   }
 
+  getParameterMsg(param: any): string {
+    return (param && (param.parameterMsg || param.parameter_msg)) || '';
+  }
+
   submitForm(): void {
     this.isSubmitted = true;
+    // Reset error messages
     this.subCaseReferenceError = null;
     this.dateError = null;
     this.parametersError = null;
     this.loiError = null;
     this.instructionError = null;
 
-    // Validate subCaseReference
+    // Validate fields
     if (!this.subCaseReference || this.subCaseReference.trim() === '') {
       this.subCaseReferenceError = 'Subcase Reference is required.';
     }
-
-    // Validate dateOfBranch
     if (!this.dateOfBranch) {
       this.dateError = 'Date is required.';
     } else if (!/^\d{4}-\d{2}-\d{2}$/.test(this.dateOfBranch)) {
-      this.dateError = 'Invalid date format. Please enter a valid date (YYYY-MM-DD).';
+      this.dateError = 'Invalid date format. Use YYYY-MM-DD.';
     }
-
-    // Validate LOI selection
     if (!this.selectedLoi) {
       this.loiError = 'LOI Type is required.';
     }
-
-    // Validate Instruction selection
     if (!this.selectedInstruction) {
       this.instructionError = 'Instruction Type is required.';
     }
-
-    // Validate parameters selection
-    if (Object.values(this.selectedParameters).every(value => !value)) {
+    if (Object.values(this.selectedParameters).every(val => !val)) {
       this.parametersError = 'At least one parameter must be selected.';
     }
-
-    // Check if there are any errors before proceeding
     if (this.subCaseReferenceError || this.dateError || this.parametersError || this.loiError || this.instructionError) {
-      console.error('Validation errors:', {
+      console.error('Validation errors', {
         subCaseReferenceError: this.subCaseReferenceError,
         dateError: this.dateError,
         loiError: this.loiError,
         instructionError: this.instructionError,
         parametersError: this.parametersError
       });
-      return; // Stop form submission if there are errors
+      return;
     }
 
-    // Prepare the form data to be submitted
+    // Decode JWT token to extract user ID
+    let userId: string | null = null;
+    try {
+      const decodedToken: any = jwtDecode(this.token!);
+      userId = decodedToken?.id || null;
+    } catch (error) {
+      console.error('Error decoding JWT token:', error);
+    }
+    if (!userId) {
+      console.error('Unable to extract user ID from token.');
+      return;
+    }
+
     const formData = {
-      parent_id: 'case1', // Parent ID can be set dynamically
-      client_name: this.clientName?.trim() || '',
-      subCaseReference_no: this.subCaseReference?.trim() || '',
-      parentCaseReference_no: this.parentCaseReference?.trim() || '',
-      is_deleted: false,
-      date_of_breach: this.dateOfBranch?.trim() || '',
-      created_by: 'user1', // Set dynamically as needed (e.g., current user)
-      modified_by: 'user2', // Set dynamically as needed
-      created_on: new Date().toISOString(),
-      modified_on: new Date().toISOString(),
-      case_uploaded_by: 'John Doe', // Can be dynamic if needed
-      case_status: 'status4', // Set dynamically if required
-      files: [], // Empty array as per requirement
-      parameters: Object.keys(this.selectedParameters).filter(param => this.selectedParameters[param]), // Only include selected parameters
+      parentId: this.caseData ? this.caseData.parentCaseId : null,
+      clientName: this.clientName.trim(),
+      refNumber: this.subCaseReference.trim(),
+      dateOfBreach: this.dateOfBranch.trim(),
+      caseStatus: 'uploaded',
+      parameters: Object.keys(this.selectedParameters).filter(key => this.selectedParameters[key]),
+      files: [],
+      isLoi: !!this.selectedLoi,
+      isDeleted: false,
+      createdBy: userId,
+      modifiedBy: userId,
     };
 
-    console.log('Form Data:', formData);
-    // You can now proceed with API submission here
+    axios
+      .post('http://localhost:5000/case/', formData, {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
+      .then(response => {
+        console.log('Subcase created successfully:', response.data);
+        this.router.navigate(['/case-management']);
+      })
+      .catch(error => {
+        console.error('Error creating subcase:', error.response?.data || error.message);
+      });
   }
-
-
 }
