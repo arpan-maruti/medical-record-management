@@ -77,7 +77,7 @@ export class CaseListComponent {
   
     console.log('Retrieved Token:', token);
   
-    let apiUrl = `http://localhost:5000/case?page=${page}`;
+    let apiUrl = `http://localhost:5000/user/cases?page=${page}`;
     if (caseStatus) {
       apiUrl += `&caseStatus=${caseStatus}`;
     }
@@ -93,6 +93,7 @@ export class CaseListComponent {
         console.log(response.data);
         if (response.data.code === 'Success') {
           this.data = response.data.data; // Assign the fetched data
+          console.log(this.data);
           this.filteredData = [...this.data]; // Initialize filtered data
           this.isDataAvailable = this.data.length > 0; // Set data availability flag
           this.totalPages = response.data.pagination.total_pages; // Set total pages
