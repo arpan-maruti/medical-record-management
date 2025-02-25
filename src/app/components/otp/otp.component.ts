@@ -86,14 +86,36 @@ export class OtpComponent {
   /**
    * Handles OTP resend logic.
    */
-  resendOtp(): void {
-    console.log('Resending OTP...');
-    this.customAlert.show(
-      'Resend OTP Successful',
-      'Resend OTP',
-      'OK'
-    );
-    this.startResendTimer(); // Restart the timer
+  async resendOtp(): Promise<void> {
+    try {
+      console.log('Resending OTP...');
+      const response = await axios.post(
+        'http://localhost:5000/user/send-otp',
+        { email: this.email },
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        this.customAlert.show(
+          'OTP has been resent successfully.',
+          'Resend OTP',
+          'OK'
+        );
+        this.startResendTimer();
+      } else {
+        this.customAlert.show(
+          response.data.message || 'Failed to resend OTP. Try again later.',
+          'Resend OTP',
+          'OK'
+        );
+      }
+    } catch (error: any) {
+      console.error('Error resending OTP:', error);
+      this.customAlert.show(
+        'Error resending OTP. Please try again later.',
+        'Resend OTP',
+        'OK'
+      );
+    }
   }
   onCustomAlertConfirm() {
     console.log('Alert confirmed');
