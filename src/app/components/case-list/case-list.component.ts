@@ -51,7 +51,11 @@ export class CaseListComponent {
     });
   }
 
- 
+  viewSubCaseDetails(subCase: any) {
+    this.router.navigate(['/case-management/sub-case-view'], {
+      state: { caseData: subCase, viewOnly: true }
+    });
+  }
   
    
 

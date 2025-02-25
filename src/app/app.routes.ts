@@ -38,6 +38,7 @@ export const routes: Routes = [
               { path: 'profile', component: ProfileComponent  },
               {path: 'upload-new-case', component: UploadNewCaseComponent},
               {path: 'main-case-view', component: UploadNewCaseComponent},
+              {path: 'sub-case-view', component: UploadSubcaseComponent},
               {path: 'main-case/upload-subcase', component: UploadSubcaseComponent},
               {
                 path: 'view-label', component: ViewAndLabelComponent,

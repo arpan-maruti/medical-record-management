@@ -110,14 +110,14 @@
           <!-- Subcases -->
           <tr *ngFor="let subCase of caseItem.subCases" [hidden]="!caseItem.expanded" class="subcase-row">
             <td></td>
-            <td class="case-list__utext">{{ subCase.refNumber }}</td>
-            <td>{{ subCase.instructionMsg}}</td>
-            <td>{{ subCase.clientName }}</td> <!-- Updated from client_name to clientName -->
+            <td class="case-list__utext underline" (click)="viewSubCaseDetails(subCase)">{{ subCase.ref_number }}</td>
+            <td>{{ subCase.parameters[0].instructionId.instructionMsg}}</td>
+            <td>{{ subCase.client_name }}</td> <!-- Updated from client_name to clientName -->
             <td>{{ subCase.files.length }}</td>
             <td>{{ getTotalPages(subCase) }}</td>
-            <td>{{ subCase.createdAt | date: 'dd MMM yyyy' }}</td> <!-- Updated from created_on to createdAt -->
-            <td>{{ subCase.uploadedBy }}</td>
-            <td>{{ subCase.caseStatus }}</td> 
+            <td>{{ subCase.created_at | date: 'dd MMM yyyy' }}</td> <!-- Updated from created_on to createdAt -->
+            <td>{{ subCase.modified_by.firstName }} {{ subCase.modified_by.lastName }}</td>
+            <td>{{ subCase.case_status }}</td> 
             <td>
               <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')">View LOI</a>
             </td>
@@ -172,8 +172,8 @@
 <div class="cards-container mobile-card-view">
   <ng-container *ngFor="let caseItem of filteredData">
     <div class="case-card">
-      <div class="case-card-header">
-        <h3>{{ caseItem.ref_number }}</h3>
+      <div class="case-card-header" >
+        <h3 class="underline" (click)="viewCaseDetails(caseItem)">{{ caseItem.ref_number }}</h3>
         <button (click)="toggleSubCases(caseItem)">Toggle Subcases</button>
       </div>
       <div class="case-card-details">
@@ -198,13 +198,13 @@
       <!-- Display Subcases in Card Layout -->
       <div *ngIf="caseItem.expanded">
         <div *ngFor="let subCase of caseItem.subCases" class="subcase-card">
-          <h4>Subcase Ref No: {{ subCase.refNumber }}</h4>
-          <p><strong>Client Name:</strong> {{ subCase.clientName }}</p>
-          <p><strong>Instruction Type:</strong> {{ subCase.instructionMsg }}</p>
+          <h4 class="underline" (click)="viewSubCaseDetails(subCase)">Subcase Ref No: {{ subCase.ref_number }}</h4>
+          <p><strong>Client Name:</strong> {{ subCase.client_name }}</p>
+          <p><strong>Instruction Type:</strong> {{ subCase.parameters[0].instructionId.instructionMsg }}</p>
           <p><strong>Total Files:</strong> {{ subCase.files.length }}</p>
           <p><strong>Total Pages:</strong> {{ getTotalPages(subCase) }}</p>
-          <p><strong>Date Uploaded:</strong> {{ subCase.createdAt | date: 'dd MMM yyyy' }}</p>
-          <p><strong>Uploaded By:</strong> {{ subCase.uploadedBy }}</p>
+          <p><strong>Date Uploaded:</strong> {{ subCase.created_at | date: 'dd MMM yyyy' }}</p>
+          <p><strong>Uploaded By:</strong> {{ subCase.modified_by.firstName }} {{ subCase.modified_by.lastName }}</p>
           <p><strong>Status:</strong> {{ subCase.case_status }}</p>
 
           <!-- Action Buttons for Subcases -->
