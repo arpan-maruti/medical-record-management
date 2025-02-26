@@ -1,13 +1,21 @@
-<div class="view-and-label__container" (click)="close()">
-  <div class="view-and-label__content" (click)="$event.stopPropagation()">
-    <h3 class="view-and-label__title">View Files Or Label</h3>
+<div class="view-and-label__container">
+  <div class="view-and-label__content">
+    <h3 class="view-and-label__title">View / Edit File Labels</h3>
     
-    <div *ngFor="let file of selectedFiles; let i = index" class="view-and-label__file-item">
-      <span class="view-and-label__file-item-icon">{{ file.icon }} </span>
-      <span class="view-and-label__file-item-name">{{ file.name }}</span>
-      <input type="text" [(ngModel)]="fileLabels[i]" placeholder="Label it" class="view-and-label__file-item-label-input">
+    <div *ngFor="let file of selectedFiles" class="view-and-label__file-item">
+      <span class="view-and-label__file-item-icon">{{ file.icon }}</span>
+      <span class="view-and-label__file-item-name" (click)="onPreview(file)">
+        {{ file.name }}
+      </span>
+      <input 
+        type="text" 
+        [(ngModel)]="file.label" 
+        placeholder="Enter label" 
+        class="view-and-label__file-item-label-input"
+      />
+      <button class="view-and-label__button" (click)="onSave(file)">Save</button>
     </div>
-      
-    <button class="view-and-label__button" (click)="close()">Save</button>
+
+    <button class="view-and-label__button" (click)="onClose()">Close</button>
   </div>
 </div>

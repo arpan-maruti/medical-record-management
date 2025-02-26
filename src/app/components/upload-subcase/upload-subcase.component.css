@@ -176,7 +176,7 @@
 }
 
 .upload-subcase__form input:disabled {
-    background-color: #f2f3f3 !important;
+    
     cursor: not-allowed; /* Change cursor to indicate the field is not editable */
 }
 

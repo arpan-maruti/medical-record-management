@@ -243,11 +243,36 @@ export class CaseListComponent {
 
 
 
-  openPdfPreview(fileName: string) {
-    const unsafeUrl = `/assets/q.pdf`;
-    this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
-    this.selectedFileName = fileName;
-    this.isPdfPreviewVisible = true;
+  openPdfPreview(caseId: string) {
+    console.log(caseId);
+    const token = this.cookieService.get('jwt');
+    axios.get(`http://localhost:5000/case/${caseId}/file`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+    .then(response => {
+      console.log(response.data);
+      if (response.data.code === 'Success') {
+        const files = response.data.data;
+        // Pick the file with fileType "loi" for the LOI preview
+        const loiFiles = files.filter((file: any) => file.file_type === 'loi');
+        if (loiFiles.length > 0) {
+          const loiFile = loiFiles[0];
+          const unsafeUrl = loiFile.file_url ? loiFile.file_url : `/assets/q.pdf`;
+          this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
+          this.selectedFileName = loiFile.file_name;
+          this.isPdfPreviewVisible = true;
+        }
+      } else {
+        console.error('Failed to fetch files:', response.data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching files:', error);
+    });
   }
 
   closePdfPreview() {
@@ -297,16 +322,73 @@ export class CaseListComponent {
     this.router.navigate(['case-management/upload-new-case']);
   };
 
-  openViewLabel() {
-    this.selectedFiles = [
-      { name: 'File 1.pdf', icon: '📄' },
-      { name: 'File 2.pdf', icon: '📄' },
-      { name: 'File 3.pdf', icon: '📄' },
-      { name: 'File 1.pdf', icon: '📄' },
-      { name: 'File 2.pdf', icon: '📄' },
-      { name: 'File 3.pdf', icon: '📄' }
-    ];
-    this.isViewLabelVisible = true;
+  openViewLabel(caseId: string) {
+    const token = this.cookieService.get('jwt');
+    axios.get(`http://localhost:5000/case/${caseId}/file`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+    .then(response => {
+      if (response.data.code === 'Success') {
+        const files = response.data.data;
+        // Only show files with file_type "document" in the View/Label popup
+        const documentFiles = files.filter((file: any) => file.file_type === 'document');
+        this.selectedFiles = documentFiles.map((file: any) => ({
+          id: file._id,
+          name: file.file_name,
+          label: file.files_label || '',
+          icon: '📄',
+          file_url: file.file_url, // include URL for preview
+          caseId  // attach the current caseId to each file
+        }));
+        this.isViewLabelVisible = true;
+      } else {
+        console.error('Failed to fetch files:', response.data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching files:', error);
+    });
+  }
+
+  openDocumentPreview(file: any) {
+    // If file_url is missing, you can fallback to a default URL (like /assets/q.pdf) or show an error.
+    const fileUrl = file.file_url && file.file_url.trim() !== '' ? file.file_url : '/assets/q.pdf';
+    this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
+    this.selectedFileName = file.name;
+    this.isPdfPreviewVisible = true;
+  }
+
+  patchFileLabel(fileId: string, newLabel: string) {
+    const token = this.cookieService.get('jwt');
+    axios.patch(`http://localhost:5000/file/${fileId}`, 
+      { files_label: newLabel },
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      }
+    )
+    .then(response => {
+      if (response.data.code === 'Success') {
+        console.log('File label updated successfully.');
+        // Optionally update the local file data
+        const index = this.selectedFiles.findIndex(file => file.id === fileId);
+        if (index !== -1) {
+          this.selectedFiles[index].label = newLabel;
+        }
+      } else {
+        console.error('Failed to update file label:', response.data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error updating file label:', error);
+    });
   }
   
   closeViewLabel() {
