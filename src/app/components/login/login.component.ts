@@ -6,6 +6,7 @@ import { CustomAlertComponent } from '../custom-alert/custom-alert.component';
 import { RouterLink } from '@angular/router';
 import validator from 'validator'; // Import validator
 import axios from 'axios';
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-login',
   imports: [FormsModule, CommonModule, CustomAlertComponent, RouterLink],
@@ -29,7 +30,7 @@ export class LoginComponent {
     }
     try {
       // Step 1: Login the user
-      const userResponse = await axios.post('http://localhost:5000/user/login', {
+      const userResponse = await axios.post(`${environment.apiUrl}/user/login`, {
         email: this.email,
         password: this.password,
       }, {withCredentials:true});
@@ -38,7 +39,7 @@ export class LoginComponent {
         return;
       }
       // Step 2: Send OTP to the user's phone
-      const otpResponse = await axios.post('http://localhost:5000/user/send-otp', {
+      const otpResponse = await axios.post(`${environment.apiUrl}/user/send-otp`, {
         email: this.email,
       }, {withCredentials:true});
       if (otpResponse.data.success) {

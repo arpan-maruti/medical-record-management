@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import axios from 'axios';
 import { CookieService } from 'ngx-cookie-service';
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -30,7 +31,7 @@ export class SidebarComponent implements OnInit, DoCheck {
 
   logout(): void {
     const token = this.cookieService.get('jwt');
-    axios.post(`http://localhost:5000/user/logout`, {}, { // empty object as data
+    axios.post(`${environment.apiUrl}/user/logout`, {}, { // empty object as data
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',

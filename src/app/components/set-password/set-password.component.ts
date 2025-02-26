@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import axios from 'axios';
-
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-set-password',
   templateUrl: './set-password.component.html',
@@ -45,7 +45,7 @@ export class SetPasswordComponent {
     }
 
     try {
-      await axios.post('http://localhost:5000/user/set-password', { 
+      await axios.post(`${environment.apiUrl}/user/set-password`, { 
         token: this.token, 
         password 
       });

@@ -3,7 +3,7 @@ import axios from 'axios';
 import {jwtDecode}  from 'jwt-decode';
 
 import { CookieService } from 'ngx-cookie-service'; // Import CookieService
-
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -26,7 +26,7 @@ export class ProfileComponent{
       const decodedToken: any = jwtDecode(token); // Decode the JWT token
       const userId = decodedToken.id; // Extract the user_id from the token payload
 
-      axios.get(`http://localhost:5000/user/${userId}`, {
+      axios.get(`${environment.apiUrl}/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}` // Add the JWT token to the Authorization header
         }
