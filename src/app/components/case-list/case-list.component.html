@@ -92,13 +92,15 @@
             <td>{{ caseItem.modified_by.firstName }} {{ caseItem.modified_by.lastName }}</td>
             <td>{{ caseItem.case_status }}</td>
             <td>
-              <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')">View LOI</a>
+              
+                <a class="text-primary" (click)="openPdfPreview(caseItem._id)">View LOI</a>
+             
             </td>
             <td>
               <a class="text-primary" (click)="openUploadFiles()">Upload File</a>
             </td>
             <td>
-              <a class="text-primary" (click)="openViewLabel()">View/Label</a>
+              <a class="text-primary" (click)="openViewLabel(caseItem._id)">View/Label</a>
             </td>
             <td>
               <a class="text-primary">Generate Summary</a>
@@ -119,13 +121,13 @@
             <td>{{ subCase.modified_by.firstName }} {{ subCase.modified_by.lastName }}</td>
             <td>{{ subCase.case_status }}</td> 
             <td>
-              <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')">View LOI</a>
+              <a class="text-primary" (click)="openPdfPreview(subCase._id)">View LOI</a>
             </td>
             <td>
               <a class="text-primary" (click)="openUploadFiles()">Upload File</a>
             </td>
             <td>
-              <a class="text-primary" (click)="openViewLabel()">View/Label</a>
+              <a class="text-primary" (click)="openViewLabel(subCase._id)">View/Label</a>
             </td>
             <td>
               <a class="text-primary">Generate Summary</a>
@@ -138,9 +140,14 @@
   </div>
 
   <!-- View/Label Popup -->
+  <!-- Part of your case-list.component.html -->
   <div *ngIf="isViewLabelVisible" class="view-label-popup">
-    <app-view-and-label [selectedFiles]="selectedFiles" (closePopup)="closeViewLabel()">
-    </app-view-and-label>
+    <app-view-and-label 
+      [selectedFiles]="selectedFiles" 
+      (closePopup)="closeViewLabel()"
+      (labelSave)="patchFileLabel($event.fileId, $event.newLabel)"
+      (previewPdf)="openDocumentPreview($event)">
+</app-view-and-label>
   </div>
 
   <div *ngIf="isPdfPreviewVisible" class="pdf-modal">
@@ -188,9 +195,9 @@
         <p><strong>Status:</strong> {{ caseItem.case_status }}</p>
       </div>
       <div class="case-card-actions">
-        <a class="text-primary" (click)="openPdfPreview(caseItem.ref_number + '.pdf')">View LOI</a>
+        <a class="text-primary" (click)="openPdfPreview(caseItem._id)">View LOI</a>
         <a class="text-primary" (click)="openUploadFiles()">Upload File</a>
-        <a class="text-primary" (click)="openViewLabel()">View/Label</a>
+        <a class="text-primary" (click)="openViewLabel(caseItem._id)">View/Label</a>
         <a class="text-primary">Generate Summary</a>
         <img src="assets/plus.png" class="plus-icon" (click)="addSubcase(caseItem)"/>
       </div>
@@ -209,9 +216,9 @@
 
           <!-- Action Buttons for Subcases -->
           <div class="subcase-card-actions">
-            <a class="text-primary" (click)="openPdfPreview(subCase.refNumber + '.pdf')">View LOI</a>
+            <a class="text-primary" (click)="openPdfPreview(subCase._id)">View LOI</a>
             <a class="text-primary" (click)="openUploadFiles()">Upload File</a>
-            <a class="text-primary" (click)="openViewLabel()">View/Label</a>
+            <a class="text-primary" (click)="openViewLabel(subCase._id)">View/Label</a>
             <a class="text-primary">Generate Summary</a>
           </div>
         </div>

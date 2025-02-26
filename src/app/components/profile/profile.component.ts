@@ -32,6 +32,7 @@ export class ProfileComponent{
         }
       })
       .then(response => {
+        console.log(response.data);
         if (response.data.code === 'Success') {
           this.user = response.data.data; // Assign the fetched user data to the component
         } else {

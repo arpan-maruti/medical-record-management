@@ -1,147 +1,154 @@
+/* Overall container styling */
 .view-and-label__container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Overlay background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Overlay background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
 }
 
+/* Main content area styling */
 .view-and-label__content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  width: 90%; /* Adjust width to be more flexible on small screens */
-  max-width: 600px;
-  overflow: auto;
-  height: 29rem;
-  box-sizing: border-box;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
 }
 
+/* Title styling */
 .view-and-label__title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 3rem;
-  color: #012447;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #012447;
 }
 
+/* File list and items */
 .view-and-label__file-list {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .view-and-label__file-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  flex-wrap: wrap; /* Make items responsive */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
 }
 
+.view-and-label__file-item:hover {
+    background-color: #f9f9f9;
+}
+
+/* File icon */
 .view-and-label__file-item-icon {
-  margin-right: 10px;
-  font-size: 2rem;
+    margin-right: 10px;
+    font-size: 2rem;
 }
 
+/* File name */
 .view-and-label__file-item-name {
-  flex-grow: 1;
-  word-break: break-word; /* Ensures long file names wrap */
+    flex-grow: 1;
+    word-break: break-word;
 }
 
+/* Input styling */
 .view-and-label__file-item-label-input {
-  margin-left: 10px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%; /* Ensure input takes full width */
-  max-width: 18rem; /* Limit max width */
-  height: 2.5rem;
-  box-sizing: border-box;
+    margin-left: 10px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 18rem;
+    height: 2.5rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
 }
 
-.view-and-label__file-item-label-input::placeholder {
-  font-style: italic;
-  color: gray;
+.view-and-label__file-item-label-input:focus {
+    outline: none;
+    border-color: #012447;
 }
 
+/* Button styling */
 .view-and-label__button {
-  max-width: 200px;
-  height: 3rem;
-  border-style: solid;
-  border-radius: 30px;
-  width: 100%; /* Make the button full width */
-  max-width: 11rem; /* Limit the button width */
-  color: white;
-  background-color: #012447;
-  font-size: 1.1rem;
-  cursor: pointer;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  text-align: center;
+    display: block;
+    margin: 1rem auto;
+    width: 100%;
+    max-width: 11rem;
+    height: 3rem;
+    border: none;
+    border-radius: 30px;
+    background-color: #012447;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .view-and-label__button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
+    transform: scale(1.02);
 }
 
-
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .view-and-label__content {
-    height: auto; /* Allow content to adjust based on height */
-    width: 90%; /* Make it more flexible for smaller screens */
-  }
-
-  .view-and-label__title {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-  }
-  .view-and-label__file-item-name {
-    margin-bottom: 0.6rem;
-    /* padding-bottom: 0.4rem 0; */
-  }
-  .view-and-label__file-item-icon {
-    /* visibility: hidden; */
-    display: none;
-    font-size: 1.5rem;
-  }
-
-  .view-and-label__file-item-label-input {
-    width: 100%; /* Full width for small screens */
-    max-width: none; /* Remove max-width on smaller screens */
-    margin-left: 0;
-  }
-
-  .view-and-label__button {
-    width: 100%; /* Full width button on small screens */
-    max-width: none; /* Remove max-width */
-  }
+    .view-and-label__content {
+        padding: 1.5rem;
+        width: 90%;
+    }
+    .view-and-label__title {
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+    }
+    .view-and-label__file-item {
+        flex-direction: row;
+    }
+    .view-and-label__file-item-icon {
+        display: block;
+        font-size: 1.8rem;
+    }
+    .view-and-label__file-item-label-input {
+        margin-left: 10px;
+        width: 100%;
+        max-width: none;
+    }
 }
 
 @media (max-width: 480px) {
-  .view-and-label__content {
-    width: 95%; /* Take up more space on very small screens */
-  }
-
-  .view-and-label__title {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .view-and-label__file-item {
-    flex-direction: column; /* Stack file item components vertically */
-  }
-
-  .view-and-label__file-item-icon {
-    margin-bottom: 5px; /* Space for stacked items */
-  }
-
-  .view-and-label__file-item-name {
-    margin-bottom: 5px;
-  }
+    .view-and-label__content {
+        width: 95%;
+        padding: 1rem;
+    }
+    .view-and-label__title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    .view-and-label__file-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .view-and-label__file-item-icon {
+        margin-bottom: 5px;
+        font-size: 1.5rem;
+    }
+    .view-and-label__file-item-name {
+        margin-bottom: 5px;
+    }
 }
