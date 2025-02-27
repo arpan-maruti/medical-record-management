@@ -111,12 +111,21 @@
       </div>
 
       <!-- Upload LOI Label (always visible) -->
-      <div class="upload-subcase__form-group">
-        <label for="loi-upload" class="upload-subcase__loi-upload-label">
-          <span class="upload-subcase__loi-text">Upload Letter of Instruction</span>
-          <span class="upload-subcase__upload-icon">📎</span>
-        </label>
-      </div>
+     <!-- Upload LOI Label (always visible) -->
+<div class="upload-subcase__form-group">
+  <label for="loi-upload" class="upload-subcase__loi-upload-label">
+    <span class="upload-subcase__loi-text">Upload Letter of Instruction</span>
+    <span class="upload-subcase__upload-icon">📎</span>
+  </label>
+  <!-- Hidden file input triggered by the label -->
+  <input
+    type="file"
+    id="loi-upload"
+    accept="application/pdf"
+    (change)="onLoiFileSelected($event)"
+    style="display: none;"
+  />
+</div>
 
       <!-- Instruction Type -->
       <div class="upload-subcase__form-group-instruction-type">

@@ -32,7 +32,9 @@ export class CaseListComponent {
   currentPage: number = 1; // Current page
   totalPages: number = 1; // Total pages
   inputPage: number = 1; // Input page number
-
+  selectedCaseId: string = '';
+  sortKey: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
 
 
@@ -63,15 +65,14 @@ export class CaseListComponent {
   ngAfterViewInit() {
     this.fetchCases();
   }
-  
   fetchCases(page: number = 1, caseStatus: string = '') {
+    console.log(caseStatus);
     const getCookie = (name: string): string | null => {
       return this.cookieService.get(name) || null;
     }
     const token = getCookie('jwt');
     
     if (!token) {
-      // console.error('Token is null. Unable to fetch cases.');
       this.isDataAvailable = false;
       return;
     }
@@ -79,11 +80,17 @@ export class CaseListComponent {
     console.log('Retrieved Token:', token);
   
     let apiUrl = `${environment.apiUrl}/user/cases?page=${page}`;
-    console.log(apiUrl);
     if (caseStatus) {
-      apiUrl += `&caseStatus=${caseStatus}`;
+      apiUrl += `&case_status=${caseStatus}`;
     }
-  
+    
+    // Append sort parameter for server-side sorting
+    if (this.sortKey) {
+      const sortParam = this.sortDirection === 'desc' ? `-${this.sortKey}` : this.sortKey;
+      apiUrl += `&sort=${sortParam}`;
+    }
+    
+    console.log(apiUrl);
     axios.get(apiUrl, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -91,23 +98,35 @@ export class CaseListComponent {
       },
       withCredentials: true
     })
-      .then(response => {
-        console.log(response.data);
-        if (response.data.code === 'Success') {
-          this.data = response.data.data; // Assign the fetched data
-          console.log(this.data);
-          this.filteredData = [...this.data]; // Initialize filtered data
-          this.isDataAvailable = this.data.length > 0; // Set data availability flag
-          this.totalPages = response.data.pagination.total_pages; // Set total pages
-        } else {
-          console.error('Failed to fetch cases:', response.data.message);
-          this.isDataAvailable = false;
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching cases:', error);
+    .then(response => {
+      console.log(response.data);
+      if (response.data.code === 'Success') {
+        this.data = response.data.data;
+        this.filteredData = [...this.data];
+        this.isDataAvailable = this.data.length > 0;
+        this.totalPages = response.data.pagination.total_pages;
+      } else {
+        console.error('Failed to fetch cases:', response.data.message);
         this.isDataAvailable = false;
-      });
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching cases:', error);
+      this.isDataAvailable = false;
+    });
+  }
+
+  sortBy(column: string): void {
+    if (this.sortKey === column) {
+      // Toggle sort direction if same column is clicked.
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // Set new sort column and default ascending.
+      this.sortKey = column;
+      this.sortDirection = 'asc';
+    }
+    // Refresh the cases list with the latest sort criteria.
+    this.fetchCases(this.currentPage, this.selectedStatus);
   }
 
   previousPage() {
@@ -123,8 +142,9 @@ export class CaseListComponent {
       this.fetchCases(this.currentPage, this.selectedStatus);
     }
   }
-  openUploadFiles() {
+  openUploadFiles(caseId: string) {
     this.isUploadFilesVisible = true;
+    this.selectedCaseId = caseId;
   }
 
   closeUploadFiles() {
@@ -259,12 +279,15 @@ export class CaseListComponent {
       console.log(response.data);
       if (response.data.code === 'Success') {
         const files = response.data.data;
+
         // Pick the file with fileType "loi" for the LOI preview
         const loiFiles = files.filter((file: any) => file.file_type === 'loi');
         if (loiFiles.length > 0) {
           const loiFile = loiFiles[0];
-          const unsafeUrl = loiFile.file_url ? loiFile.file_url : `/assets/q.pdf`;
-          this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
+          // Use the static file server URL with the filename from the file data
+          const fileUrl = `http://localhost:5000/files/${loiFile.file_path}`;
+          console.log(fileUrl);
+          this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
           this.selectedFileName = loiFile.file_name;
           this.isPdfPreviewVisible = true;
         }
@@ -357,8 +380,10 @@ export class CaseListComponent {
   }
 
   openDocumentPreview(file: any) {
-    // If file_url is missing, you can fallback to a default URL (like /assets/q.pdf) or show an error.
-    const fileUrl = file.file_url && file.file_url.trim() !== '' ? file.file_url : '/assets/q.pdf';
+    // Build URL using the file name with a current timestamp appended as a query parameter
+    
+    const fileUrl = `http://localhost:5000/files/${file.name}`;
+    
     this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
     this.selectedFileName = file.name;
     this.isPdfPreviewVisible = true;
@@ -397,31 +422,5 @@ export class CaseListComponent {
     this.isViewLabelVisible = false;
   }
 
-  sortKey: string = ''; // Key by which to sort
-  sortDirection: string = 'asc'; // 'asc' for ascending, 'desc' for descending
-
-  // Sort data based on column and direction
-  sortData(key: string): void {
-    if (this.sortKey === key) {
-      // Toggle sort direction if the same column is clicked
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      // Set the new column and default to ascending order
-      this.sortKey = key;
-      this.sortDirection = 'asc';
-    }
-
-    this.filteredData.sort((a, b) => {
-      const aValue = a[key];
-      const bValue = b[key];
-      console.log(aValue+" "+bValue)
-      if (aValue < bValue) {
-        return this.sortDirection === 'asc' ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return this.sortDirection === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  }
+ 
 }

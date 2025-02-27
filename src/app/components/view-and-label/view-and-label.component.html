@@ -1,21 +1,32 @@
 <div class="view-and-label__container">
   <div class="view-and-label__content">
-    <h3 class="view-and-label__title">View / Edit File Labels</h3>
-    
-    <div *ngFor="let file of selectedFiles" class="view-and-label__file-item">
-      <span class="view-and-label__file-item-icon">{{ file.icon }}</span>
-      <span class="view-and-label__file-item-name" (click)="onPreview(file)">
-        {{ file.name }}
-      </span>
-      <input 
-        type="text" 
-        [(ngModel)]="file.label" 
-        placeholder="Enter label" 
-        class="view-and-label__file-item-label-input"
-      />
-      <button class="view-and-label__button" (click)="onSave(file)">Save</button>
+    <h3 class="view-and-label__title">View/Edit File Labels</h3>
+
+    <div class="view-and-label__file-list">
+      <div *ngIf="(selectedFiles?.length || 0) > 0; else noFiles">
+        <div *ngFor="let file of selectedFiles" class="view-and-label__file-item">
+          <div class="view-and-label__file-info" (click)="onPreview(file)">
+            <span class="view-and-label__file-item-icon">{{ file.icon }}</span>
+            <span class="view-and-label__file-item-name">{{ file.name }}</span>
+          </div>
+          <div class="view-and-label__file-actions">
+            <input 
+              type="text" 
+              [(ngModel)]="file.label" 
+              placeholder="Enter label" 
+              class="view-and-label__file-item-label-input"
+            />
+            <button class="view-and-label__button view-and-label__save-button" (click)="onSave(file)">
+              <i class="fa fa-save"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <ng-template #noFiles>
+        <p class="view-and-label__no-files-message">No Files are Available</p>
+      </ng-template>
     </div>
 
-    <button class="view-and-label__button" (click)="onClose()">Close</button>
+    <button class="view-and-label__button view-and-label__close-button" (click)="onClose()">Close</button>
   </div>
 </div>
