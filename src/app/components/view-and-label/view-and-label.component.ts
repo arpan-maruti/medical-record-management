@@ -16,7 +16,7 @@ export class ViewAndLabelComponent {
   @Output() previewPdf = new EventEmitter<any>();
 
   onPreview(file: any) {
-    // Emit the file object so the parent can open the preview like the LOI preview
+    // Directly emit the file object so the parent can open the PDF preview
     this.previewPdf.emit(file);
   }
 

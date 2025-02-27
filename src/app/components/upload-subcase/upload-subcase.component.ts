@@ -42,6 +42,10 @@ export class UploadSubcaseComponent implements OnInit {
   isSubmitted: boolean = false;
   token: string | null = null;
 
+  loiFile: File | null = null;
+  loiFileName: string = '';
+  uploadedLoiFileMetadata: any = null;
+
   // Flag to indicate if the component is in viewOnly mode
   viewOnly: boolean = false;
   caseData: any = null;
@@ -71,7 +75,9 @@ export class UploadSubcaseComponent implements OnInit {
         }
       } else {
         this.clientName = navigation.extras.state['clientName'] || '';
+        console.log('Client Name:', this.clientName);
         this.parentCaseReference = navigation.extras.state['parentCaseReference'] || '';
+        console.log('Parent Case Reference:', this.parentCaseReference);
         this.caseData = {
           parentCaseId: navigation.extras.state['parentCaseId'],
           client_name: this.clientName,
@@ -203,6 +209,60 @@ export class UploadSubcaseComponent implements OnInit {
     return (param && (param.parameterMsg || param.parameter_msg)) || '';
   }
 
+
+
+  // Method triggered when a file is selected via the file input
+  onLoiFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.loiFile = file;
+      this.loiFileName = file.name;
+      this.uploadLoiFile(file);
+    }
+  }
+
+  // Upload the selected LOI file and store the metadata
+  uploadLoiFile(file: File): void {
+    if (!this.token) {
+      console.error('No JWT token available for file upload.');
+      return;
+    }
+    const extension = file.name.split('.').pop()?.toLowerCase() || 'pdf';
+    const filePath = `/files/${Date.now()}_${file.name}`;
+    let userId = '';
+    try {
+      const decoded: any = jwtDecode(this.token);
+      userId = decoded.id || decoded.userId || '';
+    } catch (error) {
+      console.error('Error decoding JWT token:', error);
+    }
+    const metadata = {
+      file_name: file.name,
+      file_path: filePath,
+      file_size: file.size,
+      file_type: 'loi',
+      file_format: extension,
+      createdBy: userId,
+      modifiedBy: userId
+    };
+
+    // Here we use the parentCaseId from the caseData.
+    axios.post(`${environment.apiUrl}/case/${this.caseData.parentCaseId}/files`, metadata, {
+      headers: {
+        'Authorization': `Bearer ${this.token}`,
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+    .then(response => {
+      console.log('LOI file uploaded successfully:', response.data);
+      // Save the returned metadata for re-use in submitForm
+      this.uploadedLoiFileMetadata = response.data.data;
+    })
+    .catch(error => {
+      console.error('Error uploading LOI file:', error);
+    });
+  }
   submitForm(): void {
     this.isSubmitted = true;
     // Reset error messages
