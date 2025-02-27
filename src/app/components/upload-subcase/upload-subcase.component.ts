@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode';
-
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-upload-subcase',
   standalone: true,
@@ -21,11 +21,14 @@ export class UploadSubcaseComponent implements OnInit {
   subCaseReference: string = '';
   dateOfBranch: string = '';
   loiTypes: any[] = [];
+  // For editable mode (holds backend IDs)
   selectedLoi: string = '';
-  instructionTypes: any[] = [];
   selectedInstruction: string = '';
+  // For view mode (display texts)
+  selectedLoiMsg: string = '';
+  selectedInstructionMsg: string = '';
+  instructionTypes: any[] = [];
   parameters: any[] = [];
-  // For parameter selection (when not viewOnly)
   selectedParameters: { [key: string]: boolean } = {};
   // For view-only mode
   selectedParametersView: any[] = [];
@@ -43,42 +46,57 @@ export class UploadSubcaseComponent implements OnInit {
   viewOnly: boolean = false;
   caseData: any = null;
 
-  constructor(private dataService: DataService,
-              private cookieService: CookieService,
-              private router: Router) {
+  constructor(
+    private dataService: DataService,
+    private cookieService: CookieService,
+    private router: Router
+  ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
-      // Expecting state to have 'caseData' and optionally 'viewOnly'
-      this.caseData = navigation.extras.state['caseData'];
-      this.viewOnly = navigation.extras.state['viewOnly'] || false;
-      if (this.caseData) {
-        console.log(this.caseData);
-        // Populate fields with the existing sub case data
+      if (navigation.extras.state['caseData']) {
+        this.caseData = navigation.extras.state['caseData'];
         this.clientName = this.caseData.client_name || '';
-        this.parentCaseReference = this.caseData.parent_id.clientName|| '';
+        // If available, use a parent case property; fall back to ref_number
+        this.parentCaseReference = this.caseData.parent_id?.clientName || this.caseData.ref_number || '';
         this.subCaseReference = this.caseData.ref_number || '';
         this.dateOfBranch = this.caseData.date_of_breach || '';
-        // For LOI and Instruction details assume parameters[0] holds necessary info
         if (this.caseData.parameters && this.caseData.parameters.length > 0) {
-          // Make sure to adjust the object structure as per your API response
-          this.selectedLoi = this.caseData.parameters[0].instructionId?.loiId?.loiMsg || '';
+          // For updating later (editable mode)
+          this.selectedLoi = this.caseData.parameters[0].instructionId?.loiId?._id || '';
           this.selectedInstruction = this.caseData.parameters[0].instructionId?.instructionMsg || '';
+          // For view mode display
+          this.selectedLoiMsg = this.caseData.parameters[0].instructionId?.loiId?.loiMsg || '';
+          this.selectedInstructionMsg = this.caseData.parameters[0].instructionId?.instructionMsg || '';
           this.selectedParametersView = this.caseData.parameters;
         }
+      } else {
+        this.clientName = navigation.extras.state['clientName'] || '';
+        this.parentCaseReference = navigation.extras.state['parentCaseReference'] || '';
+        this.caseData = {
+          parentCaseId: navigation.extras.state['parentCaseId'],
+          client_name: this.clientName,
+          ref_number: this.parentCaseReference
+        };
+      }
+      if (navigation.extras.state['viewOnly'] !== undefined) {
+        this.viewOnly = navigation.extras.state['viewOnly'];
       }
     }
   }
 
   ngOnInit(): void {
     this.token = this.getCookie('jwt');
-    this.fetchLoiTypes().then(() => {
-      // For editable mode, you may allow further changes.
-      // In viewOnly mode, if there is a LOI selected, trigger fetching instruction types.
-      if (this.selectedLoi) {
-        this.onLoiChange();
-      }
-    });
+    // In view mode, we don't need to fetch LOI or instruction types
+    if (!this.viewOnly) {
+      this.fetchLoiTypes().then(() => {
+        if (this.selectedLoi) {
+          this.onLoiChange();
+        }
+      });
+    }
   }
+
+
 
   getCookie(name: string): string | null {
     return this.cookieService.get(name) || null;
@@ -99,7 +117,7 @@ export class UploadSubcaseComponent implements OnInit {
       return;
     }
     try {
-      const response = await axios.get('http://localhost:5000/loiType', {
+      const response = await axios.get(`${environment.apiUrl}/loiType`, {
         headers: {
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
@@ -127,7 +145,7 @@ export class UploadSubcaseComponent implements OnInit {
     }
     if (!this.token) return;
     axios
-      .get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`, {
+      .get(`${environment.apiUrl}/instruction-types/loi/${this.selectedLoi}`, {
         headers: {
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
@@ -152,7 +170,7 @@ export class UploadSubcaseComponent implements OnInit {
     }
     if (!this.token) return;
     axios
-      .get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`, {
+      .get(`${environment.apiUrl}/parameters/instruction/${this.selectedInstruction}`, {
         headers: {
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
@@ -251,7 +269,7 @@ export class UploadSubcaseComponent implements OnInit {
     };
 
     axios
-      .post('http://localhost:5000/case/', formData, {
+      .post(`${environment.apiUrl}/case/`, formData, {
         headers: {
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',

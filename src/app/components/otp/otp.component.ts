@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { CustomAlertComponent } from '../custom-alert/custom-alert.component';
 import { ActivatedRoute } from '@angular/router';
 import axios from 'axios';
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-otp',
   standalone: true,
@@ -50,7 +51,7 @@ export class OtpComponent {
       }
       // Call the /user/verify-otp API with credentials
       const response = await axios.post(
-        'http://localhost:5000/user/verify-otp',
+        `${environment.apiUrl}/user/verify-otp`,
         { email: this.email, otp: this.otp },{withCredentials:true}
       );
       if (response.status === 200) {
@@ -90,7 +91,7 @@ export class OtpComponent {
     try {
       console.log('Resending OTP...');
       const response = await axios.post(
-        'http://localhost:5000/user/send-otp',
+        `${environment.apiUrl}/user/send-otp`,
         { email: this.email },
         { withCredentials: true }
       );
