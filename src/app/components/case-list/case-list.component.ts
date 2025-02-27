@@ -8,6 +8,7 @@ import { ViewAndLabelComponent } from '../view-and-label/view-and-label.componen
 import { UploadFilesComponent } from '../upload-files/upload-files.component';
 import { CookieService } from 'ngx-cookie-service';
 import axios from 'axios';
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-case-list',
   imports: [CommonModule, FormsModule, ViewAndLabelComponent, UploadFilesComponent],
@@ -77,7 +78,8 @@ export class CaseListComponent {
   
     console.log('Retrieved Token:', token);
   
-    let apiUrl = `http://localhost:5000/user/cases?page=${page}`;
+    let apiUrl = `${environment.apiUrl}/user/cases?page=${page}`;
+    console.log(apiUrl);
     if (caseStatus) {
       apiUrl += `&caseStatus=${caseStatus}`;
     }
@@ -176,7 +178,7 @@ export class CaseListComponent {
     console.log(parentId);
     return new Promise((resolve, reject) => {
       const token = this.cookieService.get('jwt');
-      axios.get(`http://localhost:5000/case/${parentId}/subcases/`, {
+      axios.get(`${environment.apiUrl}/case/${parentId}/subcases/`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -246,7 +248,7 @@ export class CaseListComponent {
   openPdfPreview(caseId: string) {
     console.log(caseId);
     const token = this.cookieService.get('jwt');
-    axios.get(`http://localhost:5000/case/${caseId}/file`, {
+    axios.get(`${environment.apiUrl}/case/${caseId}/file`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -324,7 +326,7 @@ export class CaseListComponent {
 
   openViewLabel(caseId: string) {
     const token = this.cookieService.get('jwt');
-    axios.get(`http://localhost:5000/case/${caseId}/file`, {
+    axios.get(`${environment.apiUrl}/case/${caseId}/file`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -364,7 +366,7 @@ export class CaseListComponent {
 
   patchFileLabel(fileId: string, newLabel: string) {
     const token = this.cookieService.get('jwt');
-    axios.patch(`http://localhost:5000/file/${fileId}`, 
+    axios.patch(`${environment.apiUrl}/file/${fileId}`, 
       { files_label: newLabel },
       {
         headers: {

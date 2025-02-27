@@ -19,7 +19,25 @@
 
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-header th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.table-header th:last-child {
+  border-top-right-radius: 8px;
+}
+
+/* For the header row, you can also add a bottom border radius if desired */
+.table-header th:first-child {
+  border-bottom-left-radius: 8px;
+}
+
+.table-header th:last-child {
+  border-bottom-right-radius: 8px;
 }
 .table th{
   background-color: #a4a4a4;
@@ -34,33 +52,32 @@
   overflow-x: auto;
 }
 
-.clickable-row {
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: border 0.3s;
-}
 
-.clickable-row:hover {
-  border: 2px solid #CED1DA;
-}
+
 
 .main-case {
- background-color: #F9FAFB;
- border-radius: 8px;
- padding: 1rem;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.main-case td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.main-case td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 .text-primary {
  text-decoration: underline;
 }
 
- .main-case {
-   background-color: #FFFFFF;
-   border-radius: 8px;
-   padding: 1rem;
- }
- .subcase-row {
-   background-color: #F9FAFB;
- }
+
+.subcase-row {
+  border-radius: 8px;
+}
  .subcase-card {
    margin-top: 1rem;
    background-color: #F1F5F9;
@@ -89,9 +106,14 @@
  }
  /* Hover Effect on Main Case */
  .clickable-row {
-   cursor: pointer;
-   transition: background-color 0.3s ease;
- }
+  cursor: pointer;
+  border: 2px solid black; /* Set border color to black */
+  transition: border 0.3s;
+}
+
+.clickable-row:hover {
+  border: 2px solid black;
+}
 
  
  /* Custom Button */

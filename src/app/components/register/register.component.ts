@@ -8,7 +8,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import emailValidator from 'email-validator';  // Import email-validator package
 import axios from 'axios';
 import { CookieService } from 'ngx-cookie-service';
-
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -171,7 +171,7 @@ export class RegisterComponent {
     console.log('Retrieved Token:1', token);
 
         // Send POST request using axios
-        const response = await axios.post('http://localhost:5000/user/register', registrationData, {
+        const response = await axios.post(`${environment.apiUrl}/user/register`, registrationData, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',

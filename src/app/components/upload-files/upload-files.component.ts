@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 import {jwtDecode} from 'jwt-decode';
 import axios from 'axios';
-
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-upload-files',
   imports: [CommonModule],
@@ -54,7 +54,7 @@ export class UploadFilesComponent {
   
     
     console.log(metadata);
-    axios.post('http://localhost:5000/file/', metadata, {
+    axios.post(`${environment.apiUrl}/file/`, metadata, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${token}`

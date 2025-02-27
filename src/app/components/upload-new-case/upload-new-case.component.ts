@@ -8,7 +8,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
-
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-upload-new-case',
   imports: [FormsModule, CommonModule],
@@ -103,7 +103,7 @@ export class UploadNewCaseComponent implements OnInit {
     }
 
     try {
-      const response = await axios.get('http://localhost:5000/loiType', {
+      const response = await axios.get(`${environment.apiUrl}/loiType`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ export class UploadNewCaseComponent implements OnInit {
     const token = this.getCookie('jwt');
     console.log('Retrieved Token:1', token);
     axios
-      .get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`, {
+      .get(`${environment.apiUrl}/instruction-types/loi/${this.selectedLoi}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -173,7 +173,7 @@ export class UploadNewCaseComponent implements OnInit {
     const token = this.getCookie('jwt');
     console.log('Retrieved Token:1', token);
     axios
-      .get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`, {
+      .get(`${environment.apiUrl}/parameters/instruction/${this.selectedInstruction}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -303,7 +303,7 @@ export class UploadNewCaseComponent implements OnInit {
 
       // Call the API
       axios
-        .post('http://localhost:5000/case/', formData, {
+        .post(`${environment.apiUrl}/case/`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

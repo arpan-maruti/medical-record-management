@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode';
-
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-upload-subcase',
   standalone: true,
@@ -117,7 +117,7 @@ export class UploadSubcaseComponent implements OnInit {
       return;
     }
     try {
-      const response = await axios.get('http://localhost:5000/loiType', {
+      const response = await axios.get(`${environment.apiUrl}/loiType`, {
         headers: {
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ export class UploadSubcaseComponent implements OnInit {
     }
     if (!this.token) return;
     axios
-      .get(`http://localhost:5000/instruction-types/loi/${this.selectedLoi}`, {
+      .get(`${environment.apiUrl}/instruction-types/loi/${this.selectedLoi}`, {
         headers: {
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ export class UploadSubcaseComponent implements OnInit {
     }
     if (!this.token) return;
     axios
-      .get(`http://localhost:5000/parameters/instruction/${this.selectedInstruction}`, {
+      .get(`${environment.apiUrl}/parameters/instruction/${this.selectedInstruction}`, {
         headers: {
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
@@ -269,7 +269,7 @@ export class UploadSubcaseComponent implements OnInit {
     };
 
     axios
-      .post('http://localhost:5000/case/', formData, {
+      .post(`${environment.apiUrl}/case/`, formData, {
         headers: {
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
