@@ -79,6 +79,7 @@ export class CaseListComponent {
     console.log('Retrieved Token:', token);
   
     let apiUrl = `${environment.apiUrl}/user/cases?page=${page}`;
+    console.log(apiUrl);
     if (caseStatus) {
       apiUrl += `&caseStatus=${caseStatus}`;
     }
