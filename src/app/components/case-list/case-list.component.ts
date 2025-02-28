@@ -285,7 +285,7 @@ export class CaseListComponent {
         if (loiFiles.length > 0) {
           const loiFile = loiFiles[0];
           // Use the static file server URL with the filename from the file data
-          const fileUrl = `http://localhost:5000/files/${loiFile.file_path}`;
+          const fileUrl = `http://localhost:5000${loiFile.file_path}`;
           console.log(fileUrl);
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
           this.selectedFileName = loiFile.file_name;
