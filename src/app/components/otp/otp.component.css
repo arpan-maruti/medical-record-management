@@ -17,6 +17,9 @@ html {
   overflow: hidden;
 }
 
+
+
+
 /* Image Section */
 .otp__image {
   flex: 1;
@@ -105,9 +108,9 @@ html {
 /* Error Messages */
 .otp__error-message {
   color: red;
-  font-size: 1rem;
+  position: absolute;
+  font-size: 0.9rem;
   margin-top: 0.5rem;
-  /* margin-left: 1rem; */
   text-align: left;
 }
 
@@ -115,7 +118,7 @@ html {
 .otp__buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .otp__login,

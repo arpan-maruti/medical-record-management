@@ -46,7 +46,12 @@ export class OtpComponent {
   async onVerifyClick() {
     try {
       if (!this.otp) {
-        alert('Please enter the OTP');
+        this.otpError1 = 'Please enter the OTP';
+        // alert('Please enter the OTP');
+        return;
+      }
+      if(!this.otp.match(/[0-9]/g)) {
+        this.otpError1 = "Invalid OTP";
         return;
       }
       // Call the /user/verify-otp API with credentials
@@ -56,17 +61,16 @@ export class OtpComponent {
       );
       if (response.status === 200) {
         console.log('OTP Verified Successfully:', response.data.message);
-        // Redirect to /case-management
-        alert('OTP Verified Successfully!');
+        // alert('OTP Verified Successfully!');
         this.router.navigate(['/case-management']);
       }
     } catch (error: any) {
       if (error.response && error.response.data) {
-        console.error('OTP Verification Failed:', error.response.data.error);
-        alert(`Verification Failed: ${error.response.data.error}`);
+        console.error('OTP Verification Failed:', error.message);
+        this.otpError1 = "Verification Failed";
       } else {
         console.error('Network Error:', error);
-        alert('Network Error! Please try again later.');
+        this.otpError1 = "Network Error! Please try again later.";
       }
     }
   }
