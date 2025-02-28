@@ -1,9 +1,10 @@
-import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { environment } from '../environments/environment';
+
 @Component({
   selector: 'app-upload-files',
   imports: [CommonModule],
@@ -11,6 +12,7 @@ import { environment } from '../environments/environment';
   styleUrls: ['./upload-files.component.css']
 })
 export class UploadFilesComponent {
+  @Input() caseId: string = ''; // Receive caseId from parent component
   @Output() closePopup = new EventEmitter<void>();
   @Output() fileUploaded = new EventEmitter<string>(); // Emit the file name after upload
   file: File | null = null;  // Store the uploaded file
@@ -21,12 +23,11 @@ export class UploadFilesComponent {
   // Extract user id from JWT token (assumes the token carries userId property)
   getUserIdFromJWT(): string {
     const token = this.cookieService.get('jwt');
-    console.log('JWT token:', token); // log the raw token
+    console.log('JWT token:', token);
     if (token) {
       try {
         const decoded: any = jwtDecode(token);
-        console.log('Decoded JWT:', decoded); // see what properties are available
-        // Adjust the property here based on your token's structure.
+        console.log('Decoded JWT:', decoded);
         return decoded.userId || decoded.id || ''; 
       } catch (error) {
         console.error('Error decoding JWT:', error);
@@ -40,23 +41,24 @@ export class UploadFilesComponent {
   uploadFile(file: File) {
     const token = this.cookieService.get('jwt');
     const userId = this.getUserIdFromJWT();
-    // Generate a file path. Here, we simply prepend a timestamp. Adjust as needed.
-    const filePath = `/files/${Date.now()}_${file.name}`;
+    // Generate a file path. Here, we simply prepend a timestamp.
+    const extension = file.name.split('.').pop()?.toLowerCase() || 'pdf';
+    const filePath = `${Date.now()}.pdf`;
     const metadata = {
-      fileName: file.name,            // Added file_name property
+      fileName: file.name,
       filePath: filePath,
       fileSize: file.size,
-      fileType: 'loi',                // Changed to 'loi' as expected by backend
-      fileFormat: 'pdf',
+      fileType: 'loi',      // As expected by backend
+      fileFormat: extension,
       createdBy: userId,
       modifiedBy: userId
     };
-  
     
     console.log(metadata);
-    axios.post(`${environment.apiUrl}/file/`, metadata, {
+    // Use the caseId in the API endpoint (ensure it's set)
+    axios.post(`${environment.apiUrl}/case/${this.caseId}/files`, metadata, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
       withCredentials: true
@@ -83,7 +85,7 @@ export class UploadFilesComponent {
   // Handle when files are dropped into the drag-and-drop area
   onDrop(event: DragEvent) {
     event.preventDefault();
-    const file = event.dataTransfer?.files[0];  // Get the first file
+    const file = event.dataTransfer?.files[0];
     if (file) {
       this.file = file;
       this.fileName = file.name;
