@@ -228,7 +228,7 @@ export class UploadSubcaseComponent implements OnInit {
       return;
     }
     const extension = file.name.split('.').pop()?.toLowerCase() || 'pdf';
-    const filePath = `/files/${Date.now()}_${file.name}`;
+    const filePath = `/files/${Date.now()}`;
     let userId = '';
     try {
       const decoded: any = jwtDecode(this.token);
@@ -237,19 +237,20 @@ export class UploadSubcaseComponent implements OnInit {
       console.error('Error decoding JWT token:', error);
     }
     const metadata = {
-      file_name: file.name,
-      file_path: filePath,
-      file_size: file.size,
-      file_type: 'loi',
-      file_format: extension,
+      fileName: file.name,
+      filePath: filePath,
+      fileSize: file.size,
+      fileType: 'loi',
+      fileFormat: extension,
       createdBy: userId,
       modifiedBy: userId
     };
-
+    const token = this.cookieService.get('jwt');
     // Here we use the parentCaseId from the caseData.
     axios.post(`${environment.apiUrl}/case/${this.caseData.parentCaseId}/files`, metadata, {
+
       headers: {
-        'Authorization': `Bearer ${this.token}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
       withCredentials: true
@@ -258,6 +259,7 @@ export class UploadSubcaseComponent implements OnInit {
       console.log('LOI file uploaded successfully:', response.data);
       // Save the returned metadata for re-use in submitForm
       this.uploadedLoiFileMetadata = response.data.data;
+      
     })
     .catch(error => {
       console.error('Error uploading LOI file:', error);
@@ -271,7 +273,7 @@ export class UploadSubcaseComponent implements OnInit {
     this.parametersError = null;
     this.loiError = null;
     this.instructionError = null;
-
+  
     // Validate fields
     if (!this.subCaseReference || this.subCaseReference.trim() === '') {
       this.subCaseReferenceError = 'Subcase Reference is required.';
@@ -300,7 +302,7 @@ export class UploadSubcaseComponent implements OnInit {
       });
       return;
     }
-
+  
     // Decode JWT token to extract user ID
     let userId: string | null = null;
     try {
@@ -313,7 +315,7 @@ export class UploadSubcaseComponent implements OnInit {
       console.error('Unable to extract user ID from token.');
       return;
     }
-
+  
     const formData = {
       parentId: this.caseData ? this.caseData.parentCaseId : null,
       clientName: this.clientName.trim(),
@@ -321,13 +323,18 @@ export class UploadSubcaseComponent implements OnInit {
       dateOfBreach: this.dateOfBranch.trim(),
       caseStatus: 'uploaded',
       parameters: Object.keys(this.selectedParameters).filter(key => this.selectedParameters[key]),
-      files: [],
+      files: [] as string[],
       isLoi: !!this.selectedLoi,
       isDeleted: false,
       createdBy: userId,
       modifiedBy: userId,
     };
-
+  
+    // Add the uploaded LOI file ID if available
+    if (this.uploadedLoiFileMetadata && this.uploadedLoiFileMetadata.file._id) {
+      formData.files.push(this.uploadedLoiFileMetadata.file._id);
+    }
+  
     axios
       .post(`${environment.apiUrl}/case/`, formData, {
         headers: {
