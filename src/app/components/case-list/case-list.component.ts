@@ -363,6 +363,7 @@ export class CaseListComponent {
     .then(response => {
       if (response.data.code === 'Success') {
         const files = response.data.data;
+        debugger;
         // Only show files with file_type "document" in the View/Label popup
         const documentFiles = files.filter((file: any) => file.file_type === 'document');
         this.selectedFiles = documentFiles.map((file: any) => ({
@@ -370,9 +371,10 @@ export class CaseListComponent {
           name: file.file_name,
           label: file.files_label || '',
           icon: '📄',
-          file_url: file.file_url, // include URL for preview
+          file_url: file.file_path, // include URL for preview
           caseId  // attach the current caseId to each file
         }));
+  
         this.isViewLabelVisible = true;
       } else {
         console.error('Failed to fetch files:', response.data.message);
@@ -386,8 +388,8 @@ export class CaseListComponent {
   openDocumentPreview(file: any) {
     // Build URL using the file name with a current timestamp appended as a query parameter
     console.log(file);
-    const fileUrl = `http://localhost:5000/files/${file.file_path}`;
-    
+    const fileUrl = `http://localhost:5000/files/${file.file_url}`;
+    debugger;
     this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
     this.selectedFileName = file.name;
     this.isPdfPreviewVisible = true;

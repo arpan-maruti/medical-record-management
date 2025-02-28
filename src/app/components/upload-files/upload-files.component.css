@@ -20,12 +20,12 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  border-color: #0056b3;
+  background-image: url('/assets/pdf-icon.png');
+  background-size: cover;
+  background-position: center;
 }
 
-.upload-files__drag-drop-area.upload-files__drag-drop-area--drag-over {
-  border-color: #0056b3;
-  background-color: #e0f7ff;
-}
 
 .upload-files__drag-drop-icon {
   width: 50px;

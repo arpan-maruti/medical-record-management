@@ -6,6 +6,7 @@
       (change)="onFilesSelected($event)"
       id="fileInput"
       accept="application/pdf"
+      enctype="multipart/form-data"
       class="upload-files__file-input"
     />
     <label for="fileInput" class="upload-files__btn">Browse Files</label>
@@ -18,16 +19,18 @@
     (drop)="onDrop($event)"
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave($event)"
+    *ngIf="!fileName" 
   >
     <!-- Document icon for file -->
-    <img src="/assets/pdf-icon.png" alt="PDF icon" class="upload-files__drag-drop-icon" />
-    <p class="upload-files__drag-drop-text">Drag & Drop PDF Files Here</p>
-  </div>
-
-  <!-- File Name Display -->
-  <div *ngIf="fileName" class="upload-files__file-name-display">
-    <p>Selected File: {{ fileName }}</p>
-  </div>
+    <!-- <img src="/assets/pdf-icon.png" style="z-index: -10;" alt="PDF icon" class="upload-files__drag-drop-icon" />
+    <p class="upload-files__drag-drop-text" style="z-index: -10;">Drag & Drop PDF Files Here</p> -->
+</div>
+ 
+<!-- File Name Display -->
+<div *ngIf="fileName" class="upload-files__btn upload-files__btn--secondary">
+  <p>Selected File: {{ fileName }}</p>
+  <button (click)="uploadFile()">Upload</button>
+</div>
 
   <!-- Close Button -->
   <button (click)="closeModal()" class="upload-files__btn upload-files__btn--secondary">Close</button>

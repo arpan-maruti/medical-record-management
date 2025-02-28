@@ -40,38 +40,31 @@ export class UploadFilesComponent {
   }
 
   // Function to perform file upload
-  uploadFile(file: File) {
+  uploadFile() {
     const token = this.cookieService.get('jwt');
     const userId = this.getUserIdFromJWT();
-    // Generate a file path. Here, we simply prepend a timestamp.
-    const extension = file.name.split('.').pop()?.toLowerCase() || 'pdf';
-    const filePath = `${Date.now()}.pdf`;
-    const metadata = {
-      fileName: file.name,
-      filePath: filePath,
-      fileSize: file.size,
-      // Use the fileType input. This will be 'document' when uploaded from caselist.
-      fileType: this.fileType,
-      fileFormat: extension,
-      createdBy: userId,
-      modifiedBy: userId
-    };
-    
-    console.log(metadata);
-    // Use the caseId in the API endpoint (ensure it's set)
-    axios.post(`${environment.apiUrl}/case/${this.caseId}/files`, metadata, {
+    const extension = this?.file?.name.split('.').pop()?.toLowerCase() || 'pdf';
+    const formData = new FormData();
+    formData.append('file', this.file as File);
+    formData.append('fileName', this.file?.name as string);
+    formData.append('fileType', this.fileType);
+    formData.append('createdBy', userId);
+    formData.append('modifiedBy', userId);
+    formData.append('fileFormat', extension);
+
+
+    axios.post(`${environment.apiUrl}/case/${this.caseId}/files`, formData, {
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
       withCredentials: true
     })
     .then(response => {
       console.log('File uploaded successfully:', response.data);
-      this.fileUploaded.emit(file.name);
+      this.fileUploaded.emit(this.file?.name);
     })
     .catch(error => {
-      console.error('Error uploading file:', error);
+      console.error('Error uploading file:', error.message, error.stack);
     });
   }
 
@@ -81,7 +74,7 @@ export class UploadFilesComponent {
     if (selectedFile) {
       this.file = selectedFile;
       this.fileName = selectedFile.name;
-      this.uploadFile(selectedFile);
+      // this.uploadFile(selectedFile);
     }
   }
 
@@ -92,7 +85,8 @@ export class UploadFilesComponent {
     if (file) {
       this.file = file;
       this.fileName = file.name;
-      this.uploadFile(file);
+      console.log(event.target);
+      // this.uploadFile(file);
     }
   }
 
@@ -100,13 +94,11 @@ export class UploadFilesComponent {
   onDragOver(event: DragEvent) {
     event.preventDefault();
     const target = event.currentTarget as HTMLElement;
-    target.classList.add('drag-over');
   }
 
   // Handle the dragleave event (to remove drop zone indication)
   onDragLeave(event: DragEvent) {
     const target = event.currentTarget as HTMLElement;
-    target.classList.remove('drag-over');
   }
   
   @HostListener('document:click', ['$event'])
