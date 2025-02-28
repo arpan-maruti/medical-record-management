@@ -13,6 +13,8 @@ import { environment } from '../environments/environment';
 })
 export class UploadFilesComponent {
   @Input() caseId: string = ''; // Receive caseId from parent component
+  // Added input to select fileType. When used from caselist, pass "document".
+  @Input() fileType: string = 'loi';
   @Output() closePopup = new EventEmitter<void>();
   @Output() fileUploaded = new EventEmitter<string>(); // Emit the file name after upload
   file: File | null = null;  // Store the uploaded file
@@ -48,7 +50,8 @@ export class UploadFilesComponent {
       fileName: file.name,
       filePath: filePath,
       fileSize: file.size,
-      fileType: 'loi',      // As expected by backend
+      // Use the fileType input. This will be 'document' when uploaded from caselist.
+      fileType: this.fileType,
       fileFormat: extension,
       createdBy: userId,
       modifiedBy: userId
