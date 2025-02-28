@@ -65,7 +65,7 @@ export class CaseListComponent {
   ngAfterViewInit() {
     this.fetchCases();
   }
-  fetchCases(page: number = 1, caseStatus: string = '') {
+  fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '') {
     console.log(caseStatus);
     const getCookie = (name: string): string | null => {
       return this.cookieService.get(name) || null;
@@ -88,6 +88,11 @@ export class CaseListComponent {
     if (this.sortKey) {
       const sortParam = this.sortDirection === 'desc' ? `-${this.sortKey}` : this.sortKey;
       apiUrl += `&sort=${sortParam}`;
+    }
+    
+    // Append search query if provided
+    if (searchQuery && searchQuery.trim() !== '') {
+      apiUrl += `&client_name=${encodeURIComponent(searchQuery.trim())}`;
     }
     
     console.log(apiUrl);
@@ -126,20 +131,20 @@ export class CaseListComponent {
       this.sortDirection = 'asc';
     }
     // Refresh the cases list with the latest sort criteria.
-    this.fetchCases(this.currentPage, this.selectedStatus);
+    this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery);
   }
 
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.fetchCases(this.currentPage, this.selectedStatus);
+      this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery);
     }
   }
   
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.fetchCases(this.currentPage, this.selectedStatus);
+      this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery);
     }
   }
   openUploadFiles(caseId: string) {
@@ -151,28 +156,27 @@ export class CaseListComponent {
     this.isUploadFilesVisible = false;
   }
   onStatusChange() {
-    this.fetchCases(this.currentPage, this.selectedStatus);
+    this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery);
   }
   
   onSearchChange() {
-    this.applyFilters();  // Reapply both search and status filters
+    this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery);
   }
-
-  // Apply both search and status filter together
-  applyFilters() {
-    this.filteredData = this.data.filter(caseItem => {
-      const matchesSearch = this.applySearch(caseItem);
-      const matchesStatus = this.applyStatusFilter(caseItem);
-      return matchesSearch && matchesStatus;  // Case should match both search and status
-    });
-  }
+  // // Apply both search and status filter together
+  // applyFilters() {
+  //   this.filteredData = this.data.filter(caseItem => {
+  //     const matchesSearch = this.applySearch(caseItem);
+  //     const matchesStatus = this.applyStatusFilter(caseItem);
+  //     return matchesSearch && matchesStatus;  // Case should match both search and status
+  //   });
+  // }
 
   // Filter by search query
-  applySearch(caseItem: any): boolean {
-    const searchLower = this.searchQuery.toLowerCase();
-    return caseItem.client_name.toLowerCase().includes(searchLower) ||
-           this.getCaseUploader(caseItem).toLowerCase().includes(searchLower);
-  }
+  // applySearch(caseItem: any): boolean {
+  //   const searchLower = this.searchQuery.toLowerCase();
+  //   return caseItem.client_name.toLowerCase().includes(searchLower) ||
+  //          this.getCaseUploader(caseItem).toLowerCase().includes(searchLower);
+  // }
 
   // Filter by selected status
   applyStatusFilter(caseItem: any): boolean {
@@ -382,7 +386,7 @@ export class CaseListComponent {
   openDocumentPreview(file: any) {
     // Build URL using the file name with a current timestamp appended as a query parameter
     
-    const fileUrl = `http://localhost:5000/files/${file.name}`;
+    const fileUrl = `http://localhost:5000/files/${file.file_path}`;
     
     this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
     this.selectedFileName = file.name;

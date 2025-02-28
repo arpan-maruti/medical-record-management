@@ -255,6 +255,7 @@
   <div *ngIf="isUploadFilesVisible" class="upload-files-popup">
     <app-upload-files
       [caseId]="selectedCaseId"
+      [fileType]="'document'"
       (closePopup)="closeUploadFiles()"
     >
     </app-upload-files>
