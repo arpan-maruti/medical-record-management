@@ -385,7 +385,7 @@ export class CaseListComponent {
 
   openDocumentPreview(file: any) {
     // Build URL using the file name with a current timestamp appended as a query parameter
-    
+    console.log(file);
     const fileUrl = `http://localhost:5000/files/${file.file_path}`;
     
     this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);

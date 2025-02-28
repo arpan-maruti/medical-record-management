@@ -77,7 +77,6 @@
             {{ loiError }}
           </div>
         </div>
-
         <!-- Date of Branch / Liability -->
         <div class="form-group">
           <label for="date-of-branch">Date of Breach / Liability</label>
@@ -104,12 +103,19 @@
         </div>
       </div>
 
-      <!-- Upload LOI -->
+      <!-- Upload LOI: Trigger file selection -->
       <div class="form-group">
         <label for="loi-upload" class="loi-upload-label">
           <span class="loi-text">Upload Letter of Instruction</span>
           <span class="upload-icon">📎</span>
         </label>
+        <input
+          type="file"
+          id="loi-upload"
+          accept="application/pdf"
+          (change)="onLoiFileSelected($event)"
+          style="display: none;"
+        />
       </div>
 
       <!-- Instruction Type -->
@@ -137,7 +143,6 @@
             [ngModelOptions]="{ standalone: true }"
             disabled
           />
-          
         </ng-container>
         <div *ngIf="isSubmitted && instructionError" class="error-message">
           {{ instructionError }}

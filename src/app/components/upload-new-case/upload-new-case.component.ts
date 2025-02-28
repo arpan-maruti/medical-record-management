@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../../services/data.service';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import { Inject, PLATFORM_ID } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { environment } from '../environments/environment';
+
 @Component({
   selector: 'app-upload-new-case',
   imports: [FormsModule, CommonModule],
@@ -35,6 +36,11 @@ export class UploadNewCaseComponent implements OnInit {
   instructionError: string | null = null;
   parametersError: string | null = null;
 
+  // New properties for file upload
+  loiFile: File | null = null;
+  loiFileName: string = '';
+  uploadedLoiFileMetadata: any = null;
+
   caseData: any;
   viewOnly: boolean = false;
 
@@ -57,18 +63,18 @@ export class UploadNewCaseComponent implements OnInit {
       // Populate basic case details
       this.clientName = this.caseData.client_name;
       this.caseReference = this.caseData.ref_number;
-      this.dateOfBranch = this.caseData.date_of_breach ; // Adjust based on your data structure
+      this.dateOfBranch = this.caseData.date_of_breach; // Adjust based on your data structure
   
       // Populate LOI Type
-      this.selectedLoi = this.caseData.parameters[0].instructionId.loiId.loiMsg||"hello"; // Assuming loiType is the ID of the selected LOI
+      this.selectedLoi = this.caseData.parameters[0].instructionId.loiId.loiMsg || "hello";
       console.log("loi:" + this.selectedLoi);
   
       // Populate Instruction Type
-      this.selectedInstruction = this.caseData.parameters[0].instructionId.instructionMsg; // Assuming instructionType is the ID of the selected instruction
+      this.selectedInstruction = this.caseData.parameters[0].instructionId.instructionMsg;
       console.log("instr:" + this.selectedInstruction);
   
       // Populate Parameters
-      this.selectedParametersView = this.caseData.parameters|| []; // Assuming parameters is an array of selected parameter IDs
+      this.selectedParametersView = this.caseData.parameters || [];
       console.log(this.selectedParametersView);
     }
   
@@ -92,23 +98,20 @@ export class UploadNewCaseComponent implements OnInit {
     return (param && (param.parameterMsg || param.parameter_msg)) || '';
   }
 
-  // Fetch loiTypes from the API
+  // Fetch LOI Types from the API
   async fetchLoiTypes(): Promise<void> {
     const token = this.getCookie('jwt');
-    console.log('Retrieved Token:1', token); // Log the retrieved token to debug
-
+    console.log('Retrieved Token:', token);
     if (!token) {
-      // console.error('No JWT token found in cookies');
-      return; // Prevent making the API call if the token is not found
+      return;
     }
-
     try {
       const response = await axios.get(`${environment.apiUrl}/loiType`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        withCredentials: true, // Ensure cookies are sent with the request
+        withCredentials: true,
       });
       console.log(response.data);
       if (response.data && Array.isArray(response.data.data)) {
@@ -139,19 +142,19 @@ export class UploadNewCaseComponent implements OnInit {
 
   onLoiChange(): void {
     if (!this.selectedLoi) {
-      this.instructionTypes = []; // Reset instruction types if no LOI is selected
-      this.selectedInstruction = ''; // Clear selected instruction
+      this.instructionTypes = [];
+      this.selectedInstruction = '';
       return;
     }
     const token = this.getCookie('jwt');
-    console.log('Retrieved Token:1', token);
+    console.log('Retrieved Token:', token);
     axios
       .get(`${environment.apiUrl}/instruction-types/loi/${this.selectedLoi}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        withCredentials: true, // Ensure cookies are sent with the request
+        withCredentials: true,
       })
       .then((response) => {
         this.instructionTypes = response.data.data.map((item: any) => ({
@@ -167,18 +170,18 @@ export class UploadNewCaseComponent implements OnInit {
 
   onInstructionChange(): void {
     if (!this.selectedInstruction) {
-      this.parameters = []; // Reset parameters if no instruction is selected
+      this.parameters = [];
       return;
     }
     const token = this.getCookie('jwt');
-    console.log('Retrieved Token:1', token);
+    console.log('Retrieved Token:', token);
     axios
       .get(`${environment.apiUrl}/parameters/instruction/${this.selectedInstruction}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        withCredentials: true, // Ensure cookies are sent with the request
+        withCredentials: true,
       })
       .then((response) => {
         this.parameters = response.data.data.map((item: any) => ({
@@ -200,15 +203,66 @@ export class UploadNewCaseComponent implements OnInit {
   toggleSelection(paramId: string): void {
     const index = this.selectedParameters.indexOf(paramId);
     if (index === -1) {
-      this.selectedParameters.push(paramId); // Add to selected if not already present
+      this.selectedParameters.push(paramId);
     } else {
-      this.selectedParameters.splice(index, 1); // Remove if already selected
+      this.selectedParameters.splice(index, 1);
     }
-
     if (this.selectedParameters.length > 0) {
-      // If at least one parameter is selected, clear the error message
       this.parametersError = null;
     }
+  }
+
+  // New method: Triggered when a file is selected via the file input
+  onLoiFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.loiFile = file;
+      this.loiFileName = file.name;
+      this.uploadLoiFile(file);
+    }
+  }
+
+  // New method: Upload the selected LOI file and store the returned metadata
+  uploadLoiFile(file: File): void {
+    const token = this.getCookie('jwt');
+    if (!token) {
+      console.error('No JWT token available for file upload.');
+      return;
+    }
+    const extension = file.name.split('.').pop()?.toLowerCase() || 'pdf';
+    const filePath = `/files/${Date.now()}`;
+    let userId = '';
+    try {
+      const decoded: any = jwtDecode(token);
+      userId = decoded.id || decoded.userId || '';
+    } catch (error) {
+      console.error('Error decoding JWT token:', error);
+    }
+    const metadata = {
+      fileName: file.name,
+      filePath: filePath,
+      fileSize: file.size,
+      fileType: 'loi',
+      fileFormat: extension,
+      createdBy: userId,
+      modifiedBy: userId,
+    };
+    // Using the same API endpoint as upload-subcase
+    axios
+      .post(`${environment.apiUrl}/file`, metadata, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      })
+      .then(response => {
+        console.log('LOI file uploaded successfully:', response.data);
+        this.uploadedLoiFileMetadata = response.data.data;
+      })
+      .catch(error => {
+        console.error('Error uploading LOI file:', error);
+      });
   }
 
   submitForm(): void {
@@ -258,69 +312,72 @@ export class UploadNewCaseComponent implements OnInit {
       this.parametersError = 'At least one parameter should be selected.';
     }
 
-    // If no errors, proceed with form submission
     if (
-      !this.clientNameError &&
-      !this.caseReferenceError &&
-      !this.dateError &&
-      !this.loiError &&
-      !this.instructionError &&
-      !this.parametersError
+      this.clientNameError ||
+      this.caseReferenceError ||
+      this.dateError ||
+      this.loiError ||
+      this.instructionError ||
+      this.parametersError
     ) {
-      // Decode the JWT token to extract user_id
-      const token = this.getCookie('jwt');
-      let userId: string | null = null;
-
-      if (token) {
-        try {
-          const decodedToken: any = jwtDecode(token);
-          userId = decodedToken?.id || null; // Adjust based on your token structure
-        } catch (error) {
-          console.error('Error decoding JWT token:', error);
-        }
-      }
-
-      if (!userId) {
-        console.error('Unable to extract user ID from JWT token.');
-        return; // Abort submission if user ID cannot be retrieved
-      }
-
-      const formData = {
-        parentId: null,
-        clientName: this.clientName,
-        refNumber: this.caseReference,
-        dateOfBreach: this.dateOfBranch,
-        caseStatus: 'uploaded',
-        parameters: this.selectedParameters, // Pass only IDs
-        files: [],
-        isLoi: !!this.selectedLoi,
-        isDeleted: false,
-        createdBy: userId, // Set createdBy from the decoded token
-        modifiedBy: userId, // Set modifiedBy from the decoded token
-      };
-
-      console.log('Form data:', formData);
-
-      // Call the API
-      axios
-        .post(`${environment.apiUrl}/case/`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        })
-        .then((response) => {
-          console.log('Case created successfully:', response.data);
-          this.router.navigate(['/case-management']);
-        })
-        .catch((error) => {
-          console.error(
-            'Error creating case:',
-            error.response?.data || error.message
-          );
-          // Handle error - e.g., show an error message
-        });
+      return;
     }
+
+    // Decode the JWT token to extract user_id
+    const token = this.getCookie('jwt');
+    let userId: string | null = null;
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        userId = decodedToken?.id || null;
+      } catch (error) {
+        console.error('Error decoding JWT token:', error);
+      }
+    }
+    if (!userId) {
+      console.error('Unable to extract user ID from JWT token.');
+      return;
+    }
+
+    const formData = {
+      parentId: null,
+      clientName: this.clientName,
+      refNumber: this.caseReference,
+      dateOfBreach: this.dateOfBranch,
+      caseStatus: 'uploaded',
+      parameters: this.selectedParameters,
+      files: [] as string[],
+      isLoi: !!this.selectedLoi,
+      isDeleted: false,
+      createdBy: userId,
+      modifiedBy: userId,
+    };
+
+    // Add the uploaded LOI file ID if available
+    if (
+      this.uploadedLoiFileMetadata &&
+      this.uploadedLoiFileMetadata.data &&
+      this.uploadedLoiFileMetadata.data._id
+    ) {
+      formData.files.push(this.uploadedLoiFileMetadata.data._id);
+    }
+
+    console.log('Form data:', formData);
+
+    axios
+      .post(`${environment.apiUrl}/case/`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log('Case created successfully:', response.data);
+        this.router.navigate(['/case-management']);
+      })
+      .catch((error) => {
+        console.error('Error creating case:', error.response?.data || error.message);
+      });
   }
 }
