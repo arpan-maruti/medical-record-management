@@ -56,6 +56,7 @@
           <ng-container *ngIf="!viewOnly">
             <select
               id="loi-type"
+              (input)="onInputChange()"
               [(ngModel)]="selectedLoi"
               [ngModelOptions]="{ standalone: true }"
               (ngModelChange)="onLoiChange()"
@@ -72,7 +73,7 @@
             <input
               type="text"
               id="loi-type"
-              [(ngModel)]="selectedLoi"
+              [(ngModel)]="selectedLoiMsg"
               [ngModelOptions]="{ standalone: true }"
               disabled
               class="upload-subcase__form-input"

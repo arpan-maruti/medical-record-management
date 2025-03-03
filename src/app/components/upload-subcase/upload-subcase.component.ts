@@ -318,6 +318,8 @@ export class UploadSubcaseComponent implements OnInit {
       this.dateError = 'Date is required.';
     } else if (!/^\d{4}-\d{2}-\d{2}$/.test(this.dateOfBranch)) {
       this.dateError = 'Invalid date format. Use YYYY-MM-DD.';
+    } else if (this.dateOfBranch > new Date().toISOString().split('T')[0]) {
+      this.dateError = 'Date cannot be in the future.';
     }
     if (!this.selectedLoi) {
       this.loiError = 'LOI Type is required.';
