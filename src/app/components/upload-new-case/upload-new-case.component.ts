@@ -347,6 +347,10 @@ export class UploadNewCaseComponent implements OnInit {
       this.dateError = 'Date is required.';
     } else if (!this.dateOfBranch.match(/^\d{4}-\d{2}-\d{2}$/)) {
       this.dateError = 'Invalid date format. Please enter a valid date.';
+    } else if(this.dateOfBranch > new Date().toISOString().split('T')[0]){
+      // console.log(this.dateOfBranch);
+      // console.log(new Date().toISOString().split('T')[0]);
+      this.dateError = 'Date of breach cannot be in the future.';
     }
 
     // Validate LOI Type
