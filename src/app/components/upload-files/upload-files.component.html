@@ -27,11 +27,12 @@
 </div>
  
 <!-- File Name Display -->
-<div *ngIf="fileName" class="upload-files__btn upload-files__btn--secondary">
+<div *ngIf="fileName" >
   <p>Selected File: {{ fileName }}</p>
-  <button (click)="uploadFile()">Upload</button>
 </div>
-
+  <div style="display: flex; flex-direction: initial; gap: 5px;">
+  <button class="upload-files__btn upload-files__btn--secondary" (click)="uploadFile()">Upload</button>
   <!-- Close Button -->
   <button (click)="closeModal()" class="upload-files__btn upload-files__btn--secondary">Close</button>
+</div>
 </div>
