@@ -22,7 +22,8 @@
   position: relative;
   border-color: #0056b3;
   background-image: url('/assets/pdf-icon.png');
-  background-size: cover;
+  background-size: 50px;
+  background-repeat: no-repeat;
   background-position: center;
 }
 
