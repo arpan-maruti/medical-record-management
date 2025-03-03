@@ -4,12 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomAlertComponent } from '../custom-alert/custom-alert.component';
 import { RouterLink } from '@angular/router';
-import validator from 'validator'; // Import validator
+import validator from 'validator';
 import axios from 'axios';
 import { environment } from '../environments/environment';
+import { ToastrModule, ToastrService } from 'ngx-toastr'; // Import ToastrService
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule, CustomAlertComponent, RouterLink],
+  standalone: true,
+  imports: [FormsModule, CommonModule, CustomAlertComponent, RouterLink, ToastrModule, CommonModule],
+  // Removed providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -20,41 +25,57 @@ export class LoginComponent {
   formSubmitted: boolean = false;
   isPasswordVisible: boolean = false;
   @ViewChild('customAlert') customAlert!: CustomAlertComponent;
-  constructor(private router: Router) {}
+  constructor(private router: Router, private toastr: ToastrService) {}
+
   async onLogin() {
     this.formSubmitted = true;
     // Validate inputs
     this.validateInputs();
     if (this.generalError) {
+      this.toastr.error(this.generalError, 'Validation Error');
       return;
     }
     try {
       // Step 1: Login the user
-      const userResponse = await axios.post(`${environment.apiUrl}/user/login`, {
-        email: this.email,
-        password: this.password,
-      }, {withCredentials:true});
+      const userResponse = await axios.post(
+        `${environment.apiUrl}/user/login`,
+        {
+          email: this.email,
+          password: this.password,
+        },
+        { withCredentials: true }
+      );
       if (!userResponse.data.success) {
         this.generalError = userResponse.data.message || 'Invalid email or password.';
+        this.toastr.error(this.generalError, 'Login Failed');
         return;
       }
       // Step 2: Send OTP to the user's phone
-      const otpResponse = await axios.post(`${environment.apiUrl}/user/send-otp`, {
-        email: this.email,
-      }, {withCredentials:true});
+      const otpResponse = await axios.post(
+        `${environment.apiUrl}/user/send-otp`,
+        {
+          email: this.email,
+        },
+        { withCredentials: true }
+      );
       if (otpResponse.data.success) {
-        console.log(':white_check_mark: OTP sent successfully.');
+        this.toastr.success('OTP sent successfully.', 'Success');
         this.router.navigate(['/otp'], {
           queryParams: { email: this.email },
         });
       } else {
-        this.generalError = otpResponse.data.message || 'Failed to send OTP. Try again later.';
+        this.generalError =
+          otpResponse.data.message || 'Failed to send OTP. Try again later.';
+        this.toastr.error(this.generalError, 'OTP Error');
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.error(':x: Login Error:', error);
-      this.generalError = error.response?.data?.error || 'Something went wrong. Please try again.';
+      this.generalError =
+        error.response?.data?.error || 'Something went wrong. Please try again.';
+      this.toastr.error(this.generalError, 'Server Error');
     }
   }
+
   validateInputs() {
     this.generalError = '';
     if (!this.email || !this.password) {
@@ -66,11 +87,13 @@ export class LoginComponent {
       return;
     }
   }
+
   onInputChange() {
     if (this.formSubmitted) {
       this.validateInputs();
     }
   }
+
   onForgotPassword() {
     this.customAlert.show(
       'Please contact BME to reset your password.',
@@ -78,12 +101,15 @@ export class LoginComponent {
       'OK'
     );
   }
+
   onCustomAlertConfirm() {
     console.log('Alert confirmed');
   }
+
   isValidEmail(email: string): boolean {
     return validator.isEmail(email);
   }
+
   isValidPassword(password: string): boolean {
     return (
       validator.isLength(password, { min: 6 }) &&

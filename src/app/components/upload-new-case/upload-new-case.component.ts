@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../../services/data.service';
 import axios from 'axios';
 import { CookieService } from 'ngx-cookie-service';
-import { isPlatformBrowser } from '@angular/common';
-import { Inject, PLATFORM_ID } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { environment } from '../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-upload-new-case',
@@ -52,7 +51,8 @@ export class UploadNewCaseComponent implements OnInit {
     private dataService: DataService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private cookieService: CookieService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
@@ -118,6 +118,7 @@ export class UploadNewCaseComponent implements OnInit {
       const token = this.getCookie('jwt');
       if (!token) {
         console.warn('JWT token not found.');
+        this.toastr.warning('JWT token not found', 'Warning');
         return;
       }
   
@@ -143,14 +144,14 @@ export class UploadNewCaseComponent implements OnInit {
         console.log('Fetched LOI Types and stored in Cache Storage:', this.loiTypes);
       } else {
         console.error('Unexpected response structure:', response.data);
+        this.toastr.error('Unexpected response from LOI Types API', 'Error');
       }
     } catch (error) {
       console.error('Error fetching LOI Types:', error);
+      this.toastr.error('Error fetching LOI Types', 'Error');
     }
   }
   
-  
-
   onInputChange() {
     this.clientNameError = null;
     this.caseReferenceError = null;
@@ -199,11 +200,14 @@ export class UploadNewCaseComponent implements OnInit {
         console.log(`Fetched and stored Instruction Types for LOI ${this.selectedLoi}:`, this.instructionTypes);
       })
       .catch((error) => {
-        console.error('Error fetching Instruction Types:', error);
+        if(!this.viewOnly){
+          console.error('Error fetching Instruction Types:', error);
+          this.toastr.error('Error fetching Instruction Types', 'Error');
+        }
+       
       });
   }
   
-
   async onInstructionChange(): Promise<void> {
     if (!this.selectedInstruction) {
       this.parameters = [];
@@ -243,14 +247,14 @@ export class UploadNewCaseComponent implements OnInit {
       })
       .catch((error) => {
         console.error('Error fetching parameters:', error);
+        this.toastr.error('Error fetching parameters', 'Error');
       });
   }
   
-
   isSelected(paramId: string): boolean {
     return this.selectedParameters.includes(paramId);
   }
-
+  
   // Toggle the selection of a parameter
   toggleSelection(paramId: string): void {
     const index = this.selectedParameters.indexOf(paramId);
@@ -263,8 +267,8 @@ export class UploadNewCaseComponent implements OnInit {
       this.parametersError = null;
     }
   }
-
-  // New method: Triggered when a file is selected via the file input
+  
+  // Triggered when a file is selected via the file input
   onLoiFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
@@ -273,12 +277,13 @@ export class UploadNewCaseComponent implements OnInit {
       this.uploadLoiFile(file);
     }
   }
-
-  // New method: Upload the selected LOI file and store the returned metadata
+  
+  // Upload the selected LOI file and store the returned metadata
   uploadLoiFile(file: File): void {
     const token = this.getCookie('jwt');
     if (!token) {
       console.error('No JWT token available for file upload.');
+      this.toastr.error('JWT token not available', 'File Upload');
       return;
     }
     const extension = file.name.split('.').pop()?.toLowerCase() || 'pdf';
@@ -289,6 +294,7 @@ export class UploadNewCaseComponent implements OnInit {
       userId = decoded.id || decoded.userId || '';
     } catch (error) {
       console.error('Error decoding JWT token:', error);
+      this.toastr.error('Error decoding token', 'File Upload');
     }
     const metadata = {
       fileName: file.name,
@@ -299,7 +305,6 @@ export class UploadNewCaseComponent implements OnInit {
       createdBy: userId,
       modifiedBy: userId,
     };
-    // Using the same API endpoint as upload-subcase
     axios
       .post(`${environment.apiUrl}/file`, metadata, {
         headers: {
@@ -311,12 +316,14 @@ export class UploadNewCaseComponent implements OnInit {
       .then(response => {
         console.log('LOI file uploaded successfully:', response.data);
         this.uploadedLoiFileMetadata = response.data.data;
+        this.toastr.success('LOI file uploaded successfully', 'File Upload');
       })
       .catch(error => {
         console.error('Error uploading LOI file:', error);
+        this.toastr.error('Error uploading LOI file', 'File Upload');
       });
   }
-
+  
   submitForm(): void {
     this.isSubmitted = true;
     this.clientNameError = null;
@@ -325,7 +332,7 @@ export class UploadNewCaseComponent implements OnInit {
     this.loiError = null;
     this.instructionError = null;
     this.parametersError = null;
-
+  
     // Validate client name
     if (!this.clientName) {
       this.clientNameError = 'Client Name is required.';
@@ -336,34 +343,34 @@ export class UploadNewCaseComponent implements OnInit {
     ) {
       this.clientNameError = 'Invalid input. Please enter a valid client name.';
     }
-
+  
     // Validate case reference
     if (!this.caseReference) {
       this.caseReferenceError = 'Case Reference Number is required.';
     }
-
+  
     // Validate date of breach
     if (!this.dateOfBranch) {
       this.dateError = 'Date is required.';
     } else if (!this.dateOfBranch.match(/^\d{4}-\d{2}-\d{2}$/)) {
       this.dateError = 'Invalid date format. Please enter a valid date.';
     }
-
+  
     // Validate LOI Type
     if (!this.selectedLoi) {
       this.loiError = 'LOI Type is required.';
     }
-
+  
     // Validate Instruction Type
     if (!this.selectedInstruction) {
       this.instructionError = 'Instruction Type is required.';
     }
-
+  
     // Validate Parameters
     if (this.selectedParameters.length === 0) {
       this.parametersError = 'At least one parameter should be selected.';
     }
-
+  
     if (
       this.clientNameError ||
       this.caseReferenceError ||
@@ -372,9 +379,10 @@ export class UploadNewCaseComponent implements OnInit {
       this.instructionError ||
       this.parametersError
     ) {
+      this.toastr.error('Please correct form errors.', 'Validation Error');
       return;
     }
-
+  
     // Decode the JWT token to extract user_id
     const token = this.getCookie('jwt');
     let userId: string | null = null;
@@ -384,13 +392,15 @@ export class UploadNewCaseComponent implements OnInit {
         userId = decodedToken?.id || null;
       } catch (error) {
         console.error('Error decoding JWT token:', error);
+        this.toastr.error('Error decoding token', 'Error');
       }
     }
     if (!userId) {
       console.error('Unable to extract user ID from JWT token.');
+      this.toastr.error('User authentication error', 'Error');
       return;
     }
-
+  
     const formData = {
       parentId: null,
       clientName: this.clientName,
@@ -404,7 +414,7 @@ export class UploadNewCaseComponent implements OnInit {
       createdBy: userId,
       modifiedBy: userId,
     };
-
+  
     // Add the uploaded LOI file ID if available
     if (
       this.uploadedLoiFileMetadata &&
@@ -413,9 +423,9 @@ export class UploadNewCaseComponent implements OnInit {
     ) {
       formData.files.push(this.uploadedLoiFileMetadata.data._id);
     }
-
+  
     console.log('Form data:', formData);
-
+  
     axios
       .post(`${environment.apiUrl}/case/`, formData, {
         headers: {
@@ -426,10 +436,12 @@ export class UploadNewCaseComponent implements OnInit {
       })
       .then((response) => {
         console.log('Case created successfully:', response.data);
+        this.toastr.success('Case created successfully', 'Success');
         this.router.navigate(['/case-management']);
       })
       .catch((error) => {
         console.error('Error creating case:', error.response?.data || error.message);
+        this.toastr.error('Error creating case', 'Error');
       });
   }
 }
