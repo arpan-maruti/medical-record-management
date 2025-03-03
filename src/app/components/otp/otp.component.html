@@ -17,6 +17,7 @@
             id="otp"
             [(ngModel)]="otp"
             (input)="onInput()"
+            (keydown.enter)="onVerifyClick()"
             maxlength="6"
             pattern="[0-9]*"
             inputmode="numeric"

@@ -2,35 +2,34 @@ import { Component, EventEmitter, HostListener, Input, Output } from '@angular/c
 import { CommonModule } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
+// Removed HttpClientModule imports since we now use axios.
 import { environment } from '../environments/environment';
+import { NgxFileDropModule, NgxFileDropEntry, FileSystemFileEntry } from 'ngx-file-drop';
+import axios from 'axios';
 
 @Component({
   selector: 'app-upload-files',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, NgxFileDropModule],
   templateUrl: './upload-files.component.html',
-  styleUrls: ['./upload-files.component.css']
+  styleUrls: ['./upload-files.component.css'],
 })
 export class UploadFilesComponent {
-  @Input() caseId: string = ''; // Receive caseId from parent component
-  // Added input to select fileType. When used from caselist, pass "document".
+  @Input() caseId: string = '';
   @Input() fileType: string = 'loi';
   @Output() closePopup = new EventEmitter<void>();
-  @Output() fileUploaded = new EventEmitter<string>(); // Emit the file name after upload
-  file: File | null = null;  // Store the uploaded file
-  fileName: string = '';     // Store the file name to display
+  @Output() fileUploaded = new EventEmitter<string>();
+  file: File | null = null;
+  fileName: string = '';
 
   constructor(private cookieService: CookieService) {}
 
-  // Extract user id from JWT token (assumes the token carries userId property)
   getUserIdFromJWT(): string {
     const token = this.cookieService.get('jwt');
-    console.log('JWT token:', token);
     if (token) {
       try {
         const decoded: any = jwtDecode(token);
-        console.log('Decoded JWT:', decoded);
-        return decoded.userId || decoded.id || ''; 
+        return decoded.userId || decoded.id || '';
       } catch (error) {
         console.error('Error decoding JWT:', error);
         return '';
@@ -39,77 +38,88 @@ export class UploadFilesComponent {
     return '';
   }
 
-  // Function to perform file upload
   uploadFile() {
+    if (!this.file) {
+      console.error('No file selected');
+      return;
+    }
+  
     const token = this.cookieService.get('jwt');
     const userId = this.getUserIdFromJWT();
-    const extension = this?.file?.name.split('.').pop()?.toLowerCase() || 'pdf';
+    const extension = this.file.name.split('.').pop()?.toLowerCase() || 'pdf';
     const formData = new FormData();
-    formData.append('file', this.file as File);
-    formData.append('fileName', this.file?.name as string);
+    formData.append('file', this.file);
+    formData.append('fileName', this.file.name);
     formData.append('fileType', this.fileType);
     formData.append('createdBy', userId);
     formData.append('modifiedBy', userId);
     formData.append('fileFormat', extension);
-
-
-    axios.post(`${environment.apiUrl}/case/${this.caseId}/files`, formData, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      withCredentials: true
-    })
+  
+    axios.post(
+      `${environment.apiUrl}/case/${this.caseId}/files`,
+      formData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        },
+        withCredentials: true,
+      }
+    )
     .then(response => {
       console.log('File uploaded successfully:', response.data);
       this.fileUploaded.emit(this.file?.name);
     })
     .catch(error => {
-      console.error('Error uploading file:', error.message, error.stack);
+      console.error('Error uploading file:', error);
     });
   }
 
-  // Handle when files are selected via the file input
-  onFilesSelected(event: any) {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      this.file = selectedFile;
-      this.fileName = selectedFile.name;
-      // this.uploadFile(selectedFile);
+  triggerFileInput() {
+    const input = document.getElementById('fileInput') as HTMLInputElement;
+    if (input) {
+      input.click();
     }
   }
 
-  // Handle when files are dropped into the drag-and-drop area
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    const file = event.dataTransfer?.files[0];
-    if (file) {
-      this.file = file;
-      this.fileName = file.name;
-      console.log(event.target);
-      // this.uploadFile(file);
+  onFilesSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    console.log(input.files + 'hhh');
+    if (input.files && input.files.length > 0) {
+      this.file = input.files[0];
+      this.fileName = this.file.name;
     }
   }
 
-  // Handle the dragover event (to indicate drop zone)
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    const target = event.currentTarget as HTMLElement;
+  public dropped(files: NgxFileDropEntry[]) {
+    if (files.length > 0) {
+      const droppedFile = files[0];
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          this.file = file;
+          this.fileName = file.name;
+        });
+      }
+    }
   }
 
-  // Handle the dragleave event (to remove drop zone indication)
-  onDragLeave(event: DragEvent) {
-    const target = event.currentTarget as HTMLElement;
+  public fileOver(event: any) {
+    console.log('File over event', event);
   }
-  
+
+  public fileLeave(event: any) {
+    console.log('File leave event', event);
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const modal = document.querySelector('.upload-container');
     if (modal && !modal.contains(event.target as Node)) {
-      this.closeModal(); // Close the modal if the click is outside
+      this.closeModal();
     }
   }
-  
-  // Close modal
+
   closeModal() {
     this.closePopup.emit();
   }

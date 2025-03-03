@@ -3,41 +3,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  width: 350px;
+  padding: 30px;
+  background: linear-gradient(135deg, #eff3ff, #fff);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  width: 400px;
   margin: auto;
-}
-
-.upload-files__drag-drop-area {
-  width: 100%;
-  height: 150px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  border-color: #0056b3;
-  background-image: url('/assets/pdf-icon.png');
-  background-size: 50px;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-
-.upload-files__drag-drop-icon {
-  width: 50px;
-  height: 50px;
-  margin-bottom: 10px;
-}
-
-.upload-files__drag-drop-text {
-  color: #007bff;
-  font-size: 16px;
-  text-align: center;
 }
 
 .upload-files__file-input-container {
@@ -46,8 +17,12 @@
 }
 
 .upload-files__file-input {
-  display: none;
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
 }
+
 
 .upload-files__btn {
   padding: 12px 30px;
@@ -56,10 +31,51 @@
   font-weight: 600;
   font-size: 1.1rem;
   color: #007bff;
+  background-color: transparent;
+  border: 2px solid #007bff;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .upload-files__btn:hover {
-  text-decoration: underline;
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Added icon spacing in button */
+.upload-files__btn i {
+  margin-right: 8px;
+}
+
+.upload-files__drag-drop-area {
+  width: 100%;
+  height: 160px;
+  border: 2px dashed #007bff;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: border-color 0.3s, background-color 0.3s;
+  background: #f9fbff;
+}
+
+.upload-files__drag-drop-area:hover {
+  border-color: #0056b3;
+  background: #eef5ff;
+}
+
+.upload-files__icon {
+  pointer-events: none;
+  font-size: 48px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.upload-files__drag-drop-text {
+  color: #007bff;
+  font-size: 18px;
+  text-align: center;
 }
 
 .upload-files__file-name-display {
@@ -75,12 +91,14 @@
   height: 3rem;
   border-style: solid;
   border-radius: 30px;
-  color: white;
+  color: #fff;
   background-color: #012447;
   font-size: 1.1rem;
   cursor: pointer;
   display: block;
   text-align: center;
+  border: none;
+  transition: background-color 0.3s;
 }
 
 .upload-files__btn--secondary:hover {

@@ -1,7 +1,6 @@
-<!-- File Content: Page for Registration, Admin can access this page to register a new user -->
 <div class="register">
   <div class="register__form">
-    <div class="register__form-wrapper">
+    <form class="register__form-wrapper" (ngSubmit)="onRegister()" #registerForm="ngForm">
       <p class="register__form-label">Registration</p>
       <!-- First Name and Last Name Fields -->
       <div class="register__input-container register__input-container--name">
@@ -10,7 +9,7 @@
           <div class="register__input-wrapper">
             <input class="register__input register__input--name"
               [ngClass]="{ 'register__input--error': formSubmitted && firstNameError }" type="text"
-              placeholder="First Name" [(ngModel)]="firstName" (input)="onInputChange()" pattern="^[A-Za-z]+$" />
+              placeholder="First Name" [(ngModel)]="firstName" name="firstName" (input)="onInputChange()" pattern="^[A-Za-z]+$" />
           </div>
           <div *ngIf="formSubmitted && firstNameError" class="register__error-message">
             {{ firstNameError }}
@@ -21,7 +20,7 @@
           <div class="register__input-wrapper">
             <input class="register__input register__input--name"
               [ngClass]="{ 'register__input--error': formSubmitted && lastNameError }" type="text"
-              placeholder="Last Name" [(ngModel)]="lastName" (input)="onInputChange()" pattern="^[A-Za-z]+$" />
+              placeholder="Last Name" [(ngModel)]="lastName" name="lastName" (input)="onInputChange()" pattern="^[A-Za-z]+$" />
           </div>
           <div *ngIf="formSubmitted && lastNameError" class="register__error-message">
             {{ lastNameError }}
@@ -31,8 +30,9 @@
       <!-- Email Input -->
       <h4 class="register__form-title">Email Address</h4>
       <div class="register__input-wrapper">
-        <input class="register__input" [ngClass]="{ 'register__input--error': formSubmitted && emailError }"
-          type="email" placeholder="Your Email" [(ngModel)]="email" (input)="onInputChange()" required />
+        <input class="register__input"
+          [ngClass]="{ 'register__input--error': formSubmitted && emailError }" type="email"
+          placeholder="Your Email" [(ngModel)]="email" name="email" (input)="onInputChange()" required />
       </div>
       <div *ngIf="formSubmitted && emailError" class="register__error-message">
         {{ emailError }}
@@ -40,29 +40,27 @@
       <!-- Phone Number Input -->
       <h4 class="register__form-title">Phone Number</h4>
       <div class="register__input-container">
-       
         <!-- Country Code Dropdown -->
         <div class="register__country-container">
-          <select class="register__country-dropdown" [(ngModel)]="selectedCountryCode" (change)="updatePhoneMask()">
-            <option value="" disabled>Select a Country</option>
+          <select class="register__country-dropdown" [(ngModel)]="selectedCountryCode" name="selectedCountryCode" (change)="updatePhoneMask()" required>
+            <option value="" disabled>Country</option>
             <option *ngFor="let country of countryList" [value]="country.countryCode">
               {{ country.flag }} {{ country.countryCode }} ({{ country.countryCallingCode }})
             </option>
           </select>
         </div>
-
         <!-- Phone Number Input -->
         <div class="register__input-wrapper">
           <input class="register__input register__input--phone-number"
             [ngClass]="{ 'register__input--error': formSubmitted && phoneError }" type="text" placeholder="Phone Number"
-            [(ngModel)]="phoneNumber" (input)="onInputChange()" [mask]="phoneMask" required />
+            [(ngModel)]="phoneNumber" name="phoneNumber" (input)="onInputChange()" [mask]="phoneMask" required />
         </div>
       </div>
       <div *ngIf="formSubmitted && phoneError" class="register__error-message">
         {{ phoneError }}
       </div>
       <!-- Submit Button -->
-      <button class="register__button" (click)="onRegister()">Submit</button>
-    </div>
+      <button class="register__button" type="submit">Submit</button>
+    </form>
   </div>
 </div>

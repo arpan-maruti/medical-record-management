@@ -44,6 +44,10 @@ export class UploadNewCaseComponent implements OnInit {
   caseData: any;
   viewOnly: boolean = false;
 
+  // Cache objects for reducing API calls
+  private instructionTypesCache: { [loiId: string]: any[] } = {};
+  private parametersCache: { [instructionId: string]: any[] } = {};
+
   constructor(
     private dataService: DataService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -86,10 +90,6 @@ export class UploadNewCaseComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.fetchLoiTypes();
-  }
-
   getCookie(name: string): string | null {
     return this.cookieService.get(name) || null;
   }
@@ -98,14 +98,30 @@ export class UploadNewCaseComponent implements OnInit {
     return (param && (param.parameterMsg || param.parameter_msg)) || '';
   }
 
-  // Fetch LOI Types from the API
+  // Fetch LOI Types from the API only if not already fetched
   async fetchLoiTypes(): Promise<void> {
-    const token = this.getCookie('jwt');
-    console.log('Retrieved Token:', token);
-    if (!token) {
+    if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+  
     try {
+      const cacheName = 'loi-cache';
+      const cache = await caches.open(cacheName);
+      const cachedResponse = await cache.match('/loiTypes');
+  
+      if (cachedResponse) {
+        this.loiTypes = await cachedResponse.json();
+        console.log('Loaded LOI Types from Cache Storage:', this.loiTypes);
+        return;
+      }
+  
+      const token = this.getCookie('jwt');
+      if (!token) {
+        console.warn('JWT token not found.');
+        return;
+      }
+  
+      // Fetch data from API
       const response = await axios.get(`${environment.apiUrl}/loiType`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -113,23 +129,27 @@ export class UploadNewCaseComponent implements OnInit {
         },
         withCredentials: true,
       });
-      console.log(response.data);
+  
       if (response.data && Array.isArray(response.data.data)) {
+        console.log("API called: Fetching LOI Types...");
         this.loiTypes = response.data.data.map((item: any) => ({
           _id: item._id,
           loi_msg: item.loi_msg,
         }));
-        console.log(this.loiTypes);
-        if (this.loiTypes.length > 0) {
-          this.onLoiChange();
-        }
+  
+        // Store response in Cache Storage
+        await cache.put('/loiTypes', new Response(JSON.stringify(this.loiTypes)));
+  
+        console.log('Fetched LOI Types and stored in Cache Storage:', this.loiTypes);
       } else {
         console.error('Unexpected response structure:', response.data);
       }
     } catch (error) {
-      console.error('There was an error fetching loiTypes:', error);
+      console.error('Error fetching LOI Types:', error);
     }
   }
+  
+  
 
   onInputChange() {
     this.clientNameError = null;
@@ -140,14 +160,24 @@ export class UploadNewCaseComponent implements OnInit {
     this.parametersError = null;
   }
 
-  onLoiChange(): void {
+  async onLoiChange(): Promise<void> {
     if (!this.selectedLoi) {
       this.instructionTypes = [];
       this.selectedInstruction = '';
       return;
     }
+  
+    const cacheName = 'instruction-cache';
+    const cache = await caches.open(cacheName);
+    const cachedResponse = await cache.match(`/instructionTypes/${this.selectedLoi}`);
+  
+    if (cachedResponse) {
+      this.instructionTypes = await cachedResponse.json();
+      console.log(`Loaded Instruction Types for LOI ${this.selectedLoi} from Cache Storage:`, this.instructionTypes);
+      return;
+    }
+  
     const token = this.getCookie('jwt');
-    console.log('Retrieved Token:', token);
     axios
       .get(`${environment.apiUrl}/instruction-types/loi/${this.selectedLoi}`, {
         headers: {
@@ -156,25 +186,41 @@ export class UploadNewCaseComponent implements OnInit {
         },
         withCredentials: true,
       })
-      .then((response) => {
+      .then(async (response) => {
+        console.log("api called");
         this.instructionTypes = response.data.data.map((item: any) => ({
           _id: item._id,
           instruction_msg: item.instruction_msg,
         }));
-        console.log(this.instructionTypes);
+  
+        // Store in Cache Storage
+        await cache.put(`/instructionTypes/${this.selectedLoi}`, new Response(JSON.stringify(this.instructionTypes)));
+  
+        console.log(`Fetched and stored Instruction Types for LOI ${this.selectedLoi}:`, this.instructionTypes);
       })
       .catch((error) => {
         console.error('Error fetching Instruction Types:', error);
       });
   }
+  
 
-  onInstructionChange(): void {
+  async onInstructionChange(): Promise<void> {
     if (!this.selectedInstruction) {
       this.parameters = [];
       return;
     }
+  
+    const cacheName = 'parameter-cache';
+    const cache = await caches.open(cacheName);
+    const cachedResponse = await cache.match(`/parameters/${this.selectedInstruction}`);
+  
+    if (cachedResponse) {
+      this.parameters = await cachedResponse.json();
+      console.log(`Loaded Parameters for Instruction ${this.selectedInstruction} from Cache Storage:`, this.parameters);
+      return;
+    }
+  
     const token = this.getCookie('jwt');
-    console.log('Retrieved Token:', token);
     axios
       .get(`${environment.apiUrl}/parameters/instruction/${this.selectedInstruction}`, {
         headers: {
@@ -183,17 +229,23 @@ export class UploadNewCaseComponent implements OnInit {
         },
         withCredentials: true,
       })
-      .then((response) => {
+      .then(async (response) => {
+        console.log("api called");
         this.parameters = response.data.data.map((item: any) => ({
           _id: item._id,
           parameter_msg: item.parameter_msg,
         }));
-        console.log(this.parameters);
+  
+        // Store in Cache Storage
+        await cache.put(`/parameters/${this.selectedInstruction}`, new Response(JSON.stringify(this.parameters)));
+  
+        console.log(`Fetched and stored Parameters for Instruction ${this.selectedInstruction}:`, this.parameters);
       })
       .catch((error) => {
         console.error('Error fetching parameters:', error);
       });
   }
+  
 
   isSelected(paramId: string): boolean {
     return this.selectedParameters.includes(paramId);

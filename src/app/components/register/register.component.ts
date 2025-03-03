@@ -1,14 +1,16 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import phoneValidationData from '../../../assets/country-phone-validation.json'; // Import JSON data
+import { Router } from '@angular/router';
+import phoneValidationData from '../../../assets/country-phone-validation.json';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { phone } from 'phone';
-import { PhoneMaskService } from '../../services/phone-mask.service';  // Import the PhoneMaskService
+import { PhoneMaskService } from '../../services/phone-mask.service';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask'; 
-import emailValidator from 'email-validator';  // Import email-validator package
+import emailValidator from 'email-validator';
 import axios from 'axios';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../environments/environment';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -17,6 +19,7 @@ import { environment } from '../environments/environment';
   providers: [provideNgxMask()],
 })
 export class RegisterComponent {
+  // ...existing code...
   firstName: string = '';
   lastName: string = '';
   email: string = '';
@@ -29,21 +32,18 @@ export class RegisterComponent {
   emailError: string | null = null;
   phoneError: string | null = null;
   countryList: any;
-  phoneMask: string = ''; // Variable to store the selected country mask
+  phoneMask: string = '';
 
   constructor(
     private cdr: ChangeDetectorRef,
     private phoneMaskService: PhoneMaskService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private router: Router  // Inject Router for navigation
   ) {}
 
   ngAfterViewInit() {
-    this.countryList = phoneValidationData; // List of countries from the JSON
-    if (this.countryList.length > 0) {
-      this.selectedCountryCode = this.countryList[0].countryCode;
-      this.selectedCountryName = this.countryList[0].countryName;
-      this.updatePhoneMask();
-    }
+    this.countryList = phoneValidationData;
+    console.log('Country List loaded:', this.countryList);
     this.cdr.detectChanges();
   }
 
@@ -54,101 +54,67 @@ export class RegisterComponent {
     this.phoneError = null;
   }
 
-  // Update the phone number mask based on selected country
   updatePhoneMask() {
     if (this.selectedCountryCode) {
       this.phoneMask = this.phoneMaskService.getMask(this.selectedCountryCode);
-      // If the mask isn't found, set a default or show a warning
       if (!this.phoneMask) {
         console.warn(`Mask not found for country code: ${this.selectedCountryCode}`);
-        this.phoneMask = '000-000-0000'; // Default mask
+        this.phoneMask = '000-000-0000';
       }
     }
   }
-  // Fetch the valid TLDs from an API (or use a static list)
+  
   async fetchValidTlds(): Promise<string[]> {
-    // In this case, using a static list of common TLDs
     return [
-      'com',
-      'org',
-      'net',
-      'edu',
-      'gov',
-      'int',
-      'mil',
-      'co',
-      'io',
-      'us',
-      'uk',
-      'de',
-      'jp',
-      'in',
+      'com', 'org', 'net', 'edu', 'gov', 'int', 'mil', 
+      'co', 'io', 'us', 'uk', 'de', 'jp', 'in',
     ];
   }
 
-  // Validate email with basic format check and valid TLD check
   async isValidEmail(email: string): Promise<boolean> {
-    // Use email-validator to check if the email format is valid
     if (!emailValidator.validate(email)) {
       return false;
     }
-
-    // Fetch valid TLDs asynchronously
     const validTlds = await this.fetchValidTlds();
-
-    // Extract the domain part of the email (after '@')
     const domain = email.split('@')[1];
-
-    // Get the TLD by splitting the domain at the last dot
     const domainParts = domain.split('.');
-    const tld = domainParts[domainParts.length - 1]; // The part after the last dot
-
+    const tld = domainParts[domainParts.length - 1];
     return validTlds.includes(tld);
   }
 
-  // Handle form submission
   async onRegister() {
     this.formSubmitted = true;
   
-    // Validate first name
     if (!this.firstName) {
       this.firstNameError = 'First name is required';
     } else if (!this.firstName.match(/^[A-Za-z]+$/)) {
       this.firstNameError = 'Invalid name';
     }
   
-    // Validate last name
     if (!this.lastName) {
       this.lastNameError = 'Last name is required';
     } else if (!this.lastName.match(/^[A-Za-z]+$/)) {
       this.lastNameError = 'Invalid name';
     }
   
-    // Validate email asynchronously
     if (!this.email) {
       this.emailError = 'Email address is required';
     } else if (!(await this.isValidEmail(this.email))) {
       this.emailError = 'Invalid email address or TLD';
     }
   
-    // Validate phone number using the `phone` library
-    const country = this.countryList.find(
-      (c: { countryCode: string }) => c.countryCode === this.selectedCountryCode
-    );
+    const country = this.countryList.find((c: { countryCode: string }) => c.countryCode === this.selectedCountryCode);
     if (!this.phoneNumber) {
       this.phoneError = 'Phone number is required';
     } else {
       const phoneValidation = phone(this.phoneNumber, { country: this.selectedCountryCode });
-  
-      // Check if the phone number is valid based on the selected country code
       if (!phoneValidation.isValid) {
         this.phoneError = `Invalid phone number for ${country?.countryName}`;
       } else {
-        this.phoneError = ''; // Clear the error if valid
+        this.phoneError = '';
       }
     }
   
-    // If there are no errors, proceed with registration data
     if (
       !this.firstNameError &&
       !this.lastNameError &&
@@ -164,35 +130,36 @@ export class RegisterComponent {
       };
   
       try {
-        const getCookie= (name: string): string | null =>{
+        const getCookie = (name: string): string | null => {
           return this.cookieService.get(name) || null;
-      }
-      const token = getCookie('jwt');
-    console.log('Retrieved Token:1', token);
-
-        // Send POST request using axios
+        };
+        const token = getCookie('jwt');
+        console.log('Retrieved Token:1', token);
+  
         const response = await axios.post(`${environment.apiUrl}/user/register`, registrationData, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
-        },
-        withCredentials: true
+          },
+          withCredentials: true
         });
   
         console.log('Registration successful:', response.data);
         alert('User registered successfully!');
-        
+  
         // Reset form fields after successful registration
         this.firstName = '';
         this.lastName = '';
         this.email = '';
         this.phoneNumber = '';
         this.formSubmitted = false;
+
+        // Navigate to home page
+        this.router.navigate(['/']);
       } catch (error) {
         console.error('Error during registration:', error);
         alert('Failed to register user. Please try again.');
       }
     }
   }
-  
 }
