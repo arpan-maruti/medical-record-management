@@ -53,6 +53,7 @@
           <ng-container *ngIf="!viewOnly">
             <select
               id="loi-type"
+              (input)="onInputChange()"
               [(ngModel)]="selectedLoi"
               [ngModelOptions]="{ standalone: true }"
               (ngModelChange)="onLoiChange()"
@@ -84,6 +85,7 @@
             <input
               type="date"
               id="date-of-branch"
+              (input)="onInputChange()"
               name="dateOfBranch"
               [(ngModel)]="dateOfBranch"
               [disabled]="viewOnly"
