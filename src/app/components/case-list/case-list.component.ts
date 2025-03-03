@@ -35,7 +35,7 @@ export class CaseListComponent {
   selectedCaseId: string = '';
   sortKey: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
-
+  isLoading: boolean = false; // Add loader flag
 
 
   constructor(private cdr: ChangeDetectorRef,
@@ -114,10 +114,12 @@ export class CaseListComponent {
         console.error('Failed to fetch cases:', response.data.message);
         this.isDataAvailable = false;
       }
+      this.isLoading = false;
     })
     .catch(error => {
       console.error('Error fetching cases:', error);
       this.isDataAvailable = false;
+      this.isLoading = false;
     });
   }
 

@@ -44,7 +44,7 @@
         <div class="register__country-container">
           <select class="register__country-dropdown" [(ngModel)]="selectedCountryCode" name="selectedCountryCode" (change)="updatePhoneMask()" required>
             <option value="" disabled>Country</option>
-            <option *ngFor="let country of countryList" [value]="country.countryCode">
+            <option *ngFor="let country of countryList" [value]="country.countryCallingCode">
               {{ country.flag }} {{ country.countryCode }} ({{ country.countryCallingCode }})
             </option>
           </select>

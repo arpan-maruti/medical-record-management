@@ -7,6 +7,8 @@ import { CustomAlertComponent } from '../custom-alert/custom-alert.component';
 import { ActivatedRoute } from '@angular/router';
 import axios from 'axios';
 import { environment } from '../environments/environment';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-otp',
   standalone: true,
@@ -23,57 +25,72 @@ export class OtpComponent {
   resendVisible: boolean = true;
   timer: number = 30; // Countdown timer in seconds
   @ViewChild('customAlert') customAlert!: CustomAlertComponent;
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private toastr: ToastrService
+  ) {}
+
   ngOnInit(): void {
     // Get the email from query params
     this.route.queryParams.subscribe((params) => {
-      this.email = params['email'] || ''; // Default to empty string if no email provided
+      this.email = params['email'] || ''; // Default to empty string if not provided
       console.log('Email from query params:', this.email);
     });
   }
+
   login(): void {
     this.router.navigate(['/']);
   }
+
   onInput(): void {
     this.otpError1 = '';
   }
+
   toggleVisibility(): void {
     this.inputType = 'text';
     setTimeout(() => {
       this.inputType = 'password';
     }, 1000); // Revert to 'password' after 1 second
   }
+
   async onVerifyClick() {
     try {
       if (!this.otp) {
         this.otpError1 = 'Please enter the OTP';
-        // alert('Please enter the OTP');
+        this.toastr.error('Please enter the OTP', 'Validation Error');
         return;
       }
-      if(!this.otp.match(/[0-9]/g)) {
-        this.otpError1 = "Invalid OTP";
+      if (!this.otp.match(/[0-9]/g)) {
+        this.otpError1 = 'Invalid OTP';
+        this.toastr.error('Invalid OTP', 'Validation Error');
         return;
       }
       // Call the /user/verify-otp API with credentials
       const response = await axios.post(
         `${environment.apiUrl}/user/verify-otp`,
-        { email: this.email, otp: this.otp },{withCredentials:true}
+        { email: this.email, otp: this.otp },
+        { withCredentials: true }
       );
       if (response.status === 200) {
+        this.toastr.success(response.data.message || 'OTP Verified Successfully!', 'Success');
         console.log('OTP Verified Successfully:', response.data.message);
-        // alert('OTP Verified Successfully!');
         this.router.navigate(['/case-management']);
       }
     } catch (error: any) {
       if (error.response && error.response.data) {
         console.error('OTP Verification Failed:', error.message);
-        this.otpError1 = "Verification Failed";
+        this.otpError1 = 'Verification Failed';
+        this.toastr.error('Verification Failed', 'Error');
       } else {
         console.error('Network Error:', error);
-        this.otpError1 = "Network Error! Please try again later.";
+        this.otpError1 = 'Network Error! Please try again later.';
+        this.toastr.error('Network Error! Please try again later.', 'Error');
       }
     }
   }
+
   /**
    * Starts a countdown timer for 30 seconds before allowing OTP resend.
    */
@@ -88,6 +105,7 @@ export class OtpComponent {
       }
     }, 1000);
   }
+
   /**
    * Handles OTP resend logic.
    */
@@ -100,6 +118,7 @@ export class OtpComponent {
         { withCredentials: true }
       );
       if (response.data.success) {
+        this.toastr.success('OTP has been resent successfully.', 'Resend OTP');
         this.customAlert.show(
           'OTP has been resent successfully.',
           'Resend OTP',
@@ -107,6 +126,7 @@ export class OtpComponent {
         );
         this.startResendTimer();
       } else {
+        this.toastr.error(response.data.message || 'Failed to resend OTP. Try again later.', 'Resend OTP');
         this.customAlert.show(
           response.data.message || 'Failed to resend OTP. Try again later.',
           'Resend OTP',
@@ -115,6 +135,7 @@ export class OtpComponent {
       }
     } catch (error: any) {
       console.error('Error resending OTP:', error);
+      this.toastr.error('Error resending OTP. Please try again later.', 'Resend OTP');
       this.customAlert.show(
         'Error resending OTP. Please try again later.',
         'Resend OTP',
@@ -122,6 +143,7 @@ export class OtpComponent {
       );
     }
   }
+
   onCustomAlertConfirm() {
     console.log('Alert confirmed');
   }

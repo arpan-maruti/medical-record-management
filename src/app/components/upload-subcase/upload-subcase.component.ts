@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-upload-subcase',
@@ -54,7 +55,8 @@ export class UploadSubcaseComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private cookieService: CookieService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
@@ -116,6 +118,7 @@ export class UploadSubcaseComponent implements OnInit {
   // Caching LOI Types similar to Upload New Case Component
   async fetchLoiTypes(): Promise<void> {
     if (!this.token) {
+      this.toastr.error('JWT token not found', 'Error');
       console.error('No JWT token found.');
       return;
     }
@@ -147,9 +150,11 @@ export class UploadSubcaseComponent implements OnInit {
         console.log('Fetched and stored LOI Types in Cache Storage in Subcase:', this.loiTypes);
       } else {
         console.error('Unexpected response structure:', response.data);
+        this.toastr.error('Unexpected response from LOI Types API', 'Error');
       }
     } catch (error) {
       console.error('Error fetching LOI Types:', error);
+      this.toastr.error('Error fetching LOI Types', 'Error');
     }
   }
 
@@ -191,6 +196,7 @@ export class UploadSubcaseComponent implements OnInit {
       console.log(`Fetched and stored Instruction Types for LOI ${this.selectedLoi} in Cache Storage in Subcase:`, this.instructionTypes);
     } catch (error) {
       console.error('Error fetching Instruction Types:', error);
+      this.toastr.error('Error fetching Instruction Types', 'Error');
     }
   }
   
@@ -231,6 +237,7 @@ export class UploadSubcaseComponent implements OnInit {
       console.log(`Fetched and stored Parameters for Instruction ${this.selectedInstruction} in Cache Storage in Subcase:`, this.parameters);
     } catch (error) {
       console.error('Error fetching parameters:', error);
+      this.toastr.error('Error fetching parameters', 'Error');
     }
   }
 
@@ -263,6 +270,7 @@ export class UploadSubcaseComponent implements OnInit {
   uploadLoiFile(file: File): void {
     if (!this.token) {
       console.error('No JWT token available for file upload.');
+      this.toastr.error('No JWT token available', 'File Upload');
       return;
     }
     const extension = file.name.split('.').pop()?.toLowerCase() || 'pdf';
@@ -273,6 +281,7 @@ export class UploadSubcaseComponent implements OnInit {
       userId = decoded.id || decoded.userId || '';
     } catch (error) {
       console.error('Error decoding JWT token:', error);
+      this.toastr.error('Error decoding token', 'File Upload');
     }
     const metadata = {
       fileName: file.name,
@@ -293,11 +302,12 @@ export class UploadSubcaseComponent implements OnInit {
     })
     .then(response => {
       console.log('LOI file uploaded successfully:', response.data);
-      // Save returned metadata for re-use in submitForm
       this.uploadedLoiFileMetadata = response.data.data;
+      this.toastr.success('LOI file uploaded successfully', 'File Upload');
     })
     .catch(error => {
       console.error('Error uploading LOI file:', error);
+      this.toastr.error('Error uploading LOI file', 'File Upload');
     });
   }
 
@@ -331,6 +341,7 @@ export class UploadSubcaseComponent implements OnInit {
       this.parametersError = 'At least one parameter must be selected.';
     }
     if (this.subCaseReferenceError || this.dateError || this.parametersError || this.loiError || this.instructionError) {
+      this.toastr.error('Please correct form errors.', 'Validation Error');
       console.error('Validation errors', {
         subCaseReferenceError: this.subCaseReferenceError,
         dateError: this.dateError,
@@ -347,9 +358,11 @@ export class UploadSubcaseComponent implements OnInit {
       userId = decodedToken?.id || null;
     } catch (error) {
       console.error('Error decoding JWT token:', error);
+      this.toastr.error('Error decoding token', 'Error');
     }
     if (!userId) {
       console.error('Unable to extract user ID from token.');
+      this.toastr.error('User authentication error', 'Error');
       return;
     }
   
@@ -371,6 +384,8 @@ export class UploadSubcaseComponent implements OnInit {
       formData.files.push(this.uploadedLoiFileMetadata.file._id);
     }
   
+    console.log('Submitting form data:', formData);
+  
     axios
       .post(`${environment.apiUrl}/case/`, formData, {
         headers: {
@@ -381,10 +396,12 @@ export class UploadSubcaseComponent implements OnInit {
       })
       .then(response => {
         console.log('Subcase created successfully:', response.data);
+        this.toastr.success('Subcase created successfully', 'Success');
         this.router.navigate(['/case-management']);
       })
       .catch(error => {
         console.error('Error creating subcase:', error.response?.data || error.message);
+        this.toastr.error('Error creating subcase', 'Error');
       });
   }
 }

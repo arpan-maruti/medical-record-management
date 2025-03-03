@@ -10,6 +10,7 @@ import emailValidator from 'email-validator';
 import axios from 'axios';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +20,6 @@ import { environment } from '../environments/environment';
   providers: [provideNgxMask()],
 })
 export class RegisterComponent {
-  // ...existing code...
   firstName: string = '';
   lastName: string = '';
   email: string = '';
@@ -38,7 +38,8 @@ export class RegisterComponent {
     private cdr: ChangeDetectorRef,
     private phoneMaskService: PhoneMaskService,
     private cookieService: CookieService,
-    private router: Router  // Inject Router for navigation
+    private router: Router,  // Inject Router for navigation
+    private toastr: ToastrService  // Inject ToastrService for notifications
   ) {}
 
   ngAfterViewInit() {
@@ -56,9 +57,17 @@ export class RegisterComponent {
 
   updatePhoneMask() {
     if (this.selectedCountryCode) {
-      this.phoneMask = this.phoneMaskService.getMask(this.selectedCountryCode);
+      // Find the country using the calling code
+      const country = this.countryList.find(
+        (c: { countryCallingCode: string }) => c.countryCallingCode === this.selectedCountryCode
+      );
+      let isoCode = this.selectedCountryCode; // fallback in case country not found
+      if (country) {
+        isoCode = country.countryCode;
+      }
+      this.phoneMask = this.phoneMaskService.getMask(isoCode);
       if (!this.phoneMask) {
-        console.warn(`Mask not found for country code: ${this.selectedCountryCode}`);
+        console.warn(`Mask not found for country code: ${isoCode}`);
         this.phoneMask = '000-000-0000';
       }
     }
@@ -103,11 +112,16 @@ export class RegisterComponent {
       this.emailError = 'Invalid email address or TLD';
     }
   
-    const country = this.countryList.find((c: { countryCode: string }) => c.countryCode === this.selectedCountryCode);
+    const country = this.countryList.find(
+      (c: { countryCallingCode: string }) => c.countryCallingCode === this.selectedCountryCode
+    );
+    
     if (!this.phoneNumber) {
       this.phoneError = 'Phone number is required';
     } else {
-      const phoneValidation = phone(this.phoneNumber, { country: this.selectedCountryCode });
+      // Use the ISO code from the found country for validation
+      const isoCode = country ? country.countryCode : this.selectedCountryCode;
+      const phoneValidation = phone(this.phoneNumber, { country: isoCode });
       if (!phoneValidation.isValid) {
         this.phoneError = `Invalid phone number for ${country?.countryName}`;
       } else {
@@ -125,7 +139,7 @@ export class RegisterComponent {
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
-        countryCode: this.selectedCountryCode,
+        countryCode: this.selectedCountryCode, // This is now the calling code
         phoneNumber: this.phoneNumber,
       };
   
@@ -145,7 +159,7 @@ export class RegisterComponent {
         });
   
         console.log('Registration successful:', response.data);
-        alert('User registered successfully!');
+        this.toastr.success('User registered successfully!', 'Success');
   
         // Reset form fields after successful registration
         this.firstName = '';
@@ -153,12 +167,12 @@ export class RegisterComponent {
         this.email = '';
         this.phoneNumber = '';
         this.formSubmitted = false;
-
+  
         // Navigate to home page
         this.router.navigate(['/']);
       } catch (error) {
         console.error('Error during registration:', error);
-        alert('Failed to register user. Please try again.');
+        this.toastr.error('Failed to register user. Please try again.', 'Error');
       }
     }
   }
