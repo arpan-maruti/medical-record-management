@@ -1,5 +1,5 @@
 <div class="upload-files__container">
-  <!-- Drag and Drop Area -->
+  <!-- File Input -->
   <div class="upload-files__file-input-container">
     <input
       type="file"
@@ -9,30 +9,49 @@
       enctype="multipart/form-data"
       class="upload-files__file-input"
     />
-    <label for="fileInput" class="upload-files__btn">Browse Files</label>
+    <label for="fileInput" class="upload-files__btn">
+      <i class="fas fa-upload"></i> Browse Files
+    </label>
   </div>
 
   <div class="upload-files__or-text">Or</div>
 
-  <div
-    class="upload-files__drag-drop-area"
-    (drop)="onDrop($event)"
-    (dragover)="onDragOver($event)"
-    (dragleave)="onDragLeave($event)"
-    *ngIf="!fileName" 
+  <!-- ngx-file-drop Component -->
+  <ngx-file-drop
+    (onFileDrop)="dropped($event)"
+    (onDragOver)="fileOver($event)"
+    (onDragLeave)="fileLeave($event)"
+    *ngIf="!fileName"
   >
-    <!-- Document icon for file -->
-    <!-- <img src="/assets/pdf-icon.png" style="z-index: -10;" alt="PDF icon" class="upload-files__drag-drop-icon" />
-    <p class="upload-files__drag-drop-text" style="z-index: -10;">Drag & Drop PDF Files Here</p> -->
-</div>
- 
-<!-- File Name Display -->
-<div *ngIf="fileName" >
-  <p>Selected File: {{ fileName }}</p>
-</div>
-  <div style="display: flex; flex-direction: initial; gap: 5px;">
-  <button class="upload-files__btn upload-files__btn--secondary" (click)="uploadFile()">Upload</button>
-  <!-- Close Button -->
-  <button (click)="closeModal()" class="upload-files__btn upload-files__btn--secondary">Close</button>
-</div>
+    <ng-template
+      ngx-file-drop-content-tmp
+      let-openFileSelector="openFileSelector"
+    >
+      <div class="upload-files__drag-drop-area" (click)="openFileSelector()">
+        <i class="upload-files__icon fas fa-file-pdf"></i>
+        <p class="upload-files__drag-drop-text">Drag & Drop PDF Files Here</p>
+      </div>
+    </ng-template>
+  </ngx-file-drop>
+
+  <!-- File Name Display -->
+  <div *ngIf="fileName">
+    <p class="upload-files__file-name-display">Selected File: {{ fileName }}</p>
+  </div>
+
+  <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 15px">
+    <button
+      class="upload-files__btn upload-files__btn--secondary"
+      (click)="uploadFile()"
+    >
+      Upload
+    </button>
+    <!-- Close Button -->
+    <button
+      (click)="closeModal()"
+      class="upload-files__btn upload-files__btn--secondary"
+    >
+      Close
+    </button>
+  </div>
 </div>
