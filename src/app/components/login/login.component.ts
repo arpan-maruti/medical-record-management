@@ -28,6 +28,7 @@ export class LoginComponent {
   constructor(private router: Router, private toastr: ToastrService) {}
 
   async onLogin() {
+    console.log("onLogin");
     this.formSubmitted = true;
     // Validate inputs
     this.validateInputs();
