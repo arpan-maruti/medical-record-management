@@ -37,9 +37,9 @@ export const routes: Routes = [
               { path: 'all-cases', component: CaseListComponent },
               { path: 'profile', component: ProfileComponent  },
               {path: 'upload-new-case', component: UploadNewCaseComponent},
-              {path: 'main-case-view', component: UploadNewCaseComponent},
-              {path: 'sub-case-view', component: UploadSubcaseComponent},
-              {path: 'main-case/upload-subcase', component: UploadSubcaseComponent},
+              { path: 'main-case-view/:id', component: UploadNewCaseComponent },
+              { path: 'sub-case-view/:id', component: UploadSubcaseComponent },
+              {path: 'upload-sub-case/:id', component: UploadSubcaseComponent},
               {
                 path: 'view-label', component: ViewAndLabelComponent,
               }

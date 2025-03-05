@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import axios from 'axios';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../environments/environment';
@@ -43,7 +43,7 @@ export class UploadSubcaseComponent implements OnInit {
   instructionError: string | null = null;
   isSubmitted: boolean = false;
   token: string | null = null;
-
+  caseId: string = '';
   loiFile: File | null = null;
   loiFileName: string = '';
   uploadedLoiFileMetadata: any = null;
@@ -53,52 +53,159 @@ export class UploadSubcaseComponent implements OnInit {
   caseData: any = null;
 
   constructor(
-    private dataService: DataService,
-    private cookieService: CookieService,
-    private router: Router,
-    private toastr: ToastrService
-  ) {
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras.state) {
-      if (navigation.extras.state['caseData']) {
-        this.caseData = navigation.extras.state['caseData'];
-        this.clientName = this.caseData.client_name || '';
-        // Use parentCaseReference from caseData if available; else ref_number
-        this.parentCaseReference = this.caseData.parent_id?.clientName || this.caseData.ref_number || '';
-        this.subCaseReference = this.caseData.ref_number || '';
-        this.dateOfBranch = this.caseData.date_of_breach || '';
-        if (this.caseData.parameters && this.caseData.parameters.length > 0) {
-          // For updating later (editable mode)
-          this.selectedLoi = this.caseData.parameters[0].instructionId?.loiId?._id || '';
-          this.selectedInstruction = this.caseData.parameters[0].instructionId?.instructionMsg || '';
-          // For view mode display
-          this.selectedLoiMsg = this.caseData.parameters[0].instructionId?.loiId?.loiMsg || '';
-          this.selectedInstructionMsg = this.caseData.parameters[0].instructionId?.instructionMsg || '';
-          this.selectedParametersView = this.caseData.parameters;
-        }
-      } else {
-        this.clientName = navigation.extras.state['clientName'] || '';
-        this.parentCaseReference = navigation.extras.state['parentCaseReference'] || '';
-        this.caseData = {
-          parentCaseId: navigation.extras.state['parentCaseId'],
-          client_name: this.clientName,
-          ref_number: this.parentCaseReference
-        };
-      }
-      if (navigation.extras.state['viewOnly'] !== undefined) {
-        this.viewOnly = navigation.extras.state['viewOnly'];
-      }
-    }
+      private cookieService: CookieService,
+      private route: ActivatedRoute,
+      private router: Router,
+      private toastr: ToastrService
+    ) {
+    // const navigation = this.router.getCurrentNavigation();
+    // if (navigation?.extras.state) {
+    //   if (navigation.extras.state['caseData']) {
+    //     this.caseData = navigation.extras.state['caseData'];
+    //     this.clientName = this.caseData.client_name || '';
+    //     // Use parentCaseReference from caseData if available; else ref_number
+    //     this.parentCaseReference = this.caseData.parent_id?.clientName || this.caseData.ref_number || '';
+    //     this.subCaseReference = this.caseData.ref_number || '';
+    //     this.dateOfBranch = this.caseData.date_of_breach || '';
+    //     if (this.caseData.parameters && this.caseData.parameters.length > 0) {
+    //       // For updating later (editable mode)
+    //       this.selectedLoi = this.caseData.parameters[0].instructionId?.loiId?._id || '';
+    //       this.selectedInstruction = this.caseData.parameters[0].instructionId?.instructionMsg || '';
+    //       // For view mode display
+    //       this.selectedLoiMsg = this.caseData.parameters[0].instructionId?.loiId?.loiMsg || '';
+    //       this.selectedInstructionMsg = this.caseData.parameters[0].instructionId?.instructionMsg || '';
+    //       this.selectedParametersView = this.caseData.parameters;
+    //     }
+    //   } else {
+    //     this.clientName = navigation.extras.state['clientName'] || '';
+    //     this.parentCaseReference = navigation.extras.state['parentCaseReference'] || '';
+    //     this.caseData = {
+    //       parentCaseId: navigation.extras.state['parentCaseId'],
+    //       client_name: this.clientName,
+    //       ref_number: this.parentCaseReference
+    //     };
+    //   }
+    //   if (navigation.extras.state['viewOnly'] !== undefined) {
+    //     this.viewOnly = navigation.extras.state['viewOnly'];
+    //   }
+    // }
   }
 
+
+  async fetchCaseData(): Promise<void> {
+    const token = this.cookieService.get('jwt');
+    
+    if (!token) {
+      // this.toastr.error('JWT token not available', 'Error');
+      return;
+    }
+    try {
+      const response = await axios.get(`${environment.apiUrl}/case/${this.caseId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      });
+      if (response.data.code === 'Success') {
+        this.caseData = response.data.data;
+        console.log("this is the case data", this.caseData);
+        this.viewOnly = true;
+      } else {
+        this.toastr.error(response.data.message, 'Error');
+      }
+    } catch (error) {
+      console.error('Error fetching case data:', error);
+      // this.toastr.error('Failed to fetch case data', 'Error');
+    }
+  }
   async ngOnInit(): Promise<void> {
     this.token = this.getCookie('jwt');
-    // Only fetch LOI/Instruction Types if not in view-only mode
+    
+    this.caseId = this.route.snapshot.paramMap.get('id') || '';
+    
+    if (!this.caseId) {
+      this.toastr.error('Case ID is required', 'Error');
+      this.router.navigate(['/case-management']); // Redirect to a safe page
+      return;
+    }
+  
+    // Determine if the request is for View Mode or Upload Mode based on the URL
+    const currentUrl = this.router.url;
+    if (currentUrl.includes('/sub-case-view')) {
+      this.viewOnly = true; // Set viewOnly to true for sub-case-view
+    } else if (currentUrl.includes('/upload-sub-case')) {
+      this.viewOnly = false; // Set viewOnly to false for upload-sub-case
+    } else {
+      this.toastr.error('Invalid URL', 'Error');
+      this.router.navigate(['/case-management']); // Redirect to a safe page
+      return;
+    }
+  
+    if (this.viewOnly) {
+      // Fetch case data for View Mode
+      await this.fetchCaseData();
+    } else {
+      // Fetch clientName and parentCaseReference for Upload Mode
+      await this.fetchClientAndParentCaseDetails();
+    }
+  
+    // Populate form fields based on the fetched data
+    if (this.caseData) {
+      console.log(this.caseData);
+      this.clientName = this.caseData.clientName;
+      this.parentCaseReference = this.caseData.parentId.refNumber;
+      this.subCaseReference = this.caseData.refNumber;
+      this.dateOfBranch = this.caseData.dateOfBreach;
+  
+      // Populate LOI Type
+      this.selectedLoi = this.caseData.parameters[0].instructionId.loiId.loiMsg || "hello";
+      console.log("loi:" + this.selectedLoi);
+  
+      // Populate Instruction Type
+      this.selectedInstruction = this.caseData.parameters[0].instructionId.instructionMsg;
+      console.log("instr:" + this.selectedInstruction);
+  
+      // Populate Parameters
+      this.selectedParametersView = this.caseData.parameters || [];
+      console.log(this.selectedParametersView);
+    }
+  
     if (!this.viewOnly) {
       await this.fetchLoiTypes();
       if (this.selectedLoi) {
         await this.onLoiChange();
       }
+    }
+  }
+
+  async fetchClientAndParentCaseDetails(): Promise<void> {
+    const token = this.cookieService.get('jwt');
+    
+    if (!token) {
+      // this.toastr.error('JWT token not available', 'Error');
+      return;
+    }
+  
+    try {
+      const response = await axios.get(`${environment.apiUrl}/case/${this.caseId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      });
+  
+      if (response.data.code === 'Success') {
+        console.log(response.data);
+        this.clientName = response.data.data.clientName;
+        this.parentCaseReference = response.data.data.refNumber;
+      } else {
+        this.toastr.error(response.data.message, 'Error');
+      }
+    } catch (error) {
+      console.error('Error fetching client and parent case details:', error);
+      this.toastr.error('Failed to fetch client and parent case details', 'Error');
     }
   }
 
@@ -117,9 +224,12 @@ export class UploadSubcaseComponent implements OnInit {
 
   // Caching LOI Types similar to Upload New Case Component
   async fetchLoiTypes(): Promise<void> {
+    if (this.viewOnly) {
+      return;
+    }
     if (!this.token) {
-      this.toastr.error('JWT token not found', 'Error');
-      console.error('No JWT token found.');
+      // this.toastr.error('JWT token not found', 'Error');
+      // console.error('No JWT token found.');
       return;
     }
     try {
@@ -160,6 +270,9 @@ export class UploadSubcaseComponent implements OnInit {
 
   // Caching Instruction Types per LOI
   async onLoiChange(): Promise<void> {
+    if (this.viewOnly) {
+      return;
+    }
     if (!this.selectedLoi) {
       this.instructionTypes = [];
       this.selectedInstruction = '';
@@ -202,6 +315,9 @@ export class UploadSubcaseComponent implements OnInit {
   
   // Caching Parameters per Instruction
   async onInstructionChange(): Promise<void> {
+    if (this.viewOnly) {
+      return;
+    }
     if (!this.selectedInstruction) {
       this.parameters = [];
       return;
@@ -367,7 +483,7 @@ export class UploadSubcaseComponent implements OnInit {
     }
   
     const formData = {
-      parentId: this.caseData ? this.caseData.parentCaseId : null,
+      parentId: this.caseId,
       clientName: this.clientName.trim(),
       refNumber: this.subCaseReference.trim(),
       dateOfBreach: this.dateOfBranch.trim(),
