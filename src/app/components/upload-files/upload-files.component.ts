@@ -79,11 +79,12 @@ export class UploadFilesComponent {
   triggerFileInput() {
     const input = document.getElementById('fileInput') as HTMLInputElement;
     if (input) {
-      input.click();
+      console.log(input.files);
     }
   }
 
   onFilesSelected(event: Event) {
+    console.log('onFileSelected', event);
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       debugger;
@@ -117,7 +118,7 @@ export class UploadFilesComponent {
   onDocumentClick(event: MouseEvent): void {
     const modal = document.querySelector('.upload-container');
     if (modal && !modal.contains(event.target as Node)) {
-      this.closeModal();
+      // this.closeModal();
     }
   }
 
