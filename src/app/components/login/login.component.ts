@@ -60,9 +60,7 @@ export class LoginComponent {
       );
       if (otpResponse.data.success) {
         this.toastr.success('OTP sent successfully.', 'Success');
-        this.router.navigate(['/otp'], {
-          queryParams: { email: this.email },
-        });
+        this.router.navigate(['/otp'], { queryParams: { email: this.email } });
       } else {
         this.generalError =
           otpResponse.data.message || 'Failed to send OTP. Try again later.';

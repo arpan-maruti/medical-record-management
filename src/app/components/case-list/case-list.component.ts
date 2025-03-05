@@ -49,15 +49,11 @@ export class CaseListComponent {
 
   
   viewCaseDetails(caseItem: any) {
-    this.router.navigate(['/case-management/main-case-view'], {
-      state: { caseData: caseItem, viewOnly: true }
-    });
+    this.router.navigate(['/case-management/main-case-view', caseItem._id] );
   }
 
   viewSubCaseDetails(subCase: any) {
-    this.router.navigate(['/case-management/sub-case-view'], {
-      state: { caseData: subCase, viewOnly: true }
-    });
+    this.router.navigate(['/case-management/sub-case-view', subCase._id] );
   }
   
    
@@ -66,34 +62,31 @@ export class CaseListComponent {
     this.fetchCases();
   }
   fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '') {
+    this.isLoading = true; // Start loading indicator
+  
     const getCookie = (name: string): string | null => {
       return this.cookieService.get(name) || null;
     }
     const token = getCookie('jwt');
-    
+      
     if (!token) {
       this.isDataAvailable = false;
+      this.isLoading = false; // End loading indicator if token not found
       return;
     }
-  
-    console.log('Retrieved Token:', token);
-  
+    
     let apiUrl = `${environment.apiUrl}/user/cases?page=${page}`;
     if (caseStatus) {
       apiUrl += `&case_status=${caseStatus}`;
     }
-    
-    // Append sort parameter for server-side sorting
     if (this.sortKey) {
       const sortParam = this.sortDirection === 'desc' ? `-${this.sortKey}` : this.sortKey;
       apiUrl += `&sort=${sortParam}`;
     }
-    
-    // Append search query if provided
     if (searchQuery && searchQuery.trim() !== '') {
       apiUrl += `&client_name=${encodeURIComponent(searchQuery.trim())}`;
     }
-    
+      
     axios.get(apiUrl, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -102,7 +95,6 @@ export class CaseListComponent {
       withCredentials: true
     })
     .then(response => {
-      console.log(response.data);
       if (response.data.code === 'Success') {
         this.data = response.data.data;
         this.filteredData = [...this.data];
@@ -112,12 +104,12 @@ export class CaseListComponent {
         console.error('Failed to fetch cases:', response.data.message);
         this.isDataAvailable = false;
       }
-      this.isLoading = false;
+      this.isLoading = false; // End loading indicator
     })
     .catch(error => {
       console.error('Error fetching cases:', error);
       this.isDataAvailable = false;
-      this.isLoading = false;
+      this.isLoading = false; // End loading indicator
     });
   }
 
@@ -338,13 +330,7 @@ export class CaseListComponent {
     this.uploadedFileName = fileName;  // Store the file name in the parent component
   }
   addSubcase(caseItem: any) {
-    this.router.navigate(['case-management/main-case/upload-subcase'], {
-      state: {
-        parentCaseId: caseItem._id,
-        clientName: caseItem.client_name,
-        parentCaseReference: caseItem.ref_number
-      }
-    });
+    this.router.navigate(['case-management/upload-sub-case', caseItem._id ]);
   }
 
   addCase() {

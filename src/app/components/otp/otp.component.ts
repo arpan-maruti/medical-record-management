@@ -91,9 +91,6 @@ export class OtpComponent {
     }
   }
 
-  /**
-   * Starts a countdown timer for 30 seconds before allowing OTP resend.
-   */
   startResendTimer(): void {
     this.resendVisible = false;
     this.timer = 30;
@@ -106,9 +103,6 @@ export class OtpComponent {
     }, 1000);
   }
 
-  /**
-   * Handles OTP resend logic.
-   */
   async resendOtp(): Promise<void> {
     try {
       console.log('Resending OTP...');

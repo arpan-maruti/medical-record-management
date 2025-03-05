@@ -1,13 +1,13 @@
-<div class="case-list-container" [class.blurred]="isViewLabelVisible">
-  <div *ngIf="isLoading" class="loading-container">
+<div class="case-list-container" [class.blurred]="isViewLabelVisible" >
+   <!-- Attractive loading spinner shown until cases are fetched -->
+   <div *ngIf="isLoading" class="loading-container">
     <svg class="spinner" viewBox="0 0 50 50">
       <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
     </svg>
     <p>Loading Cases...</p>
   </div>
-  <div class="header-container">
+  <div class="header-container" *ngIf="!isLoading && isDataAvailable">
     <h2 class="header-title">ALL CASES</h2>
-
     <div class="filter-container">
       <div class="custom-dropdown">
         <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <div class="search-upload-container">
+  <div class="search-upload-container" *ngIf="!isLoading && isDataAvailable">
     <div class="search-container">
       <input
         type="text"
@@ -36,10 +36,8 @@
     </div>
   </div>
 
-  <!-- Display a styled message when there are no cases -->
-  <div *ngIf="!isDataAvailable" class="case-list__no-case">
+  <div *ngIf="!isLoading && isDataAvailable && filteredData.length === 0" class="case-list__no-case">
     <div class="case-list__no-case-content">
-      <!-- Optional image for visual appeal -->
       <h2>No Cases Available</h2>
       <p>Welcome to the Case Management Section.</p>
       <p>Upload a new case to get started.</p>
@@ -47,17 +45,12 @@
     </div>
   </div>
 
-  <!-- Display a message when no cases match the filters -->
-  <div
-    *ngIf="isDataAvailable && filteredData.length === 0"
-    class="no-cases-message"
-  >
-    <p>No cases found matching the selected criteria.</p>
-  </div>
+
+  
 
   <!-- Desktop/Table view with table -->
   <div
-    *ngIf="isDataAvailable && filteredData.length > 0"
+  *ngIf="!isLoading && isDataAvailable && filteredData.length > 0"
     class="table-container desktop-table-view"
   >
     <table class="table table-striped">
@@ -354,7 +347,7 @@
   </ng-container>
 </div>
 
-<div class="pagination-bar">
+<div class="pagination-bar" *ngIf="!isLoading && isDataAvailable">
   <button
     (click)="previousPage()"
     [disabled]="currentPage === 1"
