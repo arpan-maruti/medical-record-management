@@ -66,7 +66,6 @@ export class CaseListComponent {
     this.fetchCases();
   }
   fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '') {
-    console.log(caseStatus);
     const getCookie = (name: string): string | null => {
       return this.cookieService.get(name) || null;
     }
@@ -95,7 +94,6 @@ export class CaseListComponent {
       apiUrl += `&client_name=${encodeURIComponent(searchQuery.trim())}`;
     }
     
-    console.log(apiUrl);
     axios.get(apiUrl, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -291,8 +289,8 @@ export class CaseListComponent {
         if (loiFiles.length > 0) {
           const loiFile = loiFiles[0];
           // Use the static file server URL with the filename from the file data
-          const fileUrl = `http://localhost:5000${loiFile.file_path}`;
-          console.log(fileUrl);
+          const fileUrl = `http://localhost:5000/files/${loiFile.file_path}`;
+          console.log(loiFile);
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
           this.selectedFileName = loiFile.file_name;
           this.isPdfPreviewVisible = true;
@@ -365,7 +363,6 @@ export class CaseListComponent {
     .then(response => {
       if (response.data.code === 'Success') {
         const files = response.data.data;
-        debugger;
         // Only show files with file_type "document" in the View/Label popup
         const documentFiles = files.filter((file: any) => file.file_type === 'document');
         this.selectedFiles = documentFiles.map((file: any) => ({
@@ -388,10 +385,7 @@ export class CaseListComponent {
   }
 
   openDocumentPreview(file: any) {
-    // Build URL using the file name with a current timestamp appended as a query parameter
-    console.log(file);
     const fileUrl = `http://localhost:5000/files/${file.file_url}`;
-    debugger;
     this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
     this.selectedFileName = file.name;
     this.isPdfPreviewVisible = true;

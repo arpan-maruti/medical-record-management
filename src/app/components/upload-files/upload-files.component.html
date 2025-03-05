@@ -8,8 +8,9 @@
       accept="application/pdf"
       enctype="multipart/form-data"
       class="upload-files__file-input"
+      #fileInput
     />
-    <label for="fileInput" class="upload-files__btn">
+    <label for="fileInput" class="upload-files__btn" (click)="triggerFileInput()">
       <i class="fas fa-upload"></i> Browse Files
     </label>
   </div>
@@ -21,7 +22,6 @@
     (onFileDrop)="dropped($event)"
     (onDragOver)="fileOver($event)"
     (onDragLeave)="fileLeave($event)"
-    *ngIf="!fileName"
   >
     <ng-template
       ngx-file-drop-content-tmp
@@ -35,9 +35,7 @@
   </ngx-file-drop>
 
   <!-- File Name Display -->
-  <div *ngIf="fileName">
-    <p class="upload-files__file-name-display">Selected File: {{ fileName }}</p>
-  </div>
+    <p class="upload-files__file-name-display">{{ fileName || "No file uploaded yet."}}</p>
 
   <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 15px">
     <button

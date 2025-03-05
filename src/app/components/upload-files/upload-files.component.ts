@@ -75,6 +75,7 @@ export class UploadFilesComponent {
     });
   }
 
+  // remove this
   triggerFileInput() {
     const input = document.getElementById('fileInput') as HTMLInputElement;
     if (input) {
@@ -84,8 +85,8 @@ export class UploadFilesComponent {
 
   onFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    console.log(input.files + 'hhh');
     if (input.files && input.files.length > 0) {
+      debugger;
       this.file = input.files[0];
       this.fileName = this.file.name;
     }
