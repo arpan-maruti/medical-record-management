@@ -323,57 +323,64 @@ export class UploadNewCaseComponent implements OnInit {
   // Triggered when a file is selected via the file input
   onLoiFileSelected(event: any): void {
     const file: File = event.target.files[0];
+    console.log('Selected LOI file:', file);
     if (file) {
       this.loiFile = file;
       this.loiFileName = file.name;
       this.uploadLoiFile(file);
     }
   }
-  
+  getUserIdFromJWT(): string {
+    const token = this.cookieService.get('jwt');
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        return decoded.userId || decoded.id || '';
+      } catch (error) {
+        console.error('Error decoding JWT:', error);
+        return '';
+      }
+    }
+    return '';
+  }
+  file: File | null = null;
+  fileName: string = '';
   // Upload the selected LOI file and store the returned metadata
   uploadLoiFile(file: File): void {
-    const token = this.getCookie('jwt');
+    try {
+    const token = this.cookieService.get('jwt');
     if (!token) {
       console.error('No JWT token available for file upload.');
       // this.toastr.error('JWT token not available', 'File Upload');
       return;
     }
-    const extension = file.name.split('.').pop()?.toLowerCase() || 'pdf';
-    const filePath = `/files/${Date.now()}`;
-    let userId = '';
-    try {
-      const decoded: any = jwtDecode(token);
-      userId = decoded.id || decoded.userId || '';
-    } catch (error) {
-      console.error('Error decoding JWT token:', error);
-      this.toastr.error('Error decoding token', 'File Upload');
+      const userId = this.getUserIdFromJWT();
+    const extension = this.file?.name.split('.').pop()?.toLowerCase() || 'pdf';
+    const formData = new FormData();
+    if (file) {
+      formData.append('file', file);
+      formData.append('fileName', file.name);
+      formData.append('fileType', 'loi');
+      formData.append('createdBy', userId);
+      formData.append('modifiedBy', userId);
+      formData.append('fileFormat', extension);
     }
-    const metadata = {
-      fileName: file.name,
-      filePath: filePath,
-      fileSize: file.size,
-      fileType: 'loi',
-      fileFormat: extension,
-      createdBy: userId,
-      modifiedBy: userId,
-    };
     axios
-      .post(`${environment.apiUrl}/file`, metadata, {
+      .post(`${environment.apiUrl}/file`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
         },
         withCredentials: true
       })
       .then(response => {
-        console.log('LOI file uploaded successfully:', response.data);
         this.uploadedLoiFileMetadata = response.data.data;
         this.toastr.success('LOI file uploaded successfully', 'File Upload');
       })
-      .catch(error => {
+    } catch(error) {
         console.error('Error uploading LOI file:', error);
         this.toastr.error('Error uploading LOI file', 'File Upload');
-      });
+      };
   }
   
   submitForm(): void {
