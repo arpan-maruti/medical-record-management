@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, HostListener } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -32,9 +32,10 @@ export class UploadNewCaseComponent implements OnInit {
   caseReferenceError: string | null = null;
   dateError: string | null = null;
   loiError: string | null = null;
+  loiFileError: string | null = null;
   instructionError: string | null = null;
   parametersError: string | null = null;
-
+  loiFileErrorMessage: string | null = null;
   // New properties for file upload
   loiFile: File | null = null;
   loiFileName: string = '';
@@ -42,7 +43,7 @@ export class UploadNewCaseComponent implements OnInit {
   caseId: string = '';
   caseData: any;
   viewOnly: boolean = false;
-
+  today = new Date().toISOString().split('T')[0];
   // Cache objects for reducing API calls
   private instructionTypesCache: { [loiId: string]: any[] } = {};
   private parametersCache: { [instructionId: string]: any[] } = {};
@@ -205,6 +206,7 @@ export class UploadNewCaseComponent implements OnInit {
     this.loiError = null;
     this.instructionError = null;
     this.parametersError = null;
+    this.loiFileError = null;
   }
 
   async onLoiChange(): Promise<void> {
@@ -323,7 +325,6 @@ export class UploadNewCaseComponent implements OnInit {
   // Triggered when a file is selected via the file input
   onLoiFileSelected(event: any): void {
     const file: File = event.target.files[0];
-    console.log('Selected LOI file:', file);
     if (file) {
       this.loiFile = file;
       this.loiFileName = file.name;
@@ -391,6 +392,7 @@ export class UploadNewCaseComponent implements OnInit {
     this.loiError = null;
     this.instructionError = null;
     this.parametersError = null;
+    this.loiFileError = null;
   
     // Validate client name
     if (!this.clientName) {
@@ -414,8 +416,6 @@ export class UploadNewCaseComponent implements OnInit {
     } else if (!this.dateOfBranch.match(/^\d{4}-\d{2}-\d{2}$/)) {
       this.dateError = 'Invalid date format. Please enter a valid date.';
     } else if(this.dateOfBranch > new Date().toISOString().split('T')[0]){
-      // console.log(this.dateOfBranch);
-      // console.log(new Date().toISOString().split('T')[0]);
       this.dateError = 'Date of breach cannot be in the future.';
     }
   
@@ -433,6 +433,11 @@ export class UploadNewCaseComponent implements OnInit {
     if (this.selectedParameters.length === 0) {
       this.parametersError = 'At least one parameter should be selected.';
     }
+
+    if(!this.loiFile) {
+      debugger;
+      this.loiFileError = 'LOI file is required.';
+    }
   
     if (
       this.clientNameError ||
@@ -440,11 +445,13 @@ export class UploadNewCaseComponent implements OnInit {
       this.dateError ||
       this.loiError ||
       this.instructionError ||
-      this.parametersError
+      this.parametersError ||
+      this.loiFileError
     ) {
-      this.toastr.error('Please correct form errors.', 'Validation Error');
+      this.toastr.error('Please validate all the details.', 'Validation Error');
       return;
     }
+
   
     // Decode the JWT token to extract user_id
     const token = this.getCookie('jwt');
@@ -506,5 +513,10 @@ export class UploadNewCaseComponent implements OnInit {
         console.error('Error creating case:', error.response?.data || error.message);
         this.toastr.error(error.response?.data?.message|| 'Error creating case', 'Error');
       });
+  }
+
+  @HostListener('window:keydown.enter', ['$event'])
+  hadleKeyDownEvent(event: KeyboardEvent) {
+    this.submitForm();
   }
 }
