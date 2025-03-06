@@ -120,6 +120,7 @@ export class RegisterComponent {
       this.phoneError = 'Phone number is required';
     } else {
       // Use the ISO code from the found country for validation
+      console.log(this.selectedCountryCode);
       const isoCode = country ? country.countryCode : this.selectedCountryCode;
       const phoneValidation = phone(this.phoneNumber, { country: isoCode });
       if (!phoneValidation.isValid) {
@@ -142,7 +143,7 @@ export class RegisterComponent {
         countryCode: this.selectedCountryCode, // This is now the calling code
         phoneNumber: this.phoneNumber,
       };
-  
+      console.log(registrationData);
       try {
         const getCookie = (name: string): string | null => {
           return this.cookieService.get(name) || null;
