@@ -1,11 +1,11 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DataService } from '../../services/data.service';
+
 import axios from 'axios';
 import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 
@@ -39,7 +39,7 @@ export class UploadNewCaseComponent implements OnInit {
   loiFile: File | null = null;
   loiFileName: string = '';
   uploadedLoiFileMetadata: any = null;
-
+  caseId: string = '';
   caseData: any;
   viewOnly: boolean = false;
 
@@ -48,48 +48,91 @@ export class UploadNewCaseComponent implements OnInit {
   private parametersCache: { [instructionId: string]: any[] } = {};
 
   constructor(
-    private dataService: DataService,
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private cookieService: CookieService,
-    private router: Router,
-    private toastr: ToastrService
-  ) {
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras.state) {
-      this.caseData = navigation.extras.state['caseData'];
-      this.viewOnly = navigation.extras.state['viewOnly'];
+      
+      @Inject(PLATFORM_ID) private platformId: Object,
+      private cookieService: CookieService,
+      private router: Router,
+      private toastr: ToastrService,
+      private route: ActivatedRoute
+    ) {
+      
     }
-  }
 
-  ngOnInit() {
-    if (this.caseData) {
-      console.log(this.caseData);
-      // Populate basic case details
-      this.clientName = this.caseData.client_name;
-      this.caseReference = this.caseData.ref_number;
-      this.dateOfBranch = this.caseData.date_of_breach; // Adjust based on your data structure
-  
-      // Populate LOI Type
-      this.selectedLoi = this.caseData.parameters[0].instructionId.loiId.loiMsg || "hello";
-      console.log("loi:" + this.selectedLoi);
-  
-      // Populate Instruction Type
-      this.selectedInstruction = this.caseData.parameters[0].instructionId.instructionMsg;
-      console.log("instr:" + this.selectedInstruction);
-  
-      // Populate Parameters
-      this.selectedParametersView = this.caseData.parameters || [];
-      console.log(this.selectedParametersView);
-    }
-  
-    // Fetch LOI Types and Instruction Types
-    this.fetchLoiTypes().then(() => {
-      if (this.selectedLoi) {
-        this.onLoiChange();
+    async ngOnInit() {
+      this.caseId = this.route.snapshot.paramMap.get('id') || '';
+      
+      if (this.caseId) {
+        await this.fetchCaseData(); // Wait for the case data to be fetched
       }
-    });
-  }
-
+      
+      // Now that fetchCaseData has completed, check if caseData is available
+      if (this.caseData) {
+        console.log(this.caseData);
+        // Populate basic case details
+        this.clientName = this.caseData.clientName;
+        this.caseReference = this.caseData.refNumber;
+        this.dateOfBranch = this.caseData.dateOfBreach; // Adjust based on your data structure
+    
+        // Populate LOI Type
+        this.selectedLoi = this.caseData.parameters[0].instructionId.loiId.loiMsg || "hello";
+        console.log("loi:" + this.selectedLoi);
+    
+        // Populate Instruction Type
+        this.selectedInstruction = this.caseData.parameters[0].instructionId.instructionMsg;
+        console.log("instr:" + this.selectedInstruction);
+    
+        // Populate Parameters
+        this.selectedParametersView = this.caseData.parameters || [];
+        console.log(this.selectedParametersView);
+    
+        // If in viewOnly mode, skip fetching LOI types, instruction types, and parameters
+        if (this.viewOnly) {
+          return;
+        }
+      }
+    
+      // Fetch LOI Types and Instruction Types only if not in viewOnly mode and JWT token is available
+      const token = this.getCookie('jwt');
+      if (token) {
+        await this.fetchLoiTypes(); // Wait for LOI types to be fetched
+        if (this.selectedLoi) {
+          this.onLoiChange();
+        }
+      } else {
+        // this.toastr.error('JWT token not available', 'Error');
+      }
+    }
+  
+    async fetchCaseData(): Promise<void> {
+      const token = this.cookieService.get('jwt');
+      console.log(token);
+      if (!token) {
+        console.log("aa"+token);
+        console.warn('JWT token not found, skipping API call.');
+        // Optionally, redirect to login:
+        // this.router.navigate(['/login']);
+        return;
+      }
+      try {
+        const response = await axios.get(`${environment.apiUrl}/case/${this.caseId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        });
+        if (response.data.code === 'Success') {
+          this.caseData = response.data.data;
+          console.log("this is the case data", this.caseData);
+          this.viewOnly = true;
+        } else {
+          this.toastr.error(response.data.message, 'Error');
+        }
+      } catch (error) {
+        console.error('Error fetching case data:', error);
+        // this.toastr.error('Failed to fetch case data', 'Error');
+      }
+    }
   getCookie(name: string): string | null {
     return this.cookieService.get(name) || null;
   }
@@ -101,6 +144,9 @@ export class UploadNewCaseComponent implements OnInit {
   // Fetch LOI Types from the API only if not already fetched
   async fetchLoiTypes(): Promise<void> {
     if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (this.viewOnly) {
       return;
     }
   
@@ -162,6 +208,9 @@ export class UploadNewCaseComponent implements OnInit {
   }
 
   async onLoiChange(): Promise<void> {
+    if (this.viewOnly) {
+      return;
+    }
     if (!this.selectedLoi) {
       this.instructionTypes = [];
       this.selectedInstruction = '';
@@ -209,6 +258,9 @@ export class UploadNewCaseComponent implements OnInit {
   }
   
   async onInstructionChange(): Promise<void> {
+    if (this.viewOnly) {
+      return;
+    }
     if (!this.selectedInstruction) {
       this.parameters = [];
       return;
@@ -299,7 +351,7 @@ export class UploadNewCaseComponent implements OnInit {
     const token = this.cookieService.get('jwt');
     if (!token) {
       console.error('No JWT token available for file upload.');
-      this.toastr.error('JWT token not available', 'File Upload');
+      // this.toastr.error('JWT token not available', 'File Upload');
       return;
     }
       const userId = this.getUserIdFromJWT();

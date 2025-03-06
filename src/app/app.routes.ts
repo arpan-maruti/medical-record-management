@@ -16,7 +16,11 @@ import { AgGridComponent } from './components/ag-grid/ag-grid.component';
 import { SwaggerViewerComponent } from './components/swagger-viewer/swagger-viewer.component';
 import { SetPasswordComponent } from './components/set-password/set-password.component';
 
+
+
 export const routes: Routes = [
+
+  
 
     {path:'', component: LoginComponent, pathMatch:'full'},
     {path:'otp', component: OtpComponent, pathMatch:'full'},
@@ -36,12 +40,12 @@ export const routes: Routes = [
               { path: '', redirectTo: 'all-cases', pathMatch: 'full' },
               { path: 'all-cases', component: CaseListComponent },
               { path: 'profile', component: ProfileComponent  },
-              {path: 'upload-new-case', component: UploadNewCaseComponent},
-              {path: 'main-case-view', component: UploadNewCaseComponent},
-              {path: 'sub-case-view', component: UploadSubcaseComponent},
-              {path: 'main-case/upload-subcase', component: UploadSubcaseComponent},
+              {path: 'upload-new-case', component: UploadNewCaseComponent },
+              { path: 'main-case-view/:id', component: UploadNewCaseComponent },
+              { path: 'sub-case-view/:id', component: UploadSubcaseComponent },
+              {path: 'upload-sub-case/:id', component: UploadSubcaseComponent },
               {
-                path: 'view-label', component: ViewAndLabelComponent,
+                path: 'view-label', component: ViewAndLabelComponent, 
               }
             ],
           },
