@@ -16,7 +16,11 @@ import { AgGridComponent } from './components/ag-grid/ag-grid.component';
 import { SwaggerViewerComponent } from './components/swagger-viewer/swagger-viewer.component';
 import { SetPasswordComponent } from './components/set-password/set-password.component';
 
+
+
 export const routes: Routes = [
+
+  
 
     {path:'', component: LoginComponent, pathMatch:'full'},
     {path:'otp', component: OtpComponent, pathMatch:'full'},
