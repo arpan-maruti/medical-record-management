@@ -452,7 +452,7 @@ export class UploadNewCaseComponent implements OnInit {
       })
       .catch((error) => {
         console.error('Error creating case:', error.response?.data || error.message);
-        this.toastr.error('Error creating case', 'Error');
+        this.toastr.error(error.response?.data?.message|| 'Error creating case', 'Error');
       });
   }
 }
