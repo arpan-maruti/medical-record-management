@@ -29,14 +29,6 @@ const angularApp = new AngularNodeAppEngine();
 /**
  * Serve static files from /browser
  */
-
-export function getPrerenderParams() {
-  return {
-    '/case-management/main-case-view/:id': [{ id: '123' }, { id: '456' }],
-    '/case-management/upload-sub-case/:id': [{ id: '789' }, { id: '101' }],
-    '/case-management/sub-case-view/:id': [{ id: '789' }, { id: '101' }]
-  };
-}
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
