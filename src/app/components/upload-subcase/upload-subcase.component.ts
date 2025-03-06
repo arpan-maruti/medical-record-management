@@ -92,7 +92,7 @@ export class UploadSubcaseComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.token = this.getCookie('jwt');
+    this.token = this.cookieService.get('jwt');
     // Only fetch LOI/Instruction Types if not in view-only mode
     if (!this.viewOnly) {
       await this.fetchLoiTypes();
@@ -126,13 +126,13 @@ export class UploadSubcaseComponent implements OnInit {
       const cacheName = 'loi-cache';
       const cache = await caches.open(cacheName);
       const cachedResponse = await cache.match('/loiTypes');
-  
+
       if (cachedResponse) {
         this.loiTypes = await cachedResponse.json();
         console.log('Loaded LOI Types from Cache Storage in Subcase:', this.loiTypes);
         return;
       }
-  
+
       const response = await axios.get(`${environment.apiUrl}/loiType`, {
         headers: {
           Authorization: `Bearer ${this.token}`,
@@ -140,7 +140,7 @@ export class UploadSubcaseComponent implements OnInit {
         },
         withCredentials: true,
       });
-  
+
       if (response.data && Array.isArray(response.data.data)) {
         this.loiTypes = response.data.data.map((item: any) => ({
           _id: item._id,
@@ -165,20 +165,20 @@ export class UploadSubcaseComponent implements OnInit {
       this.selectedInstruction = '';
       return;
     }
-  
+
     if (!this.token) return;
     try {
       const cacheName = 'instruction-cache';
       const cache = await caches.open(cacheName);
       const cacheKey = `/instructionTypes/${this.selectedLoi}`;
       const cachedResponse = await cache.match(cacheKey);
-  
+
       if (cachedResponse) {
         this.instructionTypes = await cachedResponse.json();
         console.log(`Loaded Instruction Types for LOI ${this.selectedLoi} from Cache Storage in Subcase:`, this.instructionTypes);
         return;
       }
-  
+
       const response = await axios.get(`${environment.apiUrl}/instruction-types/loi/${this.selectedLoi}`, {
         headers: {
           Authorization: `Bearer ${this.token}`,
@@ -186,12 +186,12 @@ export class UploadSubcaseComponent implements OnInit {
         },
         withCredentials: true,
       });
-  
+
       this.instructionTypes = response.data.data.map((item: any) => ({
         _id: item._id,
         instruction_msg: item.instruction_msg,
       }));
-  
+
       await cache.put(cacheKey, new Response(JSON.stringify(this.instructionTypes)));
       console.log(`Fetched and stored Instruction Types for LOI ${this.selectedLoi} in Cache Storage in Subcase:`, this.instructionTypes);
     } catch (error) {
@@ -199,27 +199,27 @@ export class UploadSubcaseComponent implements OnInit {
       this.toastr.error('Error fetching Instruction Types', 'Error');
     }
   }
-  
+
   // Caching Parameters per Instruction
   async onInstructionChange(): Promise<void> {
     if (!this.selectedInstruction) {
       this.parameters = [];
       return;
     }
-  
+
     if (!this.token) return;
     try {
       const cacheName = 'parameter-cache';
       const cache = await caches.open(cacheName);
       const cacheKey = `/parameters/${this.selectedInstruction}`;
       const cachedResponse = await cache.match(cacheKey);
-  
+
       if (cachedResponse) {
         this.parameters = await cachedResponse.json();
         console.log(`Loaded Parameters for Instruction ${this.selectedInstruction} from Cache Storage in Subcase:`, this.parameters);
         return;
       }
-  
+
       const response = await axios.get(`${environment.apiUrl}/parameters/instruction/${this.selectedInstruction}`, {
         headers: {
           Authorization: `Bearer ${this.token}`,
@@ -227,12 +227,12 @@ export class UploadSubcaseComponent implements OnInit {
         },
         withCredentials: true,
       });
-  
+
       this.parameters = response.data.data.map((item: any) => ({
         _id: item._id,
         parameter_msg: item.parameter_msg,
       }));
-  
+
       await cache.put(cacheKey, new Response(JSON.stringify(this.parameters)));
       console.log(`Fetched and stored Parameters for Instruction ${this.selectedInstruction} in Cache Storage in Subcase:`, this.parameters);
     } catch (error) {
@@ -265,50 +265,57 @@ export class UploadSubcaseComponent implements OnInit {
       this.uploadLoiFile(file);
     }
   }
-
+  getUserIdFromJWT(): string {
+    const token = this.cookieService.get('jwt');
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        return decoded.userId || decoded.id || '';
+      } catch (error) {
+        console.error('Error decoding JWT:', error);
+        return '';
+      }
+    }
+    return '';
+  }
   // Upload the selected LOI file and store the metadata
   uploadLoiFile(file: File): void {
+    const token = this.cookieService.get('jwt');
     if (!this.token) {
       console.error('No JWT token available for file upload.');
       this.toastr.error('No JWT token available', 'File Upload');
       return;
     }
+    const userId = this.getUserIdFromJWT();
     const extension = file.name.split('.').pop()?.toLowerCase() || 'pdf';
-    const filePath = `/files/${Date.now()}`;
-    let userId = '';
-    try {
-      const decoded: any = jwtDecode(this.token);
-      userId = decoded.id || decoded.userId || '';
-    } catch (error) {
-      console.error('Error decoding JWT token:', error);
+    const formData = new FormData();
+    if (!userId) {
+      console.error('Error decoding JWT token:');
       this.toastr.error('Error decoding token', 'File Upload');
     }
-    const metadata = {
-      fileName: file.name,
-      filePath: filePath,
-      fileSize: file.size,
-      fileType: 'loi',
-      fileFormat: extension,
-      createdBy: userId,
-      modifiedBy: userId
-    };
+    formData.append('file', file);
+    formData.append('fileName', file.name);
+    formData.append('fileType', 'loi');
+    formData.append('createdBy', userId);
+    formData.append('modifiedBy', userId);
+    formData.append('fileFormat', extension);
     // Using parentCaseId from caseData for subcase file upload
-    axios.post(`${environment.apiUrl}/case/${this.caseData.parentCaseId}/files`, metadata, {
+    axios.post(`${environment.apiUrl}/file`, formData, {
       headers: {
-        'Authorization': `Bearer ${this.token}`,
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
       },
       withCredentials: true
     })
-    .then(response => {
-      console.log('LOI file uploaded successfully:', response.data);
-      this.uploadedLoiFileMetadata = response.data.data;
-      this.toastr.success('LOI file uploaded successfully', 'File Upload');
-    })
-    .catch(error => {
-      console.error('Error uploading LOI file:', error);
-      this.toastr.error('Error uploading LOI file', 'File Upload');
-    });
+      .then(response => {
+        console.log('LOI file uploaded successfully:', response.data);
+        this.uploadedLoiFileMetadata = response.data.data;
+        this.toastr.success('LOI file uploaded successfully', 'File Upload');
+      })
+      .catch(error => {
+        console.error('Error uploading LOI file:', error);
+        this.toastr.error('Error uploading LOI file', 'File Upload');
+      });
   }
 
   submitForm(): void {
@@ -319,7 +326,7 @@ export class UploadSubcaseComponent implements OnInit {
     this.parametersError = null;
     this.loiError = null;
     this.instructionError = null;
-  
+
     // Validate fields
     if (!this.subCaseReference || this.subCaseReference.trim() === '') {
       this.subCaseReferenceError = 'Subcase Reference is required.';
@@ -351,7 +358,7 @@ export class UploadSubcaseComponent implements OnInit {
       });
       return;
     }
-  
+
     let userId: string | null = null;
     try {
       const decodedToken: any = jwtDecode(this.token!);
@@ -365,7 +372,7 @@ export class UploadSubcaseComponent implements OnInit {
       this.toastr.error('User authentication error', 'Error');
       return;
     }
-  
+
     const formData = {
       parentId: this.caseData ? this.caseData.parentCaseId : null,
       clientName: this.clientName.trim(),
@@ -379,13 +386,13 @@ export class UploadSubcaseComponent implements OnInit {
       createdBy: userId,
       modifiedBy: userId,
     };
-  
-    if (this.uploadedLoiFileMetadata && this.uploadedLoiFileMetadata.file._id) {
-      formData.files.push(this.uploadedLoiFileMetadata.file._id);
+
+    if (this.uploadedLoiFileMetadata && this.uploadedLoiFileMetadata.data._id) {
+      formData.files.push(this.uploadedLoiFileMetadata.data._id);
     }
-  
+
     console.log('Submitting form data:', formData);
-  
+
     axios
       .post(`${environment.apiUrl}/case/`, formData, {
         headers: {
