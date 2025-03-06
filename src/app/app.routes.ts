@@ -37,11 +37,11 @@ export const routes: Routes = [
               { path: 'all-cases', component: CaseListComponent },
               { path: 'profile', component: ProfileComponent  },
               {path: 'upload-new-case', component: UploadNewCaseComponent },
-              { path: 'main-case-view/:id', component: UploadNewCaseComponent, data: { renderMode: 'ssr' } },
-              { path: 'sub-case-view/:id', component: UploadSubcaseComponent , data: { renderMode: 'ssr' }},
-              {path: 'upload-sub-case/:id', component: UploadSubcaseComponent , data: { renderMode: 'ssr' }},
+              { path: 'main-case-view/:id', component: UploadNewCaseComponent, data: { renderMode: 'client' } },
+              { path: 'sub-case-view/:id', component: UploadSubcaseComponent , data: { renderMode: 'client' }},
+              {path: 'upload-sub-case/:id', component: UploadSubcaseComponent , data: { renderMode: 'client' }},
               {
-                path: 'view-label', component: ViewAndLabelComponent,
+                path: 'view-label', component: ViewAndLabelComponent, 
               }
             ],
           },
