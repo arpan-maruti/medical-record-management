@@ -76,7 +76,7 @@
 /* For widths 440px and below */
 @media (max-width: 440px) {
   .layout-container {
-      padding: 1rem;
+    padding: 0 0 21px 0;
   }
 
   .layout-container__heading {

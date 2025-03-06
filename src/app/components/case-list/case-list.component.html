@@ -7,7 +7,19 @@
     <p>Loading Cases...</p>
   </div>
   <div class="header-container" *ngIf="!isLoading && isDataAvailable">
-    <h2 class="header-title">ALL CASES</h2>
+    <div class="header-container1">
+      <h2 class="header-title">ALL CASES</h2>
+      <div class="search-container">
+        <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search by Client Name or Uploaded By"
+        class="search-input"
+        (input)="onSearchChange()"
+        />
+      </div>
+    </div>
+    <div class="header-container2">
     <div class="filter-container">
       <div class="custom-dropdown">
         <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
@@ -19,24 +31,13 @@
         </select>
       </div>
     </div>
-  </div>
-
-  <div class="search-upload-container" *ngIf="!isLoading && isDataAvailable">
-    <div class="search-container">
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        placeholder="Search by Client Name or Uploaded By"
-        class="search-input"
-        (input)="onSearchChange()"
-      />
-    </div>
     <div class="upload-container">
       <button class="upload-btn" (click)="addCase()">Upload New Case</button>
     </div>
   </div>
+  </div>
 
-  <div *ngIf="!isLoading && isDataAvailable && filteredData.length === 0" class="case-list__no-case">
+  <div *ngIf="!isLoading && !isDataAvailable && filteredData.length === 0" class="case-list__no-case">
     <div class="case-list__no-case-content">
       <h2>No Cases Available</h2>
       <p>Welcome to the Case Management Section.</p>
