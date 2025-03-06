@@ -41,9 +41,9 @@ export const routes: Routes = [
               { path: 'all-cases', component: CaseListComponent },
               { path: 'profile', component: ProfileComponent  },
               {path: 'upload-new-case', component: UploadNewCaseComponent },
-              { path: 'main-case-view/:id', component: UploadNewCaseComponent, data: { renderMode: 'client' } },
-              { path: 'sub-case-view/:id', component: UploadSubcaseComponent , data: { renderMode: 'client' }},
-              {path: 'upload-sub-case/:id', component: UploadSubcaseComponent , data: { renderMode: 'client' }},
+              { path: 'main-case-view/:id', component: UploadNewCaseComponent },
+              { path: 'sub-case-view/:id', component: UploadSubcaseComponent },
+              {path: 'upload-sub-case/:id', component: UploadSubcaseComponent },
               {
                 path: 'view-label', component: ViewAndLabelComponent, 
               }
