@@ -20,11 +20,7 @@
               class="view-and-label__file-item-label-input"
             />
             <!-- Add the edit icon here -->
-<<<<<<< HEAD
-            <button class="view-and-label__button view-and-label__edit-button" (click)="goToFileDetails(file)">
-=======
             <button *ngIf="isAdmin" class="view-and-label__button view-and-label__edit-button" (click)="goToFileDetails(file)">
->>>>>>> 4827a3f (chore: minor changes)
               <i class="fa fa-edit"></i>
             </button>
             <button class="view-and-label__button view-and-label__save-button" (click)="onSave(file)">
