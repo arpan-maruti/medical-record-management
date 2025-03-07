@@ -36,7 +36,9 @@ export class CaseListComponent {
   sortKey: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   isLoading: boolean = false; // Add loader flag
-
+  minLimit: number = 1;
+  maxLimit: number = 1;
+  totalCases: number = 1;
 
   constructor(private cdr: ChangeDetectorRef,
     private dataService: DataService, 
@@ -61,7 +63,20 @@ export class CaseListComponent {
   ngAfterViewInit() {
     this.fetchCases();
   }
-  fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '') {
+
+  selectedLimit : number = 5;
+  limitOptions: { value: number| null; label: number }[] = [
+    {value: null,label: 5},
+    {value: 10,label: 10}, 
+    {value: 20,label: 20},
+    {value: 50,label: 50},
+    {value: 100,label: 100}
+  ];
+  onLimitChange() {
+    this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery, this.selectedLimit);
+  }
+
+  fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '', limit?: number) {
     this.isLoading = true; // Start loading indicator
   
     const getCookie = (name: string): string | null => {
@@ -83,6 +98,9 @@ export class CaseListComponent {
       const sortParam = this.sortDirection === 'desc' ? `-${this.sortKey}` : this.sortKey;
       apiUrl += `&sort=${sortParam}`;
     }
+    if(limit) {
+      apiUrl += `&limit=${limit}`;
+    }
     if (searchQuery && searchQuery.trim() !== '') {
       apiUrl += `&client_name=${encodeURIComponent(searchQuery.trim())}`;
     }
@@ -100,6 +118,9 @@ export class CaseListComponent {
         this.filteredData = [...this.data];
         this.isDataAvailable = this.data.length > 0;
         this.totalPages = response.data.pagination.total_pages;
+        this.minLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + 1;
+        this.maxLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + response.data.length;
+        this.totalCases = response.data.pagination.total_items;
       } else {
         console.error('Failed to fetch cases:', response.data.message);
         this.isDataAvailable = false;
