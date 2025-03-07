@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -47,11 +47,6 @@ export class ViewAndLabelComponent implements OnInit {
 
   onClose() {
     this.closePopup.emit();
-  }
-
-  goToFileDetails(file: any) {
-    // Navigate to the file-details page with the file id as a route parameter
-    this.router.navigate(['/case-management/file-details', file.id]);
   }
 
   goToFileDetails(file: any) {
