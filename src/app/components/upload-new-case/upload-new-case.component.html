@@ -89,6 +89,7 @@
               name="dateOfBranch"
               [(ngModel)]="dateOfBranch"
               [disabled]="viewOnly"
+              [max]="today"
             />
           </ng-container>
           <ng-container *ngIf="viewOnly">
@@ -107,7 +108,7 @@
 
       <!-- Upload LOI: Trigger file selection -->
       <div class="form-group">
-        <label for="loi-upload" class="loi-upload-label">
+        <label for="loi-upload" class="loi-upload-label" (click)="onInputChange()">
           <span class="loi-text">Upload Letter of Instruction</span>
           <span class="upload-icon">📎</span>
         </label>
@@ -119,6 +120,9 @@
           enctype="multipart/form-data"
           style="display: none;"
         />
+        <div *ngIf="isSubmitted && loiFileError" class="error-message">
+          {{ loiFileError }}
+          </div>
       </div>
 
       <!-- Instruction Type -->
@@ -133,6 +137,9 @@
             [disabled]="viewOnly"
           >
             <option value="" disabled>Select Instruction Type</option>
+            <option *ngIf="instructionTypes.length === 0" value="" disabled>
+              No instruction types available, Select LOI Type First
+            </option>
             <option *ngFor="let instruction of instructionTypes" [value]="instruction._id">
               {{ instruction.instruction_msg }}
             </option>
@@ -167,9 +174,9 @@
               <svg
                 *ngIf="!isSelected(param._id)"
                 xmlns="http://www.w3.org/2000/svg"
-                height="24px"
+                height="30px"
                 viewBox="0 -960 960 960"
-                width="24px"
+                width="30px"
                 fill="#000000"
               >
                 <path
@@ -179,9 +186,9 @@
               <svg
                 *ngIf="isSelected(param._id)"
                 xmlns="http://www.w3.org/2000/svg"
-                height="24px"
+                height="30px"
                 viewBox="0 -960 960 960"
-                width="24px"
+                width="30px"
                 fill="#000000"
               >
                 <path

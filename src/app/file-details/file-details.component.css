@@ -92,7 +92,7 @@
 
 .btn-success:hover {
   background-color: #218838;
-  transform: translateY(-0.125rem);
+ 
 }
 
 .btn-danger {
@@ -102,7 +102,7 @@
 
 .btn-danger:hover {
   background-color: #c82333;
-  transform: translateY(-0.125rem);
+  
 }
 
 /* Right Side - PDF Preview */
@@ -133,9 +133,7 @@
   transition: transform 0.3s ease-in-out;
 }
 
-.pdf-frame:hover {
-  transform: scale(1.02);
-}
+
 
 /* Responsive Design */
 @media (min-width: 1024px) {

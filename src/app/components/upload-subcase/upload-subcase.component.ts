@@ -526,7 +526,8 @@ export class UploadSubcaseComponent implements OnInit {
       })
       .catch(error => {
         console.error('Error creating subcase:', error.response?.data || error.message);
-        this.toastr.error('Error creating subcase', 'Error');
+        // this.toastr.error('Error creating subcase', 'Error');
+        this.toastr.error(error.response?.data?.message|| 'Error creating case', 'Error');
       });
   }
 }
