@@ -399,7 +399,8 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 3px;
+  margin-bottom: 120px;
   padding: 10px;
 
   border-radius: 8px;

@@ -1,76 +1,82 @@
 /* Dashboard container */
 .dashboard__container {
-    display: flex;
-    flex-direction: row; /* Default layout for larger screens */
-    height: 100%; /* Use height based on the viewport for consistency */
+  display: flex;
+  flex-direction: row;
+  /* Default layout for larger screens */
+  height: 100%;
+  /* Use height based on the viewport for consistency */
+}
+
+/* Sidebar container */
+.dashboard__sidebar {
+  flex: 1;
+  height: 100vh;
+  background-color: #ffffff;
+}
+
+/* Main layout container */
+.dashboard__main-layout {
+  overflow-y: scroll;
+  flex: 5;
+  background-color: #f5f6f9;
+  height: 100vh;
+  padding: 1.5rem;
+  /* Default padding for larger screens */
+}
+
+/* Responsive Styles */
+@media (max-width: 1440px) {
+  .dashboard__main-layout {
+    padding: 1.25rem;
+    /* Adjust padding */
   }
-  
-  /* Sidebar container */
+}
+
+@media (max-width: 1024px) {
+
   .dashboard__sidebar {
-    flex: 1;
-    height: 100vh; 
+    flex: 13.2;
+    height: 100vh;
+    /* Full height of the parent container */
     background-color: #ffffff;
   }
-  
-  /* Main layout container */
+
+
+
   .dashboard__main-layout {
-    overflow-y: scroll;
-    flex: 5;
-    background-color: #f5f6f9;
-    height: 100vh; 
-    padding: 1.5rem; /* Default padding for larger screens */
+    padding: 1rem;
+    /* Adjust padding */
+    flex: 50;
   }
-  
-  /* Responsive Styles */
-  @media (max-width: 1440px) {
-    .dashboard__main-layout {
-      padding: 1.25rem; /* Adjust padding */
-    }
-  }
-  
-  @media (max-width: 1024px) {
-   
-    .dashboard__sidebar {
-      flex: 13.2;
-      height: 100vh; /* Full height of the parent container */
-      background-color: #ffffff;
-    }
-    
+}
 
-  
-    .dashboard__main-layout {
-      padding: 1rem; /* Adjust padding */
-      flex: 50;
-    }
+@media (max-width: 768px) {
+  .dashboard__sidebar {
+    flex: 0;
+    height: 100vh;
+    /* Full height of the parent container */
+    background-color: #ffffff;
   }
-  
-  @media (max-width: 768px) {
-    .dashboard__sidebar {
-      flex: 0;
-      height: 100vh; /* Full height of the parent container */
-      background-color: #ffffff;
-    }
-    
 
-  
-    .dashboard__main-layout {
-      padding: 1rem; /* Adjust padding */
-      flex: 50;
-    }
-  }
-  
-  @media (max-width: 440px) {
-    .dashboard__sidebar {
-      flex: 0;
-      height: 100vh; /* Full height of the parent container */
-      background-color: #ffffff;
-    }
-    
 
-  
-    .dashboard__main-layout {
-      padding: 1rem; /* Adjust padding */
-      flex: 50;
-    }
+
+  .dashboard__main-layout {
+    padding: 1rem;
+    /* Adjust padding */
+    flex: 50;
   }
-  
+}
+
+@media (max-width: 440px) {
+  .dashboard__sidebar {
+    flex: 0;
+    height: 100vh;
+    /* Full height of the parent container */
+    background-color: #ffffff;
+  }
+
+  .dashboard__main-layout {
+    padding: 2px 14px;
+    flex: 50;
+  }
+}

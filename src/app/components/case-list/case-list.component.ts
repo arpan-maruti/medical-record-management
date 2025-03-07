@@ -36,7 +36,9 @@ export class CaseListComponent {
   sortKey: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   isLoading: boolean = false; // Add loader flag
-
+  minLimit: number = 1;
+  maxLimit: number = 1;
+  totalCases: number = 1;
 
   constructor(private cdr: ChangeDetectorRef,
     private dataService: DataService, 
@@ -61,7 +63,20 @@ export class CaseListComponent {
   ngAfterViewInit() {
     this.fetchCases();
   }
-  fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '') {
+
+  selectedLimit : number = 5;
+  limitOptions: { value: number| null; label: number }[] = [
+    {value: null,label: 5},
+    {value: 10,label: 10}, 
+    {value: 20,label: 20},
+    {value: 50,label: 50},
+    {value: 100,label: 100}
+  ];
+  onLimitChange() {
+    this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery, this.selectedLimit);
+  }
+
+  fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '', limit?: number) {
     this.isLoading = true; // Start loading indicator
   
     const token = this.cookieService.get('jwt') || null;

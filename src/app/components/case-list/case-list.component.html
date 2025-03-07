@@ -349,6 +349,7 @@
 </div>
 
 <div class="pagination-bar" *ngIf="!isLoading && isDataAvailable">
+  <span class="pagination-info">{{ minLimit }}-{{ maxLimit }} / {{ totalCases }}</span>
   <button
     (click)="previousPage()"
     [disabled]="currentPage === 1"
@@ -356,23 +357,6 @@
   >
     Previous
   </button>
-  <span class="pagination-info">Page</span>
-  <select
-    [(ngModel)]="currentPage"
-    (ngModelChange)="goToPage($event)"
-    class="pagination-select"
-  >
-    <option *ngFor="let page of getPages()" [value]="page">{{ page }}</option>
-  </select>
-  <span class="pagination-info">of {{ totalPages }}</span>
-  <input
-    type="number"
-    [(ngModel)]="inputPage"
-    (change)="goToInputPage()"
-    class="pagination-input"
-    min="1"
-    [max]="totalPages"
-  />
   <button
     (click)="nextPage()"
     [disabled]="currentPage === totalPages"
@@ -380,4 +364,23 @@
   >
     Next
   </button>
+  <!-- <select
+    [(ngModel)]="currentPage"
+    (ngModelChange)="goToPage($event)"
+    class="pagination-select"
+  >
+</select> -->
+  <span class="pagination-info">Display Cases:</span>
+  <select [(ngModel)]="selectedLimit" class="pagination-select" (ngModelChange)="onLimitChange()">
+    <option *ngFor="let limit of limitOptions" [value]="limit.label">{{ limit.label }}</option>
+  </select>
+  <!-- <span class="pagination-info">of {{ totalPages }}</span>
+  <input
+    type="number"
+    [(ngModel)]="inputPage"
+    (change)="goToInputPage()"
+    class="pagination-input"
+    min="1"
+    [max]="totalPages"
+  />  -->
 </div>
