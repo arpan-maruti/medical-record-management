@@ -19,12 +19,19 @@
 
       <div class="details-item">
         <label>File Status:</label>
-        <span>{{ fileDetails.fileStatus }}</span>
+        <span *ngIf="!isEditing">{{ fileDetails.fileStatus }}</span>
+        <select *ngIf="isEditing" [(ngModel)]="fileDetails.fileStatus">
+          <option value="uploaded">Uploaded</option>
+          <option value="in progress">In Progress</option>
+          <option value="AI Analysis Completed">AI Analysis Completed</option>
+          <option value="error">Error</option>
+        </select>
       </div>
+      
 
       <div class="details-item">
         <label>File Size:</label>
-        <span>{{ fileDetails.fileSize }} MB</span>
+        <span>{{ fileDetails.fileSize }} KB</span>
       </div>
 
       <div class="details-item">
@@ -59,11 +66,18 @@
       </div>
     </div>
 
+    <div class="details-item" *ngIf="isEditing">
+      <label for="pdfFile">Upload New PDF:</label>
+      <input type="file" id="pdfFile" (change)="onFileSelected($event)" accept="application/pdf" />
+    </div>
+
     <!-- Edit Mode Buttons -->
     <div class="form-buttons" *ngIf="isEditing">
       <button type="button" class="btn btn-success" (click)="updateFileDetails()">Save</button>
-      <button type="button" class="btn btn-danger" (click)="toggleEdit()">Cancel</button>
+      <button type="button" class="btn btn-danger" (clickupdateFile)="toggleEdit()">Cancel</button>
     </div>
+
+    
   </section>
 
   <!-- Right Side - PDF Preview -->

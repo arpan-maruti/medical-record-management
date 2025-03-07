@@ -64,7 +64,7 @@
 
 .details-item input:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: #000000;
   background: #fff;
 }
 
@@ -133,7 +133,37 @@
   transition: transform 0.3s ease-in-out;
 }
 
+/* Style for the label in detail items */
+.details-item label {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
 
+.details-item select {
+  background: #f9f9f9;
+  border: 2px solid #000000;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #333;
+  transition: all 0.3s ease;
+  appearance: none;
+
+}
+
+/* Focus effect for the dropdown */
+.details-item select:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Optional: Add a hover effect to make the dropdown pop */
+.details-item select:hover {
+  border-color: #000000;
+}
 
 /* Responsive Design */
 @media (min-width: 1024px) {
