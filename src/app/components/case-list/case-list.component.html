@@ -1,256 +1,262 @@
 <div class="case-list-container" [class.blurred]="isViewLabelVisible" >
-   <!-- Attractive loading spinner shown until cases are fetched -->
-   <div *ngIf="isLoading" class="loading-container">
-    <svg class="spinner" viewBox="0 0 50 50">
-      <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-    </svg>
-    <p>Loading Cases...</p>
-  </div>
-  <div class="header-container" *ngIf="!isLoading">
-    <h2 class="header-title">ALL CASES</h2>
-    <div class="filter-container">
-      <div class="custom-dropdown">
-        <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
-          <option value="">All Status</option>
-          <option value="uploaded">uploaded</option>
-          <option value="inProgress">in progress</option>
-          <option value="aiAnalysisCompleted">AI Analysis Completed</option>
-          <option value="error">error</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <div class="search-upload-container" *ngIf="!isLoading">
-    <div class="search-container">
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        placeholder="Search by Client Name or Uploaded By"
-        class="search-input"
-        (input)="onSearchChange()"
-      />
-    </div>
-    <div class="upload-container">
-      <button class="upload-btn" (click)="addCase()">Upload New Case</button>
-    </div>
-  </div>
-  </div>
-
-  <div *ngIf="!isLoading && filteredData && filteredData.length === 0" class="case-list__no-case">
-    <div class="case-list__no-case-content">
-      <h2>No Cases Available</h2>
-      <p>Welcome to the Case Management Section.</p>
-      <p>Upload a new case to get started.</p>
-      <button class="custom-btn" (click)="addCase()">Upload New Case</button>
-    </div>
-  </div>
-
-
   
+ <div class="header-container">
+   <div class="header-container1">
+     <h2 class="header-title">ALL CASES</h2>
+     <div class="search-container">
+       <input
+       type="text"
+       [(ngModel)]="searchQuery"
+       placeholder="Search by Client Name or Case Ref No"
+       class="search-input"
+       (input)="onSearchChange()"
+       />
+     </div>
+   </div>
+   <div class="header-container2">
+   <div class="filter-container">
+     <div class="custom-dropdown">
+       <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
+         <option value="">All Status</option>
+         <option value="uploaded">uploaded</option>
+         <option value="inProgress">in progress</option>
+         <option value="aiAnalysisCompleted">AI Analysis Completed</option>
+         <option value="error">error</option>
+       </select>
+     </div>
+   </div>
+   <div class="upload-container">
+     <button class="upload-btn" (click)="addCase()">Upload New Case</button>
+   </div>
+ </div>
+ </div>
 
-  <!-- Desktop/Table view with table -->
-  <div
-  *ngIf="!isLoading && isDataAvailable && filteredData.length > 0"
-    class="table-container desktop-table-view"
-  >
-    <table class="table table-striped">
-      <thead>
-        <tr class="table-header">
-          <th></th>
-          <th (click)="sortBy('refNumber')" style="cursor: pointer">
-            Case Ref No
-            <span *ngIf="sortKey === 'refNumber'">
-              {{ sortDirection === 'asc' ? '▲' : '▼' }}
-            </span>
-          </th>
-          <th >
-            Instruction Type
-           
-          </th>
-          <th (click)="sortBy('clientName')" style="cursor: pointer">
-            Client Name
-            <span *ngIf="sortKey === 'clientName'">
-              {{ sortDirection === 'asc' ? '▲' : '▼' }}
-            </span>
-          </th>
-          <th>Total Files</th>
-          <th>Total Pages</th>
-          <th (click)="sortBy('createdAt')" style="cursor: pointer" >
-            Date Uploaded
-            <span *ngIf="sortKey === 'createdAt'">
-              {{ sortDirection === 'asc' ? '▲' : '▼' }}
-            </span>
-          </th>
-          <th>
-            Uploaded By
-           
-          </th>
-          <th >
-            Case Status
-            
-          </th>
-          <th>LOI</th>
-          <th></th>
-          <th>Action</th>
-          <th></th>
-          <th>Add Subcase</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let caseItem of filteredData">
-          <tr
-            (click)="toggleSubCases(caseItem)"
-            class="clickable-row main-case"
-            [ngClass]="{ 'expanded-row': caseItem.expanded }"
-          >
-            <td>
-              <span *ngIf="caseItem.expanded; else downArrow">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="12px"
-                  viewBox="0 -960 960 960"
-                  width="12px"
-                  fill="#4A6F81"
-                >
-                  <path
-                    d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"
-                  />
-                </svg>
-              </span>
-              <ng-template #downArrow>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="12px"
-                  viewBox="0 -960 960 960"
-                  width="12px"
-                  fill="#4A6F81"
-                >
-                  <path
-                    d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"
-                  />
-                </svg>
-              </ng-template>
-            </td>
-            <td
-              class="case-list__utext underline"
-              (click)="viewCaseDetails(caseItem)"
-            >
-              {{ caseItem.ref_number }}
-            </td>
-            <td>
-              {{ caseItem.parameters?.[0]?.instructionId?.instructionMsg || 'N/A' }}
-            </td>
-            <td>{{ caseItem.client_name }}</td>
-            <td>{{ caseItem.files.length }}</td>
-            <td>{{ getTotalPages(caseItem) }}</td>
-            <td>{{ caseItem.created_at | date : "dd MMM yyyy" }}</td>
-            <td>
-              {{ caseItem.modified_by.firstName }}
-              {{ caseItem.modified_by.lastName }}
-            </td>
-            <td>{{ caseItem.case_status }}</td>
-            <td>
-              <a class="text-primary" (click)="openPdfPreview(caseItem._id)"
-                >View LOI</a
-              >
-            </td>
-            <td>
-              <a class="text-primary" (click)="openUploadFiles(caseItem._id)"
-                >Upload File</a
-              >
-            </td>
-            <td>
-              <a class="text-primary" (click)="openViewLabel(caseItem._id)"
-                >View/Label</a
-              >
-            </td>
-            <td>
-              <a class="text-primary">Generate Summary</a>
-            </td>
-            <td>
-              <img
-                src="assets/plus.png"
-                class="plus-icon"
-                (click)="addSubcase(caseItem)"
-              />
-            </td>
-          </tr>
-          <!-- Subcases -->
-          <tr
-            *ngFor="let subCase of caseItem.subCases"
-            [hidden]="!caseItem.expanded"
-            class="subcase-row"
-          >
-            <td></td>
-            <td
-              class="case-list__utext underline"
-              (click)="viewSubCaseDetails(subCase)"
-            >
-              {{ subCase.ref_number }}
-            </td>
-            <td>{{ subCase.parameters[0].instructionId.instructionMsg }}</td>
-            <td>{{ subCase.client_name }}</td>
-            <td>{{ subCase.files.length }}</td>
-            <td>{{ getTotalPages(subCase) }}</td>
-            <td>{{ subCase.created_at | date : "dd MMM yyyy" }}</td>
-            <td>
-              {{ subCase.modified_by.firstName }}
-              {{ subCase.modified_by.lastName }}
-            </td>
-            <td>{{ subCase.case_status }}</td>
-            <td>
-              <a class="text-primary" (click)="openPdfPreview(subCase._id)"
-                >View LOI</a
-              >
-            </td>
-            <td>
-              <a class="text-primary" (click)="openUploadFiles(subCase._id)"
-                >Upload File</a
-              >
-            </td>
-            <td>
-              <a class="text-primary" (click)="openViewLabel(subCase._id)"
-                >View/Label</a
-              >
-            </td>
-            <td>
-              <a class="text-primary">Generate Summary</a>
-            </td>
-            <td></td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
 
-  <!-- View/Label Popup -->
-  <div *ngIf="isViewLabelVisible" class="view-label-popup">
-    <app-view-and-label
-      [selectedFiles]="selectedFiles"
-      (closePopup)="closeViewLabel()"
-      (labelSave)="patchFileLabel($event.fileId, $event.newLabel)"
-      (previewPdf)="openDocumentPreview($event)"
-    >
-    </app-view-and-label>
-  </div>
+ <div *ngIf="!isLoading && !isDataAvailable && filteredData.length === 0" class="case-list__no-case">
+   <div class="case-list__no-case-content">
+     <h2>No Cases Available</h2>
+     <p>Welcome to the Case Management Section.</p>
+     <p>Upload a new case to get started.</p>
+     <button class="custom-btn" (click)="addCase()">Upload New Case</button>
+   </div>
+ </div>
 
-  <div *ngIf="isPdfPreviewVisible" class="pdf-modal">
-    <div class="modal-background" (click)="closePdfPreview()"></div>
-    <div class="pdf-modal-content">
-      <span class="close" (click)="closePdfPreview()">×</span>
-      <h3>LOI Preview - {{ selectedFileName }}</h3>
-      <iframe
-        [src]="pdfUrl"
-        width="100%"
-        height="500px"
-        style="border: none"
-      ></iframe>
-      <div class="modal-actions">
-        <a [href]="pdfUrl" download class="btn">Download PDF</a>
-      </div>
-    </div>
-  </div>
+
+
+
+<!-- Attractive loading spinner shown until cases are fetched -->
+<div *ngIf="isLoading" class="loading-container">
+  <svg class="spinner" viewBox="0 0 50 50">
+    <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+  </svg>
+  <p>Loading Cases...</p>
+</div>
+
+ <!-- Desktop/Table view with table -->
+ <div
+ *ngIf="!isLoading && isDataAvailable && filteredData.length > 0"
+   class="table-container desktop-table-view"
+ >
+   <table class="table table-striped">
+     <thead>
+       <tr class="table-header">
+         <th></th>
+         <th (click)="sortBy('refNumber')" style="cursor: pointer">
+           Case Ref No
+           <span *ngIf="sortKey === 'refNumber'">
+             {{ sortDirection === 'asc' ? '▲' : '▼' }}
+           </span>
+         </th>
+         <th >
+           Instruction Type
+         
+         </th>
+         <th (click)="sortBy('clientName')" style="cursor: pointer">
+           Client Name
+           <span *ngIf="sortKey === 'clientName'">
+             {{ sortDirection === 'asc' ? '▲' : '▼' }}
+           </span>
+         </th>
+         <th>Total Files</th>
+         <th>Total Pages</th>
+         <th (click)="sortBy('createdAt')" style="cursor: pointer" >
+           Date Uploaded
+           <span *ngIf="sortKey === 'createdAt'">
+             {{ sortDirection === 'asc' ? '▲' : '▼' }}
+           </span>
+         </th>
+         <th>
+           Uploaded By
+         
+         </th>
+         <th >
+           Case Status
+          
+         </th>
+         <th>LOI</th>
+         <th></th>
+         <th>Action</th>
+         <th></th>
+         <th>Add Subcase</th>
+       </tr>
+     </thead>
+     <tbody>
+       <ng-container *ngFor="let caseItem of filteredData">
+         <tr
+           (click)="toggleSubCases(caseItem)"
+           class="clickable-row main-case"
+           [ngClass]="{ 'expanded-row': caseItem.expanded }"
+         >
+           <td>
+             <span *ngIf="caseItem.expanded; else downArrow">
+               <svg
+                 xmlns="http://www.w3.org/2000/svg"
+                 height="12px"
+                 viewBox="0 -960 960 960"
+                 width="12px"
+                 fill="#4A6F81"
+               >
+                 <path
+                   d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"
+                 />
+               </svg>
+             </span>
+             <ng-template #downArrow>
+               <svg
+                 xmlns="http://www.w3.org/2000/svg"
+                 height="12px"
+                 viewBox="0 -960 960 960"
+                 width="12px"
+                 fill="#4A6F81"
+               >
+                 <path
+                   d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"
+                 />
+               </svg>
+             </ng-template>
+           </td>
+           <td
+             class="case-list__utext underline"
+             (click)="viewCaseDetails(caseItem)"
+           >
+             {{ caseItem.ref_number }}
+           </td>
+           <td>
+             {{ caseItem.parameters?.[0]?.instructionId?.instructionMsg || 'N/A' }}
+           </td>
+           <td>{{ caseItem.client_name }}</td>
+           <td>{{ caseItem.files.length }}</td>
+           <td>{{ getTotalPages(caseItem) }}</td>
+           <td>{{ caseItem.created_at | date : "dd MMM yyyy" }}</td>
+           <td>
+             {{ caseItem.modified_by.firstName }}
+             {{ caseItem.modified_by.lastName }}
+           </td>
+           <td>{{ caseItem.case_status }}</td>
+           <td>
+             <a class="text-primary" (click)="openPdfPreview(caseItem._id)"
+               >View LOI</a
+             >
+           </td>
+           <td>
+             <a class="text-primary" (click)="openUploadFiles(caseItem._id)"
+               >Upload File</a
+             >
+           </td>
+           <td>
+             <a class="text-primary" (click)="openViewLabel(caseItem._id)"
+               >View/Label</a
+             >
+           </td>
+           <td>
+             <a class="text-primary">Generate Summary</a>
+           </td>
+           <td>
+             <img
+               src="assets/plus.png"
+               class="plus-icon"
+               (click)="addSubcase(caseItem)"
+             />
+           </td>
+         </tr>
+         <!-- Subcases -->
+         <tr
+           *ngFor="let subCase of caseItem.subCases"
+           [hidden]="!caseItem.expanded"
+           class="subcase-row"
+         >
+           <td></td>
+           <td
+             class="case-list__utext underline"
+             (click)="viewSubCaseDetails(subCase)"
+           >
+             {{ subCase.ref_number }}
+           </td>
+           <td>{{ subCase.parameters[0].instructionId.instructionMsg }}</td>
+           <td>{{ subCase.client_name }}</td>
+           <td>{{ subCase.files.length }}</td>
+           <td>{{ getTotalPages(subCase) }}</td>
+           <td>{{ subCase.created_at | date : "dd MMM yyyy" }}</td>
+           <td>
+             {{ subCase.modified_by.firstName }}
+             {{ subCase.modified_by.lastName }}
+           </td>
+           <td>{{ subCase.case_status }}</td>
+           <td>
+             <a class="text-primary" (click)="openPdfPreview(subCase._id)"
+               >View LOI</a
+             >
+           </td>
+           <td>
+             <a class="text-primary" (click)="openUploadFiles(subCase._id)"
+               >Upload File</a
+             >
+           </td>
+           <td>
+             <a class="text-primary" (click)="openViewLabel(subCase._id)"
+               >View/Label</a
+             >
+           </td>
+           <td>
+             <a class="text-primary">Generate Summary</a>
+           </td>
+           <td></td>
+         </tr>
+       </ng-container>
+     </tbody>
+   </table>
+ </div>
+
+
+ <!-- View/Label Popup -->
+ <div *ngIf="isViewLabelVisible" class="view-label-popup">
+   <app-view-and-label
+     [selectedFiles]="selectedFiles"
+     (closePopup)="closeViewLabel()"
+     (labelSave)="patchFileLabel($event.fileId, $event.newLabel)"
+     (previewPdf)="openDocumentPreview($event)"
+   >
+   </app-view-and-label>
+ </div>
+
+
+ <div *ngIf="isPdfPreviewVisible" class="pdf-modal">
+   <div class="modal-background" (click)="closePdfPreview()"></div>
+   <div class="pdf-modal-content">
+     <span class="close" (click)="closePdfPreview()">×</span>
+     <h3>LOI Preview - {{ selectedFileName }}</h3>
+     <iframe
+       [src]="pdfUrl"
+       width="100%"
+       height="500px"
+       style="border: none"
+     ></iframe>
+     <div class="modal-actions">
+       <a [href]="pdfUrl" download class="btn">Download PDF</a>
+     </div>
+   </div>
+ </div>
+
 
   <div *ngIf="isUploadFilesVisible" class="upload-files-popup">
     <app-upload-files
@@ -260,127 +266,131 @@
     >
     </app-upload-files>
   </div>
-
+</div>
 
 <!-- Mobile view with card layout -->
 <div class="cards-container mobile-card-view">
-  <ng-container *ngFor="let caseItem of filteredData">
-    <div class="case-card">
-      <div class="case-card-header">
-        <h3 class="underline" (click)="viewCaseDetails(caseItem)">
-          {{ caseItem.ref_number }}
-        </h3>
-        <button (click)="toggleSubCases(caseItem)">Toggle Subcases</button>
-      </div>
-      <div class="case-card-details">
-        <p><strong>Client Name:</strong> {{ caseItem.client_name }}</p>
-        <p>
-          <strong>Instruction Type:</strong>
-          {{ caseItem.parameters?.[0]?.instructionId?.instructionMsg || 'N/A' }}
-        </p>
-        <p><strong>Total Files:</strong> {{ caseItem.files.length }}</p>
-        <p><strong>Total Pages:</strong> {{ getTotalPages(caseItem) }}</p>
-        <p>
-          <strong>Date Uploaded:</strong>
-          {{ caseItem.created_at | date : "dd MMM yyyy" }}
-        </p>
-        <p>
-          <strong>Uploaded By:</strong> {{ caseItem.modified_by.firstName }}
-          {{ caseItem.modified_by.lastName }}
-        </p>
-        <p><strong>Status:</strong> {{ caseItem.case_status }}</p>
-      </div>
-      <div class="case-card-actions">
-        <a class="text-primary" (click)="openPdfPreview(caseItem._id)"
-          >View LOI</a
-        >
-        <a class="text-primary" (click)="openUploadFiles(caseItem._id)"
-          >Upload File</a
-        >
-        <a class="text-primary" (click)="openViewLabel(caseItem._id)"
-          >View/Label</a
-        >
-        <a class="text-primary">Generate Summary</a>
-        <img
-          src="assets/plus.png"
-          class="plus-icon"
-          (click)="addSubcase(caseItem)"
-        />
-      </div>
+ <ng-container *ngFor="let caseItem of filteredData">
+   <div class="case-card">
+     <div class="case-card-header">
+       <h3 class="underline" (click)="viewCaseDetails(caseItem)">
+         {{ caseItem.ref_number }}
+       </h3>
+       <button (click)="toggleSubCases(caseItem)">Toggle Subcases</button>
+     </div>
+     <div class="case-card-details">
+       <p><strong>Client Name:</strong> {{ caseItem.client_name }}</p>
+       <p>
+         <strong>Instruction Type:</strong>
+         {{ caseItem.parameters?.[0]?.instructionId?.instructionMsg || 'N/A' }}
+       </p>
+       <p><strong>Total Files:</strong> {{ caseItem.files.length }}</p>
+       <p><strong>Total Pages:</strong> {{ getTotalPages(caseItem) }}</p>
+       <p>
+         <strong>Date Uploaded:</strong>
+         {{ caseItem.created_at | date : "dd MMM yyyy" }}
+       </p>
+       <p>
+         <strong>Uploaded By:</strong> {{ caseItem.modified_by.firstName }}
+         {{ caseItem.modified_by.lastName }}
+       </p>
+       <p><strong>Status:</strong> {{ caseItem.case_status }}</p>
+     </div>
+     <div class="case-card-actions">
+       <a class="text-primary" (click)="openPdfPreview(caseItem._id)"
+         >View LOI</a
+       >
+       <a class="text-primary" (click)="openUploadFiles(caseItem._id)"
+         >Upload File</a
+       >
+       <a class="text-primary" (click)="openViewLabel(caseItem._id)"
+         >View/Label</a
+       >
+       <a class="text-primary">Generate Summary</a>
+       <img
+         src="assets/plus.png"
+         class="plus-icon"
+         (click)="addSubcase(caseItem)"
+       />
+     </div>
 
-      <!-- Display Subcases in Card Layout -->
-      <div *ngIf="caseItem.expanded">
-        <div *ngFor="let subCase of caseItem.subCases" class="subcase-card">
-          <h4 class="underline" (click)="viewSubCaseDetails(subCase)">
-            Subcase Ref No: {{ subCase.ref_number }}
-          </h4>
-          <p><strong>Client Name:</strong> {{ subCase.client_name }}</p>
-          <p>
-            <strong>Instruction Type:</strong>
-            {{ subCase.parameters[0].instructionId.instructionMsg }}
-          </p>
-          <p><strong>Total Files:</strong> {{ subCase.files.length }}</p>
-          <p><strong>Total Pages:</strong> {{ getTotalPages(subCase) }}</p>
-          <p>
-            <strong>Date Uploaded:</strong>
-            {{ subCase.created_at | date : "dd MMM yyyy" }}
-          </p>
-          <p>
-            <strong>Uploaded By:</strong> {{ subCase.modified_by.firstName }}
-            {{ subCase.modified_by.lastName }}
-          </p>
-          <p><strong>Status:</strong> {{ subCase.case_status }}</p>
-          <div class="subcase-card-actions">
-            <a class="text-primary" (click)="openPdfPreview(subCase._id)"
-              >View LOI</a
-            >
-            <a class="text-primary" (click)="openUploadFiles(subCase._id)"
-              >Upload File</a
-            >
-            <a class="text-primary" (click)="openViewLabel(subCase._id)"
-              >View/Label</a
-            >
-            <a class="text-primary">Generate Summary</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-container>
+
+     <!-- Display Subcases in Card Layout -->
+     <div *ngIf="caseItem.expanded">
+       <div *ngFor="let subCase of caseItem.subCases" class="subcase-card">
+         <h4 class="underline" (click)="viewSubCaseDetails(subCase)">
+           Subcase Ref No: {{ subCase.ref_number }}
+         </h4>
+         <p><strong>Client Name:</strong> {{ subCase.client_name }}</p>
+         <p>
+           <strong>Instruction Type:</strong>
+           {{ subCase.parameters[0].instructionId.instructionMsg }}
+         </p>
+         <p><strong>Total Files:</strong> {{ subCase.files.length }}</p>
+         <p><strong>Total Pages:</strong> {{ getTotalPages(subCase) }}</p>
+         <p>
+           <strong>Date Uploaded:</strong>
+           {{ subCase.created_at | date : "dd MMM yyyy" }}
+         </p>
+         <p>
+           <strong>Uploaded By:</strong> {{ subCase.modified_by.firstName }}
+           {{ subCase.modified_by.lastName }}
+         </p>
+         <p><strong>Status:</strong> {{ subCase.case_status }}</p>
+         <div class="subcase-card-actions">
+           <a class="text-primary" (click)="openPdfPreview(subCase._id)"
+             >View LOI</a
+           >
+           <a class="text-primary" (click)="openUploadFiles(subCase._id)"
+             >Upload File</a
+           >
+           <a class="text-primary" (click)="openViewLabel(subCase._id)"
+             >View/Label</a
+           >
+           <a class="text-primary">Generate Summary</a>
+         </div>
+       </div>
+     </div>
+   </div>
+ </ng-container>
 </div>
+
 
 <div class="pagination-bar" *ngIf="!isLoading && isDataAvailable">
-  <span class="pagination-info">{{ minLimit }}-{{ maxLimit }} / {{ totalCases }}</span>
-  <button
-    (click)="previousPage()"
-    [disabled]="currentPage === 1"
-    class="pagination-button"
-  >
-    Previous
-  </button>
-  <button
-    (click)="nextPage()"
-    [disabled]="currentPage === totalPages"
-    class="pagination-button"
-  >
-    Next
-  </button>
-  <!-- <select
-    [(ngModel)]="currentPage"
-    (ngModelChange)="goToPage($event)"
-    class="pagination-select"
-  >
+ <span class="pagination-info">{{ minLimit }}-{{ maxLimit }} / {{ totalCases }}</span>
+ <button
+   (click)="previousPage()"
+   [disabled]="currentPage === 1"
+   class="pagination-button"
+ >
+   Previous
+ </button>
+ <button
+   (click)="nextPage()"
+   [disabled]="currentPage === totalPages"
+   class="pagination-button"
+ >
+   Next
+ </button>
+ <!-- <select
+   [(ngModel)]="currentPage"
+   (ngModelChange)="goToPage($event)"
+   class="pagination-select"
+ >
 </select> -->
-  <span class="pagination-info">Display Cases:</span>
-  <select [(ngModel)]="selectedLimit" class="pagination-select" (ngModelChange)="onLimitChange()">
-    <option *ngFor="let limit of limitOptions" [value]="limit.label">{{ limit.label }}</option>
-  </select>
-  <!-- <span class="pagination-info">of {{ totalPages }}</span>
-  <input
-    type="number"
-    [(ngModel)]="inputPage"
-    (change)="goToInputPage()"
-    class="pagination-input"
-    min="1"
-    [max]="totalPages"
-  />  -->
+ <span class="pagination-info">Display Cases:</span>
+ <select [(ngModel)]="selectedLimit" class="pagination-select" (ngModelChange)="onLimitChange()">
+   <option *ngFor="let limit of limitOptions" [value]="limit.label">{{ limit.label }}</option>
+ </select>
+ <!-- <span class="pagination-info">of {{ totalPages }}</span>
+ <input
+   type="number"
+   [(ngModel)]="inputPage"
+   (change)="goToInputPage()"
+   class="pagination-input"
+   min="1"
+   [max]="totalPages"
+ />  -->
 </div>
+
+

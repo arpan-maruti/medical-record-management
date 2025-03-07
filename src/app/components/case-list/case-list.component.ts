@@ -9,6 +9,8 @@ import { UploadFilesComponent } from '../upload-files/upload-files.component';
 import { CookieService } from 'ngx-cookie-service';
 import axios from 'axios';
 import { environment } from '../environments/environment';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'app-case-list',
   imports: [CommonModule, FormsModule, ViewAndLabelComponent, UploadFilesComponent],
@@ -39,7 +41,7 @@ export class CaseListComponent {
   minLimit: number = 1;
   maxLimit: number = 1;
   totalCases: number = 1;
-
+  searchSubject: Subject<string> = new Subject<string>();
   constructor(private cdr: ChangeDetectorRef,
     private dataService: DataService, 
     private sanitizer: DomSanitizer,
@@ -58,7 +60,11 @@ export class CaseListComponent {
     this.router.navigate(['/case-management/sub-case-view', subCase._id] );
   }
   
-   
+  ngOnInit(): void {
+    this.searchSubject.pipe(debounceTime(300)).subscribe((query: string) => {
+      this.fetchCases(this.currentPage, this.selectedStatus, query, this.selectedLimit);
+    });
+  }
 
   ngAfterViewInit() {
     this.fetchCases();
@@ -80,6 +86,7 @@ export class CaseListComponent {
     this.isLoading = true; // Start loading indicator
   
     const token = this.cookieService.get('jwt') || null;
+    const token = this.cookieService.get('jwt') || null;
     if (!token) {
       this.isDataAvailable = false;
       this.isLoading = false; // End loading indicator if token not found
@@ -88,99 +95,55 @@ export class CaseListComponent {
   
     // Build the base URL with common parameters
     let baseUrl = `${environment.apiUrl}/user/cases?page=${page}`;
+  
+    // Build the base URL with common parameters
+    let baseUrl = `${environment.apiUrl}/user/cases?page=${page}`;
     if (caseStatus) {
+      baseUrl += `&case_status=${caseStatus}`;
       baseUrl += `&case_status=${caseStatus}`;
     }
     if (this.sortKey) {
-      const sortParam =
-        this.sortDirection === 'desc' ? `-${this.sortKey}` : this.sortKey;
+      const sortParam = this.sortDirection === 'desc' ? `-${this.sortKey}` : this.sortKey;
       baseUrl += `&sort=${sortParam}`;
     }
-  
-    // Helper function to execute a search with the given query parameter.
-    const executeSearch = (param: string) => {
-      let apiUrl = baseUrl;
-      if (searchQuery && searchQuery.trim() !== '') {
-        apiUrl += `&${param}=${encodeURIComponent(searchQuery.trim())}`;
-      }
-      console.log('Calling API:', apiUrl);
-      return axios.get(apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        withCredentials: true
-      });
-    };
-  
-    // If a search query is provided, attempt client_name search first.
-    if (searchQuery && searchQuery.trim() !== '') {
-      executeSearch('client_name')
-        .then(response => {
-          if (response.data.code === 'Success' && response.data.data.length > 0) {
-            // Found data using client name
-            this.data = response.data.data;
-            this.filteredData = [...this.data];
-            this.isDataAvailable = this.data.length > 0;
-            this.totalPages = response.data.pagination.total_pages;
-            this.isLoading = false;
-          } else {
-            // No results from client_name search, try ref_number search
-            executeSearch('ref_number')
-              .then(resp => {
-                if (resp.data.code === 'Success') {
-                  this.data = resp.data.data;
-                  this.filteredData = [...this.data];
-                  this.isDataAvailable = this.data.length > 0;
-                  this.totalPages = resp.data.pagination.total_pages;
-                } else {
-                  console.error('Failed to fetch cases:', resp.data.message);
-                  this.isDataAvailable = false;
-                }
-                this.isLoading = false;
-              })
-              .catch(error => {
-                console.error('Error fetching cases by ref_number:', error);
-                this.isDataAvailable = false;
-                this.isLoading = false;
-              });
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching cases by client_name:', error);
-          this.isDataAvailable = false;
-          this.isLoading = false;
-        });
-    } else {
-      // No search query provided, fetch normally.
-      axios
-        .get(baseUrl, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true
-        })
-        .then(response => {
-          if (response.data.code === 'Success') {
-            this.data = response.data.data;
-            this.filteredData = [...this.data];
-            this.isDataAvailable = this.data.length > 0;
-            this.totalPages = response.data.pagination.total_pages;
-          } else {
-            console.error('Failed to fetch cases:', response.data.message);
-            this.isDataAvailable = false;
-          }
-          this.isLoading = false; // End loading indicator
-        })
-        .catch(error => {
-          console.error('Error fetching cases:', error);
-          this.isDataAvailable = false;
-          this.isLoading = false; // End loading indicator
-        });
+    if (limit) {
+      baseUrl += `&limit=${limit}`;
     }
+  
+    // If a search query is provided, perform parallel searches for both client_name and ref_number
+    if (searchQuery && searchQuery.trim() !== '') {
+      apiUrl += `&client_name=${encodeURIComponent(searchQuery.trim())}`;
+    }
+      
+    axios.get(apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true
+    })
+    .then(response => {
+      if (response.data.code === 'Success') {
+        this.data = response.data.data;
+        this.filteredData = [...this.data];
+        this.isDataAvailable = this.data.length > 0;
+        this.totalPages = response.data.pagination.total_pages;
+        this.minLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + 1;
+        this.maxLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + response.data.length;
+        this.totalCases = response.data.pagination.total_items;
+      } else {
+        console.error('Failed to fetch cases:', response.data.message);
+        this.isDataAvailable = false;
+      }
+      this.isLoading = false; // End loading indicator
+    })
+    .catch(error => {
+      console.error('Error fetching cases:', error);
+      this.isDataAvailable = false;
+      this.isLoading = false; // End loading indicator
+    });
   }
-
+    
   sortBy(column: string): void {
     if (this.sortKey === column) {
       // Toggle sort direction if same column is clicked.
@@ -222,7 +185,21 @@ export class CaseListComponent {
   onSearchChange() {
     this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery);
   }
- 
+  // // Apply both search and status filter together
+  // applyFilters() {
+  //   this.filteredData = this.data.filter(caseItem => {
+  //     const matchesSearch = this.applySearch(caseItem);
+  //     const matchesStatus = this.applyStatusFilter(caseItem);
+  //     return matchesSearch && matchesStatus;  // Case should match both search and status
+  //   });
+  // }
+
+  // Filter by search query
+  // applySearch(caseItem: any): boolean {
+  //   const searchLower = this.searchQuery.toLowerCase();
+  //   return caseItem.client_name.toLowerCase().includes(searchLower) ||
+  //          this.getCaseUploader(caseItem).toLowerCase().includes(searchLower);
+  // }
 
   // Filter by selected status
   applyStatusFilter(caseItem: any): boolean {
@@ -434,7 +411,7 @@ export class CaseListComponent {
   patchFileLabel(fileId: string, newLabel: string) {
     const token = this.cookieService.get('jwt');
     axios.patch(`${environment.apiUrl}/file/${fileId}`, 
-      { files_label: newLabel },
+      { filesLabel: newLabel },
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -445,7 +422,7 @@ export class CaseListComponent {
     )
     .then(response => {
       if (response.data.code === 'Success') {
-        console.log('File label updated successfully.');
+        console.log(response.data);
         // Optionally update the local file data
         const index = this.selectedFiles.findIndex(file => file.id === fileId);
         if (index !== -1) {
@@ -464,5 +441,4 @@ export class CaseListComponent {
     this.isViewLabelVisible = false;
   }
 
- 
 }
