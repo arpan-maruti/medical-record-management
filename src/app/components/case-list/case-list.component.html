@@ -6,7 +6,7 @@
     </svg>
     <p>Loading Cases...</p>
   </div>
-  <div class="header-container" *ngIf="!isLoading && isDataAvailable">
+  <div class="header-container" *ngIf="!isLoading">
     <h2 class="header-title">ALL CASES</h2>
     <div class="filter-container">
       <div class="custom-dropdown">
@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <div class="search-upload-container" *ngIf="!isLoading && isDataAvailable">
+  <div class="search-upload-container" *ngIf="!isLoading">
     <div class="search-container">
       <input
         type="text"
@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <div *ngIf="!isLoading && isDataAvailable && filteredData.length === 0" class="case-list__no-case">
+  <div *ngIf="!isLoading && filteredData && filteredData.length === 0" class="case-list__no-case">
     <div class="case-list__no-case-content">
       <h2>No Cases Available</h2>
       <p>Welcome to the Case Management Section.</p>

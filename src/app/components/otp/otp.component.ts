@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-otp',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink, CustomAlertComponent],
+  imports: [FormsModule, CommonModule, CustomAlertComponent],
   templateUrl: './otp.component.html',
   styleUrls: ['./otp.component.css'],
 })
@@ -33,7 +33,6 @@ export class OtpComponent {
   ) {}
 
   ngOnInit(): void {
-    // Get the email from query params
     this.route.queryParams.subscribe((params) => {
       this.email = params['email'] || ''; // Default to empty string if not provided
       console.log('Email from query params:', this.email);
