@@ -15,14 +15,16 @@
       <span>Browse Files</span>
     </label>
   </div>
-
+ 
+ 
   <div class="upload-files__or-text">Or</div>
-
+ 
+ 
   <!-- ngx-file-drop Component -->
   <ngx-file-drop
     (onFileDrop)="dropped($event)"
-    (onDragOver)="fileOver($event)"
-    (onDragLeave)="fileLeave($event)"
+    (onFileOver)="fileOver($event)"
+    (onFileLeave)="fileLeave($event)"
   >
     <ng-template
       ngx-file-drop-content-tmp
@@ -34,10 +36,12 @@
       </div>
     </ng-template>
   </ngx-file-drop>
-
+ 
+ 
   <!-- File Name Display -->
     <p class="upload-files__file-name-display">{{ fileName || "No file uploaded yet."}}</p>
-
+ 
+ 
   <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 15px">
     <button
       class="upload-files__btn upload-files__btn--secondary"
@@ -53,4 +57,5 @@
       Close
     </button>
   </div>
-</div>
+ </div>
+ 
