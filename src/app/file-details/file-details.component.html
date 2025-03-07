@@ -1,0 +1,98 @@
+<div class="file-details__container" *ngIf="!isLoading; else loadingTemplate">
+  <!-- Left Side - File Details -->
+  <section class="file-card details">
+    <!-- Header -->
+    <header class="file-details__header">
+      <h3 class="file-details__title">File Details</h3>
+      <div class="file-details__actions">
+        <button type="button" class="btn edit-btn" *ngIf="!isEditing" (click)="toggleEdit()">Edit</button>
+      </div>
+    </header>
+
+    <!-- File Details Form -->
+    <div class="details-grid">
+      <div class="details-item">
+        <label for="fileName">File Name:</label>
+        <span *ngIf="!isEditing">{{ fileDetails.fileName }}</span>
+        <input *ngIf="isEditing" id="fileName" type="text" [(ngModel)]="fileDetails.fileName" />
+      </div>
+
+      <div class="details-item">
+        <label>File Status:</label>
+        <span *ngIf="!isEditing">{{ fileDetails.fileStatus }}</span>
+        <select *ngIf="isEditing" [(ngModel)]="fileDetails.fileStatus">
+          <option value="uploaded">Uploaded</option>
+          <option value="in progress">In Progress</option>
+          <option value="AI Analysis Completed">AI Analysis Completed</option>
+          <option value="error">Error</option>
+        </select>
+      </div>
+      
+
+      <div class="details-item">
+        <label>File Size:</label>
+        <span> <span>{{ fileDetails?.fileSize }}</span>  KB</span>
+      </div>
+
+      <div class="details-item">
+        <label for="filesLabel">File Label:</label>
+        <span *ngIf="!isEditing">{{ fileDetails.filesLabel }}</span>
+        <input *ngIf="isEditing" id="filesLabel" type="text" [(ngModel)]="fileDetails.filesLabel" />
+      </div>
+
+      <div class="details-item">
+        <label>File Type:</label>
+        <span>{{ fileDetails.fileType }}</span>
+      </div>
+
+      <div class="details-item">
+        <label>Uploaded By:</label>
+        <span>{{ fileDetails.createdBy.firstName }} {{ fileDetails.createdBy.lastName }}</span>
+      </div>
+
+      <div class="details-item">
+        <label>Date Uploaded:</label>
+        <span>{{ fileDetails.createdAt | date:'dd MMM yyyy, h:mm a' }}</span>
+      </div>
+
+      <div class="details-item">
+        <label>Last Updated:</label>
+        <span>{{ fileDetails.updatedAt | date:'dd MMM yyyy, h:mm a' }}</span>
+      </div>
+
+      <div class="details-item">
+        <label>Modified By:</label>
+        <span>{{ fileDetails.modifiedBy.firstName }} {{ fileDetails.modifiedBy.lastName }}</span>
+      </div>
+    </div>
+
+    <div class="details-item" *ngIf="isEditing">
+      <label for="pdfFile">Upload New PDF:</label>
+      <input type="file" id="pdfFile" (change)="onFileSelected($event)" accept="application/pdf" />
+    </div>
+
+    <!-- Edit Mode Buttons -->
+    <div class="form-buttons" *ngIf="isEditing">
+      <button type="button" class="btn btn-success" (click)="updateFileDetails()">Save</button>
+      <button type="button" class="btn btn-danger" (clickupdateFile)="toggleEdit()">Cancel</button>
+    </div>
+
+    
+  </section>
+
+  <!-- Right Side - PDF Preview -->
+  <section class="pdf-preview" *ngIf="fileDetails.fileFormat === 'pdf'">
+    <h4>PDF Preview</h4>
+    <iframe 
+      [src]="'http://localhost:5000/files/' + fileDetails.filePath | safeUrl"
+      class="pdf-frame">
+    </iframe>
+  </section>
+</div>
+
+<ng-template #loadingTemplate>
+  <div class="loading">
+    <div class="spinner"></div>
+    <p>Loading File Details...</p>
+  </div>
+</ng-template>

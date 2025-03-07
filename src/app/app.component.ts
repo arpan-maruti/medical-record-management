@@ -8,6 +8,6 @@ import { AxiosInterceptorService } from './services/axios-interceptor.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  constructor(private axiosInterceptor: AxiosInterceptorService) {}
+  constructor() {}
   title = 'medical-record-management';
 }

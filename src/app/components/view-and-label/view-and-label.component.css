@@ -124,6 +124,19 @@
     transform: scale(1.02);
 }
 
+.view-and-label__edit-button {
+    margin-right: 10px;
+    background-color: #012447; /* Green background */
+    color: white; /* White text */
+    border-radius: 50%;
+    padding: 10px 10px;
+    cursor: pointer;
+  }
+  
+  .view-and-label__edit-button:hover {
+    background-color: #0056b3; /* Darker green on hover */
+  }
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .view-and-label__content {
