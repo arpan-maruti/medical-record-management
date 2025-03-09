@@ -15,6 +15,7 @@ import { ViewAndLabelComponent } from './components/view-and-label/view-and-labe
 import { AgGridComponent } from './components/ag-grid/ag-grid.component';
 import { SwaggerViewerComponent } from './components/swagger-viewer/swagger-viewer.component';
 import { SetPasswordComponent } from './components/set-password/set-password.component';
+import { FileDetailsComponent } from './file-details/file-details.component';
 
 
 
@@ -46,7 +47,8 @@ export const routes: Routes = [
               {path: 'upload-sub-case/:id', component: UploadSubcaseComponent },
               {
                 path: 'view-label', component: ViewAndLabelComponent, 
-              }
+              },
+              {path: 'file-details/:id', component: FileDetailsComponent }
             ],
           },
         ],

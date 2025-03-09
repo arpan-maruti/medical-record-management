@@ -5,8 +5,11 @@
     <div class="view-and-label__file-list">
       <div *ngIf="(selectedFiles?.length || 0) > 0; else noFiles">
         <div *ngFor="let file of selectedFiles" class="view-and-label__file-item">
-          <div class="view-and-label__file-info" (click)="onPreview(file)">
-            <span class="view-and-label__file-item-icon">{{ file.icon }}</span>
+          <div class="view-and-label__file-info">
+            <!-- Updated icon: clicking on the icon navigates to file details -->
+            <span class="view-and-label__file-item-icon" (click)="goToFileDetails(file)">
+              {{ file.icon }}
+            </span>
             <span class="view-and-label__file-item-name">{{ file.name }}</span>
           </div>
           <div class="view-and-label__file-actions">
@@ -16,9 +19,14 @@
               placeholder="Enter label" 
               class="view-and-label__file-item-label-input"
             />
+            <!-- Add the edit icon here -->
+            <button *ngIf="isAdmin" class="view-and-label__button view-and-label__edit-button" (click)="goToFileDetails(file)">
+              <i class="fa fa-edit"></i>
+            </button>
             <button class="view-and-label__button view-and-label__save-button" (click)="onSave(file)">
               <i class="fa fa-save"></i>
             </button>
+            
           </div>
         </div>
       </div>

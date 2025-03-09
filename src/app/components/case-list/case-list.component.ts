@@ -79,61 +79,132 @@ export class CaseListComponent {
   fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '', limit?: number) {
     this.isLoading = true; // Start loading indicator
   
-    const getCookie = (name: string): string | null => {
-      return this.cookieService.get(name) || null;
-    }
-    const token = getCookie('jwt');
-      
+    const token = this.cookieService.get('jwt') || null;
     if (!token) {
       this.isDataAvailable = false;
       this.isLoading = false; // End loading indicator if token not found
       return;
     }
-    
-    let apiUrl = `${environment.apiUrl}/user/cases?page=${page}`;
+  
+    // Build the base URL with common parameters
+    let baseUrl = `${environment.apiUrl}/user/cases?page=${page}`;
     if (caseStatus) {
-      apiUrl += `&case_status=${caseStatus}`;
+      baseUrl += `&case_status=${caseStatus}`;
     }
     if (this.sortKey) {
       const sortParam = this.sortDirection === 'desc' ? `-${this.sortKey}` : this.sortKey;
-      apiUrl += `&sort=${sortParam}`;
+      baseUrl += `&sort=${sortParam}`;
     }
-    if(limit) {
-      apiUrl += `&limit=${limit}`;
+    if (limit) {
+      baseUrl += `&limit=${limit}`;
     }
     if (searchQuery && searchQuery.trim() !== '') {
-      apiUrl += `&client_name=${encodeURIComponent(searchQuery.trim())}`;
+      baseUrl += `&client_name=${encodeURIComponent(searchQuery.trim())}`;
     }
-      
-    axios.get(apiUrl, {
+  
+    axios.get(baseUrl, {
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       withCredentials: true
     })
-    .then(response => {
-      if (response.data.code === 'Success') {
-        this.data = response.data.data;
-        this.filteredData = [...this.data];
-        this.isDataAvailable = this.data.length > 0;
-        this.totalPages = response.data.pagination.total_pages;
-        this.minLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + 1;
-        this.maxLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + response.data.length;
-        this.totalCases = response.data.pagination.total_items;
-      } else {
-        console.error('Failed to fetch cases:', response.data.message);
+      .then(response => {
+        if (response.data.code === 'Success') {
+          this.data = response.data.data;
+          this.filteredData = [...this.data];
+          this.isDataAvailable = this.data.length > 0;
+          this.totalPages = response.data.pagination.total_pages;
+          this.minLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + 1;
+          this.maxLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + response.data.data.length;
+          this.totalCases = response.data.pagination.total_items;
+        } else {
+          console.error('Failed to fetch cases:', response.data.message);
+          this.isDataAvailable = false;
+        } // <-- Proper closing bracket for the else block
+  
+        // If a search query is provided, perform parallel search for both client name and ref number
+        if (searchQuery && searchQuery.trim() !== '') {
+          const trimmedQuery = encodeURIComponent(searchQuery.trim());
+          const clientUrl = `${baseUrl}&client_name=${trimmedQuery}`;
+          const refUrl = `${baseUrl}&ref_number=${trimmedQuery}`;
+    
+          Promise.all([
+            axios.get(clientUrl, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              withCredentials: true
+            }),
+            axios.get(refUrl, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              withCredentials: true
+            })
+          ])
+            .then(([clientRes, refRes]) => {
+              let combinedData: any[] = [];
+              if (clientRes.data.code === 'Success' && clientRes.data.data.length > 0) {
+                combinedData = combinedData.concat(clientRes.data.data);
+              }
+              if (refRes.data.code === 'Success' && refRes.data.data.length > 0) {
+                combinedData = combinedData.concat(refRes.data.data);
+              }
+              // Remove duplicates based on unique _id
+              const uniqueData = combinedData.filter((item, index, self) =>
+                index === self.findIndex(t => t._id === item._id)
+              );
+              this.data = uniqueData;
+              this.filteredData = [...uniqueData];
+              this.isDataAvailable = uniqueData.length > 0;
+              // Optionally set pagination info from one of the responses
+              this.totalPages = clientRes.data.pagination ? clientRes.data.pagination.total_pages : 1;
+              this.isLoading = false;
+            })
+            .catch(error => {
+              console.error('Error fetching search results:', error);
+              this.isDataAvailable = false;
+              this.isLoading = false;
+            });
+        } else {
+          // No search query provided, fetch normally.
+          console.log(baseUrl);
+          axios.get(baseUrl, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            withCredentials: true
+          })
+            .then(response => {
+              if (response.data.code === 'Success') {
+                this.data = response.data.data;
+                this.filteredData = [...this.data];
+                this.isDataAvailable = this.data.length > 0;
+                this.totalPages = response.data.pagination.total_pages;
+              } else {
+                console.error('Failed to fetch cases:', response.data.message);
+                this.isDataAvailable = false;
+              }
+              this.isLoading = false; // End loading indicator
+            })
+            .catch(error => {
+              console.error('Error fetching cases:', error);
+              this.isDataAvailable = false;
+              this.isLoading = false; // End loading indicator
+            });
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching cases:', error);
         this.isDataAvailable = false;
-      }
-      this.isLoading = false; // End loading indicator
-    })
-    .catch(error => {
-      console.error('Error fetching cases:', error);
-      this.isDataAvailable = false;
-      this.isLoading = false; // End loading indicator
-    });
+        this.isLoading = false;
+      });
   }
-
+    
   sortBy(column: string): void {
     if (this.sortKey === column) {
       // Toggle sort direction if same column is clicked.
@@ -175,21 +246,7 @@ export class CaseListComponent {
   onSearchChange() {
     this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery);
   }
-  // // Apply both search and status filter together
-  // applyFilters() {
-  //   this.filteredData = this.data.filter(caseItem => {
-  //     const matchesSearch = this.applySearch(caseItem);
-  //     const matchesStatus = this.applyStatusFilter(caseItem);
-  //     return matchesSearch && matchesStatus;  // Case should match both search and status
-  //   });
-  // }
-
-  // Filter by search query
-  // applySearch(caseItem: any): boolean {
-  //   const searchLower = this.searchQuery.toLowerCase();
-  //   return caseItem.client_name.toLowerCase().includes(searchLower) ||
-  //          this.getCaseUploader(caseItem).toLowerCase().includes(searchLower);
-  // }
+ 
 
   // Filter by selected status
   applyStatusFilter(caseItem: any): boolean {
