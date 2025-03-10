@@ -15,7 +15,7 @@ import {jwtDecode} from 'jwt-decode';
 export class ViewAndLabelComponent implements OnInit {
   @Input() selectedFiles: any[] = [];
   @Output() closePopup = new EventEmitter<void>();
-  @Output() labelSave = new EventEmitter<{ fileId: string, newLabel: string }>();
+  @Output() labelSave = new EventEmitter<{ fileId: string, filesLabel: string }>();
   @Output() previewPdf = new EventEmitter<any>();
 
   isAdmin: boolean = false; // Flag to determine if the user is an admin
@@ -37,12 +37,11 @@ export class ViewAndLabelComponent implements OnInit {
   }
 
   onPreview(file: any) {
-    // Directly emit the file object so the parent can open the PDF preview
     this.previewPdf.emit(file);
   }
 
   onSave(file: any) {
-    this.labelSave.emit({ fileId: file.id, newLabel: file.label });
+    this.labelSave.emit({ fileId: file.id, filesLabel: file.label });
   }
 
   onClose() {

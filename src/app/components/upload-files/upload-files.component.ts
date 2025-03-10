@@ -29,6 +29,7 @@ export class UploadFilesComponent {
 
  getUserIdFromJWT(): string {
    const token = this.cookieService.get('jwt');
+   console.log('Token:', token);
    if (token) {
      try {
        const decoded: any = jwtDecode(token);

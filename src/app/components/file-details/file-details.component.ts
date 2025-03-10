@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import axios from 'axios';
-import { environment } from '../components/environments/environment';
+import { environment } from '../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
-import { SafeUrlPipe } from '../pipes/safe-url.pipe';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import { jwtDecode } from 'jwt-decode';
 
 @Component({
