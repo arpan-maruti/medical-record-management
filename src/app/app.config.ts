@@ -18,6 +18,6 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
     provideAnimations(), 
-    importProvidersFrom(ToastrModule.forRoot())
+    importProvidersFrom(ToastrModule.forRoot()), provideAnimationsAsync()
   ],
 };

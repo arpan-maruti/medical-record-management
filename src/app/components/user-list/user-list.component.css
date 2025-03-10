@@ -1,0 +1,97 @@
+::ng-deep .search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+::ng-deep .search-field {
+  width: 300px;
+
+  border-radius: 25px;
+  padding: 10px;
+ 
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  }
+}
+
+::ng-deep .custom-table {
+  width: 100%;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+
+
+::ng-deep mat-row:nth-child(even) {
+  background: #f8f9fa;
+}
+
+::ng-deep mat-row:hover {
+  background: #e3f2fd;
+  transition: 0.3s;
+}
+
+::ng-deep .user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+::ng-deep .profile-icon {
+  background: #1976D2;
+  color: white;
+  padding: 8px;
+  border-radius: 50%;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+::ng-deep .role-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #E1F5FE;
+  color: #0288D1;
+  font-weight: bold;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+::ng-deep .status-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 20px; /* Rounded corners */
+  text-align: center;
+  min-width: 80px;
+  transition: all 0.3s ease-in-out;
+}
+
+::ng-deep .active {
+  background: #C8E6C9;
+  color: #388E3C;
+}
+
+::ng-deep .inactive {
+  background: #FFCDD2;
+  color: #D32F2F;
+}
+
+::ng-deep .loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+::ng-deep mat-icon {
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}

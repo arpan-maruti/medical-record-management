@@ -75,136 +75,90 @@ export class CaseListComponent {
   onLimitChange() {
     this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery, this.selectedLimit);
   }
-
-  fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '', limit?: number) {
+  async fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '', limit: number = 5) {
     this.isLoading = true; // Start loading indicator
   
     const token = this.cookieService.get('jwt') || null;
     if (!token) {
       this.isDataAvailable = false;
-      this.isLoading = false; // End loading indicator if token not found
+      this.isLoading = false;
       return;
     }
   
-    // Build the base URL with common parameters
-    let baseUrl = `${environment.apiUrl}/user/cases?page=${page}`;
-    if (caseStatus) {
-      baseUrl += `&case_status=${caseStatus}`;
-    }
+    // Base URL with pagination parameters (default limit = 5)
+    let baseUrl = `${environment.apiUrl}/user/cases?page=${page}&limit=${limit}`;
+    if (caseStatus) baseUrl += `&case_status=${caseStatus}`;
     if (this.sortKey) {
       const sortParam = this.sortDirection === 'desc' ? `-${this.sortKey}` : this.sortKey;
       baseUrl += `&sort=${sortParam}`;
     }
-    if (limit) {
-      baseUrl += `&limit=${limit}`;
-    }
-    if (searchQuery && searchQuery.trim() !== '') {
-      baseUrl += `&client_name=${encodeURIComponent(searchQuery.trim())}`;
-    }
   
-    axios.get(baseUrl, {
+    // Common headers
+    const headers = {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
       withCredentials: true
-    })
-      .then(response => {
+    };
+  
+    try {
+      let response;
+      
+      if (searchQuery.trim() !== '') {
+        const trimmedQuery = encodeURIComponent(searchQuery.trim());
+  
+        // Fetch paginated search results for both `client_name` & `ref_number`
+        const [clientRes, refRes] = await Promise.all([
+          axios.get(`${baseUrl}&client_name=${trimmedQuery}`, headers),
+          axios.get(`${baseUrl}&ref_number=${trimmedQuery}`, headers)
+        ]);
+  
+        // Combine data and remove duplicates based on `_id`
+        const combinedData = [...(clientRes.data.data || []), ...(refRes.data.data || [])];
+        const uniqueData = Array.from(new Map(combinedData.map(item => [item._id, item])).values());
+  
+        // Assign fetched data
+        this.data = uniqueData.slice(0, limit); // Ensure only `limit` cases are shown
+        this.filteredData = [...this.data];
+        this.isDataAvailable = uniqueData.length > 0;
+  
+        // Set pagination from one of the responses
+        this.totalPages = clientRes.data.pagination?.total_pages || 1;
+        this.minLimit = (clientRes.data.pagination.current_page - 1) * clientRes.data.pagination.items_per_page + 1;
+        this.maxLimit = this.minLimit + this.data.length - 1;
+        this.totalCases = clientRes.data.pagination.total_items;
+  
+      } else {
+        // Fetch paginated cases normally
+        response = await axios.get(baseUrl, headers);
+  
         if (response.data.code === 'Success') {
-          this.data = response.data.data;
+          this.data = response.data.data.slice(0, limit); // Ensure only `limit` cases are shown
           this.filteredData = [...this.data];
           this.isDataAvailable = this.data.length > 0;
+  
+          // Extract pagination details
           this.totalPages = response.data.pagination.total_pages;
           this.minLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + 1;
-          this.maxLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + response.data.data.length;
+          this.maxLimit = this.minLimit + this.data.length - 1;
           this.totalCases = response.data.pagination.total_items;
         } else {
           console.error('Failed to fetch cases:', response.data.message);
           this.isDataAvailable = false;
-        } // <-- Proper closing bracket for the else block
-  
-        // If a search query is provided, perform parallel search for both client name and ref number
-        if (searchQuery && searchQuery.trim() !== '') {
-          const trimmedQuery = encodeURIComponent(searchQuery.trim());
-          const clientUrl = `${baseUrl}&client_name=${trimmedQuery}`;
-          const refUrl = `${baseUrl}&ref_number=${trimmedQuery}`;
-    
-          Promise.all([
-            axios.get(clientUrl, {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-              },
-              withCredentials: true
-            }),
-            axios.get(refUrl, {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-              },
-              withCredentials: true
-            })
-          ])
-            .then(([clientRes, refRes]) => {
-              let combinedData: any[] = [];
-              if (clientRes.data.code === 'Success' && clientRes.data.data.length > 0) {
-                combinedData = combinedData.concat(clientRes.data.data);
-              }
-              if (refRes.data.code === 'Success' && refRes.data.data.length > 0) {
-                combinedData = combinedData.concat(refRes.data.data);
-              }
-              // Remove duplicates based on unique _id
-              const uniqueData = combinedData.filter((item, index, self) =>
-                index === self.findIndex(t => t._id === item._id)
-              );
-              this.data = uniqueData;
-              this.filteredData = [...uniqueData];
-              this.isDataAvailable = uniqueData.length > 0;
-              // Optionally set pagination info from one of the responses
-              this.totalPages = clientRes.data.pagination ? clientRes.data.pagination.total_pages : 1;
-              this.isLoading = false;
-            })
-            .catch(error => {
-              console.error('Error fetching search results:', error);
-              this.isDataAvailable = false;
-              this.isLoading = false;
-            });
-        } else {
-          // No search query provided, fetch normally.
-          console.log(baseUrl);
-          axios.get(baseUrl, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            },
-            withCredentials: true
-          })
-            .then(response => {
-              if (response.data.code === 'Success') {
-                this.data = response.data.data;
-                this.filteredData = [...this.data];
-                this.isDataAvailable = this.data.length > 0;
-                this.totalPages = response.data.pagination.total_pages;
-              } else {
-                console.error('Failed to fetch cases:', response.data.message);
-                this.isDataAvailable = false;
-              }
-              this.isLoading = false; // End loading indicator
-            })
-            .catch(error => {
-              console.error('Error fetching cases:', error);
-              this.isDataAvailable = false;
-              this.isLoading = false; // End loading indicator
-            });
         }
-      })
-      .catch(error => {
-        console.error('Error fetching cases:', error);
-        this.isDataAvailable = false;
-        this.isLoading = false;
-      });
+      }
+    } catch (error) {
+      console.error('Error fetching cases:', error);
+      this.isDataAvailable = false;
+    } finally {
+      this.isLoading = false; // End loading indicator
+    }
   }
-    
+  
+  
+
+  
   sortBy(column: string): void {
     if (this.sortKey === column) {
       // Toggle sort direction if same column is clicked.
@@ -455,10 +409,10 @@ export class CaseListComponent {
     this.isPdfPreviewVisible = true;
   }
 
-  patchFileLabel(fileId: string, newLabel: string) {
+  patchFileLabel(fileId: string, filesLabel: string) {
     const token = this.cookieService.get('jwt');
     axios.patch(`${environment.apiUrl}/file/${fileId}`, 
-      { files_label: newLabel },
+      { filesLabel: filesLabel },
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -473,7 +427,7 @@ export class CaseListComponent {
         // Optionally update the local file data
         const index = this.selectedFiles.findIndex(file => file.id === fileId);
         if (index !== -1) {
-          this.selectedFiles[index].label = newLabel;
+          this.selectedFiles[index].label = filesLabel;
         }
       } else {
         console.error('Failed to update file label:', response.data.message);
