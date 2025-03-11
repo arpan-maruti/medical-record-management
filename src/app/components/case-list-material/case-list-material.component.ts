@@ -1,55 +1,114 @@
-import { ChangeDetectorRef, Component, HostListener, ViewEncapsulation } from '@angular/core';
-import { DataService } from '../../services/data.service';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router'; // ✅ Import RouterModule if using Router
 import { ViewAndLabelComponent } from '../view-and-label/view-and-label.component';
 import { UploadFilesComponent } from '../upload-files/upload-files.component';
-import { CookieService } from 'ngx-cookie-service';
+import { CdkTableModule } from '@angular/cdk/table';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import axios from 'axios';
 import { environment } from '../environments/environment';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DataService } from '../../services/data.service';
+import { CookieService } from 'ngx-cookie-service';
 @Component({
-  selector: 'app-case-list',
-  imports: [CommonModule, FormsModule, ViewAndLabelComponent, UploadFilesComponent],
-  templateUrl: './case-list.component.html',
-  styleUrls: ['./case-list.component.css'],
-  encapsulation: ViewEncapsulation.None,
-
+  selector: 'app-case-list-material',
+  standalone: true, // Ensure this is a standalone component
+  imports: [ 
+    MatTableModule,
+    MatPaginatorModule, // ✅ Keep only the Module, remove MatPaginator
+    MatSortModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+    FormsModule,
+    CommonModule,
+    RouterModule, // ✅ Add RouterModule if using navigation
+    ViewAndLabelComponent,
+    UploadFilesComponent,
+    CdkTableModule 
+  ],
+  templateUrl: './case-list-material.component.html',
+  styleUrls: ['./case-list-material.component.css']
 })
-export class CaseListComponent {
-  filteredData: any[] = [];
-  isDataAvailable: boolean = false;
-  isPdfPreviewVisible: boolean = false;
-  pdfUrl: SafeResourceUrl = '';  
-  selectedFileName: string = ''; 
-  isViewLabelVisible: boolean = false; 
-  isBackgroundBlurred: boolean = false; 
-  isUploadFilesVisible: boolean = false;
-  selectedFiles: any[] = [];  // Store selected files
-  uploadedFileName: string = ''; 
-  searchQuery: string = '';  // Search query
-  selectedStatus: string  = '';
-  data: any[] = [];
-  currentPage: number = 1; // Current page
-  totalPages: number = 1; // Total pages
-  inputPage: number = 1; // Input page number
-  selectedCaseId: string = '';
-  sortKey: string = '';
-  sortDirection: 'asc' | 'desc' = 'asc';
-  isLoading: boolean = false; // Add loader flag
-  minLimit: number = 1;
-  maxLimit: number = 1;
-  totalCases: number = 1;
+export class CaseListMaterialComponent {
 
-  constructor(private cdr: ChangeDetectorRef,
-    private dataService: DataService, 
-    private sanitizer: DomSanitizer,
-    private router: Router,
-  private cookieService: CookieService) {
-    
-  }
+  displayedColumns: string[] = [
+    'expand', 'refNumber', 'instructionType', 'clientName', 'totalFiles', 'totalPages', 
+    'createdAt', 'uploadedBy', 'caseStatus', 'loi', 'uploadFile', 'viewLabel', 
+    'generateSummary', 'addSubcase'
+  ];
+  dataSource: MatTableDataSource<any>;
+  filteredData: any[] = [];
+    isDataAvailable: boolean = false;
+    isPdfPreviewVisible: boolean = false;
+    pdfUrl: SafeResourceUrl = '';  
+    selectedFileName: string = ''; 
+    isViewLabelVisible: boolean = false; 
+    isBackgroundBlurred: boolean = false; 
+    isUploadFilesVisible: boolean = false;
+    selectedFiles: any[] = [];  // Store selected files
+    uploadedFileName: string = ''; 
+    searchQuery: string = '';  // Search query
+    selectedStatus: string  = '';
+    data: any[] = [];
+    currentPage: number = 1; // Current page
+    totalPages: number = 1; // Total pages
+    inputPage: number = 1; // Input page number
+    selectedCaseId: string = '';
+    sortKey: string = '';
+    sortDirection: 'asc' | 'desc' = 'asc';
+    isLoading: boolean = false; // Add loader flag
+    minLimit: number = 1;
+    maxLimit: number = 1;
+    totalCases: number = 1;
   
+
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(private dataService: DataService, 
+      private sanitizer: DomSanitizer,
+      private router: Router,
+    private cookieService: CookieService,
+    private cdr: ChangeDetectorRef ) {
+    this.dataSource = new MatTableDataSource(this.filteredData);
+  }
+
+
+
+
+  sortData(event: any) {
+    const sortKey = event.active;
+    const sortDirection = event.direction;
+    this.sortKey = sortKey;
+    this.sortDirection = sortDirection;
+    this.fetchCases();
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
 
   
   viewCaseDetails(caseItem: any) {
@@ -62,7 +121,9 @@ export class CaseListComponent {
   
    
 
-  ngAfterViewInit() {
+  ngAfterContentInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
     this.fetchCases();
   }
 
@@ -78,6 +139,7 @@ export class CaseListComponent {
     this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery, this.selectedLimit);
   }
   async fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '', limit: number = 5) {
+    this.dataSource.data = this.filteredData;
     this.isLoading = true; // Start loading indicator
   
     const token = this.cookieService.get('jwt') || null;
@@ -109,7 +171,7 @@ export class CaseListComponent {
       
       if (searchQuery.trim() !== '') {
         const trimmedQuery = encodeURIComponent(searchQuery.trim());
-  
+        
         // Fetch paginated search results for both `client_name` & `ref_number`
         const [clientRes, refRes] = await Promise.all([
           axios.get(`${baseUrl}&client_name=${trimmedQuery}`, headers),
@@ -130,7 +192,7 @@ export class CaseListComponent {
         this.minLimit = (clientRes.data.pagination.current_page - 1) * clientRes.data.pagination.items_per_page + 1;
         this.maxLimit = this.minLimit + this.data.length - 1;
         this.totalCases = clientRes.data.pagination.total_items;
-  
+        
       } else {
         // Fetch paginated cases normally
         response = await axios.get(baseUrl, headers);
@@ -212,17 +274,18 @@ export class CaseListComponent {
   }
 
   // Toggle visibility of subcases
-  toggleSubCases(caseItem: any) {
-    caseItem.expanded = !caseItem.expanded; // Toggle subcase visibility
-  
-    // Fetch subcases only if the case is expanded and subcases are not already fetched
-    if (caseItem.expanded && !caseItem.subCases) {
-      this.fetchSubCases(caseItem._id).then(subCases => {
-        caseItem.subCases = subCases; // Store the fetched subcases in the caseItem object
-      });
-    }
-    console.log(this.filteredData)
+// Update toggleSubCases to handle expansion
+toggleSubCases(caseItem: any) {
+  caseItem.expanded = !caseItem.expanded;
+  if (caseItem.expanded && !caseItem.subCases) {
+    this.fetchSubCases(caseItem._id).then(subCases => {
+      caseItem.subCases = subCases;
+
+      console.log(caseItem.subCases);
+      this.dataSource.data = [...this.dataSource.data]; // Refresh data source
+    });
   }
+}
 
 
   fetchSubCases(parentId: string): Promise<any[]> {
@@ -445,5 +508,4 @@ export class CaseListComponent {
     this.isViewLabelVisible = false;
   }
 
- 
 }
