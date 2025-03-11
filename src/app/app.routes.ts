@@ -15,7 +15,9 @@ import { ViewAndLabelComponent } from './components/view-and-label/view-and-labe
 import { AgGridComponent } from './components/ag-grid/ag-grid.component';
 import { SwaggerViewerComponent } from './components/swagger-viewer/swagger-viewer.component';
 import { SetPasswordComponent } from './components/set-password/set-password.component';
-import { FileDetailsComponent } from './file-details/file-details.component';
+import { FileDetailsComponent } from './components/file-details/file-details.component';
+import { UserListComponent } from './components/user-list/user-list.component';
+import { CaseListMaterialComponent } from './components/case-list-material/case-list-material.component';
 
 
 
@@ -30,6 +32,7 @@ export const routes: Routes = [
     {path:'a', component: AgGridComponent, pathMatch:'full'},
     {path:'swagger', component: SwaggerViewerComponent, pathMatch:'full'},
     {path: 'set-password', component:SetPasswordComponent , pathMatch:'full'},
+    
     {
         path: 'case-management', 
         component: DashboardComponent,
@@ -40,6 +43,7 @@ export const routes: Routes = [
             children: [
               { path: '', redirectTo: 'all-cases', pathMatch: 'full' },
               { path: 'all-cases', component: CaseListComponent },
+              { path: 'all-cases-material', component: CaseListMaterialComponent },
               { path: 'profile', component: ProfileComponent  },
               {path: 'upload-new-case', component: UploadNewCaseComponent },
               { path: 'main-case-view/:id', component: UploadNewCaseComponent },
@@ -48,7 +52,8 @@ export const routes: Routes = [
               {
                 path: 'view-label', component: ViewAndLabelComponent, 
               },
-              {path: 'file-details/:id', component: FileDetailsComponent }
+              {path: 'file-details/:id', component: FileDetailsComponent },
+              {path: 'user-list', component:UserListComponent , pathMatch:'full'}
             ],
           },
         ],

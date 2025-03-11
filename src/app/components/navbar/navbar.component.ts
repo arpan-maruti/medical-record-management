@@ -7,11 +7,25 @@ import axios from 'axios';
 import { CookieService } from 'ngx-cookie-service'; 
 import { jwtDecode } from 'jwt-decode'; 
 import { environment } from '../environments/environment';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 @Component({
   selector: 'app-navbar',
   imports: [FormsModule,CommonModule,NgClass],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrl: './navbar.component.css',
+  animations: [
+    trigger('dropdownAnimation', [
+      state('open', style({
+        opacity: 1,
+        transform: 'translateY(0)'
+      })),
+      state('closed', style({
+        opacity: 0,
+        transform: 'translateY(-10px)'
+      })),
+      transition('open <=> closed', animate('0.3s ease'))
+    ])
+  ]
 })
 export class NavbarComponent {
 

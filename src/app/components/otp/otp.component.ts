@@ -2,12 +2,13 @@ import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { CustomAlertComponent } from '../custom-alert/custom-alert.component';
 import { ActivatedRoute } from '@angular/router';
 import axios from 'axios';
 import { environment } from '../environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { isPlatformBrowser } from '@angular/common';
+import { PLATFORM_ID, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-otp',
@@ -25,20 +26,22 @@ export class OtpComponent {
   resendVisible: boolean = true;
   timer: number = 30; // Countdown timer in seconds
   @ViewChild('customAlert') customAlert!: CustomAlertComponent;
-  
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.email = params['email'] || ''; // Default to empty string if not provided
-      console.log('Email from query params:', this.email);
-      // Start the resend timer on page render
-      this.startResendTimer();
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.route.queryParams.subscribe((params) => {
+        this.email = params['email'] || ''; 
+        console.log('Email from query params:', this.email);
+        this.startResendTimer();
+      });
+    }
   }
 
   login(): void {
@@ -75,7 +78,10 @@ export class OtpComponent {
         { withCredentials: true }
       );
       if (response.status === 200) {
-        this.toastr.success(response.data.message || 'OTP Verified Successfully!', 'Success');
+        this.toastr.success(
+          response.data.message || 'OTP Verified Successfully!',
+          'Success'
+        );
         console.log('OTP Verified Successfully:', response.data.message);
         this.router.navigate(['/case-management']);
       }
@@ -122,7 +128,10 @@ export class OtpComponent {
         // Restart the timer when resend is clicked
         this.startResendTimer();
       } else {
-        this.toastr.error(response.data.message || 'Failed to resend OTP. Try again later.', 'Resend OTP');
+        this.toastr.error(
+          response.data.message || 'Failed to resend OTP. Try again later.',
+          'Resend OTP'
+        );
         this.customAlert.show(
           response.data.message || 'Failed to resend OTP. Try again later.',
           'Resend OTP',
@@ -131,7 +140,10 @@ export class OtpComponent {
       }
     } catch (error: any) {
       console.error('Error resending OTP:', error);
-      this.toastr.error('Error resending OTP. Please try again later.', 'Resend OTP');
+      this.toastr.error(
+        'Error resending OTP. Please try again later.',
+        'Resend OTP'
+      );
       this.customAlert.show(
         'Error resending OTP. Please try again later.',
         'Resend OTP',
