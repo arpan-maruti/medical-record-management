@@ -1,0 +1,373 @@
+/* Container Styling */
+::ng-deep .case-list-container {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+::ng-deep .blurred {
+  filter: blur(4px);
+}
+
+/* Header Styling */
+::ng-deep .header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+::ng-deep .header-container1, 
+::ng-deep .header-container2 {
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .header-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+}
+
+::ng-deep .search-container {
+  margin-left: 20px;
+}
+
+::ng-deep .search-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 350px;
+}
+/* Table Styling */
+::ng-deep .table-container {
+  border-radius: 8px;
+  overflow: hidden;
+ 
+}
+
+::ng-deep mat-header-cell, 
+::ng-deep mat-cell {
+  padding: 12px;
+  font-size: 14px;
+  text-align: left;
+}
+
+::ng-deep mat-header-cell {
+  font-weight: bold;
+
+}
+
+
+::ng-deep .underline {
+  text-decoration: underline;
+  color: #007bff;
+  cursor: pointer;
+}
+
+::ng-deep .underline:hover {
+  color: #0056b3;
+}
+
+/* Status Indicator */
+::ng-deep .case-status {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+::ng-deep .case-status span {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  position: relative;
+}
+
+::ng-deep .case-status span::after {
+  content: '\2713';
+  font-size: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+::ng-deep .case-status.uploaded span {
+  background: yellow;
+  color: white;
+}
+
+::ng-deep .case-status.inProgress span {
+  background: orange;
+}
+
+::ng-deep .case-status.aiAnalysisCompleted span {
+  background: green;
+}
+
+::ng-deep .case-status.error span {
+  background: red;
+}
+
+::ng-deep .case-status.error span::after {
+  content: '\2717';
+}
+
+
+
+::ng-deep .mat-icon-button {
+  color: #007bff;
+}
+
+/* Modals and Popups */
+::ng-deep .view-label-popup, 
+::ng-deep .upload-files-popup, 
+::ng-deep .pdf-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+::ng-deep .modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+::ng-deep .close {
+  font-size: 18px;
+  cursor: pointer;
+  color: #333;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+/* Paginator */
+::ng-deep mat-paginator {
+  margin-top: 20px;
+}
+
+
+
+::ng-deep .case-list__no-case {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  background-color: #f8f9fa;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  margin: 2rem 0;
+  padding: 1rem;
+}
+
+ ::ng-deep.case-list__no-case-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+::ng-deep.case-list__no-case-content img.no-cases-image {
+  max-width: 150px;
+  margin-bottom: 1rem;
+}
+
+::ng-deep.case-list__no-case-content h2 {
+  font-size: 2rem;
+  color: #012447;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+::ng-deep.case-list__no-case-content p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+::ng-deep.case-list__no-case-content .custom-btn {
+  background-color: #012447;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+::ng-deep.case-list__no-case-content .custom-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.02);
+}
+
+
+
+
+::ng-deep.pdf-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+
+::ng-deep.modal-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  /* Blur the background */
+}
+
+
+::ng-deep .pdf-modal-content {
+  background-color: white;
+  padding: 20px;
+  position: relative;
+  z-index: 1001;
+  /* Ensure content appears above the background */
+  max-width: 80%;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+
+::ng-deep.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+
+::ng-deepiframe {
+  border: none;
+  display: block;
+  margin-top: 20px;
+}
+
+
+::ng-deep.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+::ng-deep.btn {
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+
+::ng-deep.btn-primary {
+  background-color: #2e4e5b;
+  color: white;
+}
+
+
+::ng-deep.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+
+
+::ng-deep.upload-files-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  /* Ensure it is on top */
+}
+
+::ng-deep.upload-files-popup .popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+::ng-deep.upload-files-popup .popup-content h3 {
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+::ng-deep.upload-files-popup button {
+  background-color: #2e4e5b;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+::ng-deep .upload-files-popup button:hover {
+  background-color: #2e4e5b;
+}
+/* .filter-container{
+  height: 2rem;
+  margin-bottom: 5rem;
+} */
+
+.upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.upload-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(to right, #007bff, #0056b3);
+  color: #fff;
+}
+
+.upload-button:hover {
+  background: linear-gradient(to right, #0056b3, #004494);
+  transform: scale(1.05);
+}
+

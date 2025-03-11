@@ -71,28 +71,33 @@ export class UserListComponent implements OnInit {
     this.isLoading = true;
     try {
       const token = this.cookieService.get('jwt');
-      const response = await axios.get(`${environment.apiUrl}/user`, {
-        params: {
-          page: this.pageIndex + 1,
-          limit: this.pageSize,
-          search: this.searchQuery,
-          sortField: this.sortField,
-          sortOrder: this.sortOrder,
-        },
+      
+      // Construct API URL with query parameters
+      const apiUrl = `${environment.apiUrl}/user?page=${this.pageIndex + 1}&limit=${this.pageSize}&search=${this.searchQuery}&sortField=${this.sortField}&sortOrder=${this.sortOrder}`;
+      
+      console.log('Making API call to:', apiUrl);
+      
+      const response = await axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        withCredentials: true,
+        withCredentials: true, // Ensure cookies are included if needed
       });
-      this.users = response.data.data.users;
-      this.totalUsers = response.data.total;
-    } catch (error) {
-      // console.error('Error fetching users:', error);
+  
+      console.log('Response:', response);
+  
+      this.users = response.data?.data?.users || [];
+      this.totalUsers = response.data?.total || 0;
+  
+    } catch (error: any) {
+      // console.error('Error fetching users:', error.response?.data || error.message);
     } finally {
       this.isLoading = false;
     }
   }
+  
+  
   onSearchChange(event: Event) {
     this.searchQuery = (event.target as HTMLInputElement).value;
     this.loadUsers();
