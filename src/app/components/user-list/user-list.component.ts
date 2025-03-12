@@ -10,9 +10,11 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CookieService } from 'ngx-cookie-service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.component';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -25,43 +27,24 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    MatProgressSpinnerModule
-  ],
-  animations: [
-    trigger('fadeIn', [
-      state('void', style({ opacity: 0 })),
-      transition(':enter', [
-        animate('0.3s ease-in', style({ opacity: 1 })),
-      ]),
-    ]),
-    trigger('hoverEffect', [
-      state('normal', style({ transform: 'scale(1)' })),
-      state('hovered', style({ transform: 'scale(1.1)' })),
-      transition('normal => hovered', animate('0.2s ease-in')),
-      transition('hovered => normal', animate('0.2s ease-out')),
-    ]),
+    MatProgressSpinnerModule,
+    MatDialogModule
+    
   ],
 })
 export class UserListComponent implements OnInit {
-  displayedColumns: string[] = [
-    'name',
-    'email',
-    'phone',
-    'role',
-    'status',
-    'actions',
-  ];
+  displayedColumns: string[] = ['name', 'email', 'phone', 'role', 'status', 'actions'];
   users: any[] = [];
   totalUsers = 0;
-  pageSize = 10;
+  pageSize = 5;
   pageIndex = 0;
   searchQuery = '';
   sortField = 'first_name';
-  sortOrder = 'asc';
+  sortOrder: 'asc' | 'desc' | ''= '';
   isLoading = false;
-  hoverState: 'normal' | 'hovered' = 'normal'; // Default state is 'normal'
+  hoverState: 'normal' | 'hovered' = 'normal';
 
-  constructor(private cookieService: CookieService) {}
+  constructor(private cookieService: CookieService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -71,35 +54,29 @@ export class UserListComponent implements OnInit {
     this.isLoading = true;
     try {
       const token = this.cookieService.get('jwt');
-      
-      // Construct API URL with query parameters
-      const apiUrl = `${environment.apiUrl}/user?page=${this.pageIndex + 1}&limit=${this.pageSize}&search=${this.searchQuery}&sortField=${this.sortField}&sortOrder=${this.sortOrder}`;
-      
-      console.log('Making API call to:', apiUrl);
-      
+
+      const apiUrl = `${environment.apiUrl}/user?page=${this.pageIndex + 1}&limit=${this.pageSize}&search=${encodeURIComponent(this.searchQuery)}&sortField=${this.sortField}&sortOrder=${this.sortOrder}`;
+      console.log('API URL:', apiUrl);
       const response = await axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        withCredentials: true, // Ensure cookies are included if needed
+        withCredentials: true,
       });
-  
-      console.log('Response:', response);
-  
+
       this.users = response.data?.data?.users || [];
-      this.totalUsers = response.data?.total || 0;
-  
+      this.totalUsers = response.data?.data?.total || 0;
     } catch (error: any) {
-      // console.error('Error fetching users:', error.response?.data || error.message);
+      console.error('Error fetching users:', error.response?.data || error.message);
     } finally {
       this.isLoading = false;
     }
   }
-  
-  
+
   onSearchChange(event: Event) {
-    this.searchQuery = (event.target as HTMLInputElement).value;
+    this.searchQuery = (event.target as HTMLInputElement).value.trim();
+    this.pageIndex = 0; // Reset to first page when searching
     this.loadUsers();
   }
 
@@ -108,20 +85,76 @@ export class UserListComponent implements OnInit {
     this.pageIndex = event.pageIndex;
     this.loadUsers();
   }
-
   onSortChange(sort: Sort) {
-    this.sortField = sort.active;
-    this.sortOrder = sort.direction || 'asc';
+    console.log('Sort:', sort);
+
+    // Map Angular column names to backend field names
+    const fieldMapping: { [key: string]: string } = {
+      firstName: "firstName",
+      lastName: "lastName",
+      email: "email",
+      phoneNumber: "phoneNumber",
+      userRole: "userRole",
+      isDeleted: "isDeleted",
+    };
+
+    // Update sort field based on selected column
+    this.sortField = fieldMapping[sort.active] || 'firstName'; // Default to firstName
+
+    // Toggle sort order: If already sorted, flip the order
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    sort.direction= this.sortOrder;
+    console.log('Sort:', sort);
+    // Reload users with new sorting order
     this.loadUsers();
-  }
+}
 
-  editUser(userId: string) {
-    console.log('Edit user:', userId);
-  }
+  
+  
 
-  deleteUser(userId: string) {
-    console.log('Delete user:', userId);
+editUser(uId: string) {
+  console.log(uId)
+  const dialogRef = this.dialog.open(EditUserDialogComponent, {
+    data: { userId: uId }  // Ensure `userId` is correctly passed
+  });
+
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result) {
+      this.loadUsers(); // Reload user list if user was updated
+    }
+  });
+}
+
+  async deleteUser(userId: string) {
+    console.log(userId);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: { message: 'Are you sure you want to delete this user?' }
+    });
+  
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        try {
+          const token = this.cookieService.get('jwt');
+          const apiUrl = `${environment.apiUrl}/user/${userId}`;
+  
+          await axios.patch(apiUrl, { isDeleted: true }, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+          });
+  
+          console.log('User deleted successfully:', userId);
+          this.loadUsers(); // Reload user list after deletion
+        } catch (error: any) {
+          console.error('Error deleting user:', error.response?.data || error.message);
+        }
+      }
+    });
   }
+  
 
   viewUser(userId: string) {
     console.log('View user:', userId);

@@ -16,7 +16,7 @@
 
 /* Main layout container */
 .dashboard__main-layout {
-  overflow-y: scroll;
+  overflow-y: visible;
   flex: 5;
   background-color: #f5f6f9;
   height: 100vh;

@@ -1,0 +1,114 @@
+/* Deep styles to ensure they apply within Material Dialog */
+::ng-deep .dialog-container {
+  text-align: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fff, #f8f8f8);
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+  max-width: 600px;
+  max-height: 400px;
+}
+
+/* Header with warning icon */
+::ng-deep .dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-weight: bold;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+/* Warning icon styling */
+::ng-deep .warning-icon {
+  font-size: 45px;
+  color: #6b81ff;
+  text-shadow: 0px 0px 8px rgba(0, 102, 255, 0.6);
+  animation: pulse 1.5s infinite alternate;
+}
+
+/* Dialog content */
+::ng-deep mat-dialog-content {
+  font-size: 16px;
+  margin-top: 12px;
+  color: #444;
+  line-height: 1.5;
+  padding: 10px 15px;
+  border-radius: 8px;
+}
+
+/* Actions container */
+::ng-deep mat-dialog-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Cancel Button */
+::ng-deep .cancel-button {
+  background: #e0e0e0;
+  color: #333;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+  margin-right: 0.5rem;
+}
+
+
+
+/* Delete Button */
+::ng-deep .delete-button {
+  background: #2f71d3;
+  color: white;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* Delete button animation effect */
+::ng-deep .delete-button::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+::ng-deep .delete-button:hover::before {
+  opacity: 1;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Pulsing Warning Icon Animation */
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    text-shadow: 0px 0px 8px rgba(0, 89, 255, 0.6);
+  }
+  to {
+    transform: scale(1.1);
+    text-shadow: 0px 0px 15px rgba(0, 102, 255, 0.8);
+  }
+}
