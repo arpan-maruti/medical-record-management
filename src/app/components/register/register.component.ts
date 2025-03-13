@@ -44,7 +44,6 @@ export class RegisterComponent {
 
   ngAfterViewInit() {
     this.countryList = phoneValidationData;
-    console.log('Country List loaded:', this.countryList);
     this.cdr.detectChanges();
   }
 
@@ -119,8 +118,6 @@ export class RegisterComponent {
     if (!this.phoneNumber) {
       this.phoneError = 'Phone number is required';
     } else {
-      // Use the ISO code from the found country for validation
-      console.log(this.selectedCountryCode);
       const isoCode = country ? country.countryCode : this.selectedCountryCode;
       const phoneValidation = phone(this.phoneNumber, { country: isoCode });
       if (!phoneValidation.isValid) {
@@ -143,13 +140,11 @@ export class RegisterComponent {
         countryCode: this.selectedCountryCode, // This is now the calling code
         phoneNumber: this.phoneNumber,
       };
-      console.log(registrationData);
       try {
         const getCookie = (name: string): string | null => {
           return this.cookieService.get(name) || null;
         };
         const token = getCookie('jwt');
-        console.log('Retrieved Token:1', token);
   
         const response = await axios.post(`${environment.apiUrl}/user/register`, registrationData, {
           headers: {
@@ -171,9 +166,9 @@ export class RegisterComponent {
   
         // Navigate to home page
         this.router.navigate(['/']);
-      } catch (error) {
+      } catch (error:any) {
         console.error('Error during registration:', error);
-        this.toastr.error('Failed to register user. Please try again.', 'Error');
+        this.toastr.error( error.response?.data?.message ||'Failed to register user. Please try again.', 'Error');
       }
     }
   }

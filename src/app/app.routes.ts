@@ -28,7 +28,7 @@ export const routes: Routes = [
     {path:'', component: LoginComponent, pathMatch:'full'},
     {path:'otp', component: OtpComponent, pathMatch:'full'},
     {path:'customalert', component: CustomAlertComponent, pathMatch:'full'},
-    {path:'register', component: RegisterComponent, pathMatch:'full'},
+    {path:'register-user', component: RegisterComponent, pathMatch:'full'},
     {path:'a', component: AgGridComponent, pathMatch:'full'},
     {path:'swagger', component: SwaggerViewerComponent, pathMatch:'full'},
     {path: 'set-password', component:SetPasswordComponent , pathMatch:'full'},
@@ -60,6 +60,5 @@ export const routes: Routes = [
       },
 
     {path:'page-not-found', component: PageNotFoundComponent},
-    
     {path:'**', redirectTo:'/page-not-found'}, 
 ];
