@@ -29,7 +29,7 @@ export class UploadFilesComponent {
 
  getUserIdFromJWT(): string {
    const token = this.cookieService.get('jwt');
-   console.log('Token:', token);
+  
    if (token) {
      try {
        const decoded: any = jwtDecode(token);
@@ -50,6 +50,7 @@ export class UploadFilesComponent {
    }
     const token = this.cookieService.get('jwt');
    const userId = this.getUserIdFromJWT();
+  
    const extension = this.file.name.split('.').pop()?.toLowerCase() || 'pdf';
    const formData = new FormData();
    formData.append('file', this.file);

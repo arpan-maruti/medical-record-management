@@ -11,6 +11,7 @@ import axios from 'axios';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-register',
@@ -91,9 +92,26 @@ export class RegisterComponent {
     return validTlds.includes(tld);
   }
 
+  getUserIdFromJWT(): string {
+     const token = this.cookieService.get('jwt');
+     console.log('Token:', token);
+     if (token) {
+       try {
+         const decoded: any = jwtDecode(token);
+         return decoded.userId || decoded.id || '';
+       } catch (error) {
+         console.error('Error decoding JWT:', error);
+         return '';
+       }
+     }
+     return '';
+   }
+
   async onRegister() {
     this.formSubmitted = true;
-  
+    
+    const userId = this.getUserIdFromJWT();
+    console.log('User ID:', userId);
     if (!this.firstName) {
       this.firstNameError = 'First name is required';
     } else if (!this.firstName.match(/^[A-Za-z]+$/)) {
@@ -142,6 +160,8 @@ export class RegisterComponent {
         email: this.email,
         countryCode: this.selectedCountryCode, // This is now the calling code
         phoneNumber: this.phoneNumber,
+        createdBy: userId,
+        modifiedBy: userId,
       };
       console.log(registrationData);
       try {

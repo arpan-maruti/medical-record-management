@@ -1,0 +1,88 @@
+
+
+.full-width {
+    
+    width: 100%;
+  }
+  
+  .phone-group {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .country-code {
+    width: 30%;
+  }
+  
+  .phone-number {
+    width: 70%;
+  }
+  
+  mat-dialog-content {
+    max-height: 70vh;
+    overflow: hidden; /* Prevents scrolling */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    gap: 12px;
+  }
+  
+  /* Common Button Styling */
+  button {
+    min-width: 110px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  /* Cancel Button */
+  button[mat-button] {
+    color: #1e88e5;
+    border: 2px solid #1e88e5;
+    background: transparent;
+  }
+  
+  button[mat-button]:hover {
+    background: #1e88e5;
+    color: white;
+  }
+  
+  /* Edit Button */
+  button[color="accent"] {
+    background: #42a5f5;
+    color: white;
+    border: 2px solid #42a5f5;
+  }
+  
+  button[color="accent"]:hover {
+    background: white;
+    color: #42a5f5;
+  }
+  
+  /* Save Button */
+  button[color="primary"] {
+    background: #1565c0;
+    color: white;
+    border: 2px solid #1565c0;
+  }
+  
+  button[color="primary"]:hover {
+    background: white;
+    color: #1565c0;
+  }
+  
+  /* Disabled Button */
+  button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border: none;
+  }
+  
