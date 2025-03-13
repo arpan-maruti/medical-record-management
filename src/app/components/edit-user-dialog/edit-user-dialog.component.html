@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>Edit User</h2>
+
+<!-- Form should hold formGroup -->
+<form [formGroup]="editUserForm">
+  <mat-dialog-content>
+    <mat-form-field class="full-width">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="first_name" />
+      <mat-error *ngIf="editUserForm.get('first_name')?.hasError('required')">
+        First name is required.
+      </mat-error>
+      <mat-error *ngIf="editUserForm.get('first_name')?.hasError('pattern')">
+        Only letters & digits are allowed.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="last_name" />
+      <mat-error *ngIf="editUserForm.get('last_name')?.hasError('required')">
+        Last name is required.
+      </mat-error>
+      <mat-error *ngIf="editUserForm.get('last_name')?.hasError('pattern')">
+        Only letters are allowed.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
+      <mat-error *ngIf="editUserForm.get('email')?.hasError('required')">
+        Email is required.
+      </mat-error>
+      <mat-error *ngIf="editUserForm.get('email')?.hasError('email')">
+        Enter a valid email.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="phone-group">
+      <mat-form-field class="country-code">
+        <mat-label>Country Code</mat-label>
+        <input matInput formControlName="country_code" />
+        <mat-error *ngIf="editUserForm.get('country_code')?.hasError('pattern')">
+          Invalid country code.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="phone-number">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phone_number" />
+        <mat-error *ngIf="editUserForm.get('phone_number')?.hasError('pattern')">
+          Invalid phone number.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field class="full-width">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="user_role">
+        <mat-option value="user">User</mat-option>
+        <mat-option value="admin">Admin</mat-option>
+      </mat-select>
+      <mat-error *ngIf="editUserForm.get('user_role')?.hasError('required')">
+        Role is required.
+      </mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="closeDialog()">Cancel</button>
+    
+    <!-- Edit button to enable form fields -->
+    <button mat-button *ngIf="!isEditing" color="accent" (click)="enableEdit()">Edit</button>
+    
+    <button mat-button color="primary" *ngIf="isEditing" [disabled]="editUserForm.invalid" (click)="saveChanges()">Save</button>
+  </mat-dialog-actions>
+</form>

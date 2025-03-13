@@ -18,7 +18,7 @@ import { SetPasswordComponent } from './components/set-password/set-password.com
 import { FileDetailsComponent } from './components/file-details/file-details.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { CaseListMaterialComponent } from './components/case-list-material/case-list-material.component';
-
+import { NestedTableComponent } from './components/nested-table/nested-table.component';
 
 
 export const routes: Routes = [
@@ -44,6 +44,7 @@ export const routes: Routes = [
               { path: '', redirectTo: 'all-cases', pathMatch: 'full' },
               { path: 'all-cases', component: CaseListComponent },
               { path: 'all-cases-material', component: CaseListMaterialComponent },
+              { path: 'all-cases-material1', component: NestedTableComponent },
               { path: 'profile', component: ProfileComponent  },
               {path: 'upload-new-case', component: UploadNewCaseComponent },
               { path: 'main-case-view/:id', component: UploadNewCaseComponent },
