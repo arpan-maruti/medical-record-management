@@ -181,16 +181,7 @@ export class RegisterComponent {
   
         console.log('Registration successful:', response.data);
         this.toastr.success('User registered successfully!', 'Success');
-  
-        // Reset form fields after successful registration
-        this.firstName = '';
-        this.lastName = '';
-        this.email = '';
-        this.phoneNumber = '';
-        this.formSubmitted = false;
-  
-        // Navigate to home page
-        this.router.navigate(['/']);
+        this.router.navigate(['/case-management/user-list']);
       } catch (error) {
         console.error('Error during registration:', error);
         this.toastr.error('Failed to register user. Please try again.', 'Error');

@@ -9,6 +9,8 @@ import { environment } from '../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID, Inject } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-otp',
@@ -31,6 +33,7 @@ export class OtpComponent {
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
+    private cookieservice:CookieService,
     @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
@@ -66,24 +69,63 @@ export class OtpComponent {
         this.toastr.error('Please enter the OTP', 'Validation Error');
         return;
       }
-      if (!this.otp.match(/[0-9]/g)) {
+      if (!this.otp.match(/^[0-9]+$/)) {
         this.otpError1 = 'Invalid OTP';
         this.toastr.error('Invalid OTP', 'Validation Error');
         return;
       }
-      // Call the /user/verify-otp API with credentials
+  
+      // Call OTP verification API
       const response = await axios.post(
         `${environment.apiUrl}/user/verify-otp`,
         { email: this.email, otp: this.otp },
         { withCredentials: true }
       );
+  
       if (response.status === 200) {
-        this.toastr.success(
-          response.data.message || 'OTP Verified Successfully!',
-          'Success'
-        );
-        console.log('OTP Verified Successfully:', response.data.message);
-        this.router.navigate(['/case-management']);
+        console.log(response.data);
+        const token = response.data.data.token;
+        const decodedToken: any = jwtDecode(token); // Decode the JWT token
+        const userId = decodedToken.id;
+        if (!token || !userId) {
+          console.error('Token or User ID is missing in response');
+          this.toastr.error('Authentication failed. No token or user ID received.', 'Error');
+          return;
+        }
+  
+        // Decode JWT token
+        const userRole = decodedToken?.role;
+  
+        if (!userRole) {
+          console.error('User role not found in token');
+          this.toastr.error('User role not found', 'Error');
+          return;
+        }
+  
+        console.log('User Role:', userRole);
+  
+        // Fetch user details using the retrieved userId
+        const userResponse = await axios.get(`${environment.apiUrl}/user/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
+  
+        if (userResponse.status === 200) {
+          const user = userResponse.data.data;
+          console.log(user);
+          const fullName = `${user.first_name} ${user.last_name}`;
+  
+          // Show a personalized success message
+          this.toastr.success(`Welcome, ${fullName}!`, 'Success');
+          console.log(`User Verified: ${fullName}`);
+        }
+  
+        // Navigate based on user role
+        if (userRole === "admin") {
+          this.router.navigate(['/case-management/user-list']);
+        } else {
+          this.router.navigate(['/case-management']);
+        }
       }
     } catch (error: any) {
       if (error.response && error.response.data) {
@@ -97,6 +139,8 @@ export class OtpComponent {
       }
     }
   }
+  
+  
 
   startResendTimer(): void {
     this.resendVisible = false;

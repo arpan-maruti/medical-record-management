@@ -8,6 +8,9 @@ import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode'; 
 import { environment } from '../environments/environment';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ToastrService } from 'ngx-toastr';
+import { LogoutDialogueComponent } from '../logout-dialogue/logout-dialogue.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-navbar',
   imports: [FormsModule,CommonModule,NgClass],
@@ -32,7 +35,7 @@ export class NavbarComponent {
   isDropdownOpen = false;
   user: any = {}; // Initialize an empty object to hold user data
 
-  constructor(private cookieService: CookieService,  private cdr: ChangeDetectorRef, private router: Router) {}
+  constructor(private toastr: ToastrService,private cookieService: CookieService,  private cdr: ChangeDetectorRef, private router: Router,  private dialog: MatDialog,) {}
 
   ngOnInit() {
     this.getUserProfile();
@@ -78,7 +81,36 @@ export class NavbarComponent {
   toProfile() {
     this.router.navigate(['/case-management/profile']);
   }
-  toLogout() {
-    this.router.navigate(['/']);
+
+  confirmLogout(): void {
+    const dialogRef = this.dialog.open(LogoutDialogueComponent, {
+      width: '350px',
+      data: { message: 'Are you sure you want to logout?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.logout();
+      }
+    });
+  }
+  logout(): void {
+    const token = this.cookieService.get('jwt');
+    axios.post(`${environment.apiUrl}/user/logout`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true
+    })
+    .then(() => {
+      this.cookieService.delete('jwt');  // Clear JWT from cookies
+      this.toastr.success('You have been logged out successfully.', 'Success');
+      this.router.navigate(['/']);
+    })
+    .catch((error) => {
+      console.error('Logout error:', error);
+      this.toastr.error('Logout failed. Please try again.', 'Error');
+    });
   }
 }

@@ -1,237 +1,301 @@
 <div class="case-list-container" [class.blurred]="isViewLabelVisible">
-    <div class="header-container">
-      <div class="header-container1">
-        <h2 class="header-title">ALL CASES</h2>
-        <div class="search-container">
-          <input
-            type="text"
-            [(ngModel)]="searchQuery"
-            placeholder="Search by Client Name or Case Ref No"
-            class="search-input"
-            (input)="onSearchChange()"
-          />
-        </div>
-      </div>
-      <div class="header-container2">
-        <div class="filter-container">
-          <mat-form-field>
-            <mat-select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
-              <mat-option value="">All Status</mat-option>
-              <mat-option value="uploaded">uploaded</mat-option>
-              <mat-option value="inProgress">in progress</mat-option>
-              <mat-option value="aiAnalysisCompleted">AI Analysis Completed</mat-option>
-              <mat-option value="error">error</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="upload-container">
-          <button mat-raised-button color="primary" class="upload-button" (click)="addCase()">
-            <mat-icon>cloud_upload</mat-icon> Upload New Case
-          </button>
-        </div>
+  <div class="header-container">
+    <div class="header-container1">
+      <h2 class="header-title">ALL CASES</h2>
+      <div class="search-container">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          placeholder="Search by Client Name or Case Ref No"
+          class="search-input"
+          (input)="onSearchChange()"
+        />
       </div>
     </div>
-  
-    <div *ngIf="!isLoading && !isDataAvailable && filteredData.length === 0" class="case-list__no-case">
-      <div class="case-list__no-case-content">
-        <h2>No Cases Available</h2>
-        <p>Welcome to the Case Management Section.</p>
-        <p>Upload a new case to get started.</p>
-        <button mat-raised-button color="primary" (click)="addCase()">Upload New Case</button>
+    <div class="header-container2">
+      <div class="filter-container">
+        <mat-form-field>
+          <mat-select
+            [(ngModel)]="selectedStatus"
+            (ngModelChange)="onStatusChange()"
+          >
+            <mat-option value="">All Status</mat-option>
+            <mat-option value="uploaded">uploaded</mat-option>
+            <mat-option value="inProgress">in progress</mat-option>
+            <mat-option value="aiAnalysisCompleted"
+              >AI Analysis Completed</mat-option
+            >
+            <mat-option value="error">error</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-    </div>
-  
-    <div *ngIf="isLoading" class="loading-container">
-      <mat-spinner></mat-spinner>
-      <p>Loading Cases...</p>
-    </div>
-  
-    <div *ngIf="!isLoading && isDataAvailable && filteredData.length > 0" class="table-container">
-      <mat-table [dataSource]="filteredData" matSort (matSortChange)="sortData($event)">
-        <ng-container matColumnDef="expand">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">
-            <button mat-icon-button (click)="toggleSubCases(caseItem)">
-              <mat-icon>{{ caseItem.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
-            </button>
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="refNumber">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Case Ref No</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem" (click)="viewCaseDetails(caseItem)" class="underline">
-            {{ caseItem.ref_number }}
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="instructionType">
-          <mat-header-cell *matHeaderCellDef>Instruction Type</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">
-            {{ caseItem.parameters?.[0]?.instructionId?.instructionMsg || 'N/A' }}
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="clientName">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">{{ caseItem.client_name }}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="totalFiles">
-          <mat-header-cell *matHeaderCellDef>Total Files</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">{{ caseItem.files.length }}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="totalPages">
-          <mat-header-cell *matHeaderCellDef>Total Pages</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">{{ getTotalPages(caseItem) }}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="createdAt"> 
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Date Uploaded</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">{{ caseItem.created_at | date : "dd MMM yyyy" }}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="uploadedBy">
-          <mat-header-cell *matHeaderCellDef>Uploaded By</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">
-            {{ caseItem.modified_by.firstName }} {{ caseItem.modified_by.lastName }}
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="caseStatus">
-          <mat-header-cell *matHeaderCellDef>Case Status</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">
-            <span class="case-status">
-              <span
-                class="status-dot"
-                [ngClass]="{
-                  'status-uploaded': caseItem.case_status === 'uploaded',
-                  'status-inProgress': caseItem.case_status === 'inProgress',
-                  'status-aiAnalysisCompleted': caseItem.case_status === 'aiAnalysisCompleted',
-                  'status-error': caseItem.case_status === 'error'
-                }"
-              ></span>
-              {{ caseItem.case_status }}
-            </span>
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="loi">
-          <mat-header-cell *matHeaderCellDef>LOI</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">
-            <button mat-button color="primary" (click)="openPdfPreview(caseItem._id)">View LOI</button>
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="uploadFile">
-          <mat-header-cell *matHeaderCellDef>Upload File</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">
-            <button mat-button color="primary" (click)="openUploadFiles(caseItem._id)">Upload File</button>
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="viewLabel">
-          <mat-header-cell *matHeaderCellDef>View/Label</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">
-            <button mat-button color="primary" (click)="openViewLabel(caseItem._id)">View/Label</button>
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="generateSummary">
-          <mat-header-cell *matHeaderCellDef>Generate Summary</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">
-            <button mat-button color="primary">Generate Summary</button>
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="addSubcase">
-          <mat-header-cell *matHeaderCellDef>Add Subcase</mat-header-cell>
-          <mat-cell *matCellDef="let caseItem">
-            <button mat-icon-button (click)="addSubcase(caseItem)">
-              <mat-icon>add</mat-icon>
-            </button>
-          </mat-cell>
-        </ng-container>
-  
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  
-        <!-- Subcases Row -->
-        <ng-container *ngFor="let caseItem of filteredData">
-          <ng-container *ngIf="caseItem.expanded">
-            <mat-row *ngFor="let subCase of caseItem.subCases" class="subcase-row">
-              <mat-cell></mat-cell>
-              <mat-cell (click)="viewSubCaseDetails(subCase)" class="underline">
-                {{ subCase.ref_number }}
-              </mat-cell>
-              <mat-cell>{{ subCase.parameters[0].instructionId.instructionMsg }}</mat-cell>
-              <mat-cell>{{ subCase.client_name }}</mat-cell>
-              <mat-cell>{{ subCase.files.length }}</mat-cell>
-              <mat-cell>{{ getTotalPages(subCase) }}</mat-cell>
-              <mat-cell>{{ subCase.created_at | date : "dd MMM yyyy" }}</mat-cell>
-              <mat-cell>
-                {{ subCase.modified_by.firstName }} {{ subCase.modified_by.lastName }}
-              </mat-cell>
-              <mat-cell>{{ subCase.case_status }}</mat-cell>
-              <mat-cell>
-                <button mat-button color="primary" (click)="openPdfPreview(subCase._id)">View LOI</button>
-              </mat-cell>
-              <mat-cell>
-                <button mat-button color="primary" (click)="openUploadFiles(subCase._id)">Upload File</button>
-              </mat-cell>
-              <mat-cell>
-                <button mat-button color="primary" (click)="openViewLabel(subCase._id)">View/Label</button>
-              </mat-cell>
-              <mat-cell>
-                <button mat-button color="primary">Generate Summary</button>
-              </mat-cell>
-              <mat-cell></mat-cell>
-            </mat-row>
-          </ng-container>
-        </ng-container>
-      </mat-table>
-  
-      <mat-paginator [length]="100"
-              [pageSize]="10"
-              [pageSizeOptions]="[5, 10, 25, 100]"
-              aria-label="Select page">
-</mat-paginator>
-    </div>
-  
-    <!-- View/Label Popup -->
-    <div *ngIf="isViewLabelVisible" class="view-label-popup">
-      <app-view-and-label
-        [selectedFiles]="selectedFiles"
-        (closePopup)="closeViewLabel()"
-        (labelSave)="patchFileLabel($event.fileId, $event.filesLabel)"
-        (previewPdf)="openDocumentPreview($event)"
-      >
-      </app-view-and-label>
-    </div>
-  
-    <div *ngIf="isPdfPreviewVisible" class="pdf-modal">
-      <div class="modal-background" (click)="closePdfPreview()"></div>
-      <div class="pdf-modal-content">
-        <span class="close" (click)="closePdfPreview()">×</span>
-        <h3>LOI Preview - {{ selectedFileName }}</h3>
-        <iframe
-          [src]="pdfUrl"
-          width="100%"
-          height="500px"
-          style="border: none"
-        ></iframe>
-        <div class="modal-actions">
-          <a [href]="pdfUrl" download class="btn">Download PDF</a>
-        </div>
+      <div class="upload-container">
+        <button
+          mat-raised-button
+          color="primary"
+          class="upload-button"
+          (click)="addCase()"
+        >
+          <mat-icon>cloud_upload</mat-icon> Upload New Case
+        </button>
       </div>
-    </div>
-  
-    <div *ngIf="isUploadFilesVisible" class="upload-files-popup">
-      <app-upload-files
-        [caseId]="selectedCaseId"
-        [fileType]="'document'"
-        (closePopup)="closeUploadFiles()"
-      >
-      </app-upload-files>
     </div>
   </div>
+
+  <div
+    *ngIf="!isLoading && !isDataAvailable && filteredData.length === 0"
+    class="case-list__no-case"
+  >
+    <div class="case-list__no-case-content">
+      <h2>No Cases Available</h2>
+      <p>Welcome to the Case Management Section.</p>
+      <p>Upload a new case to get started.</p>
+      <button mat-raised-button color="primary" (click)="addCase()">
+        Upload New Case
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading Cases...</p>
+  </div>
+
+  <div
+    *ngIf="!isLoading && isDataAvailable && filteredData.length > 0"
+    class="table-container"
+  >
+    <mat-table
+      [dataSource]="filteredData"
+      matSort
+      (matSortChange)="sortData($event)"
+    >
+      <ng-container matColumnDef="expand">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">
+          <button mat-icon-button (click)="toggleSubCases(caseItem)">
+            <mat-icon>{{
+              caseItem.expanded ? "expand_less" : "expand_more"
+            }}</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="refNumber">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Case Ref No</mat-header-cell
+        >
+        <mat-cell
+          *matCellDef="let caseItem"
+          (click)="viewCaseDetails(caseItem)"
+          class="underline"
+        >
+          {{ caseItem.ref_number }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="instructionType">
+        <mat-header-cell *matHeaderCellDef>Instruction Type</mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">
+          {{ caseItem.parameters?.[0]?.instructionId?.instructionMsg || 'N/A' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="clientName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Client Name</mat-header-cell
+        >
+        <mat-cell *matCellDef="let caseItem">{{
+          caseItem.client_name
+        }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="totalFiles">
+        <mat-header-cell *matHeaderCellDef>Total Files</mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">{{
+          caseItem.files.length
+        }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="totalPages">
+        <mat-header-cell *matHeaderCellDef>Total Pages</mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">{{
+          getTotalPages(caseItem)
+        }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Date Uploaded</mat-header-cell
+        >
+        <mat-cell *matCellDef="let caseItem">{{
+          caseItem.created_at | date : "dd MMM yyyy"
+        }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="uploadedBy">
+        <mat-header-cell *matHeaderCellDef>Uploaded By</mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">
+          {{ caseItem.modified_by.firstName }}
+          {{ caseItem.modified_by.lastName }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="caseStatus">
+        <mat-header-cell *matHeaderCellDef>Case Status</mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">
+          <span class="case-status">
+            <span
+              class="status-dot"
+              [ngClass]="{
+                'status-uploaded': caseItem.case_status === 'uploaded',
+                'status-inProgress': caseItem.case_status === 'inProgress',
+                'status-aiAnalysisCompleted':
+                  caseItem.case_status === 'aiAnalysisCompleted',
+                'status-error': caseItem.case_status === 'error'
+              }"
+            ></span>
+            {{ caseItem.case_status }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="loi">
+        <mat-header-cell *matHeaderCellDef>LOI</mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">
+          <button
+            mat-button
+            color="primary"
+            (click)="openPdfPreview(caseItem._id)"
+          >
+            View LOI
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="uploadFile">
+        <mat-header-cell *matHeaderCellDef>Upload File</mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">
+          <button
+            mat-button
+            color="primary"
+            (click)="openUploadFiles(caseItem._id)"
+          >
+            Upload File
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="viewLabel">
+        <mat-header-cell *matHeaderCellDef>View/Label</mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">
+          <button
+            mat-button
+            color="primary"
+            (click)="openViewLabel(caseItem._id)"
+          >
+            View/Label
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="generateSummary">
+        <mat-header-cell *matHeaderCellDef>Generate Summary</mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">
+          <button mat-button color="primary">Generate Summary</button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="addSubcase">
+        <mat-header-cell *matHeaderCellDef>Add Subcase</mat-header-cell>
+        <mat-cell *matCellDef="let caseItem">
+          <button mat-icon-button (click)="addSubcase(caseItem)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+       <!-- Header Row -->
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <!-- Parent Row -->
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+      <!-- Subcases Row -->
+      <ng-container *ngFor="let caseItem of filteredData">
+        <ng-container *ngIf="caseItem.expanded">
+          <mat-row *ngFor="let subCase of caseItem.subCases" class="subcase-row">
+            <pre>{{subCase}}</pre>
+            <td mat-cell [attr.colspan]="displayedColumns.length">
+              <div class="subcase-content">
+                <span (click)="viewSubCaseDetails(subCase)" class="underline">{{ subCase.ref_number }}</span>
+                <span>{{ subCase.parameters[0]?.instructionId?.instructionMsg }}</span>
+                <span>{{ subCase.client_name }}</span>
+                <span>{{ subCase.files.length }}</span>
+                <span>{{ getTotalPages(subCase) }}</span>
+                <span>{{ subCase.created_at | date : "dd MMM yyyy" }}</span>
+                <span>{{ subCase.modified_by.firstName }} {{ subCase.modified_by.lastName }}</span>
+                <span>{{ subCase.case_status }}</span>
+                <span>
+                  <button mat-button color="primary" (click)="openPdfPreview(subCase._id)">View LOI</button>
+                </span>
+                <span>
+                  <button mat-button color="primary" (click)="openUploadFiles(subCase._id)">Upload File</button>
+                </span>
+                <span>
+                  <button mat-button color="primary" (click)="openViewLabel(subCase._id)">View/Label</button>
+                </span>
+                <span>
+                  <button mat-button color="primary">Generate Summary</button>
+                </span>
+              </div>
+            </td>
+          </mat-row>
+        </ng-container>
+      </ng-container>
+    </mat-table>
+    <mat-paginator
+      [length]="100"
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </div>
+
+  <!-- View/Label Popup -->
+  <div *ngIf="isViewLabelVisible" class="view-label-popup">
+    <app-view-and-label
+      [selectedFiles]="selectedFiles"
+      (closePopup)="closeViewLabel()"
+      (labelSave)="patchFileLabel($event.fileId, $event.filesLabel)"
+      (previewPdf)="openDocumentPreview($event)"
+    >
+    </app-view-and-label>
+  </div>
+
+  <div *ngIf="isPdfPreviewVisible" class="pdf-modal">
+    <div class="modal-background" (click)="closePdfPreview()"></div>
+    <div class="pdf-modal-content">
+      <span class="close" (click)="closePdfPreview()">×</span>
+      <h3>LOI Preview - {{ selectedFileName }}</h3>
+      <iframe
+        [src]="pdfUrl"
+        width="100%"
+        height="500px"
+        style="border: none"
+      ></iframe>
+      <div class="modal-actions">
+        <a [href]="pdfUrl" download class="btn">Download PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isUploadFilesVisible" class="upload-files-popup">
+    <app-upload-files
+      [caseId]="selectedCaseId"
+      [fileType]="'document'"
+      (closePopup)="closeUploadFiles()"
+    >
+    </app-upload-files>
+  </div>
+</div>
