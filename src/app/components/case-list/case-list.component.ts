@@ -75,9 +75,10 @@ export class CaseListComponent {
     {value: 100,label: 100}
   ];
   onLimitChange() {
-    this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery, this.selectedLimit);
+    this.currentPage = 1;
+    this.fetchCases(1, this.selectedStatus, this.searchQuery, this.selectedLimit);
   }
-  async fetchCases(page: number = 1, caseStatus: string = '', searchQuery: string = '', limit: number = 5) {
+  async fetchCases(page: number = this.inputPage, caseStatus: string = '', searchQuery: string = '', limit: number = this.selectedLimit) {
     this.isLoading = true; // Start loading indicator
   
     const token = this.cookieService.get('jwt') || null;
@@ -176,6 +177,7 @@ export class CaseListComponent {
 
   previousPage() {
     if (this.currentPage > 1) {
+      console.log("Current page", this.currentPage);
       this.currentPage--;
       this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery);
     }

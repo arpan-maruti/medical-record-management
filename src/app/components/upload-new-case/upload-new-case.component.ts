@@ -510,8 +510,8 @@ export class UploadNewCaseComponent implements OnInit {
         this.router.navigate(['/case-management']);
       })
       .catch((error) => {
-        console.error('Error creating case:', error.response?.data || error.message);
-        this.toastr.error(error.response?.data?.message|| 'Error creating case', 'Error');
+        console.error('Error creating case:', error.response?.data || error.response.message || "Error creating case");
+        this.toastr.error(error.response?.data?.error || error.response?.data?.message|| 'Error creating case', 'Error');
       });
   }
 

@@ -73,6 +73,7 @@ export class UploadFilesComponent {
    .then(response => {
      console.log('File uploaded successfully:', response.data);
      this.fileUploaded.emit(this.file?.name);
+     this.closeModal();
    })
    .catch(error => {
      console.error('Error uploading file:', error);
