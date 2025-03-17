@@ -42,17 +42,6 @@
  </div>
 
 
-
-
-<!-- Attractive loading spinner shown until cases are fetched -->
-<!-- <div *ngIf="isLoading" class="loading-container">
-  <svg class="spinner" viewBox="0 0 50 50">
-    <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-  </svg>
-  <p>Loading Cases...</p>
-</div> -->
-
- <!-- Desktop/Table view with table -->
  <div
  *ngIf="!isLoading && isDataAvailable && filteredData.length > 0"
    class="table-container desktop-table-view"
@@ -372,25 +361,13 @@
  >
    Next
  </button>
- <!-- <select
-   [(ngModel)]="currentPage"
-   (ngModelChange)="goToPage($event)"
-   class="pagination-select"
- >
-</select> -->
+
  <span class="pagination-info">Display Cases:</span>
  <select [(ngModel)]="selectedLimit" class="pagination-select" (ngModelChange)="onLimitChange()">
    <option *ngFor="let limit of limitOptions" [value]="limit.label">{{ limit.label }}</option>
  </select>
- <!-- <span class="pagination-info">of {{ totalPages }}</span>
- <input
-   type="number"
-   [(ngModel)]="inputPage"
-   (change)="goToInputPage()"
-   class="pagination-input"
-   min="1"
-   [max]="totalPages"
- />  -->
+
 </div>
+
 
 

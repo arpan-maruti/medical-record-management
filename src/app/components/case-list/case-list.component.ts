@@ -9,9 +9,10 @@ import { UploadFilesComponent } from '../upload-files/upload-files.component';
 import { CookieService } from 'ngx-cookie-service';
 import axios from 'axios';
 import { environment } from '../environments/environment';
+import { Toast, ToastrModule, ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-case-list',
-  imports: [CommonModule, FormsModule, ViewAndLabelComponent, UploadFilesComponent],
+  imports: [CommonModule, FormsModule, ViewAndLabelComponent, UploadFilesComponent, ToastrModule],
   templateUrl: './case-list.component.html',
   styleUrls: ['./case-list.component.css'],
   encapsulation: ViewEncapsulation.None,
@@ -42,7 +43,8 @@ export class CaseListComponent {
   maxLimit: number = 1;
   totalCases: number = 1;
 
-  constructor(private cdr: ChangeDetectorRef,
+  constructor(private toastr: ToastrService,
+    private cdr: ChangeDetectorRef,
     private dataService: DataService, 
     private sanitizer: DomSanitizer,
     private router: Router,
@@ -50,7 +52,19 @@ export class CaseListComponent {
     
   }
   
+  // Example success message
+showSuccess(message: string) {
+  this.toastr.success(message, 'Success', {
+    timeOut: 3000
+  });
+}
 
+// Example error message
+showError(message: string) {
+  this.toastr.error(message, 'Error', {
+    timeOut: 4000
+  });
+}
   
   viewCaseDetails(caseItem: any) {
     this.router.navigate(['/case-management/main-case-view', caseItem._id] );
@@ -158,10 +172,6 @@ export class CaseListComponent {
       this.isLoading = false; // End loading indicator
     }
   }
-  
-  
-
-  
   sortBy(column: string): void {
     if (this.sortKey === column) {
       // Toggle sort direction if same column is clicked.
@@ -216,11 +226,17 @@ export class CaseListComponent {
   // Toggle visibility of subcases
   toggleSubCases(caseItem: any) {
     caseItem.expanded = !caseItem.expanded; // Toggle subcase visibility
-  
     // Fetch subcases only if the case is expanded and subcases are not already fetched
     if (caseItem.expanded && !caseItem.subCases) {
       this.fetchSubCases(caseItem._id).then(subCases => {
         caseItem.subCases = subCases; // Store the fetched subcases in the caseItem object
+
+       
+      });
+    }
+    if (caseItem.expanded && caseItem.subCases.length === 0) {
+      this.toastr.info('No subcases found for this case.', 'Info', {
+        timeOut: 3000
       });
     }
     console.log(this.filteredData)
@@ -231,6 +247,7 @@ export class CaseListComponent {
     console.log(parentId);
     return new Promise((resolve, reject) => {
       const token = this.cookieService.get('jwt');
+  
       axios.get(`${environment.apiUrl}/case/${parentId}/subcases/`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -240,20 +257,30 @@ export class CaseListComponent {
       })
       .then(response => {
         console.log(response.data);
+        
         if (response.data.code === 'Success') {
+          const subcases = response.data.data;
           
-          resolve(response.data.data); // Resolve with the fetched subcases
+  
+          resolve(subcases); // Resolve with the fetched subcases
         } else {
           console.error('Failed to fetch subcases:', response.data.message);
+          this.toastr.warning(response.data.message || 'Failed to fetch subcases', 'Warning', {
+            timeOut: 3000
+          });
           reject(response.data.message);
         }
       })
       .catch(error => {
         console.error('Error fetching subcases:', error);
+        this.toastr.error('An error occurred while fetching subcases. Please try again later.', 'Error', {
+          timeOut: 4000
+        });
         reject(error);
       });
     });
   }
+  
 
 
   getPages(): number[] {
@@ -312,26 +339,30 @@ export class CaseListComponent {
       console.log(response.data);
       if (response.data.code === 'Success') {
         const files = response.data.data;
-
+  
         // Pick the file with fileType "loi" for the LOI preview
         const loiFiles = files.filter((file: any) => file.file_type === 'loi');
         if (loiFiles.length > 0) {
           const loiFile = loiFiles[0];
-          // Use the static file server URL with the filename from the file data
           const fileUrl = `http://localhost:5000/files/${loiFile.file_path}`;
           console.log(loiFile);
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
           this.selectedFileName = loiFile.file_name;
           this.isPdfPreviewVisible = true;
+        } else {
+          this.toastr.info('No LOI files found for this case.', 'Info');
         }
       } else {
         console.error('Failed to fetch files:', response.data.message);
+        this.toastr.warning(response.data.message, 'Warning');
       }
     })
     .catch(error => {
       console.error('Error fetching files:', error);
+      this.toastr.error('An error occurred while fetching the files.', 'Error');
     });
   }
+  
 
   closePdfPreview() {
     this.isPdfPreviewVisible = false;
@@ -364,15 +395,20 @@ export class CaseListComponent {
   
   // This function is called when a file is uploaded and it gets the file name
   onFileUploaded(fileName: string) {
-    this.uploadedFileName = fileName;  // Store the file name in the parent component
+    this.uploadedFileName = fileName;
+    this.toastr.success(`File "${fileName}" uploaded successfully!`, 'Success');
   }
   addSubcase(caseItem: any) {
     this.router.navigate(['case-management/upload-sub-case', caseItem._id ]);
   }
-
+  
   addCase() {
     this.router.navigate(['case-management/upload-new-case']);
-  };
+  }
+  
+  closeViewLabel() {
+    this.isViewLabelVisible = false;
+  }
 
   openViewLabel(caseId: string) {
     const token = this.cookieService.get('jwt');
@@ -386,34 +422,46 @@ export class CaseListComponent {
     .then(response => {
       if (response.data.code === 'Success') {
         const files = response.data.data;
-        // Only show files with file_type "document" in the View/Label popup
         const documentFiles = files.filter((file: any) => file.file_type === 'document');
         this.selectedFiles = documentFiles.map((file: any) => ({
           id: file._id,
           name: file.file_name,
           label: file.files_label || '',
           icon: '📄',
-          file_url: file.file_path, // include URL for preview
-          caseId  // attach the current caseId to each file
+          file_url: file.file_path,
+          caseId
         }));
   
         this.isViewLabelVisible = true;
+        if (this.selectedFiles.length > 0) {
+          // this.toastr.success('Documents loaded successfully!', 'Success');
+        } else {
+          this.toastr.info('No document files available for this case.', 'Info');
+        }
       } else {
         console.error('Failed to fetch files:', response.data.message);
+        this.toastr.warning(response.data.message, 'Warning');
       }
     })
     .catch(error => {
       console.error('Error fetching files:', error);
+      this.toastr.error('An error occurred while fetching the document files.', 'Error');
     });
   }
+  
 
   openDocumentPreview(file: any) {
+    if (!file.file_url) {
+      this.toastr.warning('File URL is missing.', 'Warning');
+      return;
+    }
+  
     const fileUrl = `http://localhost:5000/files/${file.file_url}`;
     this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
     this.selectedFileName = file.name;
     this.isPdfPreviewVisible = true;
+    this.toastr.success('File preview opened.', 'Success');
   }
-
   patchFileLabel(fileId: string, filesLabel: string) {
     const token = this.cookieService.get('jwt');
     axios.patch(`${environment.apiUrl}/file/${fileId}`, 
@@ -429,23 +477,20 @@ export class CaseListComponent {
     .then(response => {
       if (response.data.code === 'Success') {
         console.log('File label updated successfully.');
-        // Optionally update the local file data
         const index = this.selectedFiles.findIndex(file => file.id === fileId);
         if (index !== -1) {
           this.selectedFiles[index].label = filesLabel;
         }
+        this.toastr.success('File label updated successfully.', 'Success');
       } else {
         console.error('Failed to update file label:', response.data.message);
+        this.toastr.warning(response.data.message, 'Warning');
       }
     })
     .catch(error => {
       console.error('Error updating file label:', error);
+      this.toastr.error('An error occurred while updating the file label.', 'Error');
     });
   }
-  
-  closeViewLabel() {
-    this.isViewLabelVisible = false;
-  }
-
  
 }
