@@ -39,6 +39,8 @@ export class UploadSubcaseComponent implements OnInit {
   dateError: string | null = null;
   parametersError: string | null = null;
   loiError: string | null = null;
+  loiFileError: string | null = null;
+  loiFileErrorMessage: string | null = null;
   instructionError: string | null = null;
   isSubmitted: boolean = false;
   token: string | null = null;
@@ -222,6 +224,8 @@ export class UploadSubcaseComponent implements OnInit {
     this.parametersError = null;
     this.loiError = null;
     this.instructionError = null;
+    this.loiFileError = null;
+
   }
 
   // Caching LOI Types similar to Upload New Case Component
@@ -428,6 +432,7 @@ export class UploadSubcaseComponent implements OnInit {
       .then(response => {
         console.log('LOI file uploaded successfully:', response.data);
         this.uploadedLoiFileMetadata = response.data.data;
+        this.loiFileError = null;
         this.toastr.success('LOI file uploaded successfully', 'File Upload');
       })
       .catch(error => {
@@ -444,6 +449,7 @@ export class UploadSubcaseComponent implements OnInit {
     this.parametersError = null;
     this.loiError = null;
     this.instructionError = null;
+    this.loiFileError = null;
 
     // Validate fields
     if (!this.subCaseReference || this.subCaseReference.trim() === '') {
@@ -462,17 +468,21 @@ export class UploadSubcaseComponent implements OnInit {
     if (!this.selectedInstruction) {
       this.instructionError = 'Instruction Type is required.';
     }
+    if(!this.loiFile) {
+      this.loiFileError = 'LOI file is required.';
+    }
     if (Object.values(this.selectedParameters).every(val => !val)) {
       this.parametersError = 'At least one parameter must be selected.';
     }
-    if (this.subCaseReferenceError || this.dateError || this.parametersError || this.loiError || this.instructionError) {
+    if (this.subCaseReferenceError || this.dateError || this.parametersError || this.loiError || this.instructionError || this.loiFileError) {
       this.toastr.error('Please correct form errors.', 'Validation Error');
       console.error('Validation errors', {
         subCaseReferenceError: this.subCaseReferenceError,
         dateError: this.dateError,
         loiError: this.loiError,
         instructionError: this.instructionError,
-        parametersError: this.parametersError
+        parametersError: this.parametersError,
+        loiFileError: this.loiFileError
       });
       return;
     }

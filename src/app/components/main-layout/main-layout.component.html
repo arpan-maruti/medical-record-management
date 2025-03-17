@@ -1,14 +1,12 @@
 <div class="layout-container">
-    <div *ngIf="(!isProfile && !isUploadNewCase)">
-        <p class="layout-container__heading">{{baseUrl | titlecase}}</p>
-        <p class="layout-container__path">{{baseUrl | titlecase}} / {{subRoute | pathFormat | titlecase}}</p>
-    </div>
     <div *ngIf="isProfile">
         <p class="layout-container__heading">My Profile</p>
     </div>
-    <div *ngIf="isUploadNewCase">
+    <div *ngIf="!isProfile">
         <p class="layout-container__heading">{{baseUrl | titlecase}}</p>
-        <p class="layout-container__path">{{baseUrl | titlecase}} / {{subRoute | pathFormat | titlecase}}</p>
+        <span class="layout-container__path" (click)="redirectToBaseRoute()">{{baseUrl | titlecase}}</span>
+        <span class="layout-container__path_label"> / </span>
+        <span class="layout-container__path" (click)="redirectToSubRoute()">{{subRoute | pathFormat | titlecase}}</span>
     </div>
     <router-outlet></router-outlet>
 </div>
