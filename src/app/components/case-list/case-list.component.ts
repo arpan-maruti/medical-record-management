@@ -90,7 +90,6 @@ export class CaseListComponent {
   
     // Base URL with pagination parameters (default limit = 5)
     let baseUrl = `${environment.apiUrl}/user/cases?page=${page}&limit=${limit}`;
-    console.log("page:", page, " limit", limit);
     if (caseStatus) baseUrl += `&case_status=${caseStatus}`;
     if (this.sortKey) {
       const sortParam = this.sortDirection === 'desc' ? `-${this.sortKey}` : this.sortKey;
