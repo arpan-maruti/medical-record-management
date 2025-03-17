@@ -34,7 +34,7 @@ export class NavbarComponent {
 
   isDropdownOpen = false;
   user: any = {}; // Initialize an empty object to hold user data
-
+  userRole: string = '';
   constructor(private toastr: ToastrService,private cookieService: CookieService,  private cdr: ChangeDetectorRef, private router: Router,  private dialog: MatDialog,) {}
 
   ngOnInit() {
@@ -43,21 +43,22 @@ export class NavbarComponent {
 
   // Fetch user profile data
   getUserProfile() {
-    const token = this.cookieService.get('jwt'); // Get the JWT token from cookies
+    const token = this.cookieService.get('jwt');
 
     if (token) {
       try {
-        const decodedToken: any = jwtDecode(token); // Decode the JWT token
-        const userId = decodedToken.id; // Extract the user_id from the token payload
+        const decodedToken: any = jwtDecode(token);
+        this.userRole = decodedToken.role; // Extract user role
+        const userId = decodedToken.id;
 
         axios.get(`${environment.apiUrl}/user/${userId}`, {
           headers: {
-            Authorization: `Bearer ${token}` // Add the JWT token to the Authorization header
+            Authorization: `Bearer ${token}`
           }
         })
         .then(response => {
           if (response.data.code === 'Success') {
-            this.user = response.data.data; // Assign the fetched user data to the component
+            this.user = response.data.data;
           } else {
             console.error('Failed to fetch user data:', response.data.message);
           }
@@ -68,8 +69,6 @@ export class NavbarComponent {
       } catch (error) {
         console.error('Error decoding JWT token:', error);
       }
-    } else {
-      // console.error('No JWT token found');
     }
   }
   toggleDropdown(event: MouseEvent) {

@@ -52,11 +52,16 @@
 }
 
 .navbar__blank-box {
-  flex: 41; /* Placeholder for spacing */
-  border: 1px solid lightgray; /* Expand border into full height */
-  box-sizing: border-box;
+  flex: 41; /* Adjust flex so it doesn't take too much space */
+  display: flex;
+  align-items: center; /* Vertically center content */
+  justify-content: flex-end; /* Right align content */
+  border: 1px solid lightgray; /* Ensure border extends fully */
   height: 5.5rem; /* Match logo height */
+  padding-right: 1rem; /* Add padding for spacing */
+  box-sizing: border-box;
 }
+
 
 /* Profile box styling */
 .navbar__profile-box {
@@ -133,6 +138,25 @@
   font-weight: 500; /* Medium font weight */
   margin: 0;
 }
+
+.admin-badge {
+  background: linear-gradient(45deg, #00ccff, #007bff, #0056b3);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+
+
+
+
 
 /* Add a subtle animation for the dropdown */
 @keyframes slideIn {
