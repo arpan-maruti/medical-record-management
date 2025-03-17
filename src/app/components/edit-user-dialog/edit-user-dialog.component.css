@@ -11,11 +11,11 @@
   }
   
   .country-code {
-    width: 30%;
+    width: 35%;
   }
   
   .phone-number {
-    width: 70%;
+    width: 65%;
   }
   
   mat-dialog-content {
@@ -85,4 +85,40 @@
     cursor: not-allowed;
     border: none;
   }
+  .phone-group {
+    .country-code {
+      font-size: 2px !important; 
+    }
+  
+    mat-option {
+      font-size: 12px !important; 
+    }
+  
+    mat-label {
+      font-size: 12px; 
+    }
+  }
+
+  @media (max-width:476px) {
+    .country-code {
+      width: 45%;
+    }
+    
+    .phone-number {
+      width: 55%;
+    }
+    
+  }
+
+  @media (max-width:375px) {
+    .country-code {
+      width: 50%;
+    }
+    
+    .phone-number {
+      width: 50%;
+    }
+    
+  }
+  
   

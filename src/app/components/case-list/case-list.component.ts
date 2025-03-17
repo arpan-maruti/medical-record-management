@@ -172,10 +172,6 @@ showError(message: string) {
       this.isLoading = false; // End loading indicator
     }
   }
-  
-  
-
-  
   sortBy(column: string): void {
     if (this.sortKey === column) {
       // Toggle sort direction if same column is clicked.

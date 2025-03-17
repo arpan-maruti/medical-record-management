@@ -8,24 +8,32 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
-
+import { ToastrService } from 'ngx-toastr';
+import phoneValidationData from '../../../assets/country-phone-validation.json';
+import { PhoneMaskService } from '../../services/phone-mask.service';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 @Component({
   selector: 'app-edit-user-dialog',
   standalone: true,
-  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [NgxMaskDirective,MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './edit-user-dialog.component.html',
-  styleUrl: './edit-user-dialog.component.css'
+  styleUrl: './edit-user-dialog.component.css',
+  providers: [provideNgxMask()],
 })
 export class EditUserDialogComponent implements OnInit {
   editUserForm!: FormGroup;
   isLoading = false;
   isEditing = false; // Track if user is in edit mode
   originalData: any = {}; // Store original user data
-
+  countryList: any = phoneValidationData;
+  phoneMask: string = '';
+  
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditUserDialogComponent>,
     private cookieService: CookieService,
+    private phoneMaskService: PhoneMaskService,
+    private toastr: ToastrService, // Inject ToastrService
     @Inject(MAT_DIALOG_DATA) public data: { userId: string }
   ) {}
 
@@ -59,6 +67,7 @@ export class EditUserDialogComponent implements OnInit {
       this.editUserForm.patchValue(response.data.data);
       console.log(this.originalData);
     } catch (error: any) {
+      this.toastr.error('Failed to fetch user details', 'Error');
       console.error('Error fetching user data:', error.response?.data || error.message);
     } finally {
       this.isLoading = false;
@@ -71,8 +80,11 @@ export class EditUserDialogComponent implements OnInit {
   }
 
   async saveChanges() {
-    if (this.editUserForm.invalid) return;
-    
+    if (this.editUserForm.invalid) {
+      this.toastr.warning('Please fill out all required fields correctly', 'Validation Error');
+      return;
+    }
+
     this.isLoading = true;
     try {
       const token = this.cookieService.get('jwt');
@@ -103,16 +115,36 @@ export class EditUserDialogComponent implements OnInit {
             'Content-Type': 'application/json',
           }
         });
+        this.toastr.success('User details updated successfully', 'Success');
+      } else {
+        this.toastr.info('No changes detected', 'Info');
       }
   
       this.dialogRef.close(true); // Close dialog with success
     } catch (error: any) {
+      this.toastr.error('Failed to update user details', 'Error');
       console.error('Error updating user:', error.response?.data || error.message);
     } finally {
       this.isLoading = false;
     }
   }
-  
+  updatePhoneMask() {
+    const selectedCountryCode = this.editUserForm.get('country_code')?.value;
+    if (selectedCountryCode) {
+      const country = this.countryList.find(
+        (c: { countryCallingCode: string }) => c.countryCallingCode === selectedCountryCode
+      );
+      let isoCode = selectedCountryCode; 
+      if (country) {
+        isoCode = country.countryCode;
+      }
+      this.phoneMask = this.phoneMaskService.getMask(isoCode);
+      if (!this.phoneMask) {
+        console.warn(`Mask not found for country code: ${isoCode}`);
+        this.phoneMask = '000-000-0000';
+      }
+    }
+  }
   closeDialog() {
     this.dialogRef.close(false);
   }

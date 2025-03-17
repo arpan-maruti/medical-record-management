@@ -185,7 +185,7 @@ export class RegisterComponent {
         this.formSubmitted = false;
   
         // Navigate to home page
-        this.router.navigate(['/']);
+        this.router.navigate(['/case-management/user-list']);
       } catch (error:any) {
         console.error('Error during registration:', error);
         this.toastr.error( error.response?.data?.message ||'Failed to register user. Please try again.', 'Error');
