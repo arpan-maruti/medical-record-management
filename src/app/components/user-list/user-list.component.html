@@ -7,7 +7,13 @@
   </mat-form-field>
 </div>
 
-<div class="table-container">
+<div *ngIf="users.length === 0" class="no-users-box">
+  <mat-icon class="no-users-icon">group</mat-icon>
+  <p>No users available.</p>
+  <button mat-raised-button color="primary" (click)="navigateToRegister()">Add User</button>
+</div>
+
+<div class="table-container" *ngIf="users.length !== 0">
   <table mat-table [dataSource]="users" [matSortDisableClear]="true"  matSort (matSortChange)="onSortChange($event)" class="custom-table">
     
       <!-- Name Column -->
@@ -78,6 +84,7 @@
 </div>
 
 <mat-paginator 
+*ngIf="users.length !== 0"
   [length]="totalUsers" 
   [pageSize]="pageSize" 
   [pageSizeOptions]="[5, 10, 20, 50, 100]" 

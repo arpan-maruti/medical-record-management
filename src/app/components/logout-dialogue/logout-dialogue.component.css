@@ -1,0 +1,94 @@
+/* Dialog Title */
+h2 {
+    color: #d32f2f;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  
+  /* Dialog Message */
+  p {
+    font-size: 16px;
+    text-align: center;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  /* Dialog Content */
+  .mat-dialog-content {
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Dialog Actions */
+  .mat-dialog-actions {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 15px;
+  }
+  
+  /* Cancel Button */
+  .cancel-button {
+    background: linear-gradient(135deg, #757575, #616161);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    margin: 0.5rem;
+  }
+  
+  .cancel-button:hover {
+    background: linear-gradient(135deg, #616161, #424242);
+    transform: scale(1.05);
+  }
+  
+  /* Confirm Button */
+  /* Confirm Button (Bluish Theme) */
+.confirm-button {
+    background: linear-gradient(135deg, #2f71d3, #1c64b7); /* Dark to light blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Hover Effect */
+  .confirm-button:hover {
+    background: linear-gradient(135deg, #1a54a3, #154383); /* Deeper blue shades */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+  }
+  
+  /* Active Effect */
+  .confirm-button:active {
+    background: linear-gradient(135deg, #154383, #0e2c5e);
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.4);
+    transform: scale(1);
+  }
+  
+  
+  /* Mobile Responsiveness */
+  @media (max-width: 600px) {
+    .mat-dialog-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .cancel-button, .confirm-button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  

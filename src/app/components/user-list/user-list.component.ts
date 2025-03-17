@@ -15,6 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CookieService } from 'ngx-cookie-service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -44,7 +45,7 @@ export class UserListComponent implements OnInit {
   isLoading = false;
   hoverState: 'normal' | 'hovered' = 'normal';
 
-  constructor(private cookieService: CookieService, private dialog: MatDialog) {}
+  constructor(private cookieService: CookieService, private dialog: MatDialog, private router: Router) { }
 
   ngOnInit(): void {
     this.loadUsers();
@@ -110,7 +111,11 @@ export class UserListComponent implements OnInit {
 }
 
   
-  
+navigateToRegister() {
+  // Assuming you have a router injected
+  this.router.navigate(['/register']);
+}
+
 
 editUser(uId: string) {
   console.log(uId)

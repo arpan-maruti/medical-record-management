@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router'; // ✅ Import RouterModule if using Router
 import { ViewAndLabelComponent } from '../view-and-label/view-and-label.component';
 import { UploadFilesComponent } from '../upload-files/upload-files.component';
-import { CdkTableModule } from '@angular/cdk/table';
+import { CdkColumnDef, CdkTableModule } from '@angular/cdk/table';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -43,7 +43,8 @@ import { CookieService } from 'ngx-cookie-service';
     CdkTableModule 
   ],
   templateUrl: './case-list-material.component.html',
-  styleUrls: ['./case-list-material.component.css']
+  styleUrls: ['./case-list-material.component.css'],
+  providers: [CdkColumnDef]
 })
 export class CaseListMaterialComponent {
 
@@ -52,6 +53,8 @@ export class CaseListMaterialComponent {
     'createdAt', 'uploadedBy', 'caseStatus', 'loi', 'uploadFile', 'viewLabel', 
     'generateSummary', 'addSubcase'
   ];
+
+
   dataSource: MatTableDataSource<any>;
   filteredData: any[] = [];
     isDataAvailable: boolean = false;
