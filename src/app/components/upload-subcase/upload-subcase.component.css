@@ -81,7 +81,7 @@
 
 .upload-subcase__form-group-row .upload-subcase__form-group {
     flex: 1; /* Make each input take equal width */
-    min-width: 15rem; /* Ensure inputs have a minimum width */
+    min-width: 18rem; /* Ensure inputs have a minimum width */
 }
 
 /* Custom styling for select dropdowns */
@@ -182,11 +182,21 @@
 
 @media (max-width: 1440px) {
     .upload-subcase__form-group label {
-        font-size: 1rem;
+        font-size: 1.14rem;
     }
 }
 
 @media (max-width: 1024px) {
+    .upload-subcase__form-group {
+        font-size: 1.2rem;
+    }
+    .upload-subcase__form
+     {
+        padding: 2.2rem;
+     }
+    .upload-subcase__title {
+        font-size: 1.5rem;
+    }
     .upload-subcase__forms {
         flex-direction: column;
     }

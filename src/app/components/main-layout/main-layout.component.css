@@ -56,8 +56,9 @@
 }
 
 @media (max-width: 768px) {
+  
   .layout-container {
-    padding: 1.2rem;
+    padding: 0;
   }
 
   .layout-container__heading {

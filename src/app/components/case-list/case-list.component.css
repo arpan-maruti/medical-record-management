@@ -885,13 +885,15 @@ iframe {
     }
   }
 }
-
-/* 425px - Small Mobile */
-@media (max-width: 425px) {
+@media (max-width: 545px) {
   .case-card-actions {
     flex-direction: column;
     gap: 10px;
   }
+}
+
+/* 425px - Small Mobile */
+@media (max-width: 425px) {
 
   .pdf-modal-content {
     /* padding: 10px; */
