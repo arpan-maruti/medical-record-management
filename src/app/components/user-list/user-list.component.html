@@ -83,6 +83,36 @@
   </table>
 </div>
 
+<!-- Mobile Layout -->
+<div class="mobile-user-list" *ngIf="users.length !== 0">
+  <div *ngFor="let user of users" class="user-card">
+    <div class="user-card-header">
+      <div>
+        <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+        <p>{{ user.email }}</p>
+      </div>
+      <span class="status-badge" [ngClass]="{'active': !user.is_deleted, 'inactive': user.is_deleted}">
+        {{ user.is_deleted ? 'Inactive' : 'Active' }}
+      </span>
+    </div>
+    <div>
+      <p><strong>Phone:</strong> {{ user.country_code }} {{ user.phone_number }}</p>
+      <p><strong>Role:</strong> {{ user.user_role }}</p>
+    </div>
+    <div class="user-card-actions">
+      <button mat-icon-button color="primary" (click)="editUser(user._id)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteUser(user._id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button color="accent" (click)="viewUser(user._id)">
+        <mat-icon>visibility</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
 <mat-paginator 
 *ngIf="users.length !== 0"
   [length]="totalUsers" 

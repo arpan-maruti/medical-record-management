@@ -35,25 +35,30 @@
         Enter a valid email.
       </mat-error>
     </mat-form-field>
-
     <div class="phone-group">
       <mat-form-field class="country-code">
         <mat-label>Country Code</mat-label>
-        <input matInput formControlName="country_code" />
-        <mat-error *ngIf="editUserForm.get('country_code')?.hasError('pattern')">
-          Invalid country code.
+        <mat-select formControlName="country_code" (selectionChange)="updatePhoneMask()">
+          <mat-option *ngFor="let country of countryList" [value]="country.countryCallingCode">
+            {{ country.flag }} {{ country.countryCode }} ({{ country.countryCallingCode }})
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="editUserForm.get('country_code')?.hasError('required')">
+          Select a country code.
         </mat-error>
       </mat-form-field>
 
       <mat-form-field class="phone-number">
         <mat-label>Phone Number</mat-label>
-        <input matInput formControlName="phone_number" />
+        <input matInput formControlName="phone_number" [mask]="phoneMask" />
+        <mat-error *ngIf="editUserForm.get('phone_number')?.hasError('required')">
+          Phone number is required.
+        </mat-error>
         <mat-error *ngIf="editUserForm.get('phone_number')?.hasError('pattern')">
           Invalid phone number.
         </mat-error>
       </mat-form-field>
     </div>
-
     <mat-form-field class="full-width">
       <mat-label>Role</mat-label>
       <mat-select formControlName="user_role">
