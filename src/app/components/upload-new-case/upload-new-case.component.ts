@@ -60,7 +60,7 @@ export class UploadNewCaseComponent implements OnInit {
     }
 
     async ngOnInit() {
-      this.caseId = this.route.snapshot.paramMap.get('id') || '';
+      this.caseId = atob(this.route.snapshot.paramMap.get('id') || '');
       
       if (this.caseId) {
         await this.fetchCaseData(); // Wait for the case data to be fetched

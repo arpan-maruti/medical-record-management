@@ -11,6 +11,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID, Inject } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-otp',
@@ -40,8 +41,18 @@ export class OtpComponent {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.route.queryParams.subscribe((params) => {
-        this.email = params['email'] || ''; 
-        console.log('Email from query params:', this.email);
+        const encryptedEmail = params['email']; // Get email from query params
+
+        if (encryptedEmail) {
+          try {
+            // Decode URL-safe format
+           this.email= atob(encryptedEmail);
+          } catch (error) {
+            console.error('Error decrypting email:', error);
+          }
+        }
+
+        // Start resend OTP timer after setting email
         this.startResendTimer();
       });
     }

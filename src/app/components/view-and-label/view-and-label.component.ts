@@ -49,7 +49,7 @@ export class ViewAndLabelComponent implements OnInit {
   }
 
   goToFileDetails(file: any) {
-    // Navigate to the file-details page with the file id as a route parameter
-    this.router.navigate(['/case-management/file-details', file.id]);
+    const encodedId = btoa(file.id);
+    this.router.navigate(['/case-management/file-details', encodedId]);
   }
 }
