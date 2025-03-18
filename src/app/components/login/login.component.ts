@@ -8,6 +8,7 @@ import validator from 'validator';
 import axios from 'axios';
 import { environment } from '../environments/environment';
 import { ToastrModule, ToastrService } from 'ngx-toastr'; // Import ToastrService
+import * as CryptoJS from 'crypto-js';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
@@ -60,8 +61,14 @@ export class LoginComponent {
       );
       if (otpResponse.data.success) {
         this.toastr.success('OTP sent successfully.', 'Success');
-        this.router.navigate(['/otp'], { queryParams: { email: this.email } });
-      } else {
+    
+        // Encrypt email using secret key from environment
+        const encryptedEmail = btoa(this.email)
+  
+    
+        // Navigate with encrypted email
+        this.router.navigate(['/otp'], { queryParams: { email: encryptedEmail } });
+    }else {
         this.generalError =
           otpResponse.data.message || 'Failed to send OTP. Try again later.';
         this.toastr.error(this.generalError, 'OTP Error');

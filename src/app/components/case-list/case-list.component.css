@@ -44,7 +44,7 @@
 }
 
 .table th {
-  background-color: #a4a4a4;
+  background-color: #a4a4a442;
 }
 
 .table th,
@@ -57,8 +57,6 @@
 .table-container {
   overflow-x: auto;
 }
-
-
 
 
 .main-case {
@@ -74,6 +72,11 @@
 }
 
 .main-case td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.main-case tr {
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
 }

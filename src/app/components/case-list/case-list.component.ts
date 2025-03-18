@@ -66,14 +66,15 @@ showError(message: string) {
   });
 }
   
-  viewCaseDetails(caseItem: any) {
-    this.router.navigate(['/case-management/main-case-view', caseItem._id] );
-  }
+viewCaseDetails(caseItem: any) {
+  const encodedId = btoa(caseItem._id);  // Encode the ID
+  this.router.navigate(['/case-management/main-case-view', encodedId]);
+}
 
-  viewSubCaseDetails(subCase: any) {
-    this.router.navigate(['/case-management/sub-case-view', subCase._id] );
-  }
-  
+viewSubCaseDetails(subCase: any) {
+  const encodedId = btoa(subCase._id);  // Encode the ID
+  this.router.navigate(['/case-management/sub-case-view', encodedId]);
+}
    
 
   ngAfterViewInit() {
@@ -399,7 +400,8 @@ showError(message: string) {
     this.toastr.success(`File "${fileName}" uploaded successfully!`, 'Success');
   }
   addSubcase(caseItem: any) {
-    this.router.navigate(['case-management/upload-sub-case', caseItem._id ]);
+    const encodedId = btoa(caseItem._id);
+    this.router.navigate(['case-management/upload-sub-case', encodedId ]);
   }
   
   addCase() {

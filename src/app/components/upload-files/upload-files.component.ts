@@ -56,6 +56,8 @@ export class UploadFilesComponent {
     formData.append('createdBy', userId);
     formData.append('modifiedBy', userId);
     formData.append('fileFormat', extension);
+    formData.append('fileSize', this.file.size.toString());
+    console.log(this.file.size.toString());
 
     axios.post(
       `${environment.apiUrl}/case/${this.caseId}/files`,
