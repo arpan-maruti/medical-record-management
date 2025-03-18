@@ -1,7 +1,7 @@
 .case-list-container {
-  /* margin-top: 3rem; */
   background-color: #ffffff;
   padding: 1rem;
+  margin-top: 6px;
 }
 
 .case-list__heading {
@@ -819,7 +819,7 @@ iframe {
     padding: 0.5rem;
   }
   .header-container1 {
-    gap: 10px;
+    gap: 30px;
   }
   .header-container2 {
     gap: 0;

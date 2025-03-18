@@ -12,40 +12,21 @@
         <!-- Client Name -->
         <div class="upload-subcase__form-group">
           <label for="client-name" class="upload-subcase__form-label">Client Name</label>
-          <input
-            type="text"
-            id="client-name"
-            [(ngModel)]="clientName"
-            [ngModelOptions]="{ standalone: true }"
-            [disabled]="true"
-            class="upload-subcase__form-input"
-          />
+          <input type="text" id="client-name" [(ngModel)]="clientName" [ngModelOptions]="{ standalone: true }"
+            [disabled]="true" class="upload-subcase__form-input" />
         </div>
         <!-- Parent Case Reference -->
         <div class="upload-subcase__form-group">
           <label for="parent-case-reference" class="upload-subcase__form-label">Parent Case Reference Number</label>
-          <input
-            type="text"
-            id="parent-case-reference"
-            [(ngModel)]="parentCaseReference"
-            [ngModelOptions]="{ standalone: true }"
-            [disabled]="true"
-            class="upload-subcase__form-input"
-          />
+          <input type="text" id="parent-case-reference" [(ngModel)]="parentCaseReference"
+            [ngModelOptions]="{ standalone: true }" [disabled]="true" class="upload-subcase__form-input" />
         </div>
         <!-- Sub Case Reference -->
         <div class="upload-subcase__form-group">
           <label for="sub-case-reference" class="upload-subcase__form-label">Sub Case Reference Number</label>
-          <input
-            type="text"
-            id="sub-case-reference"
-            placeholder="Enter reference number"
-            (input)="onInputChange()"
-            [(ngModel)]="subCaseReference"
-            [ngModelOptions]="{ standalone: true }"
-            [disabled]="viewOnly"
-            class="upload-subcase__form-input"
-          />
+          <input type="text" id="sub-case-reference" placeholder="Enter reference number" (input)="onInputChange()"
+            [(ngModel)]="subCaseReference" [ngModelOptions]="{ standalone: true }" [disabled]="viewOnly"
+            class="upload-subcase__form-input" />
           <div *ngIf="isSubmitted && subCaseReferenceError" class="upload-subcase__error-message">
             {{ subCaseReferenceError }}
           </div>
@@ -54,15 +35,9 @@
         <div class="upload-subcase__form-group">
           <label for="loi-type" class="upload-subcase__form-label">What type of LOI?</label>
           <ng-container *ngIf="!viewOnly">
-            <select
-              id="loi-type"
-              (input)="onInputChange()"
-              [(ngModel)]="selectedLoi"
-              [ngModelOptions]="{ standalone: true }"
-              (ngModelChange)="onLoiChange()"
-              [disabled]="viewOnly"
-              class="upload-subcase__form-select"
-            >
+            <select id="loi-type" (input)="onInputChange()" [(ngModel)]="selectedLoi"
+              [ngModelOptions]="{ standalone: true }" (ngModelChange)="onLoiChange()" [disabled]="viewOnly"
+              class="upload-subcase__form-select">
               <option value="" disabled>Select LOI Type</option>
               <option *ngFor="let loi of loiTypes" [value]="loi._id">
                 {{ loi.loi_msg }}
@@ -70,14 +45,8 @@
             </select>
           </ng-container>
           <ng-container *ngIf="viewOnly">
-            <input
-              type="text"
-              id="loi-type"
-              [(ngModel)]="selectedLoi"
-              [ngModelOptions]="{ standalone: true }"
-              disabled
-              class="upload-subcase__form-input"
-            />
+            <input type="text" id="loi-type" [(ngModel)]="selectedLoi" [ngModelOptions]="{ standalone: true }" disabled
+              class="upload-subcase__form-input" />
           </ng-container>
           <div *ngIf="isSubmitted && loiError" class="upload-subcase__error-message">
             {{ loiError }}
@@ -87,23 +56,12 @@
         <div class="upload-subcase__form-group">
           <label for="date-of-branch" class="upload-subcase__form-label">Date of Breach / Liability</label>
           <ng-container *ngIf="!viewOnly">
-            <input
-              (input)="onInputChange()"
-              type="date"
-              id="date-of-branch"
-              name="dateOfBranch"
-              [(ngModel)]="dateOfBranch"
-              class="upload-subcase__form-input"
-            />
+            <input (input)="onInputChange()" type="date" id="date-of-branch" name="dateOfBranch"
+              [(ngModel)]="dateOfBranch" class="upload-subcase__form-input" />
           </ng-container>
           <ng-container *ngIf="viewOnly">
-            <input
-              type="text"
-              id="date-of-branch"
-              [value]="dateOfBranch | date: 'dd MMM yyyy'"
-              disabled
-              class="upload-subcase__form-input"
-            />
+            <input type="text" id="date-of-branch" [value]="dateOfBranch | date: 'dd MMM yyyy'" disabled
+              class="upload-subcase__form-input" />
           </ng-container>
           <div *ngIf="isSubmitted && dateError" class="upload-subcase__error-message">
             {{ dateError }}
@@ -111,52 +69,38 @@
         </div>
       </div>
 
-      <!-- Upload LOI Label (always visible) -->
-     <!-- Upload LOI Label (always visible) -->
-<div class="upload-subcase__form-group">
-  <label for="loi-upload" class="upload-subcase__loi-upload-label">
-    <span class="upload-subcase__loi-text">Upload Letter of Instruction</span>
-    <span class="upload-subcase__upload-icon">📎</span>
-  </label>
-  <!-- Hidden file input triggered by the label -->
-  <input
-    type="file"
-    id="loi-upload"
-    accept="application/pdf"
-    (change)="onLoiFileSelected($event)"
-    enctype="multipart/form-data"
-    style="display: none;"
-  />
-</div>
+      <div class="upload-subcase__form-group">
+        <label for="loi-upload" class="upload-subcase__loi-upload-label">
+          <span class="upload-subcase__loi-text">Upload Letter of Instruction</span>
+          <span class="upload-subcase__upload-icon">📎</span>
+        </label>
+        <!-- Hidden file input triggered by the label -->
+        <input type="file" id="loi-upload" accept="application/pdf" (change)="onLoiFileSelected($event)"
+          enctype="multipart/form-data" style="display: none;" />
+          <div *ngIf="isSubmitted && loiFileError" class="upload-subcase__error-message">
+            {{ loiFileError }}
+            </div>
+      </div>
 
       <!-- Instruction Type -->
       <div class="upload-subcase__form-group-instruction-type">
         <label for="instruction-type" class="upload-subcase__form-label">Instruction Type</label>
         <ng-container *ngIf="!viewOnly">
-          <select
-            id="instruction-type"
-            (input)="onInputChange()"
-            [(ngModel)]="selectedInstruction"
-            [ngModelOptions]="{ standalone: true }"
-            (ngModelChange)="onInstructionChange()"
-            [disabled]="viewOnly"
-            class="upload-subcase__form-select"
-          >
+          <select id="instruction-type" (input)="onInputChange()" [(ngModel)]="selectedInstruction"
+            [ngModelOptions]="{ standalone: true }" (ngModelChange)="onInstructionChange()" [disabled]="viewOnly"
+            class="upload-subcase__form-select">
             <option value="" disabled>Select Instruction Type</option>
+            <option *ngIf="instructionTypes.length === 0" value="" disabled>
+              No instruction types available, Select LOI Type First
+            </option>
             <option *ngFor="let instruction of instructionTypes" [value]="instruction._id">
               {{ instruction.instruction_msg }}
             </option>
           </select>
         </ng-container>
         <ng-container *ngIf="viewOnly">
-          <input
-            type="text"
-            id="instruction-type"
-            [(ngModel)]="selectedInstruction"
-            [ngModelOptions]="{ standalone: true }"
-            disabled
-            class="upload-subcase__form-input"
-          />
+          <input type="text" id="instruction-type" [(ngModel)]="selectedInstruction"
+            [ngModelOptions]="{ standalone: true }" disabled class="upload-subcase__form-input" />
         </ng-container>
         <div *ngIf="isSubmitted && instructionError" class="upload-subcase__error-message">
           {{ instructionError }}
@@ -167,34 +111,22 @@
     <!-- Second Form: Parameters List -->
     <form id="upload-subcase__form2" class="upload-subcase__form" (input)="onInputChange()">
       <h3 class="upload-subcase__form-title">SELECT THE PARAMETERS</h3>
-      <div class="upload-subcase__form-group" *ngIf="(viewOnly ? selectedParametersView.length : parameters.length) > 0">
+      <div class="upload-subcase__form-group"
+        *ngIf="(viewOnly ? selectedParametersView.length : parameters.length) > 0">
 
         <ul class="upload-subcase__parameter-list">
-          <li
-            (click)="toggleSelection(param._id)"
-            *ngFor="let param of parameters"
-            class="upload-subcase__parameter-item"
-          >
+          <li (click)="toggleSelection(param._id)" *ngFor="let param of parameters"
+            class="upload-subcase__parameter-item">
             <div class="upload-subcase__checkbox-container">
-              <svg
-                *ngIf="!isSelected(param._id)"
-                xmlns="http://www.w3.org/2000/svg"
-                height="24px"
-                viewBox="0 -960 960 960"
-                width="24px"
-                fill="#000000"
-              >
-                <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z" />
+              <svg *ngIf="!isSelected(param._id)" xmlns="http://www.w3.org/2000/svg" height="24px"
+                viewBox="0 -960 960 960" width="24px" fill="#000000">
+                <path
+                  d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z" />
               </svg>
-              <svg
-                *ngIf="isSelected(param._id)"
-                xmlns="http://www.w3.org/2000/svg"
-                height="24px"
-                viewBox="0 -960 960 960"
-                width="24px"
-                fill="#000000"
-              >
-                <path d="m424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z" />
+              <svg *ngIf="isSelected(param._id)" xmlns="http://www.w3.org/2000/svg" height="24px"
+                viewBox="0 -960 960 960" width="24px" fill="#000000">
+                <path
+                  d="m424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z" />
               </svg>
             </div>
             <div class="upload-subcase__parameter-details">
@@ -203,8 +135,8 @@
           </li>
         </ul>
         <ul class="upload-subcase__parameter-list" *ngIf="viewOnly">
-          <li *ngFor="let param of selectedParametersView" >
-            <div class="upload-subcase__parameter-details" style="margin: 0.5rem;" >
+          <li *ngFor="let param of selectedParametersView">
+            <div class="upload-subcase__parameter-details" style="margin: 0.5rem;">
               {{ getParameterMsg(param) }}
             </div>
           </li>

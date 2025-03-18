@@ -435,7 +435,6 @@ export class UploadNewCaseComponent implements OnInit {
     }
 
     if(!this.loiFile) {
-      debugger;
       this.loiFileError = 'LOI file is required.';
     }
   

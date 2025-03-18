@@ -11,6 +11,7 @@ import { PathFormatPipe } from '../../pipes/path-format.pipe';
 export class MainLayoutComponent implements OnInit, DoCheck {
   fullUrl: string = '';
   baseUrl: string = '';
+  subRoute: string = '';
   isProfile: boolean = false;
   isUploadNewCase: boolean = false;
   title: string = '';
@@ -24,11 +25,20 @@ export class MainLayoutComponent implements OnInit, DoCheck {
 
   ngDoCheck(): void {
     const currentUrl = this.router.url;
+
     if (this.fullUrl !== currentUrl) {
       this.fullUrl = currentUrl;
       this.isProfile = currentUrl.includes('profile');
       this.isUploadNewCase = currentUrl.includes('upload-new-case');
     }
     this.baseUrl = this.fullUrl.split('/')[1].replace(/-/g, ' ');
+    this.subRoute = this.fullUrl.split('/').slice(2, 3).join('/');
+  }
+  redirectToBaseRoute() {
+    this.baseUrl = this.baseUrl.replace(' ', '-');
+    this.router.navigate([`/${this.baseUrl}`]);
+  }
+  redirectToSubRoute() {
+    // this.router.navigate(['']);
   }
 }
