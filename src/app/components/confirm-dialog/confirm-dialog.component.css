@@ -1,5 +1,5 @@
-/* Deep styles to ensure they apply within Material Dialog */
-::ng-deep .dialog-container {
+/* Dialog Container */
+.dialog-container {
   text-align: center;
   padding: 1rem;
   background: linear-gradient(135deg, #fff, #f8f8f8);
@@ -11,7 +11,7 @@
 }
 
 /* Header with warning icon */
-::ng-deep .dialog-header {
+.dialog-header {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,7 +22,7 @@
 }
 
 /* Warning icon styling */
-::ng-deep .warning-icon {
+.warning-icon {
   font-size: 45px;
   color: #6b81ff;
   text-shadow: 0px 0px 8px rgba(0, 102, 255, 0.6);
@@ -30,7 +30,7 @@
 }
 
 /* Dialog content */
-::ng-deep mat-dialog-content {
+mat-dialog-content {
   font-size: 16px;
   margin-top: 12px;
   color: #444;
@@ -40,14 +40,14 @@
 }
 
 /* Actions container */
-::ng-deep mat-dialog-actions {
+mat-dialog-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
 /* Cancel Button */
-::ng-deep .cancel-button {
+.cancel-button {
   background: #e0e0e0;
   color: #333;
   font-weight: bold;
@@ -57,10 +57,8 @@
   margin-right: 0.5rem;
 }
 
-
-
 /* Delete Button */
-::ng-deep .delete-button {
+.action-button {
   background: #2f71d3;
   color: white;
   font-weight: bold;
@@ -71,9 +69,8 @@
   overflow: hidden;
 }
 
-
 /* Delete button animation effect */
-::ng-deep .delete-button::before {
+.action-button::before {
   content: "";
   position: absolute;
   top: -2px;
@@ -85,7 +82,7 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-::ng-deep .delete-button:hover::before {
+.action-button:hover::before {
   opacity: 1;
 }
 

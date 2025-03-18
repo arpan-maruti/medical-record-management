@@ -31,7 +31,7 @@ export class FileDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.fileId = this.route.snapshot.paramMap.get('id')!;
+    this.fileId = atob(this.route.snapshot.paramMap.get('id')!);
     this.fetchFileDetails();
   }
 
@@ -72,6 +72,7 @@ export class FileDetailsComponent implements OnInit {
     if (target.files && target.files.length > 0) {
       this.pdfFile = target.files[0];
     }
+    console.log(this.pdfFile);
   }
 
   getUserIdFromJWT(): string {
@@ -88,7 +89,9 @@ export class FileDetailsComponent implements OnInit {
   }
 
   updateFileDetails() {
+   
     if (this.pdfFile) {
+      alert(this.pdfFile);
       const token = this.cookieService.get('jwt');
       const formData = new FormData();
       const extension = this.pdfFile.name.split('.').pop()?.toLowerCase() || 'pdf';
@@ -114,6 +117,7 @@ export class FileDetailsComponent implements OnInit {
           this.toastr.error('Error updating file', 'Error');
         });
     } else {
+      
       const updatedFileDetails = {
         fileName: this.fileDetails.fileName,
         filesLabel: this.fileDetails.filesLabel,

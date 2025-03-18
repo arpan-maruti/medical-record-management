@@ -17,6 +17,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.component';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-user-list',
@@ -31,7 +32,8 @@ import { ToastrService } from 'ngx-toastr';
     MatButtonModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTooltip
   ],
 })
 export class UserListComponent implements OnInit {
@@ -110,7 +112,7 @@ export class UserListComponent implements OnInit {
   }
 
   navigateToRegister() {
-    this.router.navigate(['/register']);
+    this.router.navigate(['/register-user']);
   }
 
   editUser(uId: string) {
@@ -124,6 +126,38 @@ export class UserListComponent implements OnInit {
       }
     });
   }
+
+  async toggleUserStatus(user: any) {
+    const action = user.is_deleted ? 'restore' : 'delete';
+  
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: { isDeleted: user.is_deleted }
+    });
+  
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        try {
+          const token = this.cookieService.get('jwt');
+          const apiUrl = `${environment.apiUrl}/user/${user._id}`;
+  
+          await axios.patch(apiUrl, { isDeleted: !user.is_deleted }, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+          });
+  
+          this.toastr.success(`User ${action}d successfully`, 'Success');
+          this.loadUsers();
+        } catch (error: any) {
+          this.toastr.error(error.response?.data?.message || `Error ${action}ing user`, 'Error');
+        }
+      }
+    });
+  }
+  
 
   async deleteUser(userId: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -156,5 +190,10 @@ export class UserListComponent implements OnInit {
 
   viewUser(userId: string) {
     this.toastr.info(`Viewing user details for ${userId}`, 'Info');
+  }
+
+  
+  navigateToCaseManagement() {
+    this.router.navigate(['/case-management']);
   }
 }

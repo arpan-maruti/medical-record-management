@@ -1,11 +1,18 @@
 
 
 <div class="search-container">
+  <span class="action-buttons">
+    <button mat-raised-button color="primary" (click)="navigateToRegister()">Add User</button>
+    <button mat-raised-button color="accent" (click)="navigateToCaseManagement()">All Cases</button>
+  </span>
   <mat-form-field class="search-field">
     <mat-icon matPrefix>search</mat-icon>
     <input matInput placeholder="Search Users" (input)="onSearchChange($event)">
   </mat-form-field>
+
+
 </div>
+
 
 <div *ngIf="users.length === 0" class="no-users-box">
   <mat-icon class="no-users-icon">group</mat-icon>
@@ -69,11 +76,10 @@
         <button mat-icon-button color="primary" matTooltip="Edit" (click)="editUser(user._id)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" matTooltip="Delete" (click)="deleteUser(user._id)">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <button mat-icon-button color="accent" matTooltip="View" (click)="viewUser(user._id)">
-          <mat-icon>visibility</mat-icon>
+        <button mat-icon-button [color]="user.is_deleted ? 'accent' : 'warn'"
+                matTooltip="{{ user.is_deleted ? 'Restore' : 'Delete' }}"
+                (click)="toggleUserStatus(user)">
+          <mat-icon>{{ user.is_deleted ? 'restore' : 'delete' }}</mat-icon>
         </button>
       </td>
     </ng-container>
@@ -106,9 +112,9 @@
       <button mat-icon-button color="warn" (click)="deleteUser(user._id)">
         <mat-icon>delete</mat-icon>
       </button>
-      <button mat-icon-button color="accent" (click)="viewUser(user._id)">
+      <!-- <button mat-icon-button color="accent" (click)="viewUser(user._id)">
         <mat-icon>visibility</mat-icon>
-      </button>
+      </button> -->
     </div>
   </div>
 </div>

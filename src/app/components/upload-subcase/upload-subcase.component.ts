@@ -125,7 +125,7 @@ export class UploadSubcaseComponent implements OnInit {
 
     this.token = this.getCookie('jwt');
     
-    this.caseId = this.route.snapshot.paramMap.get('id') || '';
+    this.caseId = atob(this.route.snapshot.paramMap.get('id') || '');
     
     if (!this.caseId) {
       this.toastr.error('Case ID is required', 'Error');
