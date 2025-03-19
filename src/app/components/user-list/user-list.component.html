@@ -1,5 +1,8 @@
 
 
+
+
+
 <div class="search-container">
   <span class="action-buttons">
     <button mat-raised-button color="primary" (click)="navigateToRegister()">Add User</button>
@@ -13,14 +16,56 @@
 
 </div>
 
+<!-- Add this skeleton loading template to your HTML file -->
+<div class="skeleton-container" *ngIf="isLoading">
+  
 
-<div *ngIf="users.length === 0" class="no-users-box">
+  <!-- Table skeleton -->
+  <div class="skeleton-table">
+    <!-- Table header -->
+    <div class="skeleton-table-header">
+      <div class="skeleton-cell skeleton-header-cell" *ngFor="let col of displayedColumns"></div>
+    </div>
+    
+    <!-- Table rows -->
+    <div class="skeleton-table-row" *ngFor="let i of [1, 2, 3, 4, 5]">
+      <div class="skeleton-cell skeleton-name"></div>
+      <div class="skeleton-cell skeleton-email"></div>
+      <div class="skeleton-cell skeleton-phone"></div>
+      <div class="skeleton-cell skeleton-role"></div>
+      <div class="skeleton-cell skeleton-status"></div>
+      <div class="skeleton-cell skeleton-actions"></div>
+    </div>
+  </div>
+  
+  <!-- Pagination skeleton -->
+  <div class="skeleton-pagination"></div>
+</div>
+
+<!-- Add this mobile skeleton loading template to your HTML file -->
+<div class="mobile-skeleton" *ngIf="isLoading">
+  <!-- Generate 5 skeleton cards -->
+  <div class="skeleton-card" *ngFor="let i of [1, 2, 3, 4, 5]">
+    <div class="skeleton-card-header">
+      <div class="skeleton-card-name"></div>
+      <div class="skeleton-card-status"></div>
+    </div>
+    <div class="skeleton-card-details"></div>
+    <div class="skeleton-card-details"></div>
+    <div class="skeleton-card-actions">
+      <div class="skeleton-card-action"></div>
+      <div class="skeleton-card-action"></div>
+    </div>
+  </div>
+</div>
+
+<div  *ngIf="users.length === 0 && !isLoading" class="no-users-box">
   <mat-icon class="no-users-icon">group</mat-icon>
   <p>No users available.</p>
   <button mat-raised-button color="primary" (click)="navigateToRegister()">Add User</button>
 </div>
 
-<div class="table-container" *ngIf="users.length !== 0">
+<div class="table-container" *ngIf="users.length !== 0 && !isLoading">
   <table mat-table [dataSource]="users" [matSortDisableClear]="true"  matSort (matSortChange)="onSortChange($event)" class="custom-table">
     
       <!-- Name Column -->
