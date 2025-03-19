@@ -44,6 +44,8 @@ export class UploadNewCaseComponent implements OnInit {
   caseData: any;
   viewOnly: boolean = false;
   today = new Date().toISOString().split('T')[0];
+
+  isLoading = true;
   // Cache objects for reducing API calls
   private instructionTypesCache: { [loiId: string]: any[] } = {};
   private parametersCache: { [instructionId: string]: any[] } = {};
@@ -60,12 +62,13 @@ export class UploadNewCaseComponent implements OnInit {
     }
 
     async ngOnInit() {
+      this.isLoading = true; // Start loading
       this.caseId = atob(this.route.snapshot.paramMap.get('id') || '');
-      
+    
       if (this.caseId) {
         await this.fetchCaseData(); // Wait for the case data to be fetched
       }
-      
+    
       // Now that fetchCaseData has completed, check if caseData is available
       if (this.caseData) {
         console.log(this.caseData);
@@ -88,6 +91,7 @@ export class UploadNewCaseComponent implements OnInit {
     
         // If in viewOnly mode, skip fetching LOI types, instruction types, and parameters
         if (this.viewOnly) {
+          this.isLoading = false; // Stop loading
           return;
         }
       }
@@ -97,43 +101,48 @@ export class UploadNewCaseComponent implements OnInit {
       if (token) {
         await this.fetchLoiTypes(); // Wait for LOI types to be fetched
         if (this.selectedLoi) {
-          this.onLoiChange();
+          await this.onLoiChange(); // Wait for LOI change to complete
         }
       } else {
         // this.toastr.error('JWT token not available', 'Error');
       }
+    
+      this.isLoading = false; // Stop loading after all data fetching is complete
     }
-  
-    async fetchCaseData(): Promise<void> {
-      const token = this.cookieService.get('jwt');
-      console.log(token);
-      if (!token) {
-        console.log("aa"+token);
-        console.warn('JWT token not found, skipping API call.');
-        // Optionally, redirect to login:
-        // this.router.navigate(['/login']);
-        return;
-      }
-      try {
-        const response = await axios.get(`${environment.apiUrl}/case/${this.caseId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true
-        });
-        if (response.data.code === 'Success') {
-          this.caseData = response.data.data;
-          console.log("this is the case data", this.caseData);
-          this.viewOnly = true;
-        } else {
-          this.toastr.error(response.data.message, 'Error');
-        }
-      } catch (error) {
-        console.error('Error fetching case data:', error);
-        // this.toastr.error('Failed to fetch case data', 'Error');
-      }
+
+   async fetchCaseData(): Promise<void> {
+  const token = this.cookieService.get('jwt');
+  console.log(token);
+  if (!token) {
+    console.log("aa"+token);
+    console.warn('JWT token not found, skipping API call.');
+    // Optionally, redirect to login:
+    // this.router.navigate(['/login']);
+    this.isLoading = false; // Stop loading
+    return;
+  }
+  try {
+    const response = await axios.get(`${environment.apiUrl}/case/${this.caseId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    });
+    if (response.data.code === 'Success') {
+      this.caseData = response.data.data;
+      console.log("this is the case data", this.caseData);
+      this.viewOnly = true;
+    } else {
+      this.toastr.error(response.data.message, 'Error');
     }
+  } catch (error) {
+    console.error('Error fetching case data:', error);
+    // this.toastr.error('Failed to fetch case data', 'Error');
+  } finally {
+    this.isLoading = false; // Stop loading after fetching case data
+  }
+}
   getCookie(name: string): string | null {
     return this.cookieService.get(name) || null;
   }
@@ -142,12 +151,13 @@ export class UploadNewCaseComponent implements OnInit {
     return (param && (param.parameterMsg || param.parameter_msg)) || '';
   }
 
-  // Fetch LOI Types from the API only if not already fetched
   async fetchLoiTypes(): Promise<void> {
     if (!isPlatformBrowser(this.platformId)) {
+      this.isLoading = false; // Stop loading
       return;
     }
     if (this.viewOnly) {
+      this.isLoading = false; // Stop loading
       return;
     }
   
@@ -159,6 +169,7 @@ export class UploadNewCaseComponent implements OnInit {
       if (cachedResponse) {
         this.loiTypes = await cachedResponse.json();
         console.log('Loaded LOI Types from Cache Storage:', this.loiTypes);
+        this.isLoading = false; // Stop loading
         return;
       }
   
@@ -166,6 +177,7 @@ export class UploadNewCaseComponent implements OnInit {
       if (!token) {
         console.warn('JWT token not found.');
         this.toastr.warning('JWT token not found', 'Warning');
+        this.isLoading = false; // Stop loading
         return;
       }
   
@@ -196,9 +208,10 @@ export class UploadNewCaseComponent implements OnInit {
     } catch (error) {
       console.error('Error fetching LOI Types:', error);
       this.toastr.error('Error fetching LOI Types', 'Error');
+    } finally {
+      this.isLoading = false; // Stop loading after fetching LOI types
     }
   }
-  
   onInputChange() {
     this.clientNameError = null;
     this.caseReferenceError = null;
@@ -211,11 +224,13 @@ export class UploadNewCaseComponent implements OnInit {
 
   async onLoiChange(): Promise<void> {
     if (this.viewOnly) {
+      this.isLoading = false; // Stop loading
       return;
     }
     if (!this.selectedLoi) {
       this.instructionTypes = [];
       this.selectedInstruction = '';
+      this.isLoading = false; // Stop loading
       return;
     }
   
@@ -226,6 +241,7 @@ export class UploadNewCaseComponent implements OnInit {
     if (cachedResponse) {
       this.instructionTypes = await cachedResponse.json();
       console.log(`Loaded Instruction Types for LOI ${this.selectedLoi} from Cache Storage:`, this.instructionTypes);
+      this.isLoading = false; // Stop loading
       return;
     }
   
@@ -255,16 +271,20 @@ export class UploadNewCaseComponent implements OnInit {
           console.error('Error fetching Instruction Types:', error);
           this.toastr.error('Error fetching Instruction Types', 'Error');
         }
-       
+      })
+      .finally(() => {
+        this.isLoading = false; // Stop loading after fetching instruction types
       });
   }
   
   async onInstructionChange(): Promise<void> {
     if (this.viewOnly) {
+      this.isLoading = false; // Stop loading
       return;
     }
     if (!this.selectedInstruction) {
       this.parameters = [];
+      this.isLoading = false; // Stop loading
       return;
     }
   
@@ -275,6 +295,7 @@ export class UploadNewCaseComponent implements OnInit {
     if (cachedResponse) {
       this.parameters = await cachedResponse.json();
       console.log(`Loaded Parameters for Instruction ${this.selectedInstruction} from Cache Storage:`, this.parameters);
+      this.isLoading = false; // Stop loading
       return;
     }
   
@@ -302,6 +323,9 @@ export class UploadNewCaseComponent implements OnInit {
       .catch((error) => {
         console.error('Error fetching parameters:', error);
         this.toastr.error('Error fetching parameters', 'Error');
+      })
+      .finally(() => {
+        this.isLoading = false; // Stop loading after fetching parameters
       });
   }
   

@@ -42,6 +42,47 @@
     overflow-wrap: anywhere;
 }
 
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+/* Skeleton Loading Animation */
+@keyframes skeleton-loading {
+  0% {
+    background-color: #e0e0e0; /* Light gray */
+  }
+  50% {
+    background-color: #f5f5f5; /* Lighter gray */
+  }
+  100% {
+    background-color: #e0e0e0; /* Back to light gray */
+  }
+}
+
+/* Skeleton Loading Styles */
+.skeleton-text {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  height: 1rem;
+  width: 80%;
+  margin-bottom: 8px;
+  animation: skeleton-loading 1.5s infinite; /* Apply animation */
+}
+
+.skeleton-text.profile-card__label {
+  width: 100px; /* Adjust width for labels */
+  animation: skeleton-loading 1.5s infinite; /* Apply animation */
+}
+
+.skeleton-text.profile-card__value {
+  width: 150px; /* Adjust width for values */
+  animation: skeleton-loading 1.5s infinite; /* Apply animation */
+}
+
 @media (max-width: 1024px) {
     .profile-card {
         height: auto; /* Decrease width on medium screens (like tablets) */

@@ -27,7 +27,6 @@
           <option value="error">Error</option>
         </select>
       </div>
-      
 
       <div class="details-item">
         <label>File Size:</label>
@@ -76,8 +75,6 @@
       <button type="button" class="btn btn-success" (click)="updateFileDetails()">Save</button>
       <button type="button" class="btn btn-danger" (click)="toggleEdit()">Cancel</button>
     </div>
-
-    
   </section>
 
   <!-- Right Side - PDF Preview -->
@@ -92,7 +89,56 @@
 
 <ng-template #loadingTemplate>
   <div class="loading">
-    <div class="spinner"></div>
-    <p>Loading File Details...</p>
+    <!-- Skeleton Loading for File Details -->
+    <section class="file-card details">
+      <header class="file-details__header">
+        <h3 class="file-details__title skeleton-text"></h3>
+      </header>
+
+      <div class="details-grid">
+        <div class="details-item">
+          <label class="skeleton-text"></label>
+          <span class="skeleton-text"></span>
+        </div>
+        <div class="details-item">
+          <label class="skeleton-text"></label>
+          <span class="skeleton-text"></span>
+        </div>
+        <div class="details-item">
+          <label class="skeleton-text"></label>
+          <span class="skeleton-text"></span>
+        </div>
+        <div class="details-item">
+          <label class="skeleton-text"></label>
+          <span class="skeleton-text"></span>
+        </div>
+        <div class="details-item">
+          <label class="skeleton-text"></label>
+          <span class="skeleton-text"></span>
+        </div>
+        <div class="details-item">
+          <label class="skeleton-text"></label>
+          <span class="skeleton-text"></span>
+        </div>
+        <div class="details-item">
+          <label class="skeleton-text"></label>
+          <span class="skeleton-text"></span>
+        </div>
+        <div class="details-item">
+          <label class="skeleton-text"></label>
+          <span class="skeleton-text"></span>
+        </div>
+        <div class="details-item">
+          <label class="skeleton-text"></label>
+          <span class="skeleton-text"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skeleton Loading for PDF Preview -->
+    <section class="pdf-preview">
+      <h4 class="skeleton-text"></h4>
+      <div class="pdf-frame skeleton-text"></div>
+    </section>
   </div>
 </ng-template>

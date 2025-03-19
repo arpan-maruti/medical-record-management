@@ -76,10 +76,10 @@ export class UserListComponent implements OnInit {
           },
           withCredentials: true,
         });
-        return response;
+        return response; // Ensure axios response is returned
       };
   
-      // Delay function to set isLoading to true after 500ms
+      // Delay function to set isLoading to true after 100ms
       const delayLoading = new Promise<void>((resolve) => {
         loadingTimeout = setTimeout(() => {
           this.isLoading = true;
@@ -88,26 +88,32 @@ export class UserListComponent implements OnInit {
         }, 100);
       });
   
-      // Race between API call and delay
-      const response = await Promise.race([fetchUsers(), delayLoading]);
+      // Start both API call and loading delay
+      const responsePromise = fetchUsers();
+      await delayLoading;
   
-      // Clear timeout if data comes before 500ms
+      // Wait for the API call to complete
+      const response = await responsePromise;
+  
+      // Clear timeout if data comes before 100ms
       clearTimeout(loadingTimeout);
   
-      // If response is successful and it's an axios response, process it
-      if ('data' in response!) {
+      // If response is successful, process it
+      if (response?.data) {
         this.users = response.data?.data?.users || [];
         this.totalUsers = response.data?.data?.total || 0;
       }
     } catch (error: any) {
+      console.error('Error fetching users:', error);
       // this.toastr.error(error.response?.data?.message || 'Error fetching users', 'Error');
     } finally {
-      // Ensure `isLoading` is set to false when the data arrives
+      // Ensure `isLoading` is set to false after data arrives
       if (loadingStarted) {
         this.isLoading = false;
       }
     }
   }
+  
   
   
 

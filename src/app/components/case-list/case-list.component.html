@@ -1,45 +1,110 @@
 <div class="case-list-container" [class.blurred]="isViewLabelVisible" >
   
- <div class="header-container">
-   <div class="header-container1">
-     <h2 class="header-title">ALL CASES</h2>
-     <div class="search-container">
-       <input
-       type="text"
-       [(ngModel)]="searchQuery"
-       placeholder="Search by Client Name or Case Ref No"
-       class="search-input"
-       (input)="onSearchChange()"
-       />
-     </div>
-   </div>
-   <div class="header-container2">
-   <div class="filter-container">
-     <div class="custom-dropdown">
-       <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()" [ngClass] = "{'selected': selectedStatus}">
-         <option value="">All Status</option>
-         <option value="uploaded">uploaded</option>
-         <option value="inProgress">in progress</option>
-         <option value="aiAnalysisCompleted">AI Analysis Completed</option>
-         <option value="error">error</option>
-       </select>
-     </div>
-   </div>
-   <div class="upload-container">
-     <button class="upload-btn" (click)="addCase()">Upload New Case</button>
-   </div>
- </div>
- </div>
+  <div class="header-container">
+    <div class="header-container1">
+      <h2 class="header-title">ALL CASES</h2>
+      <div class="search-container">
+        <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search by Client Name or Case Ref No"
+        class="search-input"
+        (input)="onSearchChange()"
+        />
+      </div>
+    </div>
+    <div class="header-container2">
+    <div class="filter-container">
+      <div class="custom-dropdown">
+        <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()" [ngClass] = "{'selected': selectedStatus}">
+          <option value="">All Status</option>
+          <option value="uploaded">uploaded</option>
+          <option value="inProgress">in progress</option>
+          <option value="aiAnalysisCompleted">AI Analysis Completed</option>
+          <option value="error">error</option>
+        </select>
+      </div>
+    </div>
+    <div class="upload-container">
+      <button class="upload-btn" (click)="addCase()">Upload New Case</button>
+    </div>
+  </div>
+  </div>
+ 
+ 
+  <div *ngIf="!isLoading && !isDataAvailable && filteredData.length === 0" class="case-list__no-case">
+    <div class="case-list__no-case-content">
+      <h2>No Cases Available</h2>
+      <p>Welcome to the Case Management Section.</p>
+      <p>Upload a new case to get started.</p>
+      <button class="custom-btn" (click)="addCase()">Upload New Case</button>
+    </div>
+  </div>
+
+<div *ngIf="isLoading" class="table-container desktop-table-view">
+  <table class="table table-striped">
+    <thead>
+      <tr class="table-header">
+        <th></th>
+        <th>Case Ref No</th>
+        <th>Instruction Type</th>
+        <th>Client Name</th>
+        <th>Total Files</th>
+        <th>Total Pages</th>
+        <th>Date Uploaded</th>
+        <th>Uploaded By</th>
+        <th>Case Status</th>
+        <th>LOI</th>
+        <th></th>
+        <th>Action</th>
+        <th></th>
+        <th>Add Subcase</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of [1, 2, 3, 4, 5]" class="skeleton-row">
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+        <td><div class="skeleton-text"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="isLoading" class="cards-container mobile-card-view">
+  <div *ngFor="let i of [1, 2, 3, 4, 5]" class="case-card skeleton-card">
+    <div class="case-card-header">
+      <h3><div class="skeleton-text"></div></h3>
+    </div>
+    <div class="case-card-details">
+      <p><strong><div class="skeleton-text"></div></strong></p>
+      <p><strong><div class="skeleton-text"></div></strong></p>
+      <p><strong><div class="skeleton-text"></div></strong></p>
+      <p><strong><div class="skeleton-text"></div></strong></p>
+      <p><strong><div class="skeleton-text"></div></strong></p>
+      <p><strong><div class="skeleton-text"></div></strong></p>
+    </div>
+    <div class="case-card-actions">
+      <div class="skeleton-text"></div>
+      <div class="skeleton-text"></div>
+      <div class="skeleton-text"></div>
+      <div class="skeleton-text"></div>
+    </div>
+  </div>
+</div>
 
 
- <div *ngIf="!isLoading && !isDataAvailable && filteredData.length === 0" class="case-list__no-case">
-   <div class="case-list__no-case-content">
-     <h2>No Cases Available</h2>
-     <p>Welcome to the Case Management Section.</p>
-     <p>Upload a new case to get started.</p>
-     <button class="custom-btn" (click)="addCase()">Upload New Case</button>
-   </div>
- </div>
 
 
  <div
