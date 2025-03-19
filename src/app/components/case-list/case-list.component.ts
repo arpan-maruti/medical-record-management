@@ -11,6 +11,7 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { environment } from '../environments/environment';
 import { Toast, ToastrModule, ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-case-list',
   imports: [CommonModule, FormsModule, ViewAndLabelComponent, UploadFilesComponent, ToastrModule],
@@ -43,7 +44,7 @@ export class CaseListComponent {
   minLimit: number = 1;
   maxLimit: number = 1;
   totalCases: number = 1;
-
+  
   constructor(private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
     private dataService: DataService, 
