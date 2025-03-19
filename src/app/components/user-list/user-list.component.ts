@@ -60,27 +60,56 @@ export class UserListComponent implements OnInit {
   }
 
   async loadUsers() {
-    this.isLoading = true;
+    let loadingTimeout: any;
+    let loadingStarted = false;
+  
     try {
       const token = this.cookieService.get('jwt');
       const apiUrl = `${environment.apiUrl}/user?page=${this.pageIndex + 1}&limit=${this.pageSize}&search=${encodeURIComponent(this.searchQuery)}&sortField=${this.sortField}&sortOrder=${this.sortOrder}`;
-
-      const response = await axios.get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
+  
+      // Function to make API request
+      const fetchUsers = async () => {
+        const response = await axios.get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        });
+        return response;
+      };
+  
+      // Delay function to set isLoading to true after 500ms
+      const delayLoading = new Promise<void>((resolve) => {
+        loadingTimeout = setTimeout(() => {
+          this.isLoading = true;
+          loadingStarted = true;
+          resolve();
+        }, 100);
       });
-
-      this.users = response.data?.data?.users || [];
-      this.totalUsers = response.data?.data?.total || 0;
+  
+      // Race between API call and delay
+      const response = await Promise.race([fetchUsers(), delayLoading]);
+  
+      // Clear timeout if data comes before 500ms
+      clearTimeout(loadingTimeout);
+  
+      // If response is successful and it's an axios response, process it
+      if ('data' in response!) {
+        this.users = response.data?.data?.users || [];
+        this.totalUsers = response.data?.data?.total || 0;
+      }
     } catch (error: any) {
       // this.toastr.error(error.response?.data?.message || 'Error fetching users', 'Error');
     } finally {
-      this.isLoading = false;
+      // Ensure `isLoading` is set to false when the data arrives
+      if (loadingStarted) {
+        this.isLoading = false;
+      }
     }
   }
+  
+  
 
   onSearchChange(event: Event) {
     this.searchQuery = (event.target as HTMLInputElement).value.trim();
