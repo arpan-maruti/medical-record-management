@@ -89,7 +89,6 @@ viewSubCaseDetails(subCase: any) {
       try {
         const decodedToken: any = jwtDecode(token);
         this.userRole = decodedToken.role;
-        console.log("role",this.userRole);
         const userId = decodedToken.id;
       } catch (error) {
         console.error('Error decoding JWT token:', error);
@@ -166,7 +165,6 @@ viewSubCaseDetails(subCase: any) {
       } else {
         // Fetch paginated cases normally
         response = await axios.get(baseUrl, headers);
-        console.log("response", response);
   
         if (response.data.code === 'Success') {
           this.data = response.data.data.slice(0, limit); // Ensure only `limit` cases are shown
@@ -178,7 +176,6 @@ viewSubCaseDetails(subCase: any) {
           this.minLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + 1;
           this.maxLimit = this.minLimit + this.data.length - 1;
           this.totalCases = response.data.pagination.total_items;
-        console.log("tc", this.totalCases);
 
         } else {
           console.error('Failed to fetch cases:', response.data.message);
@@ -207,7 +204,6 @@ viewSubCaseDetails(subCase: any) {
 
   previousPage() {
     if (this.currentPage > 1) {
-      console.log("Current page", this.currentPage);
       this.currentPage--;
       this.fetchCases(this.currentPage, this.selectedStatus, this.searchQuery);
     }
@@ -244,27 +240,20 @@ viewSubCaseDetails(subCase: any) {
   }
 
   // Toggle visibility of subcases
-  toggleSubCases(caseItem: any) {
-    caseItem.expanded = !caseItem.expanded; // Toggle subcase visibility
-    // Fetch subcases only if the case is expanded and subcases are not already fetched
+  async toggleSubCases(caseItem: any) {
+    caseItem.expanded = !caseItem.expanded;
     if (caseItem.expanded && !caseItem.subCases) {
-      this.fetchSubCases(caseItem._id).then(subCases => {
-        caseItem.subCases = subCases; // Store the fetched subcases in the caseItem object
-
-       
+      await this.fetchSubCases(caseItem._id).then(subCases => {
+         caseItem.subCases= subCases;
       });
     }
-    // if (caseItem.expanded && caseItem.subCases.length === 0) {
-    //   this.toastr.info('No subcases found for this case.', 'Info', {
-    //     timeOut: 3000
-    //   });
-    // }
-    console.log(this.filteredData)
+    if (caseItem.expanded && caseItem.subCases.length === 0) {
+      this.toastr.info('No subcases found for this case.', 'Info');
+    }
   }
 
   subcaseLength: number = 0;
   fetchSubCases(parentId: string): Promise<any[]> {
-    console.log(parentId);
     return new Promise((resolve, reject) => {
       const token = this.cookieService.get('jwt');
   
@@ -276,14 +265,10 @@ viewSubCaseDetails(subCase: any) {
         withCredentials: true
       })
       .then(response => {
-        console.log("subcases",response.data);
         this.subcaseLength = response.data.length;
-        console.log("qqqq", this.subcaseLength);
         if (response.data.code === 'Success') {
           const subcases = response.data.data;
-          
-  
-          resolve(subcases); // Resolve with the fetched subcases
+          resolve(subcases);
         } else {
           console.error('Failed to fetch subcases:', response.data.message);
           this.toastr.warning(response.data.message || 'Failed to fetch subcases', 'Warning', {
@@ -291,6 +276,7 @@ viewSubCaseDetails(subCase: any) {
           });
           reject(response.data.message);
         }
+
       })
       .catch(error => {
         console.error('Error fetching subcases:', error);
@@ -347,7 +333,6 @@ viewSubCaseDetails(subCase: any) {
 
 
   openPdfPreview(caseId: string) {
-    console.log(caseId);
     const token = this.cookieService.get('jwt');
     axios.get(`${environment.apiUrl}/case/${caseId}/file`, {
       headers: {
@@ -357,7 +342,6 @@ viewSubCaseDetails(subCase: any) {
       withCredentials: true
     })
     .then(response => {
-      console.log(response.data);
       if (response.data.code === 'Success') {
         const files = response.data.data;
   
@@ -366,7 +350,6 @@ viewSubCaseDetails(subCase: any) {
         if (loiFiles.length > 0) {
           const loiFile = loiFiles[0];
           const fileUrl = `http://localhost:5000/files/${loiFile.file_path}`;
-          console.log(loiFile);
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
           this.selectedFileName = loiFile.file_name;
           this.isPdfPreviewVisible = true;
@@ -410,7 +393,7 @@ viewSubCaseDetails(subCase: any) {
     return this.dataService.getTotalPages(caseItem);
   }
 
-  getCaseUploader(caseItem: any) {
+  getCaseUploader(caseItem: any) {    
     return this.dataService.getCaseUploader(caseItem);
   }
   
@@ -419,12 +402,10 @@ viewSubCaseDetails(subCase: any) {
     this.uploadedFileName = fileName;
     this.toastr.success(`File "${fileName}" uploaded successfully!`, 'Success');
   }
-  addSubcase(caseItem: any) {
-    this.fetchSubCases(caseItem._id);
+  async addSubcase(caseItem: any) {
+    await this.fetchSubCases(caseItem._id);
     const encodedId = btoa(caseItem._id);
-    console.log("qqqqqqqqqq", this.subcaseLength);
-    console.log(this.subcaseLength === 1);
-    if(this.userRole === 'admin' && this.subcaseLength >= 1) {
+    if(this.userRole != 'admin' && this.subcaseLength >= 10) {
       console.log("Cannot add more sub cases");
       this.toastr.error('Cannot add more sub cases.', 'Error');
       return
@@ -511,7 +492,6 @@ viewSubCaseDetails(subCase: any) {
     )
     .then(response => {
       if (response.data.code === 'Success') {
-        console.log('File label updated successfully.');
         const index = this.selectedFiles.findIndex(file => file.id === fileId);
         if (index !== -1) {
           this.selectedFiles[index].label = filesLabel;
