@@ -1,7 +1,8 @@
+<!-- Add this skeleton loading template to your HTML file -->
 <div class="upload-new-case__container">
   <div class="upload-new-case__header">
-    <h2 class="upload-new-case__title" *ngIf="!viewOnly">Upload New Case</h2>
-    <h2 class="upload-new-case__title" *ngIf="viewOnly">Main Case View</h2>
+    <h2 class="upload-new-case__title" *ngIf="!isLoading && !viewOnly">Upload New Case</h2>
+    <h2 class="upload-new-case__title" *ngIf="!isLoading && viewOnly">Main Case View</h2>
   </div>
 
   <!-- Form container -->
@@ -12,7 +13,9 @@
         <!-- Client Name -->
         <div class="form-group">
           <label for="client-name">Client Name</label>
+          <div class="skeleton-input" *ngIf="isLoading"></div>
           <input
+            *ngIf="!isLoading"
             type="text"
             id="client-name"
             placeholder="Enter client name"
@@ -33,8 +36,11 @@
         </div>
         <!-- Case Reference Number -->
         <div class="form-group">
+          
           <label for="case-reference">Case Reference Number</label>
+          <div class="skeleton-input" *ngIf="isLoading"></div>
           <input
+            *ngIf="!isLoading"
             type="text"
             id="case-reference"
             (input)="onInputChange()"
@@ -50,7 +56,8 @@
         <!-- LOI (Letter of Instruction) Type -->
         <div class="form-group">
           <label for="loi-type">What type of LOI?</label>
-          <ng-container *ngIf="!viewOnly">
+          <div class="skeleton-input" *ngIf="isLoading"></div>
+          <ng-container *ngIf="!isLoading && !viewOnly">
             <select
               id="loi-type"
               (input)="onInputChange()"
@@ -65,7 +72,7 @@
               </option>
             </select>
           </ng-container>
-          <ng-container *ngIf="viewOnly">
+          <ng-container *ngIf="!isLoading && viewOnly">
             <input
               type="text"
               id="loi-type"
@@ -81,7 +88,8 @@
         <!-- Date of Branch / Liability -->
         <div class="form-group">
           <label for="date-of-branch">Date of Breach / Liability</label>
-          <ng-container *ngIf="!viewOnly">
+          <div class="skeleton-input" *ngIf="isLoading"></div>
+          <ng-container *ngIf="!isLoading && !viewOnly">
             <input
               type="date"
               id="date-of-branch"
@@ -92,7 +100,7 @@
               [max]="today"
             />
           </ng-container>
-          <ng-container *ngIf="viewOnly">
+          <ng-container *ngIf="!isLoading && viewOnly">
             <input
               type="text"
               id="date-of-branch"
@@ -108,11 +116,13 @@
 
       <!-- Upload LOI: Trigger file selection -->
       <div class="form-group">
-        <label for="loi-upload" class="loi-upload-label" (click)="onInputChange()">
+        <label for="loi-upload" class="loi-upload-label">
           <span class="loi-text">Upload Letter of Instruction</span>
           <span class="upload-icon">📎</span>
         </label>
+        <div class="skeleton-upload" *ngIf="isLoading"></div>
         <input
+          *ngIf="!isLoading"
           type="file"
           id="loi-upload"
           accept="application/pdf"
@@ -122,13 +132,14 @@
         />
         <div *ngIf="isSubmitted && loiFileError" class="error-message">
           {{ loiFileError }}
-          </div>
+        </div>
       </div>
 
       <!-- Instruction Type -->
       <div class="form-group">
         <label for="instruction-type">Instruction Type</label>
-        <ng-container *ngIf="!viewOnly">
+        <div class="skeleton-input" *ngIf="isLoading"></div>
+        <ng-container *ngIf="!isLoading && !viewOnly">
           <select
             id="instruction-type"
             [(ngModel)]="selectedInstruction"
@@ -145,7 +156,7 @@
             </option>
           </select>
         </ng-container>
-        <ng-container *ngIf="viewOnly">
+        <ng-container *ngIf="!isLoading && viewOnly">
           <input
             type="text"
             id="instruction-type"
@@ -167,7 +178,9 @@
       (input)="onInputChange()"
     >
       <h3 class="upload-new-case__form-title">SELECT THE PARAMETERS</h3>
-      <div class="form-group" *ngIf="(viewOnly ? selectedParametersView.length : parameters.length) > 0">
+     
+      
+      <div class="form-group" *ngIf="!isLoading && (viewOnly ? selectedParametersView.length : parameters.length) > 0">
         <ul class="parameter-list" *ngIf="!viewOnly">
           <li *ngFor="let param of parameters" (click)="toggleSelection(param._id)">
             <div class="checkbox-container">
@@ -213,12 +226,21 @@
         </div>
       </div>
 
+      <!-- Skeleton for parameter list -->
+      <div class="skeleton-parameter-list" *ngIf="isLoading">
+        <div class="skeleton-parameter-item" *ngFor="let i of [1,2,3,4,5]">
+          <div class="skeleton-checkbox"></div>
+          <div class="skeleton-parameter-text"></div>
+        </div>
+      </div>
+
       <!-- Submit Button -->
-      <div class="form-group" *ngIf="!viewOnly">
+      <div class="form-group" *ngIf="!isLoading && !viewOnly">
         <button type="button" (click)="submitForm()" class="submit-button">
           Submit
         </button>
       </div>
+
     </form>
   </div>
 </div>

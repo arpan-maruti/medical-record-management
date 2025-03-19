@@ -52,6 +52,8 @@ export class UploadSubcaseComponent implements OnInit {
   // Flag to indicate if the component is in viewOnly mode
   viewOnly: boolean = false;
   caseData: any = null;
+  isLoading: boolean = true;
+
 
   constructor(
       private cookieService: CookieService,
@@ -121,59 +123,42 @@ export class UploadSubcaseComponent implements OnInit {
     }
   }
   async ngOnInit(): Promise<void> {
-
-
+    this.isLoading = true; // Start loading
     this.token = this.getCookie('jwt');
-    
     this.caseId = atob(this.route.snapshot.paramMap.get('id') || '');
-    
+
     if (!this.caseId) {
       this.toastr.error('Case ID is required', 'Error');
-      this.router.navigate(['/case-management']); // Redirect to a safe page
+      this.router.navigate(['/case-management']);
       return;
     }
-  
-    // Determine if the request is for View Mode or Upload Mode based on the URL
+
     const currentUrl = this.router.url;
     if (currentUrl.includes('/sub-case-view')) {
-      this.viewOnly = true; // Set viewOnly to true for sub-case-view
+      this.viewOnly = true;
     } else if (currentUrl.includes('/upload-sub-case')) {
-      this.viewOnly = false; // Set viewOnly to false for upload-sub-case
+      this.viewOnly = false;
     } else {
       this.toastr.error('Invalid URL', 'Error');
-      this.router.navigate(['/case-management']); // Redirect to a safe page
+      this.router.navigate(['/case-management']);
       return;
     }
-  
+
     if (this.viewOnly) {
-      // Fetch case data for View Mode
       await this.fetchCaseData();
     } else {
-      // Fetch clientName and parentCaseReference for Upload Mode
       await this.fetchClientAndParentCaseDetails();
     }
-  
-    // Populate form fields based on the fetched data
+
     if (this.caseData) {
-      console.log(this.caseData);
       this.clientName = this.caseData.clientName;
       this.parentCaseReference = this.caseData.parentId.refNumber;
       this.subCaseReference = this.caseData.refNumber;
       this.dateOfBranch = this.caseData.dateOfBreach;
-  
-      // Populate LOI Type
       this.selectedLoi = this.caseData.parameters[0].instructionId.loiId.loiMsg || "hello";
-      console.log("loi:" + this.selectedLoi);
-  
-      // Populate Instruction Type
       this.selectedInstruction = this.caseData.parameters[0].instructionId.instructionMsg;
-      console.log("instr:" + this.selectedInstruction);
-  
-      // Populate Parameters
       this.selectedParametersView = this.caseData.parameters || [];
-      console.log(this.selectedParametersView);
     }
-  
 
     if (!this.viewOnly) {
       await this.fetchLoiTypes();
@@ -181,8 +166,9 @@ export class UploadSubcaseComponent implements OnInit {
         await this.onLoiChange();
       }
     }
-  }
 
+    this.isLoading = false; // Stop loading after data is fetched
+  }
   async fetchClientAndParentCaseDetails(): Promise<void> {
     const token = this.cookieService.get('jwt');
     

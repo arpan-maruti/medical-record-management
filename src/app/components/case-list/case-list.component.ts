@@ -177,7 +177,7 @@ viewSubCaseDetails(subCase: any) {
           this.minLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + 1;
           this.maxLimit = this.minLimit + this.data.length - 1;
           this.totalCases = response.data.pagination.total_items;
-
+  
         } else {
           console.error('Failed to fetch cases:', response.data.message);
           this.isDataAvailable = false;
