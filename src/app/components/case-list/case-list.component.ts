@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ViewAndLabelComponent } from '../view-and-label/view-and-label.component';
 import { UploadFilesComponent } from '../upload-files/upload-files.component';
 import { CookieService } from 'ngx-cookie-service';
+import { jwtDecode } from 'jwt-decode'; 
 import axios from 'axios';
 import { environment } from '../environments/environment';
 import { Toast, ToastrModule, ToastrService } from 'ngx-toastr';
@@ -80,6 +81,22 @@ viewSubCaseDetails(subCase: any) {
   ngAfterViewInit() {
     this.fetchCases();
   }
+  userRole: string='';
+  getUserProfile() {
+    const token = this.cookieService.get('jwt');
+
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        this.userRole = decodedToken.role;
+        console.log("role",this.userRole);
+        const userId = decodedToken.id;
+      } catch (error) {
+        console.error('Error decoding JWT token:', error);
+      }
+    }
+  }
+  // this.getUserProfile();
 
   selectedLimit : number = 5;
   limitOptions: { value: number| null; label: number }[] = [
@@ -95,7 +112,7 @@ viewSubCaseDetails(subCase: any) {
   }
   async fetchCases(page: number = this.inputPage, caseStatus: string = '', searchQuery: string = '', limit: number = this.selectedLimit) {
     this.isLoading = true; // Start loading indicator
-  
+    this.getUserProfile();
     const token = this.cookieService.get('jwt') || null;
     if (!token) {
       this.isDataAvailable = false;
@@ -146,10 +163,10 @@ viewSubCaseDetails(subCase: any) {
         this.minLimit = (clientRes.data.pagination.current_page - 1) * clientRes.data.pagination.items_per_page + 1;
         this.maxLimit = this.minLimit + this.data.length - 1;
         this.totalCases = clientRes.data.pagination.total_items;
-  
       } else {
         // Fetch paginated cases normally
         response = await axios.get(baseUrl, headers);
+        console.log("response", response);
   
         if (response.data.code === 'Success') {
           this.data = response.data.data.slice(0, limit); // Ensure only `limit` cases are shown
@@ -161,6 +178,8 @@ viewSubCaseDetails(subCase: any) {
           this.minLimit = (response.data.pagination.current_page - 1) * response.data.pagination.items_per_page + 1;
           this.maxLimit = this.minLimit + this.data.length - 1;
           this.totalCases = response.data.pagination.total_items;
+        console.log("tc", this.totalCases);
+
         } else {
           console.error('Failed to fetch cases:', response.data.message);
           this.isDataAvailable = false;
@@ -235,15 +254,15 @@ viewSubCaseDetails(subCase: any) {
        
       });
     }
-    if (caseItem.expanded && caseItem.subCases.length === 0) {
-      this.toastr.info('No subcases found for this case.', 'Info', {
-        timeOut: 3000
-      });
-    }
+    // if (caseItem.expanded && caseItem.subCases.length === 0) {
+    //   this.toastr.info('No subcases found for this case.', 'Info', {
+    //     timeOut: 3000
+    //   });
+    // }
     console.log(this.filteredData)
   }
 
-
+  subcaseLength: number = 0;
   fetchSubCases(parentId: string): Promise<any[]> {
     console.log(parentId);
     return new Promise((resolve, reject) => {
@@ -257,8 +276,9 @@ viewSubCaseDetails(subCase: any) {
         withCredentials: true
       })
       .then(response => {
-        console.log(response.data);
-        
+        console.log("subcases",response.data);
+        this.subcaseLength = response.data.length;
+        console.log("qqqq", this.subcaseLength);
         if (response.data.code === 'Success') {
           const subcases = response.data.data;
           
@@ -400,11 +420,24 @@ viewSubCaseDetails(subCase: any) {
     this.toastr.success(`File "${fileName}" uploaded successfully!`, 'Success');
   }
   addSubcase(caseItem: any) {
+    this.fetchSubCases(caseItem._id);
     const encodedId = btoa(caseItem._id);
+    console.log("qqqqqqqqqq", this.subcaseLength);
+    console.log(this.subcaseLength === 1);
+    if(this.userRole === 'admin' && this.subcaseLength >= 1) {
+      console.log("Cannot add more sub cases");
+      this.toastr.error('Cannot add more sub cases.', 'Error');
+      return
+    }
     this.router.navigate(['case-management/upload-sub-case', encodedId ]);
   }
   
   addCase() {
+    if(this.userRole != 'admin' && this.totalCases > 10) {
+      console.log("Cannot add more cases");
+      this.toastr.error('Cannot add more cases.', 'Error');
+      return
+    }
     this.router.navigate(['case-management/upload-new-case']);
   }
   

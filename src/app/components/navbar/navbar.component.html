@@ -12,9 +12,11 @@
     <li class="navbar__blank-box"> <span *ngIf="userRole === 'admin'" class="admin-badge">Admin</span> </li>
 
     <li class="navbar__profile-box" (click)="toggleDropdown($event)">
-      <a class="navbar__profile-name">
+      <a class="navbar__profile-name__desktop">
         {{ user?.first_name }} {{ user?.last_name }}
-       
+      </a>
+      <a class="navbar__profile-name__tablet">
+        {{ user?.first_name }}
       </a>
       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="navbar__profile-icon">
         <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />

@@ -35,6 +35,9 @@
     flex: 1;
     min-width: 20rem;
 }
+.upload-new-case__form:nth-child(2) {
+    margin-bottom: 30px;
+}
 
 .upload-new-case__form-title {
     font-size: 1.6rem;
@@ -177,8 +180,17 @@ button:hover {
 }
 
 @media (max-width: 1024px) {
+    .upload-new-case__title {
+        font-size: 1.5rem;
+    }
+    .upload-new-case__form {
+        padding: 2.2rem;
+    }
     .upload-new-case__forms {
         flex-direction: column;
+    }
+    .form-group {
+        margin-bottom: 1.2rem;
     }
 
     .form-group-row {
@@ -203,6 +215,9 @@ button:hover {
         margin-top: 1rem;
     }
 
+    .form-group label {
+        font-size: 1.15rem;
+    }
     .form-group input,
     .form-group select {
         font-size: 1rem;
@@ -220,20 +235,26 @@ button:hover {
 }
 
 @media (max-width: 768px) {
+    .upload-new-case__header {
+        margin-bottom: 1rem;
+    }
+    .upload-new-case__container {
+        padding-top: 1rem;
+    }
     .upload-new-case__title {
         font-size: 1.5rem;
         /* Adjust font size for smaller screens */
     }
 
     .upload-new-case__form {
-        padding: 2rem 1.5rem;
+        padding: 1rem 1.1rem;
         /* Adjust padding for smaller screens */
     }
 
     .upload-new-case__form-title {
         font-size: 1.2rem;
         /* Adjust font size for smaller screens */
-        margin-bottom: 1.5rem;
+        margin-bottom: 0;
         /* Adjust margin for smaller screens */
     }
 
@@ -256,7 +277,7 @@ button:hover {
     }
 
     .error-message {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
     }
 }
 

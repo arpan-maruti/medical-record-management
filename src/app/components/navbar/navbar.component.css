@@ -71,13 +71,14 @@
   align-items: center; /* Center content vertically */
   justify-content: center;
 }
-
-.navbar__profile-box a {
+.navbar__profile-name__desktop, .navbar__profile-name__tablet {
   font-size: 1.5rem; /* Adjust font size */
   text-decoration: none;
   color: #161839;
 }
-
+.navbar__profile-name__tablet {
+  display: none;
+}
 .navbar__profile-box svg {
   width: 1.5rem; /* Adjust size of the SVG */
   height: 1.5rem;
@@ -238,6 +239,12 @@
 
 /* For widths 768px and below */
 @media (max-width: 768px) {
+  .navbar__profile-name__desktop {
+    display: none;
+  }
+  .navbar__profile-name__tablet {
+    display: block;
+  }
   .navbar {
     height: 3.4rem;
   }
