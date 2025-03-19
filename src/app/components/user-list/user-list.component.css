@@ -130,12 +130,13 @@
   flex: 1;
   min-width: 200px;
   max-width: 300px;
+  /* height: 1rem; */
 }
 
 ::ng-deep .action-buttons {
   height: 2.7rem;
   display: flex;
- 
+  gap: 0.8rem
 }
 
 @keyframes skeleton-loading {
@@ -251,9 +252,7 @@
 
 /* Small Laptops and Tablets (1024px and below) */
 @media (max-width: 1156px) {
-  .search-container {
-    justify-content: center;
-  }
+  
 
   .search-field {
     width: 100%;
@@ -309,7 +308,7 @@
     padding: 15px;
   }
   .search-container {
-    flex-direction: column;
+    flex-direction: row;
     align-items: stretch;
   }
 

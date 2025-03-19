@@ -9,7 +9,7 @@
           <div class="register__input-wrapper">
             <input class="register__input register__input--name"
               [ngClass]="{ 'register__input--error': formSubmitted && firstNameError }" type="text"
-              placeholder="First Name" [(ngModel)]="firstName" name="firstName" (input)="onInputChange()" pattern="^[A-Za-z]+$" />
+              placeholder="First Name" [(ngModel)]="firstName" name="firstName" (input)="onInputChange()" />
           </div>
           <div *ngIf="formSubmitted && firstNameError" class="register__error-message">
             {{ firstNameError }}
@@ -20,7 +20,7 @@
           <div class="register__input-wrapper">
             <input class="register__input register__input--name"
               [ngClass]="{ 'register__input--error': formSubmitted && lastNameError }" type="text"
-              placeholder="Last Name" [(ngModel)]="lastName" name="lastName" (input)="onInputChange()" pattern="^[A-Za-z]+$" />
+              placeholder="Last Name" [(ngModel)]="lastName" name="lastName" (input)="onInputChange()" />
           </div>
           <div *ngIf="formSubmitted && lastNameError" class="register__error-message">
             {{ lastNameError }}

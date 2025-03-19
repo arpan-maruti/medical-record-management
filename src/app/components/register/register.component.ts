@@ -113,13 +113,13 @@ export class RegisterComponent {
     console.log('User ID:', userId);
     if (!this.firstName) {
       this.firstNameError = 'First name is required';
-    } else if (!this.firstName.match(/^[A-Za-z]+$/)) {
+    } else if (!this.firstName.match(/^[A-Za-z0-9']+$/)) {
       this.firstNameError = 'Invalid name';
     }
   
     if (!this.lastName) {
       this.lastNameError = 'Last name is required';
-    } else if (!this.lastName.match(/^[A-Za-z]+$/)) {
+    } else if (!this.lastName.match(/^[A-Za-z0-9']+$/)) {
       this.lastNameError = 'Invalid name';
     }
   
