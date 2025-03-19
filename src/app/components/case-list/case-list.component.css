@@ -709,7 +709,7 @@ iframe {
 
 /* Style the select element */
 .custom-dropdown select {
-  appearance: none;
+  /* appearance: none; */
   width: 124px;
   padding: 10px;
   font-size: 1rem;
@@ -724,19 +724,22 @@ iframe {
   position: relative;
 }
 
+/* .custom-dropdown select {
+  color : red;
+  width: 10px;
+} */
+
 /* Custom down arrow */
-.custom-dropdown::after {
+/* .custom-dropdown::after {
   content: '\25BC';
-  /* Unicode for downward arrow */
   position: absolute;
   top: 50%;
   right: 1rem;
   transform: translateY(-50%);
   color: #012447;
   pointer-events: none;
-  /* Prevents clicking the arrow */
   font-size: 1rem;
-}
+} */
 
 /* Hover and focus effect */
 .custom-dropdown select:hover,
@@ -746,7 +749,9 @@ iframe {
 }
 
 
-
+.custom-dropdown select.selected::after {
+  display: none;
+}
 
 
 .subcase-card {

@@ -16,7 +16,7 @@
    <div class="header-container2">
    <div class="filter-container">
      <div class="custom-dropdown">
-       <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
+       <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()" [ngClass] = "{'selected': selectedStatus}">
          <option value="">All Status</option>
          <option value="uploaded">uploaded</option>
          <option value="inProgress">in progress</option>
@@ -74,9 +74,11 @@
              {{ sortDirection === 'asc' ? '▲' : '▼' }}
            </span>
          </th>
-         <th>
+         <th (click)="sortBy('createdBy')" style="cursor: pointer">
            Uploaded By
-         
+           <span *ngIf="sortKey === 'createdBy'">
+            {{ sortDirection === 'asc' ? '▲' : '▼' }}
+          </span>
          </th>
          <th >
            Case Status
